@@ -1,5 +1,5 @@
 <?php
-spl_autoload_register(function($className, $projectRoot = __DIR__ ) {
+function gkAutoLoader($className, $projectRoot = __DIR__ ) {
 
   static $classes;
 
@@ -30,4 +30,6 @@ spl_autoload_register(function($className, $projectRoot = __DIR__ ) {
     require_once $projectRoot . '/'. $classes[$className];
   }
 
-});
+}
+
+spl_autoload_register('gkAutoLoader');
