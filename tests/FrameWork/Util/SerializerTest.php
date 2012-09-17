@@ -35,14 +35,14 @@ class SerializerTest extends PHPUnit_Framework_TestCase
       array( $stdClass ),
       array( new TestAccumulatorClass() ),
       array( 'i am a string' ),
-      array( 123456789 ),
+      array( '123456789' ),
       array(
         array(
-          1,
-          2,
-          3,
-          '4' => 5,
-          '6' => 7,
+          '1',
+          '2',
+          '3',
+          '4' => '5',
+          '6' => '7',
           'item1' => new TestAccumulatorClass(),
           'item2' => $stdClass,
         )
