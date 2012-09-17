@@ -1,5 +1,5 @@
 <?php
-function gkAutoLoader($className, $projectRoot = __DIR__ ) {
+function gkAutoLoader($className) {
 
   static $classes;
 
@@ -27,7 +27,7 @@ function gkAutoLoader($className, $projectRoot = __DIR__ ) {
   }
 
   if (isset($classes[$className])) {
-    require_once $projectRoot . DIRECTORY_SEPARATOR . $classes[$className];
+    require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . $classes[$className];
   }
 }
 
