@@ -16,9 +16,9 @@ function gkAutoLoader($className, $projectRoot = __DIR__ ) {
         );
 
         foreach (iterator_to_array($regexIterator, false) as $file) {
-          $file = str_replace('\\', '/', $file); // Windows compatible
+          $file = str_replace('\\', DIRECTORY_SEPARATOR, $file); // Windows compatible
           $path = str_replace($dirPart, '', current($file));
-          $name = str_replace('/', '_', $path);
+          $name = str_replace(DIRECTORY_SEPARATOR, '_', $path);
           $name = str_replace('.php', '', $name);
 
           $classes[$name] = $dirPart . $path;
@@ -27,9 +27,8 @@ function gkAutoLoader($className, $projectRoot = __DIR__ ) {
   }
 
   if (isset($classes[$className])) {
-    require_once $projectRoot . '/'. $classes[$className];
+    require_once $projectRoot . DIRECTORY_SEPARATOR . $classes[$className];
   }
-
 }
 
 spl_autoload_register('gkAutoLoader');
