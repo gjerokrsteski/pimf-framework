@@ -68,7 +68,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
     $serializedItem   = Pimf_Util_Serializer::serialize($item);
     $unserializedItem = Pimf_Util_Serializer::unserialize($serializedItem);
 
-    $this->assertEquals($item, $unserializedItem);
+    $this->assertEquals(gettype($item), gettype($unserializedItem));
   }
 
   public function testHandlingWithBigBigClassObject()
@@ -79,7 +79,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
     $serializedData   = Pimf_Util_Serializer::serialize($testObject);
     $unserializedData = Pimf_Util_Serializer::unserialize($serializedData);
 
-    $this->assertEquals($testObject, $unserializedData);
+    $this->assertEquals(gettype($testObject), gettype($unserializedData));
     $this->assertObjectHasAttribute('baterry', $unserializedData);
     $this->assertNotEmpty($unserializedData->getAll());
     $this->assertEquals(100, count($unserializedData->getAll()));
@@ -92,7 +92,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
     $serializedData   = Pimf_Util_Serializer::serialize($bigData);
     $unserializedData = Pimf_Util_Serializer::unserialize($serializedData);
 
-    $this->assertEquals($bigData, $unserializedData);
+    $this->assertEquals(gettype($bigData), gettype($unserializedData));
   }
 
   public function testHandlingWithBigBigArrayOfObjectsData()
@@ -108,7 +108,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
     $serializedData   = Pimf_Util_Serializer::serialize($bigData);
     $unserializedData = Pimf_Util_Serializer::unserialize($serializedData);
 
-    $this->assertEquals($bigData, $unserializedData);
+    $this->assertEquals(gettype($bigData), gettype($unserializedData));
   }
 
   public function testHandlingWithBigBigObjectOfArraysData()
@@ -120,6 +120,6 @@ class SerializerTest extends PHPUnit_Framework_TestCase
     $serializedData   = Pimf_Util_Serializer::serialize($stdClass);
     $unserializedData = Pimf_Util_Serializer::unserialize($serializedData);
 
-    $this->assertEquals($stdClass, $unserializedData);
+    $this->assertEquals(gettype($stdClass), gettype($unserializedData));
   }
 }
