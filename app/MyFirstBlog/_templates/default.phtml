@@ -1,0 +1,10 @@
+<?php
+foreach($this->entries as $entry) :
+?>
+
+<h2><a href="?action=showentry&id=<?=$entry->getId()?>"><?=$entry->getTitle()?></a></h2>
+<p><?=$entry->getContent()?></p>
+
+<?php
+endforeach;
+?>

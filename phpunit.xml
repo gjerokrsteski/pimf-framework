@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  colors="true"
+  processIsolation="false"
+  stopOnFailure="false"
+  syntaxCheck="true"
+  backupGlobals="false"
+  backupStaticAttributes="false"
+  forceCoversAnnotation="false"
+  mapTestClassNameToCoveredClassName="false"
+  bootstrap="bootstrap.php">
+
+  <testsuites>
+    <testsuite name="Pimf">
+      <directory suffix="Test.php">tests</directory>
+    </testsuite>
+  </testsuites>
+
+  <filter>
+    <whitelist addUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">core</directory>
+      <exclude>
+       <file>bootstrap.php</file>
+      </exclude>
+    </whitelist>
+  </filter>
+
+</phpunit>
