@@ -6,12 +6,6 @@ php:
 
 env:
   - DB=sqlite
-  - DB=mysql
-
-matrix:
-  exclude:
-    - php: 5.4
-      env: DB=sqlite
       
 notifications:
   email:
