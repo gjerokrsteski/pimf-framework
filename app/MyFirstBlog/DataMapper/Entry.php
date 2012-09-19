@@ -1,8 +1,4 @@
 <?php
-/**
- * @namespace   MyFirstBlog_DataMapper_Entry
- * @author      Gjero Krsteski <gjero@krsteski.de>
- */
 class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
 {
   /**
@@ -21,7 +17,7 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
   }
 
   /**
-   * @param $id
+   * @param int $id
    * @return mixed|object
    * @throws OutOfRangeException
    */
