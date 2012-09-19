@@ -49,33 +49,7 @@ class PropertyValueTest extends PHPUnit_Framework_TestCase
   {
     $this->assertSame($expected, Pimf_Util_PropertyValue::ensureBoolean($value));
   }
-
-  public static function ensureStringProvider()
-  {
-    return array(
-      array('', ''),
-      array(' ', ' '),
-      array(1, '1'),
-      array(1234, '1234'),
-      array(1234.1234, '1234.1234'),
-      array('1', '1'),
-      array(array(), 'Array'),
-      array(array(1), 'Array'),
-      array(true, 'true'),
-      array(false, 'false'),
-    );
-  }
-
-  /**
-   * @param $value
-   * @param $expected
-   * @dataProvider ensureStringProvider
-   */
-  public function testEnsureString($value, $expected)
-  {
-    $this->assertSame($expected, Pimf_Util_PropertyValue::ensureString($value));
-  }
-
+  
   public static function ensureArrayProvider()
   {
     return array(
@@ -85,7 +59,6 @@ class PropertyValueTest extends PHPUnit_Framework_TestCase
       array(1234, array(1234)),
       array(1234.1234, array(1234.1234)),
       array('1', array('1')),
-      array(array(1), array(1)),
       array(true, array(true)),
       array(false, array(false)),
       array('[1,2,3]', array('1','2','3')),
@@ -102,18 +75,5 @@ class PropertyValueTest extends PHPUnit_Framework_TestCase
   public function testEnsureArray($value, $expected)
   {
     $this->assertSame($expected, Pimf_Util_PropertyValue::ensureArray($value));
-  }
-
-  public function testEnsureEnum()
-  {
-    $this->assertSame(1, Pimf_Util_PropertyValue::ensureEnum('January', 'xEnum'));
-  }
-
-  /**
-   * @expectedException InvalidArgumentException
-   */
-  public function testEnsureEnumThrowingException()
-  {
-    Pimf_Util_PropertyValue::ensureEnum('March', 'xEnum');
   }
 }
