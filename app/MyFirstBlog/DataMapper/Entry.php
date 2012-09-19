@@ -1,7 +1,6 @@
 <?php
 /**
  * @namespace   MyFirstBlog_DataMapper_Entry
- * @copyright   (c) 1999-2012 QuestBack AG http://www.questback.de/
  * @author      Gjero Krsteski <gjero@krsteski.de>
  */
 class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
