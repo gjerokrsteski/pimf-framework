@@ -69,6 +69,15 @@ class Pimf_Util_String
   }
 
   /**
+   * @param   string  $value
+   * @return  string
+   */
+  public static function deslagSpecialChars($value)
+  {
+    return preg_replace('#[^!\#$%&()*+,\-.0-9:;<=>?@A-Z[\]\^_`a-z{|}~]+#', '_', $value);
+  }
+
+  /**
    * Check value to find if it was serialized.
    *
    * If $data is not an string, then returned value will always be false.
