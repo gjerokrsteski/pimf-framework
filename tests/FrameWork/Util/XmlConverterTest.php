@@ -61,7 +61,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
 
     $utilXml   = new Pimf_Util_Xml();
     $simpleXml = $utilXml->toSimpleXMLElement($file);
-    $result    = $utilXml->toArray($simpleXml, 'efs');
+    $result    = $utilXml->toArray($simpleXml, 'pimf');
 
     $this->assertNotEmpty($result);
     $this->assertArrayHasKey('MediaElementGroup', $result);
@@ -77,7 +77,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
 
     $utilXml   = new Pimf_Util_Xml();
     $simpleXml = $utilXml->toSimpleXMLElement($file);
-    $result    = $utilXml->toArray($simpleXml, 'some-bad-namespace');
+    $utilXml->toArray($simpleXml, 'some-bad-namespace');
   }
 
   /**
@@ -86,7 +86,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   public function testConvertToSimpleXmlThrowingException()
   {
     $utilXml   = new Pimf_Util_Xml();
-    $simpleXml = $utilXml->toSimpleXMLElement(new stdClass());
+    $utilXml->toSimpleXMLElement(new stdClass());
   }
 
   /**
@@ -95,6 +95,6 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   public function testConvertToDOMDocThrowingException()
   {
     $utilXml   = new Pimf_Util_Xml();
-    $simpleXml = $utilXml->toDOMDocument(new stdClass());
+    $utilXml->toDOMDocument(new stdClass());
   }
 }

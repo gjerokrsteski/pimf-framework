@@ -1,8 +1,4 @@
 <?php
-/**
- * @namespace   MessageFormaterTest.php
- * @copyright   (c) 2012 Gjero Krsteski http://www.krsteski.de/
- */
 class MessageFormaterTest extends PHPUnit_Framework_TestCase
 {
   protected $expectedMsg = 'Hello Ben my name is Matt! I am 21, how old are you? I like food!';

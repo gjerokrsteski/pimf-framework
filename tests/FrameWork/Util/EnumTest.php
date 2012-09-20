@@ -1,10 +1,6 @@
 <?php
 require_once dirname(__FILE__).'/_fixture/EnumFixtures.php';
 
-/**
- * @namespace   EnumTest.php
- * @copyright   (c) 1999-2012 QuestBack AG http:public function testwww.questback.de/
- */
 class EnumTest extends PHPUnit_Framework_TestCase
 {
   public function testDefaultValue()

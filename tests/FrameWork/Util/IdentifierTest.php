@@ -1,8 +1,4 @@
 <?php
-/**
- * @namespace   IdentifierTest.php
- * @copyright (c) 2012 Gjero Krsteski http://www.krsteski.de
- */
 class IdentifierTest extends PHPUnit_Framework_TestCase
 {
   /**

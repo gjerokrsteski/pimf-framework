@@ -1,43 +1,43 @@
 <?xml version="1.0"?>
-<efs:Question xmlns:efs="http://www.globalpark.com/efs" version="1.0" questionId="14">
-  <efs:MediaElementGroup>
-    <efs:MediaElement context="QUESTION_LABEL" contentType="text">
-      <efs:ContentValue language="en_GB">111</efs:ContentValue>
-    </efs:MediaElement>
-    <efs:MediaElement context="QUESTION_ISSUE" contentType="text">
-      <efs:ContentValue language="en_GB">Here you fill in your question text.</efs:ContentValue>
-    </efs:MediaElement>
-    <efs:MediaElement context="QUESTION_HELP" contentType="text">
-      <efs:ContentValue language="en_GB">Here you explain how the question has to be filled in (optional).</efs:ContentValue>
-    </efs:MediaElement>
-    <efs:MediaElement context="QUESTION_VIT" contentType="text">
-      <efs:ContentValue language="en_GB">Here you eoooooooooooooooooooooooooo.</efs:ContentValue>
-    </efs:MediaElement>
-  </efs:MediaElementGroup>
-  <efs:ScaleCollection>
-    <efs:FixedValueScale behaviour="exclusive" layoutId="SingleChoiceScale">
-      <efs:MediaElementGroup/>
-      <efs:NumericVariable>
-        <efs:VariableName>v_557</efs:VariableName>
-      </efs:NumericVariable>
-      <efs:Indication>
-        <efs:MediaElementGroup>
-          <efs:MediaElement context="INDICATION_LABEL" contentType="text">
-            <efs:ContentValue language="en_GB">Answer category 1</efs:ContentValue>
-          </efs:MediaElement>
-        </efs:MediaElementGroup>
-        <efs:VariableReference>v_557</efs:VariableReference>
-        <efs:DataValue>1</efs:DataValue>
-      </efs:Indication>
-      <efs:Indication>
-        <efs:MediaElementGroup>
-          <efs:MediaElement context="INDICATION_LABEL" contentType="text">
-            <efs:ContentValue language="en_GB">Answer category 2</efs:ContentValue>
-          </efs:MediaElement>
-        </efs:MediaElementGroup>
-        <efs:VariableReference>v_557</efs:VariableReference>
-        <efs:DataValue>2</efs:DataValue>
-      </efs:Indication>
-    </efs:FixedValueScale>
-  </efs:ScaleCollection>
-</efs:Question>
+<pimf:Question xmlns:pimf="http://www.krsteski.de/pimf" version="1.0" questionId="14">
+  <pimf:MediaElementGroup>
+    <pimf:MediaElement context="label" contentType="text">
+      <pimf:ContentValue language="en_GB">111</pimf:ContentValue>
+    </pimf:MediaElement>
+    <pimf:MediaElement context="issue" contentType="text">
+      <pimf:ContentValue language="en_GB">Here you fill in your question text.</pimf:ContentValue>
+    </pimf:MediaElement>
+    <pimf:MediaElement context="help" contentType="text">
+      <pimf:ContentValue language="en_GB">Here you explain how the question has to be filled in (optional).</pimf:ContentValue>
+    </pimf:MediaElement>
+    <pimf:MediaElement context="vit" contentType="text">
+      <pimf:ContentValue language="en_GB">Here you eoooooooooooooooooooooooooo.</pimf:ContentValue>
+    </pimf:MediaElement>
+  </pimf:MediaElementGroup>
+  <pimf:ScaleCollection>
+    <pimf:FixedValueScale behaviour="exclusive" layoutId="SingleChoiceScale">
+      <pimf:MediaElementGroup/>
+      <pimf:NumericVariable>
+        <pimf:VariableName>v_557</pimf:VariableName>
+      </pimf:NumericVariable>
+      <pimf:Indication>
+        <pimf:MediaElementGroup>
+          <pimf:MediaElement context="label" contentType="text">
+            <pimf:ContentValue language="en_GB">Answer category 1</pimf:ContentValue>
+          </pimf:MediaElement>
+        </pimf:MediaElementGroup>
+        <pimf:VariableReference>v_557</pimf:VariableReference>
+        <pimf:DataValue>1</pimf:DataValue>
+      </pimf:Indication>
+      <pimf:Indication>
+        <pimf:MediaElementGroup>
+          <pimf:MediaElement context="label" contentType="text">
+            <pimf:ContentValue language="en_GB">Answer category 2</pimf:ContentValue>
+          </pimf:MediaElement>
+        </pimf:MediaElementGroup>
+        <pimf:VariableReference>v_557</pimf:VariableReference>
+        <pimf:DataValue>2</pimf:DataValue>
+      </pimf:Indication>
+    </pimf:FixedValueScale>
+  </pimf:ScaleCollection>
+</pimf:Question>

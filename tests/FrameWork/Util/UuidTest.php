@@ -1,10 +1,7 @@
 <?php
 class UuidTest extends PHPUnit_Framework_TestCase
 {
-  /**
-   * @test
-   */
-  public function RetreiveNewUuid()
+  public function testRetreiveNewUuid()
   {
     $this->assertNotSame(
       Pimf_Util_Uuid::generate(),

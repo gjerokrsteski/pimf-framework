@@ -511,14 +511,14 @@ class Pimf_Util_Validator
   /**
    * @param string $field
    * @param int $error
-   * @return bool
+   * @return void
    */
   protected function setError($field, $error)
   {
     if (!array_key_exists($field, $this->errors) || $this->errors[$field] !== $error && !is_array($this->errors[$field])) {
       $tmpArray     = array( $field => $error );
       $this->errors = array_merge_recursive($this->errors, $tmpArray);
-      return true;
+      return;
     } elseif (is_array($this->errors[$field])) {
       foreach ($this->errors[$field] as $value) {
         if ($value == $error) {

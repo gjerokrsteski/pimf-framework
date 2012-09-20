@@ -1,8 +1,4 @@
 <?php
-/**
- * @namespace   MemoryUsageTest.php
- * @copyright   (c) 2012 Gjero Krsteski http://www.krsteski.de/
- */
 class MemoryUsageTest extends PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()

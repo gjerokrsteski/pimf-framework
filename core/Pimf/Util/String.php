@@ -69,12 +69,14 @@ class Pimf_Util_String
   }
 
   /**
-   * @param   string  $value
-   * @return  string
+   * Replace special chars by underscores.
+   * @param $value
+   * @param string $replaceWith
+   * @return mixed
    */
-  public static function deslagSpecialChars($value)
+  public static function slagSpecialChars($value, $replaceWith = '_')
   {
-    return preg_replace('#[^!\#$%&()*+,\-.0-9:;<=>?@A-Z[\]\^_`a-z{|}~]+#', '_', $value);
+    return preg_replace(array("/[^a-zA-Z0-9]/", "/$replaceWith+/", "/$replaceWith$/"), array("_", "_", ""), $value);
   }
 
   /**

@@ -176,6 +176,8 @@ class Pimf_Environment
     if ($this->envData->getParam('HTTP_USER_AGENT')) {
       return $this->envData->getParam('HTTP_USER_AGENT');
     }
+
+    return null;
   }
 
   /**

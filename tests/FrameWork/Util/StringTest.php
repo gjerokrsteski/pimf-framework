@@ -1,8 +1,4 @@
 <?php
-/**
- * @namespace   StringTest.php
- * @copyright   (c) 2012 Gjero Krsteski http://www.krsteski.de/
- */
 class StringTest extends PHPUnit_Framework_TestCase
 {
   protected $testString = '';
@@ -121,6 +117,17 @@ class StringTest extends PHPUnit_Framework_TestCase
       Pimf_Util_String::isSerialized($data),
 
       'problem on asserting that '.print_r($data,true). ' is serialized'
+
+    );
+  }
+
+  public function testSlagStringFromSpecialChars()
+  {
+    $this->assertEquals(
+
+      '_1_2_3_These_words_are_quoted',
+
+      Pimf_Util_String::slagSpecialChars('\"[1,2,3,<>#?==(/%/$§"!]{These,words,are,quoted}\"# "')
 
     );
   }

@@ -1,9 +1,4 @@
 <?php
-/**
- * @namespace   PropertyValueTest.php
- * @copyright   (c) 2012 Gjero Krsteski http://www.krsteski.de/
- */
-
 class xUser
 {
   public $name = 'public-conan';
