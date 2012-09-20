@@ -62,6 +62,9 @@ class Pimf_Util_Csv
 
     $fp = fopen('php://temp', 'w');
 
+    $bom = chr(0xEF) . chr(0xBB) . chr(0xBF);
+    fputs($fp, $bom);
+
     foreach ($data as $row) {
       fputcsv($fp, $row, $this->delimiter, $this->enclosure);
     }
