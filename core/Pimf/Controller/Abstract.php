@@ -23,7 +23,7 @@
  *
  * @package Pimf_Controller
  * @author Gjero Krsteski <gjero@krsteski.de>
-a */
+ */
 abstract class Pimf_Controller_Abstract
 {
   /**

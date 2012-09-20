@@ -34,7 +34,7 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     $validator = new Pimf_Util_Validator($this->request->fromGet());
 
     if (!$validator->digit('id') || !$validator->value('id', '>', 0)) {
-      throw new RuntimeException('not valid entry');
+      throw new Pimf_Controller_Exception('not valid entry');
     }
 
     $viewSingleEntry = new Pimf_View();

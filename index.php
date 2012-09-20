@@ -19,7 +19,7 @@ try{
 
   $resolver->process()->render();
 
-} catch (RuntimeException $e){
+} catch (Pimf_Controller_Exception $e){
   echo $e->getMessage();
 } catch (Exception $e) {
   $registry->logger->error($e->getMessage());
