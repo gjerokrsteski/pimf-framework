@@ -50,12 +50,10 @@ class Pimf_Resolver
    * @param Pimf_Request $request
    * @param string $controllerRepositoryPath
    * @param string $prefix
-   * @throws RuntimeException If no controller specified
-   * @throws RuntimeException If no controller found at the repository
    */
   public function __construct(Pimf_Request $request, $controllerRepositoryPath = '/Controller', $prefix = 'Pimf_')
   {
-    $fromGet = $request->fromGet();
+    $fromGet        = $request->fromGet();
     $controllerName = $fromGet->getParam('controller');
 
     if (!$controllerName) {
@@ -66,20 +64,29 @@ class Pimf_Resolver
     $this->request                  = $request;
     $this->controllerClassName      = $prefix . 'Controller_';
     $this->controllerFilePath       = $this->controllerRepositoryPath . '/' . ucfirst($controllerName) . '.php';
-
-    if (!file_exists($this->controllerFilePath)) {
-      throw new RuntimeException('no controller found at the repository path; ' . $this->controllerFilePath);
-    }
   }
 
   /**
    * @return Pimf_Controller_Abstract
+   * @throws RuntimeException If no controller specified or no controller found at the repository.
    */
   public function process()
   {
+    if (!file_exists($this->controllerFilePath)) {
+      throw new RuntimeException(
+        'no controller found at the repository path; ' . $this->controllerFilePath
+      );
+    }
+
     $path       = str_replace($this->controllerRepositoryPath, '', $this->controllerFilePath);
     $name       = str_replace('/', $this->controllerClassName, $path);
     $controller = str_replace('.php', '', $name);
+
+    if (!class_exists($controller)) {
+      throw new RuntimeException(
+        'can not load class "'.$controller.'" from the repository'
+      );
+    }
 
     return new $controller($this->request);
   }

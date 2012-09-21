@@ -39,22 +39,31 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
   public function __construct(Pimf_PDO $db, $prefix = 'Pimf')
   {
     parent::__construct($db);
-    $this->prefix = $prefix.'_DataMapper_';
+    $this->prefix = $prefix . '_DataMapper_';
   }
 
   /**
    * @param string $entity The name of the data-mapper class.
    * @return Pimf_DataMapper_Abstract
+   * @throws BadMethodCallException If no entity fount at the repository.
    */
   public function load($entity)
   {
-    $entity = $this->prefix. ucfirst($entity);
+    $entity = $this->prefix . ucfirst($entity);
 
     if (true === $this->identityMap->hasId($entity)) {
       return $this->identityMap->getObject($entity);
     }
 
-    $this->identityMap->set($entity, new $entity($this->db));
+    if (!class_exists($entity)) {
+      throw new BadMethodCallException(
+        'entity "'.$entity.'" found at the data-mapper repository'
+      );
+    }
+
+    $model = new $entity($this->db);
+
+    $this->identityMap->set($entity, $model);
 
     return $this->identityMap->getObject($entity);
   }

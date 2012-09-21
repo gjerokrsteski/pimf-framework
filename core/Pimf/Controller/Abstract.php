@@ -42,7 +42,7 @@ abstract class Pimf_Controller_Abstract
   public function __construct(Pimf_Request $request)
   {
     $this->request = $request;
-    $this->action  = ($request->fromGet()->getParam('action') ?: 'index');
+    $this->action  = $request->fromGet()->getParam('action') ?: 'index';
   }
 
   abstract public function indexAction();
@@ -54,8 +54,8 @@ abstract class Pimf_Controller_Abstract
    */
   public function render()
   {
-    $suffix = (PHP_SAPI === 'cli')  ? 'CliAction' : 'Action';
-    $action = strtolower($this->action).$suffix;
+    $suffix = (PHP_SAPI === 'cli') ? 'CliAction' : 'Action';
+    $action = strtolower($this->action) . $suffix;
 
     if (method_exists($this, 'init')) {
       call_user_func(array($this, 'init'));
@@ -63,7 +63,7 @@ abstract class Pimf_Controller_Abstract
 
     if (!method_exists($this, $action)) {
       throw new RuntimeException(
-        "no action '{$this->action}' defined at controller ". get_class($this)
+        "no action '{$action}' defined at controller ". get_class($this)
       );
     }
 

@@ -44,11 +44,25 @@ class Pimf_Environment
    */
   public function isAjax()
   {
-    if ($this->envData->getParam('X_REQUESTED_WITH') && $this->envData->getParam('X_REQUESTED_WITH') === 'XMLHttpRequest') {
-      return true;
-    }
+    return $this->envData->getParam('X_REQUESTED_WITH') === 'XMLHttpRequest';
+  }
 
-    return false;
+  /**
+   * Is the application running under HTTP protocol?
+   * @return bool
+   */
+  public function isHttp()
+  {
+    return (bool) $this->envData->getParam('HTTP');
+  }
+
+  /**
+   * Is the application running under HTTPS protocol?
+   * @return bool
+   */
+  public function isHttps()
+  {
+    return $this->envData->getParam('HTTPS') === 'on';
   }
 
   /**
@@ -57,7 +71,7 @@ class Pimf_Environment
    */
   public function getContentLength()
   {
-    return (int)$this->envData->getParam('CONTENT_LENGTH');
+    return (int) $this->envData->getParam('CONTENT_LENGTH');
   }
 
   /**
@@ -94,7 +108,7 @@ class Pimf_Environment
    */
   public function getPort()
   {
-    return (int)$this->envData->getParam('SERVER_PORT');
+    return (int) $this->envData->getParam('SERVER_PORT');
   }
 
   /**

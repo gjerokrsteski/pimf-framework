@@ -88,7 +88,9 @@ class Pimf_Request
    */
   public function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
   {
-    $strip = is_null($overrideStripSlashes) ? get_magic_quotes_gpc() : $overrideStripSlashes;
+    $hasMagicQuotes = function_exists('get_magic_quotes_gpc') ? get_magic_quotes_gpc() : false;
+
+    $strip = !$overrideStripSlashes ? $hasMagicQuotes : $overrideStripSlashes;
 
     if ($strip) {
       return self::stripSlashes($rawData);

@@ -19,10 +19,8 @@
  */
 
 /**
- * For accumulating things.
- *
- * It can be used to solve many simple problems such as counting,
- * adding and finding the maximum/minimum or acting as switch or static stack.
+ * A well-known object that other objects can use to find common objects and services.
+ * Acts also as a dependency injection container.
  *
  * <code>
  * $registry = new Pimf_Registry();
@@ -43,7 +41,7 @@ class Pimf_Registry
    * The temporary storage for accumulator.
    * @var ArrayObject
    */
-  protected static $battery = null;
+  protected static $battery;
 
   /**
    * Re-initialises the data.
@@ -51,7 +49,7 @@ class Pimf_Registry
    */
   protected static function init()
   {
-    if (self::$battery === null) {
+    if (!self::$battery) {
       self::$battery = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
     }
   }
@@ -83,21 +81,5 @@ class Pimf_Registry
     self::init();
 
     return self::$battery->offsetGet($namespace);
-  }
-
-  /**
-   * Resets the accumulator-storage.
-   */
-  public function reset()
-  {
-    self::$battery = null;
-  }
-
-  /**
-   * @return array
-   */
-  public function getAll()
-  {
-    return self::$battery->getArrayCopy();
   }
 }

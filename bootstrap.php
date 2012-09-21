@@ -4,6 +4,27 @@
  */
 require_once 'autoloader.php';
 
+define('E_FATAL',  E_ERROR | E_USER_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR);
+
+function catchNoUserErrorHandlerFunctionErrors()
+{
+  $error = error_get_last();
+  if ($error && ($error['type'] & E_FATAL)) {
+    exceptionErrorHandler(
+      $error['type'], $error['message'], $error['file'], $error['line']
+    );
+  }
+}
+
+function exceptionErrorHandler($errorType, $errorMessage, $errorFile, $errorLine )
+{
+  throw new ErrorException($errorMessage, $errorType, 0, $errorFile, $errorLine);
+}
+
+register_shutdown_function('catchNoUserErrorHandlerFunctionErrors');
+set_error_handler("exceptionErrorHandler");
+
+// load the configuration.
 $iniParser = new  Pimf_Util_IniParser(dirname(__FILE__).'/config.ini');
 $config = $iniParser->parse();
 

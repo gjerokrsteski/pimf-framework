@@ -20,6 +20,7 @@
 
 /**
  * Logger with common logging options into a file.
+ *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
@@ -197,13 +198,18 @@ class Pimf_Logger
 
   public function __destruct()
   {
-    if (fclose($this->fileHandle) === false) {
-      // Failure to close the log file
-      $this->write("Logger failed to close the handle to the log file", 'ERROR_SEVERITY');
-    }
+    if (is_resource($this->fileHandle)
+      && is_resource($this->warningFileHandle)
+      && is_resource($this->errorFileHandle)) {
 
-    fclose($this->warningFileHandle);
-    fclose($this->errorFileHandle);
+      if (fclose($this->fileHandle) === false) {
+        // Failure to close the log file
+        $this->write("Logger failed to close the handle to the log file", 'ERROR_SEVERITY');
+      }
+
+      fclose($this->warningFileHandle);
+      fclose($this->errorFileHandle);
+    }
   }
 
   /**
@@ -233,15 +239,13 @@ class Pimf_Logger
 
     //get the file name
     $lastSlashIndex = strrpos($PHPSELF, "/");
+    $fileName       = $PHPSELF;
 
     if ($lastSlashIndex !== false) {
       $fileName = substr($PHPSELF, $lastSlashIndex + 1);
-    } else {
-      $fileName = $PHPSELF;
     }
 
     $msg .= $fileName . "\t";
-
     $msg .= $severity;
     $msg .= ": " . $message . "\r\n";
 
