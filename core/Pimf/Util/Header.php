@@ -47,7 +47,7 @@ class Pimf_Util_Header
     header('Content-Type: application/pdf', true);
   }
 
-  public static function useContentTypeCvs()
+  public static function useContentTypeCsv()
   {
     header('Content-Type: text/csv; charset=UTF-8', true);
   }
