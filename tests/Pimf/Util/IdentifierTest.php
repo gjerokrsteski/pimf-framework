@@ -19,17 +19,6 @@ class IdentifierTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * Array could not be converted to string.
-   * @test
-   * @expectedException ErrorException
-   */
-  public function CreatingNewInstanceWithMixedArgsThrowingErrorTrigger()
-  {
-    $identifier = new Pimf_Util_Identifier(1, '23', array(1, 2, 3));
-    print $identifier;
-  }
-
-  /**
    * @test
    */
   public function CreatingNewInstanceWithMixedArgs()

@@ -6,23 +6,29 @@ require_once 'autoloader.php';
 
 define('E_FATAL',  E_ERROR | E_USER_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR);
 
-function catchNoUserErrorHandlerFunctionErrors()
+function pimfCatchNoUserErrorHandlerFunctionErrors()
 {
   $error = error_get_last();
   if ($error && ($error['type'] & E_FATAL)) {
-    exceptionErrorHandler(
-      $error['type'], $error['message'], $error['file'], $error['line']
-    );
+    pimfCustomErrorHandler($error['type'], $error['message'], $error['file'], $error['line'], 'context');
   }
 }
 
-function exceptionErrorHandler($errorType, $errorMessage, $errorFile, $errorLine )
+function pimfCustomErrorHandler($number, $string, $file, $line, $context)
 {
-  throw new ErrorException($errorMessage, $errorType, 0, $errorFile, $errorLine);
+  // Determine if this error is one of the enabled ones in php config (php.ini, .htaccess, etc)
+  $errorIsEnabled = (bool)($number & ini_get('error_reporting'));
+
+  if (in_array($number, array(E_USER_ERROR, E_RECOVERABLE_ERROR)) && $errorIsEnabled) {
+    throw new ErrorException($string, 0, $number, $file, $line, $context);
+  } else if ($errorIsEnabled) {
+    error_log($string, 0);
+    return false;
+  }
 }
 
-register_shutdown_function('catchNoUserErrorHandlerFunctionErrors');
-set_error_handler("exceptionErrorHandler");
+register_shutdown_function('pimfCatchNoUserErrorHandlerFunctionErrors');
+set_error_handler("pimfCustomErrorHandler");
 
 // load the configuration.
 $iniParser = new  Pimf_Util_IniParser(dirname(__FILE__).'/config.ini');
