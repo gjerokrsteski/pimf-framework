@@ -28,9 +28,12 @@ function pimfCustomErrorHandler($number, $string, $file, $line, $context)
 }
 
 register_shutdown_function('pimfCatchNoUserErrorHandlerFunctionErrors');
-set_error_handler("pimfCustomErrorHandler");
+set_error_handler('pimfCustomErrorHandler');
 
-// load the configuration.
+ini_set('date.timezone', 'Europe/Berlin');
+setlocale(LC_ALL, 'de_DE.utf8');
+
+// load the app configuration.
 $iniParser = new  Pimf_Util_IniParser(dirname(__FILE__).'/config.ini');
 $config = $iniParser->parse();
 
