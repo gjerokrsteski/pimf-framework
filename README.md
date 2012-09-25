@@ -2,6 +2,8 @@ Php Is My Framework
 ===================
 Have you ever wished a PHP framework that perfectly adapts to your projects needs, your programming experience and your customers budget? A thin PHP framewrok with less implementing rools and easy to learn how to use it? PIMF is about to satisfy your demands!
 
+[![Build Status](https://secure.travis-ci.org/gjerokrsteski/pimf.png)](http://travis-ci.org/gjerokrsteski/pimf)
+
 Two PIMF principles
 -------------------
 Most of the PHP framewroks are bigger than your problem. At all you need less than 20% of the functionality of the framework to solve you problem. Therefore we belive that the “right” 20% of the effort is the 80% of the results - and that is PIMF.
@@ -17,7 +19,6 @@ PIMFs implementation is based on well proved design patterns as well as fast obj
 Keyfeatures
 -----------
 - Completely unit tested in PHP version 5.3 and 5.4
-- Scaffolding: you can easily create multiple bulk projects/applications.
 - Configuration: into common way - using ini. files.
 - Intelligent bootstrapping: depending on the configuration, the framework can bootstrap in testing or production mode.
 - Resolver: resolves the user requests to controller and action.
