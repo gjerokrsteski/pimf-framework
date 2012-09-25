@@ -63,7 +63,7 @@ Accessing the controller action in two ways
 
 Maybe you wonder about that - but that is the easiest way to make some possibility for scaffolding or manipulating data without implementing a backend interface. 
 All methods at the controller who have the suffix "Action()" can be accessed only from the browser and methods who have the suffix "CliAction()" can be accessed only on the command line interface.
-If you want to send message to you interface that throw Pimf_Controller_Exception. This will be printed out at the view.
+If you want to send message to you interface than throw Pimf_Controller_Exception. This will be printed out at the view.
 
 Creating new data-mapper
 ------------------------
