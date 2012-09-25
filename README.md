@@ -16,6 +16,27 @@ Actually we created PIMF for personal use. The aim was to create robust and secu
 
 PIMFs implementation is based on well proved design patterns as well as fast object relation mapping mechanism - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without to override your projects. And for all of you out there, who like to create rich application interfaces with ExtJs or Dojo - we have created mechanism to couple your GUI to the controllers in a easy and fast way.
 
+Creating new project
+--------------------
+- go to the "app" directory and create a new subdirectory for example "My First Blog"
+
+Creating new controller
+------------------------
+- go to "app/MyFirstBlog/" and create a new subdirectory "Controller" - the directory name is strict convention.
+- create new PHP file with name for example "Index.php" into directory  "app/MyFirstBlog/Controller/"
+- the file "Index.php" has to have strict class name like "MyFirstBlog_Controller_Index" and has to extend "Pimf_Controller_Abstract"
+- create new method action for example "indexAction()"
+- optionally you can implement the method "init()" - it will be triggered before anny action of the controller is executed.
+- call the controller-action on sending the GET "index.php?controller=index&action=index" parameters to your request
+
+Creating new DataMapper
+-----------------------
+- we recommend you to get familiar with the Data-Mapper Pattern and PHP's PDO extension. You can read more here: https://github.com/gjerokrsteski/php-identity-map
+- otherwise you have to go to "app/MyFirstBlog/" and create a two new subdirectories "DataMapper" and "Models" - thee directories names are strict convention.
+- create new model class into directory "app/MyFirstBlog/Models/" for example with name "Entry.php" and class name "MyFirstBlog_Models_Entry"
+- create new data-mapper class into directory "app/MyFirstBlog/DataMapper/" for example with name "Entry.php" with class name "MyFirstBlog_DataMapper_Entry" by extending the class "Pimf_DataMapper_Abstract"
+- create the CRUD methods you really need at the class "MyFirstBlog_DataMapper_Entry". For better understanding how to use PDO and how to hydrate objects, read more here: https://github.com/gjerokrsteski/pimf/blob/master/app/MyFirstBlog/DataMapper/Entry.php
+
 Keyfeatures
 -----------
 - Completely unit tested in PHP version 5.3 and 5.4
