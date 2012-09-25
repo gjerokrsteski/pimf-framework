@@ -41,6 +41,30 @@ Creating new controller
 </pre>
 
 
+Accessing the controller action in two ways
+-------------------------------------------
+- at the browser - by calling the controller-action on sending the GET "index.php?controller=index&action=showentry" parameters to your request.
+- at the command line interface by executing the command "php index.php controller=index action=insert"
+
+<pre>
+      class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
+      {
+        public function showentryAction()
+        {
+          // ...
+        }
+
+        public function insertCliAction()
+        {
+          // ...
+        }
+      }
+</pre>
+
+Maybe you wonder about that - but that is the easiest way to make some possibility for scaffolding or manipulating data without implementing a backend interface. 
+All methods at the controller who have the suffix "Action()" can be accessed only from the browser and methods who have the suffix "CliAction()" can be accessed only on the command line interface.
+If you want to send message to you interface that throw Pimf_Controller_Exception. This will be printed out at the view.
+
 Creating new data-mapper
 ------------------------
 - we recommend you to get familiar with the Data-Mapper Pattern and PHP's PDO extension. You can read more here: https://github.com/gjerokrsteski/php-identity-map
