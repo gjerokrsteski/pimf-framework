@@ -19,6 +19,11 @@ PIMFs implementation is based on well proved design patterns as well as fast obj
 Creating new project
 --------------------
 - go to the "app" directory and create a new subdirectory for example "My First Blog"
+<pre>
+|-- app/
+|   `-- MyFirstBlog/
+|       |-- Controller/
+</pre>
 
 Creating new controller
 ------------------------
@@ -28,6 +33,13 @@ Creating new controller
 - create new method action for example "indexAction()"
 - optionally you can implement the method "init()" - it will be triggered before anny action of the controller is executed.
 - call the controller-action on sending the GET "index.php?controller=index&action=index" parameters to your request
+<pre>
+|-- app/
+|   `-- MyFirstBlog/
+|       |-- Controller/
+|       |   '-- Index.php
+</pre>
+
 
 Creating new DataMapper
 -----------------------
@@ -36,6 +48,16 @@ Creating new DataMapper
 - create new model class into directory "app/MyFirstBlog/Models/" for example with name "Entry.php" and class name "MyFirstBlog_Models_Entry"
 - create new data-mapper class into directory "app/MyFirstBlog/DataMapper/" for example with name "Entry.php" with class name "MyFirstBlog_DataMapper_Entry" by extending the class "Pimf_DataMapper_Abstract"
 - create the CRUD methods you really need at the class "MyFirstBlog_DataMapper_Entry". For better understanding how to use PDO and how to hydrate objects, read more here: https://github.com/gjerokrsteski/pimf/blob/master/app/MyFirstBlog/DataMapper/Entry.php
+<pre>
+|-- app/
+|   `-- MyFirstBlog/
+|       |-- Controller/
+|       |   '-- Index.php
+|       |-- DataMapper/
+|       |   '-- Entry.php
+|       |-- Models/
+|       |   '-- Entry.php
+</pre>
 
 Keyfeatures
 -----------
