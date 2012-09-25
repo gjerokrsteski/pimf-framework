@@ -44,7 +44,7 @@ Creating new controller
 Creating new DataMapper
 -----------------------
 - we recommend you to get familiar with the Data-Mapper Pattern and PHP's PDO extension. You can read more here: https://github.com/gjerokrsteski/php-identity-map
-- otherwise you have to go to "app/MyFirstBlog/" and create a two new subdirectories "DataMapper" and "Models" - thee directories names are strict convention.
+- otherwise you have to go to "app/MyFirstBlog/" and create a two new subdirectories "DataMapper" and "Models" - the directories names are strict convention.
 - create new model class into directory "app/MyFirstBlog/Models/" for example with name "Entry.php" and class name "MyFirstBlog_Models_Entry"
 - create new data-mapper class into directory "app/MyFirstBlog/DataMapper/" for example with name "Entry.php" with class name "MyFirstBlog_DataMapper_Entry" by extending the class "Pimf_DataMapper_Abstract"
 - create the CRUD methods you really need at the class "MyFirstBlog_DataMapper_Entry". For better understanding how to use PDO and how to hydrate objects, read more here: https://github.com/gjerokrsteski/pimf/blob/master/app/MyFirstBlog/DataMapper/Entry.php
