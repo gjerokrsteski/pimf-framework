@@ -45,8 +45,9 @@ class Pimf_View
 
   public function __construct()
   {
+    $registry = new Pimf_Registry();
     $this->data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-    $this->setPath(dirname(dirname(dirname(__FILE__))).'/app/MyFirstBlog');
+    $this->setPath(dirname(dirname(dirname(__FILE__))).'/app/'.$registry->conf->app->name);
   }
 
   /**
