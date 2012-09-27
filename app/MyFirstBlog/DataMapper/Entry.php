@@ -2,7 +2,7 @@
 class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
 {
   /**
-   * @return MyFirstBlog_Models_Entry[]
+   * @return MyFirstBlog_Model_Entry[]
    */
   public function getAll()
   {
@@ -10,7 +10,7 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
       'SELECT * FROM blog'
     );
 
-    $sth->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'MyFirstBlog_Models_Entry');
+    $sth->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'MyFirstBlog_Model_Entry');
     $sth->execute();
 
     return $sth->fetchAll();
@@ -32,7 +32,7 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
     );
 
     $sth->bindValue(':id', $id, PDO::PARAM_INT);
-    $sth->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'MyFirstBlog_Models_Entry');
+    $sth->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'MyFirstBlog_Model_Entry');
     $sth->execute();
 
     // let pdo fetch the User instance for you.
@@ -51,11 +51,11 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
   }
 
   /**
-   * @param MyFirstBlog_Models_Entry $blogEntry
+   * @param MyFirstBlog_Model_Entry $blogEntry
    * @return int
    * @throws RuntimeException
    */
-  public function insert(MyFirstBlog_Models_Entry $blogEntry)
+  public function insert(MyFirstBlog_Model_Entry $blogEntry)
   {
     if (true === $this->identityMap->hasObject($blogEntry)) {
       throw new RuntimeException('Object has an ID, cannot insert.');
@@ -79,10 +79,10 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
   }
 
   /**
-   * @param MyFirstBlog_Models_Entry $blogEntry
+   * @param MyFirstBlog_Model_Entry $blogEntry
    * @return bool
    */
-  public function update(MyFirstBlog_Models_Entry $blogEntry)
+  public function update(MyFirstBlog_Model_Entry $blogEntry)
   {
     $sth = $this->db->prepare(
       "UPDATE blog SET title = :title, content = :content WHERE id = :id"
@@ -102,11 +102,10 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
   }
 
   /**
-   * @param MyFirstBlog_Models_Entry $blogEntry
+   * @param MyFirstBlog_Model_Entry $blogEntry
    * @return bool
-   * @throws RuntimeException
    */
-  public function delete(MyFirstBlog_Models_Entry $blogEntry)
+  public function delete(MyFirstBlog_Model_Entry $blogEntry)
   {
     $sth = $this->db->prepare(
       "DELETE FROM blog WHERE id = :id;"

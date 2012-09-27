@@ -77,7 +77,6 @@ try {
 
   $db = new Pimf_PDO($dbDsn);
   $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  $db->exec(file_get_contents(dirname(__FILE__).'/'.$config->bootstrap->create_table_file));
 
   $registry->em = new Pimf_EntityManager($db, $config->app->name);
   $registry->logger = new Pimf_Logger($config->bootstrap->local_temp_directory);

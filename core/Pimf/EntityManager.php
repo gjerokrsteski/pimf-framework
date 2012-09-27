@@ -100,4 +100,12 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
   {
     return $this->load($entity);
   }
+
+  /**
+   * @return PDO
+   */
+  public function getPDO()
+  {
+    return $this->db;
+  }
 }

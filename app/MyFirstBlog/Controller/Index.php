@@ -52,10 +52,24 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     echo $this->loadMainView($viewSingleEntry);
   }
 
+  public function entryasjsonAction()
+  {
+    $registry = new Pimf_Registry();
+
+    $entry = $registry->em->entry->find(
+      $this->request->fromGet()->getParam('id')
+    );
+
+    Pimf_Util_Header::clear();
+    Pimf_Util_Header::useContentTypeJson();
+
+    echo Pimf_Util_Json::encode($entry->toArray());
+  }
+
   public function insertCliAction()
   {
     $registry = new Pimf_Registry();
-    $entry    = new MyFirstBlog_Models_Entry();
+    $entry    = new MyFirstBlog_Model_Entry();
 
     $entry->setTitle($this->request->fromGet()->getParam('title'));
     $entry->setContent($this->request->fromGet()->getParam('content'));
@@ -68,7 +82,7 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
   public function updateCliAction()
   {
     $registry = new Pimf_Registry();
-    $entry    = new MyFirstBlog_Models_Entry();
+    $entry    = new MyFirstBlog_Model_Entry();
 
     $entry->setTitle($this->request->fromGet()->getParam('title'));
     $entry->setContent($this->request->fromGet()->getParam('content'));
@@ -80,5 +94,26 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     $res = $registry->em->entry->update($entry);
 
     var_dump($res);
+  }
+
+  public function createtableCliAction()
+  {
+    $registry = new Pimf_Registry();
+
+    try {
+
+      $res = $registry->em->getPDO()->exec(
+        file_get_contents(
+          dirname(dirname(__FILE__)) .
+            DIRECTORY_SEPARATOR . '_database' .
+            DIRECTORY_SEPARATOR . 'create-table.sql'
+        )
+      );
+
+      var_dump($res);
+
+    } catch (PDOException $e) {
+      throw new Pimf_Controller_Exception($e->getMessage());
+    }
   }
 }

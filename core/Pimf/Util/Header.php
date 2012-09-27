@@ -49,7 +49,7 @@ class Pimf_Util_Header
 
   public static function useContentTypeCsv()
   {
-    header('Content-Type: text/csv; charset=UTF-8', true);
+    header('Content-Type: text/csv', true);
   }
 
   /**

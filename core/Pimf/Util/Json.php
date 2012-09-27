@@ -29,10 +29,10 @@ class Pimf_Util_Json
 {
   /**
    * Returns the JSON representation of a value.
-   * @param array $data
+   * @param mixed $data
    * @return string
    */
-  public static function encode(array $data)
+  public static function encode($data)
   {
     $json = json_encode($data);
 

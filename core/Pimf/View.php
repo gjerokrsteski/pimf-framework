@@ -27,10 +27,10 @@
 class Pimf_View
 {
   /**
-   * Path to the templates
+   * Path to the templates.
    * @var string
    */
-  private $path = '/_templates';
+  private $path = '_templates';
 
   /**
    * @var string Name of the template, in which case the default template.
@@ -41,13 +41,16 @@ class Pimf_View
    * Contains the variables that are to be embedded in the template.
    * @var array
    */
-  private $data = array();
+  private $data;
 
   public function __construct()
   {
-    $registry = new Pimf_Registry();
+    $registry   = new Pimf_Registry();
     $this->data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-    $this->setPath(dirname(dirname(dirname(__FILE__))).'/app/'.$registry->conf->app->name);
+
+    $this->setPath(
+      dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . $registry->conf->app->name
+    );
   }
 
   /**
@@ -73,7 +76,7 @@ class Pimf_View
    */
   protected function setPath($templatesDir)
   {
-    $this->path = (string)$templatesDir.$this->path;
+    $this->path = (string)$templatesDir . DIRECTORY_SEPARATOR . $this->path;
   }
 
   /**
@@ -89,9 +92,7 @@ class Pimf_View
 
     $trace = debug_backtrace();
     trigger_error(
-      'undefined property for the view: '
-        . $name . ' at ' . $trace[0]['file'] . ' line ' . $trace[0]['line'],
-      E_USER_NOTICE
+      'undefined property for the view: ' . $name . ' at ' . $trace[0]['file'] . ' line ' . $trace[0]['line'], E_USER_NOTICE
     );
 
     return null;
@@ -108,13 +109,13 @@ class Pimf_View
     if (file_exists($file)) {
 
       ob_start();
-        include $file;
-        $output = ob_get_contents();
+      include $file;
+      $output = ob_get_contents();
       ob_end_clean();
 
       return $output;
     }
 
-    throw new RuntimeException('could not find template: '.$file);
+    throw new RuntimeException('could not find template: ' . $file);
   }
 }
