@@ -4,84 +4,11 @@ Have you ever wished a PHP framework that perfectly adapts to your projects need
 
 [![Build Status](https://secure.travis-ci.org/gjerokrsteski/pimf.png)](http://travis-ci.org/gjerokrsteski/pimf)
 
-Two PIMF principles
--------------------
-Most of the PHP framewroks are bigger than your problem. At all you need less than 20% of the functionality of the framework to solve you problem. Therefore we belive that the “right” 20% of the effort is the 80% of the results - and that is PIMF.
+PIMF (Php Is My Framework) is a micro framework for PHP that emphasises minimalism and simplicity. It is based on proven design patterns and a fast object relational mapping mechanism, and is designed to be easily updated without having to rewrite your projects. It includes mechanisms for easily coupling controllers to ExtJs and Dojo.
 
-A good and robust business-logic is better that fat and complex framework.
-
-Behind PIMF
------------
-Actually we created PIMF for personal use. The aim was to create robust and secure projects and deliver them fast. We wanted just one easy framewrok, who can be used once for all  our projects. And than - PIMF was born!
-
-PIMFs implementation is based on well proved design patterns as well as fast object relation mapping mechanism - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without to override your projects. And for all of you out there, who like to create rich application interfaces with ExtJs or Dojo - we have created mechanism to couple your GUI to the controllers in a easy and fast way.
-
-Creating new project
---------------------
-- go to the "app" directory and create a new subdirectory for example "My First Blog"
-<pre>
-|-- app/
-|   `-- MyFirstBlog/
-|       |-- Controller/
-</pre>
-
-Creating new controller
-------------------------
-- go to "app/MyFirstBlog/" and create a new subdirectory "Controller" - the directory name is strict convention.
-- create new PHP file with name for example "Index.php" into directory  "app/MyFirstBlog/Controller/"
-- the file "Index.php" has to have strict class name like "MyFirstBlog_Controller_Index" and has to extend "Pimf_Controller_Abstract"
-- create new method action for example "indexAction()"
-- optionally you can implement the method "init()" - it will be triggered before anny action of the controller is executed.
-- call the controller-action on sending the GET "index.php?controller=index&action=index" parameters to your request
-<pre>
-|-- app/
-|   `-- MyFirstBlog/
-|       |-- Controller/
-|       |   '-- Index.php
-</pre>
-
-
-Accessing the controller action in two ways
--------------------------------------------
-- at the browser - by calling the controller-action on sending the GET "index.php?controller=index&action=showentry" parameters to your request.
-- at the command line interface by executing the command "php index.php controller=index action=insert"
-
-<pre>
-      class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
-      {
-        public function showentryAction()
-        {
-          // ...
-        }
-
-        public function insertCliAction()
-        {
-          // ...
-        }
-      }
-</pre>
-
-Maybe you wonder about that - but that is the easiest way to make some possibility for scaffolding or manipulating data without implementing a backend interface. 
-All methods at the controller who have the suffix "Action()" can be accessed only from the browser and methods who have the suffix "CliAction()" can be accessed only on the command line interface.
-If you want to send message to you interface than throw Pimf_Controller_Exception. This will be printed out at the view.
-
-Creating new data-mapper
-------------------------
-- we recommend you to get familiar with the Data-Mapper Pattern and PHP's PDO extension. You can read more here: https://github.com/gjerokrsteski/php-identity-map
-- otherwise you have to go to "app/MyFirstBlog/" and create a two new subdirectories "DataMapper" and "Models" - the directories names are strict convention.
-- create new model class into directory "app/MyFirstBlog/Models/" for example with name "Entry.php" and class name "MyFirstBlog_Models_Entry"
-- create new data-mapper class into directory "app/MyFirstBlog/DataMapper/" for example with name "Entry.php" with class name "MyFirstBlog_DataMapper_Entry" by extending the class "Pimf_DataMapper_Abstract"
-- create the CRUD methods you really need at the class "MyFirstBlog_DataMapper_Entry". For better understanding how to use PDO and how to hydrate objects, read more here: https://github.com/gjerokrsteski/pimf/blob/master/app/MyFirstBlog/DataMapper/Entry.php
-<pre>
-|-- app/
-|   `-- MyFirstBlog/
-|       |-- Controller/
-|       |   '-- Index.php
-|       |-- DataMapper/
-|       |   '-- Entry.php
-|       |-- Models/
-|       |   '-- Entry.php
-</pre>
+Usecases and documentation
+--------------------------
+Please read here: http://gjerokrsteski.github.com/pimf/
 
 Keyfeatures
 -----------
