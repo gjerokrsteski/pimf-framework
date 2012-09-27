@@ -29,7 +29,7 @@
 abstract class Pimf_Model_ToArray
 {
   /**
-   * Returns the properties of the given model-object.
+   * Returns only protected and public properties of the given model-object.
    * For another properties output format, please override this method.
    * @return array A list of properties.
    */
