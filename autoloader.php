@@ -1,5 +1,5 @@
 <?php
-function gkAutoLoader($className) {
+function pimfSuperAutoLoader($className) {
 
   static $classes;
 
@@ -31,4 +31,4 @@ function gkAutoLoader($className) {
   }
 }
 
-spl_autoload_register('gkAutoLoader');
+spl_autoload_register('pimfSuperAutoLoader');
