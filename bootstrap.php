@@ -6,9 +6,6 @@ require_once 'autoloader.php';
 
 define('E_FATAL',  E_ERROR | E_USER_ERROR | E_PARSE | E_CORE_ERROR | E_COMPILE_ERROR | E_RECOVERABLE_ERROR);
 
-
-// Wrong parameters for ErrorException([string $exception [, long $code, [ long $severity, [ string $filename, [ long $lineno  [, Exception $previous = NULL]]]]]])
-
 function pimfCatchNoUserErrorHandlerFunctionErrors()
 {
   $error = error_get_last();
