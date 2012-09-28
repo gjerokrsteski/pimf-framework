@@ -38,7 +38,13 @@ setlocale(LC_ALL, 'de_DE.utf8');
 
 // load the app configuration.
 $iniParser = new  Pimf_Util_IniParser(dirname(__FILE__).'/config.ini');
-$config = $iniParser->parse();
+
+$config = Pimf_Cache::cache('config.cache');
+
+if (!$config) {
+  $config = $iniParser->parse();
+  Pimf_Cache::cache('config.cache', $config);
+}
 
 if ($config->environment == 'testing') {
 

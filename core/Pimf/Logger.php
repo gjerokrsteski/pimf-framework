@@ -99,10 +99,10 @@ class Pimf_Logger
       $this->localeStorageDir = rtrim(realpath($this->localeStorageDir), '\\/') . DIRECTORY_SEPARATOR;
     }
 
-    $this->fileHandle = fopen($this->localeStorageDir . $this->logFileName , "at+");
+    $this->fileHandle = fopen($this->localeStorageDir . $this->logFileName, "at+");
 
     if ($this->fileHandle === false) {
-      throw new RuntimeException("failed to obtain a handle to log file '" . $this->logFileName  . "'");
+      throw new RuntimeException("failed to obtain a handle to log file '" . $this->localeStorageDir . $this->logFileName  . "'");
     }
 
     $warningLogFile          = $this->localeStorageDir . "pimf-warnings.txt";
