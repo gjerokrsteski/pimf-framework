@@ -47,5 +47,5 @@ Keyfeatures
  - String Util Methods
  - Identifier Generator
  - Enum Manager - gives the ability to emulate and create enumeration objects natively in PHP.
- - Validation: fast an secure validators for the common data types. Can be used as fluent interface - chaining of single validators.
- - Filtering: tainted data filtering
+ - Validation: fast an secure validators for the common data types.
+ - Filtering: tainted data filtering.
