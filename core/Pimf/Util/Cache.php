@@ -40,7 +40,7 @@
  * @package Pimf_Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cache
+class Pimf_Util_Cache
 {
   /**
    * Reads/writes temporary data to cache files.
