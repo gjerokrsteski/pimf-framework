@@ -39,6 +39,14 @@ class Pimf_Environment
   }
 
   /**
+   * @return Pimf_Param
+   */
+  public function getData()
+  {
+    return $this->envData;
+  }
+
+  /**
    * Is this an AJAX request?
    * @return bool
    */
@@ -63,6 +71,16 @@ class Pimf_Environment
   public function isHttps()
   {
     return $this->envData->getParam('HTTPS') === 'on';
+  }
+
+  /**
+   * Name and revision of the information protocol
+   * via which the page was requested; i.e. 'HTTP/1.0';
+   * @return mixed|null
+   */
+  public function getProtocolInfo()
+  {
+    return $this->envData->getParam('SERVER_PROTOCOL');
   }
 
   /**
@@ -209,5 +227,94 @@ class Pimf_Environment
   public function getUri()
   {
     return $this->envData->getParam('REQUEST_URI');
+  }
+
+  /**
+   * Try to get a request header.
+   * @param string $header
+   * @return array
+   */
+  public function getRequestHeader($header)
+  {
+    $header = str_replace('-', '_', strtoupper($header));
+    $value  = $this->envData->getParam('HTTP_' . $header);
+
+    if (!$value) {
+      $headers = $this->getRequestHeaders();
+      $value   = !empty($headers[$header]) ? $headers[$header] : null;
+    }
+
+    return $value;
+  }
+
+  /**
+   * Try to determine all request headers
+   *
+   * @return array
+   */
+  protected function getRequestHeaders()
+  {
+    $headers = array();
+
+    if (function_exists('apache_request_headers')) {
+      $tmpHeaders = apache_request_headers();
+
+      foreach ($tmpHeaders as $key => $value) {
+        $headers[str_replace('-', '_', strtoupper($key))] = $value;
+      }
+    } else {
+      foreach ($this->envData as $key => $value) {
+        if ('HTTP_' === substr($key, 0, 5)) {
+          $headers[substr($key, 5)] = $value;
+        }
+      }
+    }
+
+    return $headers;
+  }
+
+  /**
+   * Are we in a web environment?
+   * @return boolean
+   */
+  public static function isWeb()
+  {
+    return self::isApache() || self::isIIS() || self::isCgi();
+  }
+
+  /**
+   * Are we in a cli environment?
+   * @return boolean
+   */
+  public static function isCli()
+  {
+    return PHP_SAPI === 'cli';
+  }
+
+  /**
+   * Are we in a cgi environment?
+   * @return boolean
+   */
+  public static function isCgi()
+  {
+    return PHP_SAPI === 'cgi-fcgi' || PHP_SAPI === 'cgi';
+  }
+
+  /**
+   * Are we served through Apache[2]?
+   * @return boolean
+   */
+  public static function isApache()
+  {
+    return PHP_SAPI === 'apache2handler' || PHP_SAPI === 'apachehandler';
+  }
+
+  /**
+   * Are we served through IIS?
+   * @return boolean
+   */
+  public static function isIIS()
+  {
+    return PHP_SAPI == 'isapi';
   }
 }

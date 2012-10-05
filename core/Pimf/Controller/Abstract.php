@@ -54,7 +54,7 @@ abstract class Pimf_Controller_Abstract
    */
   public function render()
   {
-    $suffix = (PHP_SAPI === 'cli') ? 'CliAction' : 'Action';
+    $suffix = Pimf_Environment::isCli() ? 'CliAction' : 'Action';
     $action = strtolower($this->action) . $suffix;
 
     if (method_exists($this, 'init')) {

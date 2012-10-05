@@ -316,7 +316,7 @@ class Pimf_Util_String
     $needlePart   = substr($haystack, -1 * $needleLength);
 
     if ($needlePart !== $needle) {
-      // append missing trailing string
+      // append missing trailing character.
       $haystack .= $needle;
     }
 

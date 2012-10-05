@@ -34,7 +34,7 @@ ini_set('date.timezone', 'Europe/Berlin');
 setlocale(LC_ALL, 'de_DE.utf8');
 
 // load the app configuration.
-$iniParser = new  Pimf_Util_IniParser(dirname(__FILE__).'/config.ini');
+$iniParser = new  Pimf_Util_IniParser(dirname(__FILE__).DIRECTORY_SEPARATOR.'config.ini');
 
 $config = Pimf_Util_Cache::cache('config.cache');
 

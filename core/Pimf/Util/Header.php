@@ -22,7 +22,9 @@
  */
 
 /**
- * @namespace Pimf_Util
+ * Manages a raw HTTP header sending.
+ *
+ * @package Pimf_Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
 class Pimf_Util_Header
@@ -52,8 +54,32 @@ class Pimf_Util_Header
     header('Content-Type: text/csv', true);
   }
 
+  public static function useContentTypeTextPlain()
+  {
+    header('Content-Type: text/plain', true);
+  }
+
+  public static function useContentTypeZip()
+  {
+    header('Content-Type: application/zip', true);
+  }
+
+  public static function useContentTypeXZip()
+  {
+    header('Content-Type: application/x-zip', true);
+  }
+
+  public static function useContentTypeMSWord()
+  {
+    header('Content-Type: application/msword', true);
+  }
+
+  public static function useContentTypeOctetStream()
+  {
+    header('Content-Type: application/octet-stream', true);
+  }
+
   /**
-   * Prints out the new generated pdf-file as an raw HTTP-header.
    * Sends file as header through any firewall and browser - IE6, IE7, IE8, IE9, FF3.6, FF11, Safari, Chrome, Opera.
    * @link http://reeg.junetz.de/DSP/node16.html
    * @link http://www.php.net/manual/de/function.header.php#88038
@@ -77,7 +103,6 @@ class Pimf_Util_Header
     } else {
       echo $fileOrString;
     }
-
-    exit;
+    exit(0);
   }
 }
