@@ -50,7 +50,7 @@ abstract class Pimf_Controller_Abstract
   /**
    * Method to show the content.
    * @return mixed
-   * @throws RuntimeException
+   * @throws Pimf_Controller_Exception
    */
   public function render()
   {
@@ -62,7 +62,7 @@ abstract class Pimf_Controller_Abstract
     }
 
     if (!method_exists($this, $action)) {
-      throw new RuntimeException(
+      throw new Pimf_Controller_Exception(
         "no action '{$action}' defined at controller ". get_class($this)
       );
     }
