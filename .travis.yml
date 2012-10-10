@@ -3,13 +3,14 @@ language: php
 php:
   - 5.3
   - 5.4
-      
+
+before_install:
+ - pecl install PDO
+ - pecl install pdo_sqlite
+ - echo "extension=pdo.so" >> 'php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"'
+ - echo "extension=pdo_sqlite.so" >> 'php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"'
+
 notifications:
   email:
     - gjero@krsteski.de
 
-pecl install PDO
-pecl install pdo_sqlite
-
-echo "extension=pdo.so" >> 'php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"'
-echo "extension=pdo_sqlite.so" >> 'php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"'
