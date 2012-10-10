@@ -71,10 +71,8 @@ if (version_compare(PHP_VERSION, $config->bootstrap->expected->php_version, '<')
 
 // check expected extensions.
 foreach ($config->bootstrap->expected->extensions as $extension) {
- if (!extension_loaded($extension)) {
-   if (!dl($extension.'.so')) {
-      $problems[] = 'No '.$extension.' extension loaded!';
-    }  
+  if (!extension_loaded($extension)) {
+    $problems[] = 'No ' . $extension . ' extension loaded!';
   }
 }
 
