@@ -53,7 +53,7 @@ class Pimf_ResolverTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException RuntimeException
+   * @expectedException Pimf_Controller_Exception
    */
   public function testIfNoActionFoundAtController()
   {
