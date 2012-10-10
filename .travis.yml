@@ -7,7 +7,7 @@ php:
 
 before_install:
  - pear channel-update pear.php.net
- - pear upgrade-all
+ - pear upgrade PEAR_Autoloader
  - pecl install PDO
  - pecl install pdo_sqlite
  - echo "extension=pdo.so" >> 'php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"'
