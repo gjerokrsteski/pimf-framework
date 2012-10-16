@@ -1,11 +1,18 @@
 <?php
 function pimfSuperAutoLoader($className) {
 
+  $directoryToBeLoaded  = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+
+  $loadDirs = array(
+    $directoryToBeLoaded . 'core' . DIRECTORY_SEPARATOR, 
+    $directoryToBeLoaded . 'app' . DIRECTORY_SEPARATOR
+  );
+
   static $classes;
 
   if (!$classes) {
 
-    foreach(array('core/', 'app/') as $dirPart) {
+    foreach($loadDirs as $dirPart) {
 
         $regexIterator = new RegexIterator(
           new RecursiveIteratorIterator(
@@ -27,7 +34,7 @@ function pimfSuperAutoLoader($className) {
   }
 
   if (isset($classes[$className])) {
-    require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . $classes[$className];
+    require_once $classes[$className];
   }
 }
 
