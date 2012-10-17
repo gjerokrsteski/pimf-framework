@@ -122,7 +122,7 @@ If you want to send message to you interface than throw Pimf_Controller_Exceptio
 
 <ul>
 <li>Completely unit tested in PHP version 5.3 and 5.4</li>
-<li>Configuration: into common way - using ini. files.</li>
+<li>Configuration: into common and fast way - as array</li>
 <li>Intelligent bootstrapping: depending on the configuration, the framework can bootstrap in testing or production mode.</li>
 <li>Resolver: resolves the user requests to controller and action.</li>
 <li>Controller and actions can be accessed from the browser and from the command line interface.</li>
@@ -130,7 +130,7 @@ If you want to send message to you interface than throw Pimf_Controller_Exceptio
 
 <ul>
 <li>Action naming like “public function searchAction()” convention</li>
-<li>If available uses init() for preinitializing before an action is proceeded.</li>
+<li>If available uses init() for pre-initializing before an action is proceeded.</li>
 </ul>
 </li>
 <li>Request Manager: for controlled access to the global state of the world.
@@ -138,20 +138,21 @@ If you want to send message to you interface than throw Pimf_Controller_Exceptio
 <ul>
 <li>Can manage: POST, GET, CLI params and SERVER.</li>
 <li>Avoids XSS attacks.</li>
-<li>Delivers methos for retrieving all server and execution environment information.</li>
+<li>Delivers methods for retrieving all server and execution environment information.</li>
 </ul>
 </li>
 <li>View: a simply view for sending and rendering data
 
 <ul>
 <li>JSON: can send data using predefined models</li>
-<li>HTML: can bind predefined template partials and render them with preasigned variables.</li>
+<li>HTML: can bind predefined template partials "PHTML" and render them with preassigned variables</li>
 </ul>
 </li>
 <li>Session Manager: delivers methods for save session handling.</li>
 <li>Entity Manager: based on PDO it is a general manager for data persistence and object relational mapping.
 
 <ul>
+<li>Supports the following databases out of the box: MySQL, PostgreSQL, SQLite, SQL Server.</li>
 <li>Loads the predefined data mappers and can manipulate data at the database.</li>
 <li>Extends PDO for save transactions and can handle with multiple nested transactions. </li>
 </ul>
@@ -174,7 +175,7 @@ If you want to send message to you interface than throw Pimf_Controller_Exceptio
 
 <ul>
 <li>Serializer - supports igbinary if activated, for fast serialization.</li>
-<li>Property Enshurator</li>
+<li>Class Properties Types Insurer</li>
 <li>XML Convertiner - XML to DOMDocument or SimpleXMLElement or to Array.</li>
 <li>Memoryusage</li>
 <li>Message Formater</li>
@@ -183,7 +184,8 @@ If you want to send message to you interface than throw Pimf_Controller_Exceptio
 <li>Identifier Generator</li>
 <li>Enum Manager - gives the ability to emulate and create enumeration objects natively in PHP.</li>
 <li>Validation: fast an secure validators for the common data types.</li>
-<li>Filtering: tainted data filtering</li>
+<li>Filtering: tainted data filtering.</li>
+<li>Fluent: creates ad-hoc object as data container, using fluent interface, for any purpose you need.</li>
 </ul>
 </li>
 </ul><h3>Support or Contact</h3>
