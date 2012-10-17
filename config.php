@@ -1,7 +1,7 @@
 <?php
 $config = array(
 
-  'environment' => 'production',
+  'environment' => 'testing',
 
   'app' => array(
     'name' => 'MyFirstBlog'
