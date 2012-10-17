@@ -21,6 +21,7 @@
 /**
  * Server and execution environment information.
  *
+ * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
 class Pimf_Environment

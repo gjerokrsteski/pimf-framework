@@ -10,42 +10,13 @@ Usecases and documentation
 --------------------------
 Please read here: http://gjerokrsteski.github.com/pimf/
 
-Keyfeatures
------------
-- Completely unit tested in PHP version 5.3 and 5.4
-- Configuration: into common way - using ini. files.
-- Intelligent bootstrapping: depending on the configuration, the framework can bootstrap in testing or production mode.
-- Resolver: resolves the user requests to controller and action.
-- Controller and actions can be accessed from the browser and from the command line interface.
-- Controller:  based on the most popular design patterns for controllers. 
- - Action naming like “public function searchAction()” convention
- - If available uses init() for preinitializing before an action is proceeded.
-- Request Manager: for controlled access to the global state of the world.
- - Can manage: POST, GET, CLI params and SERVER.
- - Avoids XSS attacks.
- - Delivers methos for retrieving all server and execution environment information.
-- View: a simply view for sending and rendering data
- - JSON: can send data using predefined models
- - HTML: can bind predefined template partials and render them with preasigned variables.
-- Session Manager: delivers methods for save session handling.
-- Entity Manager: based on PDO it is a general manager for data persistence and object relational mapping.
- - Loads the predefined data mappers and can manipulate data at the database.
- - Extends PDO for save transactions and can handle with multiple nested transactions. 
-- Data Mappers: for mapping the domain models to the persistence layer.
- - Can implement a identity map. By using Data-Mapper pattern without an identity map, you can easily run into problems because you may have more than one object that references the same domain entity.
-- Logger: with common logging options into a file.
- - User has to define a temporary directory for logging - 0777.
- - Can separate log messages to errors, warnings, debugging, info.
- - If php’s display errors is off, so only errors will be logged = production.
-- Util Farm: a bunch of useful and proved utilities, making our programmers live easier.
- - Serializer - supports igbinary if activated, for fast serialization.
- - Property Enshurator
- - XML Convertiner - XML to DOMDocument or SimpleXMLElement or to Array.
- - Memoryusage
- - Message Formater
- - UUID Generator
- - String Util Methods
- - Identifier Generator
- - Enum Manager - gives the ability to emulate and create enumeration objects natively in PHP.
- - Validation: fast an secure validators for the common data types.
- - Filtering: tainted data filtering.
+Contributing and pull request guidelines
+----------------------------------------
+[GitHub pull requests](https://help.github.com/articles/using-pull-requests) are a great way for everyone in the community to contribute to the PIMF codebase. Found a bug? Just fix it in your fork and submit a pull request. This will then be reviewed, and, if found as good, merged into the main repository.
+
+In order to keep the codebase clean, stable and at high quality, even with so many people contributing, some guidelines are necessary for high-quality pull requests:
+
+- **Branch:** Unless they are immediate documentation fixes relevant for old versions, pull requests should be sent to the `develop` branch only. Make sure to select that branch as target when creating the pull request (GitHub will not automatically select it.)
+- **Documentation:** If you are adding a new feature or changing the API in any relevant way, this should be documented.
+- **Unit tests:** To keep old bugs from re-appearing and generally hold quality at a high level, the PIMF core is thoroughly unit-tested. Thus, when you create a pull request, it is expected that you unit test any new code you add. For any bug you fix, you should also add regression tests to make sure the bug will never appear again. If you are unsure about how to write tests, the core team or other contributors will gladly help.
+

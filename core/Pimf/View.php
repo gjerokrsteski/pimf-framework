@@ -49,7 +49,7 @@ class Pimf_View
     $this->data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
 
     $this->setPath(
-      dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . $registry->conf->app->name
+      dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . $registry->conf['app']['name']
     );
   }
 

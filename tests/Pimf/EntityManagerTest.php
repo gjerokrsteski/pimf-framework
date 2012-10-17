@@ -3,7 +3,7 @@ class Pimf_EntityManagerTest extends PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {
-    new Pimf_EntityManager(new Pimf_PDO('sqlite::memory:'));
+    new Pimf_EntityManager(new Pimf_Pdo('sqlite::memory:'));
   }
 
   /**
@@ -11,7 +11,7 @@ class Pimf_EntityManagerTest extends PHPUnit_Framework_TestCase
    */
   public function testLoadingNotExistingEntity()
   {
-    $em = new Pimf_EntityManager(new Pimf_PDO('sqlite::memory:'));
+    $em = new Pimf_EntityManager(new Pimf_Pdo('sqlite::memory:'));
 
     $em->load('notexistingentity');
   }

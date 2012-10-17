@@ -33,10 +33,10 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
   protected $prefix;
 
   /**
-   * @param Pimf_PDO $db
+   * @param Pimf_Pdo $db
    * @param string $prefix The data-mappers repository name.
    */
-  public function __construct(Pimf_PDO $db, $prefix = 'Pimf')
+  public function __construct(Pimf_Pdo $db, $prefix = 'Pimf')
   {
     parent::__construct($db);
     $this->prefix = $prefix . '_DataMapper_';

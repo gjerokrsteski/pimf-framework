@@ -4,10 +4,7 @@ require_once 'bootstrap.php';
 $cliParams = array();
 
 if (Pimf_Environment::isCli()) {
-  parse_str(
-    implode('&', array_slice($_SERVER['argv'], 1)),
-    $cliParams
-  );
+  parse_str(implode('&', array_slice($_SERVER['argv'], 1)), $cliParams);
 }
 
 try{
@@ -18,17 +15,17 @@ try{
 
     dirname(__FILE__) . DIRECTORY_SEPARATOR
       . 'app' . DIRECTORY_SEPARATOR .
-      $registry->conf->app->name
+      $registry->conf['app']['name']
       . DIRECTORY_SEPARATOR . 'Controller',
 
-    Pimf_Util_String::ensureTrailing('_', $registry->conf->app->name)
+    Pimf_Util_String::ensureTrailing('_', $registry->conf['app']['name'])
 
   );
 
   $resolver->process()->render();
 
 } catch (Pimf_Controller_Exception $e){
-  echo $e->getMessage();
+  echo $e->getMessage().PHP_EOL;
 } catch (Exception $e) {
   $registry->logger->error($e->getMessage() . $e->getTraceAsString());
 }

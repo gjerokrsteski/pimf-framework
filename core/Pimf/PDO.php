@@ -22,7 +22,7 @@
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_PDO extends PDO
+class Pimf_Pdo extends PDO
 {
   /**
    * The current transaction level.

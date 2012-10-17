@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Models_Json
+ * Pimf_Model
  *
  * PHP Version 5
  *

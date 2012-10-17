@@ -19,7 +19,7 @@
  */
 
 /**
- * Request Manager: for controlled access to the global state of the world.
+ * Request Manager - for controlled access to the global state of the world.
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
