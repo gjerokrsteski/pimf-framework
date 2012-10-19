@@ -1,8 +1,9 @@
 <?php
 require_once 'autoloader.php';
-
-// load the app configuration.
 require_once 'config.php';
+
+ini_set('default_charset', $config['encoding']);
+date_default_timezone_set($config['timezone']);
 
 if ($config['environment'] == 'testing') {
 
@@ -40,14 +41,13 @@ $registry = new Pimf_Registry();
 
 try {
 
-  $db = Pimf_Pdo_Factory::get($dbConf);
-
-  $registry->em     = new Pimf_EntityManager($db, $config['app']['name']);
-
+  $registry->em     = new Pimf_EntityManager(Pimf_Pdo_Factory::get($dbConf), $config['app']['name']);
+  
   $registry->logger = new Pimf_Logger($config['bootstrap']['local_temp_directory']);
   $registry->logger->init();
 
   $registry->env  = new Pimf_Environment($_SERVER);
+  
   $registry->conf = $config;
 
 } catch (Exception $e) {
@@ -58,4 +58,4 @@ if (!empty($problems)) {
   die(print_r($problems, true));
 }
 
-unset($dbDsn, $dbUser, $dbPwd, $db, $extension, $problems, $config);
+unset($dbDsn, $dbUser, $dbPwd, $extension, $problems, $config);

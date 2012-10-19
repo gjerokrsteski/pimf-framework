@@ -33,7 +33,7 @@
  * @property Pimf_EntityManager $em
  * @property Pimf_Logger $logger
  * @property Pimf_Environment $env
- * @property stdClass $conf
+ * @property array $conf
  */
 class Pimf_Registry
 {
