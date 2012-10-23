@@ -49,12 +49,12 @@
 <ol>
 <li>Download PIMF</li>
 <li>Extract the PIMF archive and upload the contents to your web server.</li>
-<li>Open the config.php file and set
-<pre>
-'environment' =&gt; 'production'
-'local_temp_directory' =&gt; '/tmp/' //if necessary
-</pre>
-</li>
+<li>Open the config.php file and set</li>
+</ol><div class="highlight"><pre><span class="s1">'environment'</span> <span class="o">=&gt;</span> <span class="s1">'production'</span>
+<span class="s1">'local_temp_directory'</span> <span class="o">=&gt;</span> <span class="s1">'/tmp/'</span> <span class="c1">//if necessary</span>
+</pre></div>
+
+<ol>
 <li>Create at your local temp directory the files <strong>pimf-logs.txt</strong>, <strong>pimf-warnings.txt</strong>, <strong>pimf-errors.txt</strong> and verify that they are writable.</li>
 <li>Navigate to your application in a web browser.</li>
 </ol><p>If all is well, you should see a pretty PIMF splash page. Get ready - there is lot more to learn!</p>
@@ -79,14 +79,13 @@
 <p>SQLite is an awesome, zero-configuration database system. By default, PIMF is configured to use a SQLite database. Really, you don't have to change anything. Just drop a SQLite database named blog-production.db into the 'app/MyFirstBlog/_database/ ' directory. You're done.
 Of course, if you want to name your database something besides "application", you can modify the database option in the SQLite section of the config.php file:</p>
 
-<pre>
-  'production' =&gt; array(
-    'db' =&gt; array(
-      'driver' =&gt; 'sqlite',
-      'database' =&gt; 'app/MyFirstBlog/_database/blog-production.db'
-    ),
-  ),
-</pre>
+<div class="highlight"><pre>  <span class="s1">'production'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'db'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+      <span class="s1">'driver'</span> <span class="o">=&gt;</span> <span class="s1">'sqlite'</span><span class="p">,</span>
+      <span class="s1">'database'</span> <span class="o">=&gt;</span> <span class="s1">'app/MyFirstBlog/_database/blog-production.db'</span>
+    <span class="p">),</span>
+  <span class="p">),</span>
+</pre></div>
 
 <p>If your application receives less than 100,000 hits per day, SQLite should be suitable for production use in your application. Otherwise, consider using MySQL or PostgreSQL.</p>
 
@@ -100,24 +99,23 @@ Of course, if you want to name your database something besides "application", yo
 
 <p>An example of the MySQL system settings with added default PDO attributes:</p>
 
-<pre>
-  'db' =&gt; array(
-    'driver'                    =&gt; 'mysql',
-    'host'                      =&gt; 'localhost',
-    'database'                  =&gt; 'database',
-    'username'                  =&gt; 'root',
-    'password'                  =&gt; '',
-    'charset'                   =&gt; 'utf8',
-    'prefix'                    =&gt; '',
-    'options'                   =&gt; array(
-      PDO::ATTR_CASE              =&gt; PDO::CASE_LOWER,
-      PDO::ATTR_ERRMODE           =&gt; PDO::ERRMODE_EXCEPTION,
-      PDO::ATTR_ORACLE_NULLS      =&gt; PDO::NULL_NATURAL,
-      PDO::ATTR_STRINGIFY_FETCHES =&gt; false,
-      PDO::ATTR_EMULATE_PREPARES  =&gt; false,
-    ),
-  ),
-</pre>
+<div class="highlight"><pre>  <span class="s1">'db'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+    <span class="s1">'driver'</span>                    <span class="o">=&gt;</span> <span class="s1">'mysql'</span><span class="p">,</span>
+    <span class="s1">'host'</span>                      <span class="o">=&gt;</span> <span class="s1">'localhost'</span><span class="p">,</span>
+    <span class="s1">'database'</span>                  <span class="o">=&gt;</span> <span class="s1">'database'</span><span class="p">,</span>
+    <span class="s1">'username'</span>                  <span class="o">=&gt;</span> <span class="s1">'root'</span><span class="p">,</span>
+    <span class="s1">'password'</span>                  <span class="o">=&gt;</span> <span class="s1">''</span><span class="p">,</span>
+    <span class="s1">'charset'</span>                   <span class="o">=&gt;</span> <span class="s1">'utf8'</span><span class="p">,</span>
+    <span class="s1">'prefix'</span>                    <span class="o">=&gt;</span> <span class="s1">''</span><span class="p">,</span>
+    <span class="s1">'options'</span>                   <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
+      <span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_CASE</span>              <span class="o">=&gt;</span> <span class="nx">PDO</span><span class="o">::</span><span class="na">CASE_LOWER</span><span class="p">,</span>
+      <span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_ERRMODE</span>           <span class="o">=&gt;</span> <span class="nx">PDO</span><span class="o">::</span><span class="na">ERRMODE_EXCEPTION</span><span class="p">,</span>
+      <span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_ORACLE_NULLS</span>      <span class="o">=&gt;</span> <span class="nx">PDO</span><span class="o">::</span><span class="na">NULL_NATURAL</span><span class="p">,</span>
+      <span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_STRINGIFY_FETCHES</span> <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>
+      <span class="nx">PDO</span><span class="o">::</span><span class="na">ATTR_EMULATE_PREPARES</span>  <span class="o">=&gt;</span> <span class="k">false</span><span class="p">,</span>
+    <span class="p">),</span>
+  <span class="p">),</span>
+</pre></div>
 
 <p>More about the PDO connection attributes can be found in the PHP manual.</p>
 
@@ -125,11 +123,10 @@ Of course, if you want to name your database something besides "application", yo
 
 <ul>
 <li>go to the "app" directory and create a new subdirectory for example "My First Blog"</li>
-</ul><pre>
-|-- app/
+</ul><div class="highlight"><pre>|-- app/
 |   `-- MyFirstBlog/
 |       |-- Controller/
-</pre>
+</pre></div>
 
 <h3>Creating new controller</h3>
 
@@ -140,41 +137,40 @@ Of course, if you want to name your database something besides "application", yo
 <li>create new method action for example "indexAction()"</li>
 <li>optionally you can implement the method "init()" - it will be triggered before any action of the controller is executed.</li>
 <li>call the controller-action on sending the GET "index.php?controller=index&amp;action=index" parameters to your request</li>
-</ul><pre>
-|-- app/
+</ul><div class="highlight"><pre>|-- app/
 |   `-- MyFirstBlog/
 |       |-- Controller/
 |       |   '-- Index.php
-</pre>
+</pre></div>
 
 <h3>Accessing the controller action in two ways</h3>
 
 <ul>
-<li>at the browser, by calling the controller-action on sending the GET parameters to your request
-<pre>
-/index.php?controller=index&amp;action=showentry
-</pre>
-</li>
-<li>at the command line interface by executing the command
-<pre>
-php pimf controller=index action=insert title="Conan" content="action movie"
-</pre>
-</li>
-</ul><pre>
- class MyFirstBlog_Controller_Index
- extends Pimf_Controller_Abstract
- {
-   public function showentryAction()
-   {
-     // ...
-   }
+<li>at the browser, by calling the controller-action on sending the GET parameters to your request</li>
+</ul><div class="highlight"><pre>/index.php?controller<span class="o">=</span>index&amp;action<span class="o">=</span>showentry
+</pre></div>
 
-   public function insertCliAction()
-   {
-    // ...
-   }
- }
-</pre>
+<ul>
+<li>at the command line interface by executing the command</li>
+</ul><div class="highlight"><pre>php pimf <span class="nv">controller</span><span class="o">=</span>index <span class="nv">action</span><span class="o">=</span>insert <span class="nv">title</span><span class="o">=</span><span class="s2">"Conan"</span> <span class="nv">content</span><span class="o">=</span><span class="s2">"action movie"</span>
+</pre></div>
+
+<p>Here you can see how they are defined at the index-controller:</p>
+
+<div class="highlight"><pre> <span class="k">class</span> <span class="nc">MyFirstBlog_Controller_Index</span>
+ <span class="k">extends</span> <span class="nx">Pimf_Controller_Abstract</span>
+ <span class="p">{</span>
+   <span class="k">public</span> <span class="k">function</span> <span class="nf">showentryAction</span><span class="p">()</span>
+   <span class="p">{</span>
+     <span class="c1">// ...</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="k">function</span> <span class="nf">insertCliAction</span><span class="p">()</span>
+   <span class="p">{</span>
+    <span class="c1">// ...</span>
+   <span class="p">}</span>
+ <span class="p">}</span>
+</pre></div>
 
 <p>Maybe you wonder about that - but that is the easiest way to make some possibility for scaffolding or manipulating data without implementing a backend interface.
 All methods at the controller who have the suffix "Action()" can be accessed only from the browser and methods who have the suffix "CliAction()" can be accessed only on the command line interface.
@@ -190,8 +186,7 @@ If you want to send message to you interface than throw Pimf_Controller_Exceptio
 <li>create new data-mapper class into directory "app/MyFirstBlog/DataMapper/" for example with name "Entry.php" with class name "MyFirstBlog_DataMapper_Entry" by extending the class "Pimf_DataMapper_Abstract"</li>
 <li>create the CRUD methods you really need at the class "MyFirstBlog_DataMapper_Entry". For better understanding how to use PDO and how to hydrate objects, read more here: <a href="https://github.com/gjerokrsteski/pimf/blob/master/app/MyFirstBlog/DataMapper/Entry.php">https://github.com/gjerokrsteski/pimf/blob/master/app/MyFirstBlog/DataMapper/Entry.php</a>
 </li>
-</ul><pre>
-|-- app/
+</ul><div class="highlight"><pre>|-- app/
 |   `-- MyFirstBlog/
 |       |-- Controller/
 |       |   '-- Index.php
@@ -199,7 +194,7 @@ If you want to send message to you interface than throw Pimf_Controller_Exceptio
 |       |   '-- Entry.php
 |       |-- Model/
 |       |   '-- Entry.php
-</pre>
+</pre></div>
 
 <h3>Feature overview</h3>
 
