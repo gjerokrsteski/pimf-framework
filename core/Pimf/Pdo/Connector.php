@@ -1,11 +1,6 @@
 <?php
 /**
- * Pimf_Pdo
- *
  * PHP Version 5
- *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
  *
  * LICENSE
  *
