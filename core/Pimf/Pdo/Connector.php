@@ -1,5 +1,7 @@
 <?php
 /**
+ * Pimf_Pdo
+ *
  * PHP Version 5
  *
  * LICENSE
