@@ -4,9 +4,6 @@
  *
  * PHP Version 5
  *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
- *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
@@ -44,24 +41,18 @@ class Pimf_Pdo_Postgre extends Pimf_Pdo_Connector
   {
     $dsn = "pgsql:host={$config['host']};dbname={$config['database']}";
 
-    // The developer has the freedom of specifying a port for the PostgresSQL
-    // database or the default port (5432) will be used by PDO to create the
-    // connection to the database for the developer.
     if (isset($config['port'])) {
       $dsn .= ";port={$config['port']}";
     }
 
     $connection = new Pimf_Pdo($dsn, $config['username'], $config['password'], $this->options($config));
 
-    // If a character set has been specified, we'll execute a query against
-    // the database to set the correct character set. By default, this is
     // set to UTF-8 which should be fine for most scenarios.
     if (isset($config['charset'])) {
       $connection->prepare("SET NAMES '{$config['charset']}'")->execute();
     }
 
-    // If a schema has been specified, we'll execute a query against
-    // the database to set the search path.
+    // If a schema has been specified
     if (isset($config['schema'])) {
       $connection->prepare("SET search_path TO '{$config['schema']}'")->execute();
     }
