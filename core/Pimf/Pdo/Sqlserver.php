@@ -4,9 +4,6 @@
  *
  * PHP Version 5
  *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
- *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
@@ -42,12 +39,11 @@ class Pimf_Pdo_Sqlserver extends Pimf_Pdo_Connector
    */
   public function connect(array $config)
   {
-    // Format the SQL Server connection string. This connection string format can
-    // also be used to connect to Azure SQL Server databases. The port is defined
-    // directly after the server name, so we'll create that first.
-    $port = (isset($config['port'])) ? ',' . $config['port'] : '';
+    // This connection string format can also be used to connect 
+    // to Azure SQL Server databases. 
+    $port = (isset($config['port'])) ? ','.$config['port'] : '';
 
-    //check for dblib for mac users connecting to mssql (utilizes freetds)
+    //check for dblib for mac users connecting to mssql
     if (isset($config['dsn_type']) && !empty($config['dsn_type']) and $config['dsn_type'] == 'dblib') {
       $dsn = "dblib:host={$config['host']}{$port};dbname={$config['database']}";
     } else {
