@@ -4,9 +4,6 @@
  *
  * PHP Version 5
  *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
- *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
@@ -38,8 +35,7 @@ class Pimf_Pdo_Sqlite extends Pimf_Pdo_Connector
     $options = $this->options($config);
 
     // SQLite provides supported for "in-memory" databases, which exist only for
-    // lifetime of the request. Any given in-memory database may only have one
-    // PDO connection open to it at a time. These are mainly for tests.
+    // lifetime of the request. These are mainly for tests.
     if ($config['database'] == ':memory:') {
       return new Pimf_Pdo('sqlite::memory:', null, null, $options);
     }
