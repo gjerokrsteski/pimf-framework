@@ -617,4 +617,15 @@ class Pimf_Util_String
 
     return $string;
   }
+
+  /**
+   * @param int $length
+   * @return string
+   */
+  public static function random($length = 32)
+  {
+    return substr(
+      str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 5)), 0, $length
+    );
+  }
 }

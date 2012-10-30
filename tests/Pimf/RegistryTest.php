@@ -24,4 +24,9 @@ class Pimf_RegistryTest extends PHPUnit_Framework_TestCase
 
     $this->assertEquals(array(1,2,3), $reg->list);
   }
+
+  public function testGettingItemsStatically()
+  {
+    $this->assertEquals(array(1,2,3), Pimf_Registry::get('list'));
+  }
 }

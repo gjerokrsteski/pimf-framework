@@ -5,14 +5,6 @@
 # be placed in your Apache config whenever possible.
 # http://httpd.apache.org/docs/2.2/howto/htaccess.html
 
-# Turning on the rewrite engine is necessary for the following rules and
-# features. "+FollowSymLinks" must be enabled for this to work symbolically.
-
-<IfModule mod_rewrite.c>
-	Options +FollowSymLinks
-	RewriteEngine On
-</IfModule>
-
 # For all files not found in the file system, reroute the request to the
 # "index.php" front controller, keeping the query string intact
 

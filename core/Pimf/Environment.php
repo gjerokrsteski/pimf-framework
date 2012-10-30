@@ -118,7 +118,7 @@ class Pimf_Environment
    */
   public function getHostWithPort()
   {
-    return sprintf('%s:%s', $this->getHost(), $this->getPort());
+    return ''.$this->getHost().':'.$this->getPort();
   }
 
   /**

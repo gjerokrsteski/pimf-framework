@@ -49,9 +49,12 @@ class Pimf_Session
    */
   protected function __construct()
   {
-    session_start();
-    if (isset($_SESSION['_sesMgmt']) === false) {
-      $_SESSION['_sesMgmt'] = array();
+    if (!isset($_SESSION)) {
+      session_start();
+    }
+
+    if (isset($_SESSION) === false) {
+      $_SESSION = array();
     }
   }
 
@@ -75,8 +78,8 @@ class Pimf_Session
       );
     }
 
-    if (isset($_SESSION['_sesMgmt'][$key]) === false) {
-      $_SESSION['_sesMgmt'][$key] = $value;
+    if (isset($_SESSION[$key]) === false) {
+      $_SESSION[$key] = $value;
       return true;
     }
 
@@ -90,8 +93,8 @@ class Pimf_Session
    */
   public function &__get($key)
   {
-    if (isset($_SESSION['_sesMgmt'][$key])) {
-      return $_SESSION['_sesMgmt'][$key];
+    if (isset($_SESSION[$key])) {
+      return $_SESSION[$key];
     }
 
     return null;
@@ -104,8 +107,8 @@ class Pimf_Session
    */
   public function __unset($key)
   {
-    if (isset($_SESSION['_sesMgmt'][$key])) {
-      unset($_SESSION['_sesMgmt'][$key]);
+    if (isset($_SESSION[$key])) {
+      unset($_SESSION[$key]);
       return true;
     }
     return false;
@@ -138,7 +141,7 @@ class Pimf_Session
   public function reset()
   {
     session_regenerate_id(true);
-    $_SESSION['_sesMgmt'] = array();
+    $_SESSION = array();
   }
 
   /**

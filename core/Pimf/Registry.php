@@ -25,6 +25,11 @@
  * <code>
  * $registry = new Pimf_Registry();
  * $registry->your_key = "123";
+ *
+ * // or ..
+ *
+ * Pimf_Registry::set('your_key', "123")
+ * Pimf_Registry::get('your_key')
  * </code>
  *
  * @package Pimf
@@ -57,9 +62,18 @@ class Pimf_Registry
   /**
    * @param mixed $namespace The namespace or identifier.
    * @param mixed $value The value.
-   * @throws LogicException If key should be overwritten.
    */
   public function __set($namespace, $value)
+  {
+    self::set($namespace, $value);
+  }
+
+  /**
+   * @param mixed $namespace The namespace or identifier.
+   * @param mixed $value The value.
+   * @throws LogicException If key should be overwritten.
+   */
+  public static function set($namespace, $value)
   {
     self::init();
 
@@ -74,9 +88,18 @@ class Pimf_Registry
 
   /**
    * @param mixed $namespace The namespace or identifier.
-   * @return mixed|null
+   * @return mixed
    */
   public function __get($namespace)
+  {
+    return self::get($namespace);
+  }
+
+  /**
+   * @param mixed $namespace The namespace or identifier.
+   * @return mixed|null
+   */
+  public static function get($namespace)
   {
     self::init();
 
