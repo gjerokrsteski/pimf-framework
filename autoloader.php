@@ -23,7 +23,6 @@ function pimfSuperAutoLoader($className) {
         );
 
         foreach (iterator_to_array($regexIterator, false) as $file) {
-          $file = current($file);
           $file = str_replace('\\', '/', $file); // Windows compatible
           $path = str_replace($dirPart, '', current($file));
           $name = str_replace('/', '_', $path);
