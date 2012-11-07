@@ -4,8 +4,8 @@ function pimfSuperAutoLoader($className) {
   $directoryToBeLoaded  = dirname(__FILE__) . DIRECTORY_SEPARATOR;
 
   $loadDirs = array(
-    $directoryToBeLoaded . 'core' . DIRECTORY_SEPARATOR, 
-    $directoryToBeLoaded . 'app' . DIRECTORY_SEPARATOR
+    $directoryToBeLoaded . 'core' . '/', 
+    $directoryToBeLoaded . 'app' . '/'
   );
 
   static $classes;
@@ -23,9 +23,10 @@ function pimfSuperAutoLoader($className) {
         );
 
         foreach (iterator_to_array($regexIterator, false) as $file) {
-          $file = str_replace('\\', DIRECTORY_SEPARATOR, $file); // Windows compatible
+          $file = current($file);
+          $file = str_replace('\\', '/', $file); // Windows compatible
           $path = str_replace($dirPart, '', current($file));
-          $name = str_replace(DIRECTORY_SEPARATOR, '_', $path);
+          $name = str_replace('/', '_', $path);
           $name = str_replace('.php', '', $name);
 
           $classes[$name] = $dirPart . $path;
