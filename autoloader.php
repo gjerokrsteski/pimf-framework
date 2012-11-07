@@ -1,7 +1,7 @@
 <?php
 function pimfSuperAutoLoader($className) {
 
-  $directoryToBeLoaded  = dirname(__FILE__) . DIRECTORY_SEPARATOR;
+  $directoryToBeLoaded  = dirname(__FILE__) . '/';
 
   $loadDirs = array(
     $directoryToBeLoaded . 'core' . '/', 
