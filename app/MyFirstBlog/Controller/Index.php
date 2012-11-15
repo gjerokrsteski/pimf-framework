@@ -10,10 +10,10 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     $viewMain = new Pimf_View();
     $viewMain->setTemplate('theblog');
     $viewMain->assign('blog_title', 'This is my firs Blog with PIMF');
-    $viewMain->assign('blog_content', $view->loadTemplate());
+    $viewMain->assign('blog_content', $view->render());
     $viewMain->assign('blog_footer', 'A Blog about cool and thin framework');
 
-    return $viewMain->loadTemplate();
+    return $viewMain->render();
   }
 
   public function indexAction()

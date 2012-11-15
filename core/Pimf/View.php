@@ -103,7 +103,7 @@ class Pimf_View
    * @throws RuntimeException If could not find template.
    * @throws Exception If previous thrown.
    */
-  public function loadTemplate()
+  public function render()
   {
     $file = $this->path . '/' . $this->template . '.phtml';
 
