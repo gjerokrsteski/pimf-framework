@@ -1,18 +1,11 @@
 <?php
 function pimfSuperAutoLoader($className) {
 
-  $directoryToBeLoaded  = dirname(__FILE__) . '/';
-
-  $loadDirs = array(
-    $directoryToBeLoaded . 'core' . '/', 
-    $directoryToBeLoaded . 'app' . '/'
-  );
-
   static $classes;
 
   if (!$classes) {
 
-    foreach($loadDirs as $dirPart) {
+    foreach(array( 'core' . '/',  'app' . '/' ) as $dirPart) {
 
         $regexIterator = new RegexIterator(
           new RecursiveIteratorIterator(
@@ -23,7 +16,7 @@ function pimfSuperAutoLoader($className) {
         );
 
         foreach (iterator_to_array($regexIterator, false) as $file) {
-          $file = str_replace('\\', '/', $file); // Windows compatible
+          $file = str_replace('\\', '/', $file);
           $path = str_replace($dirPart, '', current($file));
           $name = str_replace('/', '_', $path);
           $name = str_replace('.php', '', $name);

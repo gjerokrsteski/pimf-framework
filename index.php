@@ -13,10 +13,7 @@ try{
 
     new Pimf_Request(($_GET + $cliParams), $_POST, $_COOKIE),
 
-    dirname(__FILE__) . DIRECTORY_SEPARATOR
-      . 'app' . DIRECTORY_SEPARATOR .
-      $registry->conf['app']['name']
-      . DIRECTORY_SEPARATOR . 'Controller',
+    dirname(__FILE__) . '/' . 'app' . '/' . $registry->conf['app']['name'] . '/' . 'Controller',
 
     Pimf_Util_String::ensureTrailing('_', $registry->conf['app']['name'])
 

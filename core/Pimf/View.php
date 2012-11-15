@@ -49,7 +49,7 @@ class Pimf_View
     $this->data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
 
     $this->setPath(
-      dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . $registry->conf['app']['name']
+      dirname(dirname(dirname(__FILE__))) . '/' . 'app' . '/' . $registry->conf['app']['name']
     );
   }
 
@@ -76,7 +76,7 @@ class Pimf_View
    */
   protected function setPath($templatesDir)
   {
-    $this->path = (string)$templatesDir . DIRECTORY_SEPARATOR . $this->path;
+    $this->path = (string)$templatesDir . '/' . $this->path;
   }
 
   /**
@@ -101,21 +101,30 @@ class Pimf_View
   /**
    * @return string The Output of the template.
    * @throws RuntimeException If could not find template.
+   * @throws Exception If previous thrown.
    */
   public function loadTemplate()
   {
-    $file = $this->path . DIRECTORY_SEPARATOR . $this->template . '.phtml';
+    $file = $this->path . '/' . $this->template . '.phtml';
 
-    if (file_exists($file)) {
-
-      ob_start();
-      include $file;
-      $output = ob_get_contents();
-      ob_end_clean();
-
-      return $output;
+    if (!file_exists($file)) {
+      throw new RuntimeException('could not find template: ' . $file);
     }
 
-    throw new RuntimeException('could not find template: ' . $file);
+    $level = ob_get_level();
+    ob_start();
+
+    try {
+
+      include $file;
+      return ob_get_clean();
+
+    } catch (Exception $e) {
+      while (ob_get_level() > $level) {
+        ob_end_clean();
+      }
+
+      throw $e;
+    }
   }
 }
