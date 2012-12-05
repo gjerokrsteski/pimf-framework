@@ -2,7 +2,7 @@
 /**
  * Class for data access
  */
-class MyFirstBlog_Model_Entry extends Pimf_Model_ToArray
+class MyFirstBlog_Model_Entry extends ArrayObject
 {
   protected $id;
 

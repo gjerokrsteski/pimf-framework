@@ -77,9 +77,9 @@ class Pimf_Registry
   {
     self::init();
 
-    if (self::$battery->offsetExists($namespace)) {
+    if (is_resource($value)) {
       throw new LogicException(
-        'key ['.$namespace.'] can not be overwritten at the registry'
+        'storing resources in a registry is not permitted!'
       );
     }
 

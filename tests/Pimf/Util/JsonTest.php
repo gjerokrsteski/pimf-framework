@@ -1,14 +1,4 @@
 <?php
-class TestJsonModel extends Pimf_Model_ToArray
-{
-  private $id = 1;
-
-  protected $title = 'my title';
-
-  public $content = 'my content';
-}
-
-
 class JsonTest extends PHPUnit_Framework_TestCase
 {
   public function testEncodingAndDecodingValidData()
@@ -22,13 +12,18 @@ class JsonTest extends PHPUnit_Framework_TestCase
 
   public function testHandlingWithObjects()
   {
-    $jsonModel = new TestJsonModel();
-    $encode = Pimf_Util_Json::encode($jsonModel->toArray());
+    $jsonModel = new ArrayObject(array(
+      'title'   => 'my title',
+      'content' => 'my content',
+      'id'      => 1
+    ));
+
+    $encode = Pimf_Util_Json::encode($jsonModel->getArrayCopy());
     $decode = Pimf_Util_Json::decode($encode);
 
     $this->assertObjectHasAttribute('title', $decode);
     $this->assertObjectHasAttribute('content', $decode);
-    $this->assertObjectNotHasAttribute('id', $decode);
+    $this->assertObjectHasAttribute('id', $decode);
 
     $this->assertEquals($decode->title, 'my title');
     $this->assertEquals($decode->content, 'my content');

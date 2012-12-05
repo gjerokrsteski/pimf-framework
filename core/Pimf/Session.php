@@ -74,7 +74,7 @@ class Pimf_Session
   {
     if (is_resource($value)) {
       throw new LogicException(
-        'storing resources in a SESSION is permitted!'
+        'storing resources in a session is not permitted!'
       );
     }
 

@@ -63,7 +63,7 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     Pimf_Util_Header::clear();
     Pimf_Util_Header::useContentTypeJson();
 
-    echo Pimf_Util_Json::encode($entry->toArray());
+    echo Pimf_Util_Json::encode($entry->getArrayCopy());
   }
 
   public function insertCliAction()

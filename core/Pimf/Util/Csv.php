@@ -58,9 +58,7 @@ class Pimf_Util_Csv
    */
   public function create(array $data)
   {
-    $data = new ArrayObject($data, ArrayObject::STD_PROP_LIST);
-
-    $fp = fopen('php://temp', 'w');
+    $fp = fopen('php://temp', 'a');
 
     $bom = chr(0xEF) . chr(0xBB) . chr(0xBF);
     fputs($fp, $bom);

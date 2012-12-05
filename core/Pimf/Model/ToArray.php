@@ -19,9 +19,12 @@
  */
 
 /**
- * Defines the general behavior of sending JSON data.
+ * Returns only protected and public properties of the given model-object. You have to extend it.
  *
- * You have to extend it.
+ * Normally you will use ArrayObject and than method getArrayCopy() to turn Classes to Array, but
+ * with Pimf_Model_ToArray you have the opportunity to easily intercept the setting of the values at the array.
+ *
+ * Sure if you need it - otherwise please prefers using ArrayObject - is much faster!
  *
  * @package Pimf_Model_ToArray
  * @author Gjero Krsteski <gjero@krsteski.de>
