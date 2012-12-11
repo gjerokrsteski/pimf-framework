@@ -66,8 +66,18 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     echo Pimf_Util_Json::encode($entry->getArrayCopy());
   }
 
+  /**
+   * @argument string [title]
+   * @argument string [content]
+   */
   public function insertCliAction()
   {
+    $validator = new Pimf_Util_Validator($this->request->fromGet());
+
+    if (!$validator->length('title', '>', 0) || !$validator->length('content', '>', 0)) {
+      throw new Pimf_Controller_Exception('not valid entry');
+    }
+
     $registry = new Pimf_Registry();
     $entry    = new MyFirstBlog_Model_Entry();
 
@@ -79,8 +89,18 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     var_dump($res);
   }
 
+  /**
+   * @argument string [title]
+   * @argument string [content]
+   */
   public function updateCliAction()
   {
+    $validator = new Pimf_Util_Validator($this->request->fromGet());
+
+    if (!$validator->length('title', '>', 0) || !$validator->length('content', '>', 0)) {
+      throw new Pimf_Controller_Exception('not valid entry');
+    }
+
     $registry = new Pimf_Registry();
     $entry    = new MyFirstBlog_Model_Entry();
 
@@ -104,9 +124,7 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
 
       $res = $registry->em->getPDO()->exec(
         file_get_contents(
-          dirname(dirname(__FILE__)) .
-            DIRECTORY_SEPARATOR . '_database' .
-            DIRECTORY_SEPARATOR . 'create-table.sql'
+          dirname(dirname(__FILE__)) .'/_database/create-table.sql'
         )
       );
 

@@ -15,7 +15,7 @@ $config = array(
 
   /*
   |------------------------------------------------------------------------
-  | The default environment modus for your application
+  | The default environment modus for your application [testing|production]
   |------------------------------------------------------------------------
   */
   
@@ -40,7 +40,7 @@ $config = array(
   
   /*
   |------------------------------------------------------------------------
-  | Application
+  | Application data
   |------------------------------------------------------------------------
   */
   
