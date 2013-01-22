@@ -42,15 +42,22 @@ class Pimf_Request
   private $cookieData;
 
   /**
+   * @var Pimf_Param
+   */
+  private $cliData;
+
+  /**
    * @param array $getData
    * @param array $postData
    * @param array $cookieData
+   * @param array $cliData
    */
-  public function __construct(array $getData, array $postData = array(), array $cookieData = array())
+  public function __construct(array $getData, array $postData = array(), array $cookieData = array(), array $cliData = array())
   {
     $this->getData    = new Pimf_Param($this->stripSlashesIfMagicQuotes($getData));
     $this->postData   = new Pimf_Param($this->stripSlashesIfMagicQuotes($postData));
     $this->cookieData = new Pimf_Param($cookieData);
+    $this->cliData    = new Pimf_Param($this->stripSlashesIfMagicQuotes($cliData));
   }
 
   /**
@@ -60,6 +67,16 @@ class Pimf_Request
   public function fromGet()
   {
     return $this->getData;
+  }
+
+
+  /**
+   * CLI arguments passed to script.
+   * @return Pimf_Param
+   */
+  public function fromCli()
+  {
+    return $this->cliData;
   }
 
   /**

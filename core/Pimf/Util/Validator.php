@@ -67,7 +67,7 @@ class Pimf_Util_Validator
   public function length($field, $operator, $length)
   {
     $isValid    = false;
-    $fieldValue = $this->request->getParam($field);
+    $fieldValue = $this->request->get($field);
 
     if ($fieldValue === null) {
       $this->setError($field, 101);
@@ -123,7 +123,7 @@ class Pimf_Util_Validator
    */
   public function email($field)
   {
-    $address = trim($this->request->getParam($field));
+    $address = trim($this->request->get($field));
 
     if (preg_match('#^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$#', $address)) {
       return true;
@@ -142,8 +142,8 @@ class Pimf_Util_Validator
    */
   public function compare($field1, $field2, $caseInsensitive = false)
   {
-    $field1value = $this->request->getParam($field1);
-    $field2value = $this->request->getParam($field2);
+    $field1value = $this->request->get($field1);
+    $field2value = $this->request->get($field2);
     $isValid     = false;
 
     if ($field1value === null || $field2value === null) {
@@ -178,7 +178,7 @@ class Pimf_Util_Validator
    */
   public function lengthBetween($field, $max, $min, $inclusive = false)
   {
-    $fieldValue = $this->request->getParam($field);
+    $fieldValue = $this->request->get($field);
     $isValid    = false;
 
     if ($fieldValue === null){
@@ -212,7 +212,7 @@ class Pimf_Util_Validator
    */
   public function punctuation($field)
   {
-    $fieldValue = $this->request->getParam($field);
+    $fieldValue = $this->request->get($field);
 
     if ($fieldValue === null) {
       $this->setError($field, 105);
@@ -236,7 +236,7 @@ class Pimf_Util_Validator
    */
   public function value($field, $operator, $length)
   {
-    $fieldValue = $this->request->getParam($field);
+    $fieldValue = $this->request->get($field);
     $isValid    = false;
 
     if ($fieldValue === null) {
@@ -293,7 +293,7 @@ class Pimf_Util_Validator
    */
   public function valueBetween($field, $max, $min, $inclusive = false)
   {
-    $fieldValue = $this->request->getParam($field);
+    $fieldValue = $this->request->get($field);
     $isValid    = false;
 
     if ($fieldValue === null) {
@@ -325,7 +325,7 @@ class Pimf_Util_Validator
    */
   public function digit($field)
   {
-    $fieldValue = $this->request->getParam($field);
+    $fieldValue = $this->request->get($field);
 
     if ($fieldValue === null) {
       $this->setError($field, 111);
@@ -348,7 +348,7 @@ class Pimf_Util_Validator
    */
   public function alpha($field)
   {
-    $fieldValue = $this->request->getParam($field);
+    $fieldValue = $this->request->get($field);
 
     if ($fieldValue === null) {
       $this->setError($field, 108);
@@ -370,7 +370,7 @@ class Pimf_Util_Validator
    */
   public function alphaNumeric($field)
   {
-    $fieldValue = $this->request->getParam($field);
+    $fieldValue = $this->request->get($field);
 
     if ($fieldValue === null) {
       $this->setError($field, 109);
@@ -399,7 +399,7 @@ class Pimf_Util_Validator
    */
   public function date($field, $format)
   {
-    $fieldValue = $this->request->getParam($field);
+    $fieldValue = $this->request->get($field);
 
     if ($fieldValue === null) {
       $this->setError($field, 110);

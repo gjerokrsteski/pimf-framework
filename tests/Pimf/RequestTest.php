@@ -31,24 +31,24 @@ class Pimf_RequestTest extends PHPUnit_Framework_TestCase
   {
     $request = new Pimf_Request($_GET);
 
-    $this->assertNotNull( $request->fromGet()->getParam('controller') );
-    $this->assertEquals( 'index', $request->fromGet()->getParam('controller') );
+    $this->assertNotNull( $request->fromGet()->get('controller') );
+    $this->assertEquals( 'index', $request->fromGet()->get('controller') );
   }
 
   public function tesPostData()
   {
     $request = new Pimf_Request(array(), $_POST);
 
-    $this->assertNotNull( $request->fromGet()->getParam('firstname') );
-    $this->assertEquals( 'gatter', $request->fromGet()->getParam('firstname') );
+    $this->assertNotNull( $request->fromGet()->get('firstname') );
+    $this->assertEquals( 'gatter', $request->fromGet()->get('firstname') );
   }
 
   public function tesCookieData()
   {
     $request = new Pimf_Request(array(), array(), $_COOKIE);
 
-    $this->assertNotNull( $request->fromGet()->getParam('date') );
-    $this->assertEquals( '01-01-2017', $request->fromGet()->getParam('date') );
+    $this->assertNotNull( $request->fromGet()->get('date') );
+    $this->assertEquals( '01-01-2017', $request->fromGet()->get('date') );
   }
 
   public function testStripSlashesIfMagicQuotes()

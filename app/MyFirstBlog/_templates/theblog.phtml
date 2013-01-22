@@ -1,12 +1,32 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
+    <meta charset="utf-8">
     <title><?=$this->blog_title?></title>
+    <style type="text/css">
+        @import url(http://fonts.googleapis.com/css?family=Domine);
+        body {
+            font-family : 'Domine', sans-serif;
+            font-size   : 13pt;
+            color       : #666;
+            line-height : 28px;
+        }
+        a, a:visited {
+            color : #2972A2;
+        }
+        a:hover {
+            color : #6ed347;
+        }
+   	</style>
 </head>
 <body>
-<h1><?=$this->blog_title?></h1>
-<?=$this->blog_content?>
-<hr/>
-<?=$this->blog_footer?>
+  <header>
+      <h1><?=$this->blog_title?></h1>
+  </header>
+  <?=$this->blog_content?>
+  <hr/>
+  <footer>
+      <p><?=$this->blog_footer?></p>
+  </footer>
 </body>
 </html>

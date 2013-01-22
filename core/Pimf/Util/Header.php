@@ -39,44 +39,49 @@ class Pimf_Util_Header
     }
   }
 
-  public static function useContentTypeJson()
+  public static function contentTypeJson()
   {
-    header('Content-Type: application/json', true);
+    self::contentType('application/json');
   }
 
-  public static function useContentTypePdf()
+  public static function contentTypePdf()
   {
-    header('Content-Type: application/pdf', true);
+    self::contentType('application/pdf');
   }
 
-  public static function useContentTypeCsv()
+  public static function contentTypeCsv()
   {
-    header('Content-Type: text/csv', true);
+    self::contentType('text/csv');
   }
 
-  public static function useContentTypeTextPlain()
+  public static function contentTypeTextPlain()
   {
-    header('Content-Type: text/plain', true);
+    self::contentType('text/plain');
   }
 
-  public static function useContentTypeZip()
+  public static function contentTypeZip()
   {
-    header('Content-Type: application/zip', true);
+    self::contentType('application/zip');
   }
 
-  public static function useContentTypeXZip()
+  public static function contentTypeXZip()
   {
-    header('Content-Type: application/x-zip', true);
+    self::contentType('application/x-zip');
   }
 
-  public static function useContentTypeMSWord()
+  public static function contentTypeMSWord()
   {
-    header('Content-Type: application/msword', true);
+    self::contentType('application/msword');
   }
 
-  public static function useContentTypeOctetStream()
+  public static function contentTypeOctetStream()
   {
-    header('Content-Type: application/octet-stream', true);
+    self::contentType('application/octet-stream');
+  }
+
+  public static function contentType($definition)
+  {
+    header('Content-Type: '.$definition, true);
   }
 
   /**
@@ -104,5 +109,170 @@ class Pimf_Util_Header
       echo $fileOrString;
     }
     exit(0);
+  }
+
+  /**
+   * @param int $code HTTP response code
+   * @param string $status The header string which will be used to figure out the HTTP status code to send.
+   * @param bool $replace Whether the header should replace a previous similar header.
+   */
+  public static function send($code, $status, $replace = true)
+  {
+    header(Pimf_Registry::get('env')->getProtocolInfo() . ' ' . $code . ' ' . $status, $replace, $code);
+  }
+
+  public static function sendContinue()
+  {
+    self::send(100, 'Continue');
+  }
+
+  public static function sendProcessing()
+  {
+    self::send(102, 'Processing');
+  }
+
+  public static function sendOK()
+  {
+    self::send(200, 'OK');
+  }
+
+  public static function sendCreated()
+  {
+    self::send(201, 'Created');
+  }
+
+  public static function sendAccepted()
+  {
+    self::send(202, 'Accepted');
+  }
+
+  public static function sendNoAuthInfo()
+  {
+    self::send(203, 'Non-Authoritative Information');
+  }
+
+  public static function sendNoContent()
+  {
+    self::send(204, 'No Content');
+  }
+
+  public static function sendMovedPermanently()
+  {
+    self::send(301, 'Moved Permanently');
+  }
+
+  public static function sendFound()
+  {
+    self::send(302, 'Found');
+  }
+
+  public static function sendTemporaryRedirect()
+  {
+    self::send(307, 'Temporary Redirect');
+  }
+
+  public static function sendBadRequest()
+  {
+    self::send(400, 'Bad Request');
+  }
+
+  public static function sendUnauthorized()
+  {
+    self::send(401, 'Unauthorized');
+  }
+
+  public static function sendPaymentRequired()
+  {
+    self::send(402, 'Payment Required');
+  }
+
+  public static function sendForbidden()
+  {
+    self::send(403, 'Forbidden');
+  }
+
+  /**
+   * @param string $msg
+   */
+  public static function sendNotFound($msg = '')
+  {
+    self::view(404, $msg);
+  }
+
+  public static function sendMethodNotAllowed()
+  {
+    self::send(405, 'Method Not Allowed');
+  }
+
+  public static function sendNotAcceptable()
+  {
+    self::send(406, 'Not Acceptable');
+  }
+
+  public static function sendProxyAuthRequired()
+  {
+    self::send(407, 'Proxy Authentication Required');
+  }
+
+  public static function sendRequestTimeout()
+  {
+    self::send(408, 'Request Timeout');
+  }
+
+  public static function sendUnsupportedMediaType()
+  {
+    self::send(415, 'Unsupported Media Type');
+  }
+
+  public static function sendLocked()
+  {
+    self::send(423, 'Locked');
+  }
+
+  /**
+   * @param string $msg
+   */
+  public static function sendInternalServerError($msg = '')
+  {
+    self::view(500, $msg);
+  }
+
+  public static function sendServiceUnavailable()
+  {
+    self::send(503, 'Service Unavailable');
+  }
+
+  /**
+   * @param string $url
+   */
+  public static function toLocation($url)
+  {
+    header('Location: '.$url);
+    exit;
+  }
+
+  /**
+   * @param int $code
+   * @param string $status
+   */
+  protected static function view($code, $status)
+  {
+    if(Pimf_Environment::isCli() || (Pimf_Environment::isWeb() && !empty($status) && $code == 500)) {
+      die($status.PHP_EOL);
+    }
+
+    self::send($code, $status);
+
+    $conf = Pimf_Registry::get('conf');
+    $root = dirname(dirname(dirname(dirname(__FILE__))));
+
+    $appTpl  = $root.'/app/'.$conf['app']['name'].'/_error/'.$code.'.php';
+    $coreTpl = $root.'/core/Pimf/_error/'.$code.'.php';
+
+    if(file_exists($appTpl) && is_readable($appTpl)){
+      die(include $appTpl);
+    }
+
+    die(include $coreTpl);
   }
 }

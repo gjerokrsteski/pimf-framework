@@ -53,8 +53,11 @@ class Pimf_Resolver
    */
   public function __construct(Pimf_Request $request, $controllerRepositoryPath = '/Controller', $prefix = 'Pimf_')
   {
-    $fromGet        = $request->fromGet();
-    $controllerName = $fromGet->getParam('controller');
+    $controllerName = $request->fromGet()->get('controller');
+
+    if (Pimf_Environment::isCli()) {
+      $controllerName = $request->fromCli()->get('controller');
+    }
 
     if (!$controllerName) {
       $controllerName = 'index';
@@ -68,12 +71,12 @@ class Pimf_Resolver
 
   /**
    * @return Pimf_Controller_Abstract
-   * @throws RuntimeException If no controller specified or no controller found at the repository.
+   * @throws Pimf_Resolver_Exception If no controller specified or no controller found at the repository.
    */
   public function process()
   {
     if (!file_exists($this->controllerFilePath)) {
-      throw new RuntimeException(
+      throw new Pimf_Resolver_Exception(
         'no controller found at the repository path; ' . $this->controllerFilePath
       );
     }
@@ -83,7 +86,7 @@ class Pimf_Resolver
     $controller = str_replace('.php', '', $name);
 
     if (!class_exists($controller)) {
-      throw new RuntimeException(
+      throw new Pimf_Resolver_Exception(
         'can not load class "'.$controller.'" from the repository'
       );
     }

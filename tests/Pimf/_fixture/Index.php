@@ -15,4 +15,9 @@ class Fixture_Controller_Index extends Pimf_Controller_Abstract
   {
 
   }
+
+  public function indexCliAction()
+  {
+
+  }
 }

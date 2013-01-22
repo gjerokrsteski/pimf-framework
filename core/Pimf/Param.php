@@ -50,12 +50,22 @@ class Pimf_Param
    * @param null $defaultValue
    * @return mixed|null
    */
-  public function getParam($index, $defaultValue = null)
+  public function get($index, $defaultValue = null)
   {
     if($this->data->offsetExists($index)) {
       return $this->data->offsetGet($index);
     }
 
     return $defaultValue;
+  }
+
+  /**
+   * @param string $index
+   * @param null $defaultValue
+   * @return mixed|null
+   */
+  public function getParam($index, $defaultValue = null)
+  {
+    return $this->get($index, $defaultValue);
   }
 }

@@ -46,7 +46,7 @@ final class Pimf_Application
     if (Pimf_Environment::isCli()) {
       parse_str(implode('&', array_slice($server['argv'], 1)), $cliArguments);
 
-      if (count($cliArguments) == 1 && isset($cliArguments['list'])) {
+      if (count($cliArguments) < 1 || isset($cliArguments['list'])) {
         self::printCommands();
         exit(1);
       }
@@ -55,7 +55,7 @@ final class Pimf_Application
     $conf = Pimf_Registry::get('conf');
 
     $resolver = new Pimf_Resolver(
-      new Pimf_Request(($get + $cliArguments), $post, $cookie),
+      new Pimf_Request($get, $post, $cookie, $cliArguments),
       'app' . '/' . $conf['app']['name'] . '/' . 'Controller',
       Pimf_Util_String::ensureTrailing('_', $conf['app']['name'])
     );
@@ -81,12 +81,29 @@ final class Pimf_Application
     ini_set('default_charset', $config['encoding']);
     date_default_timezone_set($config['timezone']);
 
+    // setup the error reporting.
     if ($config['environment'] == 'testing') {
+
       error_reporting(E_ALL | E_STRICT);
       ini_set('display_errors', 'on');
       $dbConf = $config['testing']['db'];
+
     } else {
-      error_reporting(E_ALL & ~E_NOTICE);
+
+      // setup the error and exception handling.
+      set_exception_handler(function($e){
+        Pimf_Error::exception($e);
+      });
+
+      set_error_handler(function($code, $error, $file, $line){
+        Pimf_Error::native($code, $error, $file, $line);
+      });
+
+      register_shutdown_function(function(){
+        Pimf_Error::shutdown();
+      });
+
+      error_reporting(-1);
       ini_set('display_errors', 'off');
       $dbConf = $config['production']['db'];
     }

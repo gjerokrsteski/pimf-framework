@@ -88,5 +88,15 @@ $config = array(
     'local_temp_directory' => '/tmp/'
   ),
 
-);
+  /*
+  |------------------------------------------------------------------------
+  | Settings for the error handling behavior
+  |------------------------------------------------------------------------
+  */
 
+  'error' => array(
+  	'ignore_levels' => array(E_USER_NOTICE, E_USER_ERROR),
+  	'debug_info' => false,
+  	'log' => true,
+  ),
+);

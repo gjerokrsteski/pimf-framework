@@ -42,7 +42,7 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
 
     $registry = new Pimf_Registry();
     $entry    = $registry->em->entry->find(
-      $this->request->fromGet()->getParam('id')
+      $this->request->fromGet()->get('id')
     );
 
     $viewSingleEntry->assign('title', $entry->getTitle());
@@ -57,11 +57,11 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     $registry = new Pimf_Registry();
 
     $entry = $registry->em->entry->find(
-      $this->request->fromGet()->getParam('id')
+      $this->request->fromGet()->get('id')
     );
 
     Pimf_Util_Header::clear();
-    Pimf_Util_Header::useContentTypeJson();
+    Pimf_Util_Header::contentTypeJson();
 
     echo Pimf_Util_Json::encode($entry->getArrayCopy());
   }
@@ -72,7 +72,7 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
    */
   public function insertCliAction()
   {
-    $validator = new Pimf_Util_Validator($this->request->fromGet());
+    $validator = new Pimf_Util_Validator($this->request->fromCli());
 
     if (!$validator->length('title', '>', 0) || !$validator->length('content', '>', 0)) {
       throw new Pimf_Controller_Exception('not valid entry');
@@ -81,8 +81,8 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     $registry = new Pimf_Registry();
     $entry    = new MyFirstBlog_Model_Entry();
 
-    $entry->setTitle($this->request->fromGet()->getParam('title'));
-    $entry->setContent($this->request->fromGet()->getParam('content'));
+    $entry->setTitle($this->request->fromCli()->get('title'));
+    $entry->setContent($this->request->fromCli()->get('content'));
 
     $res = $registry->em->entry->insert($entry);
 
@@ -104,11 +104,11 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     $registry = new Pimf_Registry();
     $entry    = new MyFirstBlog_Model_Entry();
 
-    $entry->setTitle($this->request->fromGet()->getParam('title'));
-    $entry->setContent($this->request->fromGet()->getParam('content'));
+    $entry->setTitle($this->request->fromCli()->get('title'));
+    $entry->setContent($this->request->fromCli()->get('content'));
 
     $entry = $registry->em->entry->reflectId(
-      $entry, $this->request->fromGet()->getParam('id')
+      $entry, $this->request->fromCli()->get('id')
     );
 
     $res = $registry->em->entry->update($entry);

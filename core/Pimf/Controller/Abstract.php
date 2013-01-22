@@ -32,17 +32,11 @@ abstract class Pimf_Controller_Abstract
   protected $request;
 
   /**
-   * @var string
-   */
-  protected $action;
-
-  /**
    * @param Pimf_Request $request
    */
   public function __construct(Pimf_Request $request)
   {
     $this->request = $request;
-    $this->action  = $request->fromGet()->getParam('action') ?: 'index';
   }
 
   abstract public function indexAction();
@@ -54,8 +48,15 @@ abstract class Pimf_Controller_Abstract
    */
   public function render()
   {
-    $suffix = Pimf_Environment::isCli() ? 'CliAction' : 'Action';
-    $action = strtolower($this->action) . $suffix;
+    if (Pimf_Environment::isCli()) {
+      $suffix = 'CliAction';
+      $action = $this->request->fromCli()->get('action') ?: 'index';
+    } else {
+      $suffix = 'Action';
+      $action = $this->request->fromGet()->get('action') ?: 'index';
+    }
+
+    $action = strtolower($action) . $suffix;
 
     if (method_exists($this, 'init')) {
       call_user_func(array($this, 'init'));

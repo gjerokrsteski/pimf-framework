@@ -53,7 +53,7 @@ class Pimf_Environment
    */
   public function isAjax()
   {
-    return $this->envData->getParam('X_REQUESTED_WITH') === 'XMLHttpRequest';
+    return $this->envData->get('X_REQUESTED_WITH') === 'XMLHttpRequest';
   }
 
   /**
@@ -62,7 +62,7 @@ class Pimf_Environment
    */
   public function isHttp()
   {
-    return (bool) $this->envData->getParam('HTTP');
+    return (bool) $this->envData->get('HTTP');
   }
 
   /**
@@ -71,7 +71,7 @@ class Pimf_Environment
    */
   public function isHttps()
   {
-    return $this->envData->getParam('HTTPS') === 'on';
+    return $this->envData->get('HTTPS') === 'on';
   }
 
   /**
@@ -81,7 +81,7 @@ class Pimf_Environment
    */
   public function getProtocolInfo()
   {
-    return $this->envData->getParam('SERVER_PROTOCOL');
+    return $this->envData->get('SERVER_PROTOCOL');
   }
 
   /**
@@ -90,7 +90,7 @@ class Pimf_Environment
    */
   public function getContentLength()
   {
-    return (int) $this->envData->getParam('CONTENT_LENGTH');
+    return (int) $this->envData->get('CONTENT_LENGTH');
   }
 
   /**
@@ -99,17 +99,17 @@ class Pimf_Environment
    */
   public function getHost()
   {
-    if ($this->envData->getParam('HOST')) {
+    if ($this->envData->get('HOST')) {
 
-      if (strpos($this->envData->getParam('HOST'), ':') !== false) {
-        $hostParts = explode(':', $this->envData->getParam('HOST'));
+      if (strpos($this->envData->get('HOST'), ':') !== false) {
+        $hostParts = explode(':', $this->envData->get('HOST'));
         return $hostParts[0];
       }
 
-      return $this->envData->getParam('HOST');
+      return $this->envData->get('HOST');
     }
 
-    return $this->envData->getParam('SERVER_NAME');
+    return $this->envData->get('SERVER_NAME');
   }
 
   /**
@@ -127,7 +127,7 @@ class Pimf_Environment
    */
   public function getPort()
   {
-    return (int) $this->envData->getParam('SERVER_PORT');
+    return (int) $this->envData->get('SERVER_PORT');
   }
 
   /**
@@ -136,7 +136,7 @@ class Pimf_Environment
    */
   public function getSelf()
   {
-    return $this->envData->getParam('PHP_SELF');
+    return $this->envData->get('PHP_SELF');
   }
 
   /**
@@ -145,7 +145,7 @@ class Pimf_Environment
    */
   public function getScriptName()
   {
-    return $this->envData->getParam('SCRIPT_NAME');
+    return $this->envData->get('SCRIPT_NAME');
   }
 
   /**
@@ -163,7 +163,7 @@ class Pimf_Environment
    */
   public function getPathInfo()
   {
-    return $this->envData->getParam('PATH_INFO');
+    return $this->envData->get('PATH_INFO');
   }
 
   /**
@@ -172,19 +172,19 @@ class Pimf_Environment
    */
   public function getIp()
   {
-    if ($this->envData->getParam('X_FORWARDED_FOR')) {
-      return $this->envData->getParam('X_FORWARDED_FOR');
+    if ($this->envData->get('X_FORWARDED_FOR')) {
+      return $this->envData->get('X_FORWARDED_FOR');
     }
 
-    if ($this->envData->getParam('CLIENT_IP')) {
-      return $this->envData->getParam('CLIENT_IP');
+    if ($this->envData->get('CLIENT_IP')) {
+      return $this->envData->get('CLIENT_IP');
     }
 
-    if ($this->envData->getParam('SERVER_NAME')) {
-      return gethostbyname($this->envData->getParam('SERVER_NAME'));
+    if ($this->envData->get('SERVER_NAME')) {
+      return gethostbyname($this->envData->get('SERVER_NAME'));
     }
 
-    return $this->envData->getParam('REMOTE_ADDR');
+    return $this->envData->get('REMOTE_ADDR');
   }
 
   /**
@@ -193,7 +193,7 @@ class Pimf_Environment
    */
   public function getReferer()
   {
-    return $this->envData->getParam('HTTP_REFERER');
+    return $this->envData->get('HTTP_REFERER');
   }
 
   /**
@@ -202,12 +202,12 @@ class Pimf_Environment
    */
   public function getUserAgent()
   {
-    if ($this->envData->getParam('USER_AGENT')) {
-      return $this->envData->getParam('USER_AGENT');
+    if ($this->envData->get('USER_AGENT')) {
+      return $this->envData->get('USER_AGENT');
     }
 
-    if ($this->envData->getParam('HTTP_USER_AGENT')) {
-      return $this->envData->getParam('HTTP_USER_AGENT');
+    if ($this->envData->get('HTTP_USER_AGENT')) {
+      return $this->envData->get('HTTP_USER_AGENT');
     }
 
     return null;
@@ -218,7 +218,7 @@ class Pimf_Environment
    */
   public function getServerName()
   {
-    return $this->envData->getParam('SERVER_NAME');
+    return $this->envData->get('SERVER_NAME');
   }
 
   /**
@@ -227,7 +227,18 @@ class Pimf_Environment
    */
   public function getUri()
   {
-    return $this->envData->getParam('REQUEST_URI');
+    return $this->envData->get('REQUEST_URI');
+  }
+
+  /**
+   * Gives you the current page URL
+   * @return string
+   */
+  public function getUrl()
+  {
+    $protocol = strpos(strtolower($this->getProtocolInfo()),'https') === false ? 'http' : 'https';
+
+    return $protocol . '://' . $this->getHost();
   }
 
   /**
@@ -238,7 +249,7 @@ class Pimf_Environment
   public function getRequestHeader($header)
   {
     $header = str_replace('-', '_', strtoupper($header));
-    $value  = $this->envData->getParam('HTTP_' . $header);
+    $value  = $this->envData->get('HTTP_' . $header);
 
     if (!$value) {
       $headers = $this->getRequestHeaders();

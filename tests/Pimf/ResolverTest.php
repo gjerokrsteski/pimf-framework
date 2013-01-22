@@ -39,7 +39,7 @@ class Pimf_ResolverTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException RuntimeException
+   * @expectedException Pimf_Resolver_Exception
    */
   public function testIfNoControllerFoundAtTheRepositoryPath()
   {
@@ -57,10 +57,8 @@ class Pimf_ResolverTest extends PHPUnit_Framework_TestCase
    */
   public function testIfNoActionFoundAtController()
   {
-    $_GET['action'] = 'undefined';
-
     $resolver = new Pimf_Resolver(
-      new Pimf_Request($_GET),
+      new Pimf_Request(array(),array(),array(),array('action'=>'undefined')),
       dirname(__FILE__).'/_fixture/',
       'Fixture_'
     );
