@@ -37,13 +37,8 @@ class Pimf_Error
 
     ob_get_level() and ob_end_clean();
 
-    $message = $exception->getMessage();
-
-    // show a nicer error.
-    $file = $exception->getFile();
-
-    // If detailed errors are enabled, we'll just format the exception into
-    // a simple error message and display it on the screen.
+    // if detailed errors are enabled, just format the exception into
+    // a simple error message and display it.
     $conf = Pimf_Registry::get('conf');
     $msg  = null;
 
@@ -51,9 +46,9 @@ class Pimf_Error
       $msg =
         "<html><h2>Untreated Exception</h2>
 				<h3>Message:</h3>
-				<pre>" . $message . "</pre>
+				<pre>" . $exception->getMessage() . "</pre>
 				<h3>Location:</h3>
-				<pre>" . $file . " on line " . $exception->getLine() . "</pre>
+				<pre>" . $exception->getFile() . " on line " . $exception->getLine() . "</pre>
         <h3>Stack Trace:</h3>
         <pre>" . $exception->getTraceAsString() . "</pre></html>";
     }
