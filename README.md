@@ -16,7 +16,8 @@ git clone --recursive https://github.com/gjerokrsteski/pimf.git
 ```
 
 **Step 2.** Extract the PIMF archive and upload the contents to your web server.
-Step 3. Open the config.php file and set
+
+**Step 3.** Open the config.php file and set
 
 ```php
 'environment' => 'production'
