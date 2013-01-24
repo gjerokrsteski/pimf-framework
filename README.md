@@ -6,9 +6,6 @@ Have you ever wished a PHP framework that perfectly adapts to your projects need
 
 PIMF (Php Is My Framework) is a micro framework for PHP that emphasises minimalism and simplicity. It is based on proven design patterns and a fast object relational mapping mechanism, and is designed to be easily updated without having to rewrite your projects. It includes mechanisms for easily coupling controllers to ExtJs and Dojo.
 
-Usecases and documentation
---------------------------
-Please read here: http://gjerokrsteski.github.com/pimf/
 
 Installation
 ----------------
@@ -32,6 +29,10 @@ Step 3. Open the config.php file and set
 
 If all is well, you should see a pretty PIMF splash page. Get ready - there is lot more to learn!
 
+
+Usecases and documentation
+--------------------------
+Please read here: http://gjerokrsteski.github.com/pimf/
 
 Contributing and pull request guidelines
 ----------------------------------------
