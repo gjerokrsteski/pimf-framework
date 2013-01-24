@@ -46,18 +46,23 @@
 
 <h3>Installation</h3>
 
-<ol>
-<li>Download PIMF</li>
-<li>Extract the PIMF archive and upload the contents to your web server.</li>
-<li>Open the config.php file and set</li>
-</ol><div class="highlight"><pre><span class="s1">'environment'</span> <span class="o">=&gt;</span> <span class="s1">'production'</span>
+<p>Step 1. Download PIMF</p>
+
+<div class="highlight"><pre><span class="nx">git</span> <span class="k">clone</span> <span class="o">--</span><span class="nx">recursive</span> <span class="nx">https</span><span class="o">://</span><span class="nx">github</span><span class="o">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">gjerokrsteski</span><span class="o">/</span><span class="nx">pimf</span><span class="o">.</span><span class="nx">git</span>
+</pre></div>
+
+<p>Step 2. Extract the PIMF archive and upload the contents to your web server.
+Step 3. Open the config.php file and set</p>
+
+<div class="highlight"><pre><span class="s1">'environment'</span> <span class="o">=&gt;</span> <span class="s1">'production'</span>
 <span class="s1">'local_temp_directory'</span> <span class="o">=&gt;</span> <span class="s1">'/tmp/'</span> <span class="c1">//if necessary</span>
 </pre></div>
 
-<ol>
-<li>Create at your local temp directory the files <strong>pimf-logs.txt</strong>, <strong>pimf-warnings.txt</strong>, <strong>pimf-errors.txt</strong> and verify that they are writable.</li>
-<li>Navigate to your application in a web browser.</li>
-</ol><p>If all is well, you should see a pretty PIMF splash page. Get ready - there is lot more to learn!</p>
+<p>Step 4. Create at your local temp directory the files <strong>pimf-logs.txt</strong>, <strong>pimf-warnings.txt</strong>, <strong>pimf-errors.txt</strong> and verify that they are writable.</p>
+
+<p>Step 5. Navigate to your application in a web browser.</p>
+
+<p>If all is well, you should see a pretty PIMF splash page. Get ready - there is lot more to learn!</p>
 
 <h3>Basic configuration</h3>
 
