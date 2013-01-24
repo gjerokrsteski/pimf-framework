@@ -1,0 +1,7 @@
+[submodule "Haanga"]
+path = ext/Haanga
+url = git://github.com/crodas/Haanga.git
+
+[submodule "Twig"]
+path = ext/Twig
+url = git://github.com/fabpot/Twig.git
