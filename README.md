@@ -10,6 +10,29 @@ Usecases and documentation
 --------------------------
 Please read here: http://gjerokrsteski.github.com/pimf/
 
+Installation
+----------------
+**Step 1.** Download PIMF
+
+```php
+git clone --recursive https://github.com/gjerokrsteski/pimf.git
+```
+
+**Step 2.** Extract the PIMF archive and upload the contents to your web server.
+Step 3. Open the config.php file and set
+
+```php
+'environment' => 'production'
+'local_temp_directory' => '/tmp/' //if necessary
+```
+
+**Step 4.** Create at your local temp directory the files **pimf-logs.txt**, **pimf-warnings.txt**, **pimf-errors.txt** and verify that they are writable.
+
+**Step 5.** Navigate to your application in a web browser.
+
+If all is well, you should see a pretty PIMF splash page. Get ready - there is lot more to learn!
+
+
 Contributing and pull request guidelines
 ----------------------------------------
 [GitHub pull requests](https://help.github.com/articles/using-pull-requests) are a great way for everyone in the community to contribute to the PIMF codebase. Found a bug? Just fix it in your fork and submit a pull request. This will then be reviewed, and, if found as good, merged into the main repository.
