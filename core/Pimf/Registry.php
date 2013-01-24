@@ -43,7 +43,7 @@
 class Pimf_Registry
 {
   /**
-   * The temporary storage for accumulator.
+   * The temporary storage for the accumulator.
    * @var ArrayObject
    */
   protected static $battery;
@@ -96,13 +96,18 @@ class Pimf_Registry
   }
 
   /**
-   * @param mixed $namespace The namespace or identifier.
+   * @param string|integer $namespace The namespace or identifier.
+   * @param mixed $defaultValue
    * @return mixed|null
    */
-  public static function get($namespace)
+  public static function get($namespace, $defaultValue = null)
   {
     self::init();
 
-    return self::$battery->offsetGet($namespace);
+    if(self::$battery->offsetExists($namespace)) {
+      return self::$battery->offsetGet($namespace);
+    }
+
+    return $defaultValue;
   }
 }

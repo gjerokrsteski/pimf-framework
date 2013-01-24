@@ -99,4 +99,38 @@ $config = array(
   	'debug_info' => false,
   	'log' => true,
   ),
+
+  /*
+  |------------------------------------------------------------------------
+  | View engines configurations - using multiple engines is possible
+  |------------------------------------------------------------------------
+  */
+
+  'view' => array(
+
+      /*
+      |------------------------------------------------------------------------
+      | Twig view environment configurations
+      |------------------------------------------------------------------------
+      */
+
+      'twig' => array(
+        'cache'      => true,
+        'debug'      => false,
+        'auto_reload' => true,
+      ),
+
+      /*
+      |------------------------------------------------------------------------
+      | Haanga view environment configurations
+      |------------------------------------------------------------------------
+      */
+
+      'haanga' => array(
+        'cache'      => true,
+        'debug'      => false,
+        'auto_reload' => true,
+      ),
+  ),
+
 );

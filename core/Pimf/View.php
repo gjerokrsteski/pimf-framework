@@ -30,18 +30,24 @@ class Pimf_View
    * Path to the templates.
    * @var string
    */
-  private $path = '_templates';
+  protected $path = '_templates';
 
   /**
    * @var string Name of the template, in which case the default template.
    */
-  private $template = 'default';
+  protected $template = 'default';
+
+  /**
+   * The template file extension.
+   * @var string
+   */
+  protected $extension = '.phtml';
 
   /**
    * Contains the variables that are to be embedded in the template.
    * @var array
    */
-  private $data;
+  protected $data;
 
   public function __construct()
   {
@@ -57,10 +63,22 @@ class Pimf_View
    * Assigns a variable to a specific key for the template.
    * @param string $key The key.
    * @param mixed $value The Value.
+   * @return Pimf_View
    */
   public function assign($key, $value)
   {
     $this->data[$key] = $value;
+    return $this;
+  }
+
+  /**
+   * @param array $data
+   * @return Pimf_View
+   */
+  public function pump(array $data)
+  {
+    $this->data->exchangeArray($data);
+    return $this;
   }
 
   /**
@@ -105,26 +123,38 @@ class Pimf_View
    */
   public function render()
   {
-    $file = $this->path . '/' . $this->template . '.phtml';
-
-    if (!file_exists($file)) {
-      throw new RuntimeException('could not find template: ' . $file);
-    }
-
     $level = ob_get_level();
     ob_start();
 
     try {
 
-      include $file;
-      return ob_get_clean();
+      echo $this->reunite();
 
     } catch (Exception $e) {
+
       while (ob_get_level() > $level) {
         ob_end_clean();
       }
 
       throw $e;
     }
+
+    return ob_get_clean();
+  }
+
+  /**
+   * Puts the template an the variables together.
+   * @throws RuntimeException
+   * @return string
+   */
+  public function reunite()
+  {
+    $file = $this->path . '/' . $this->template . $this->extension;
+
+    if (!file_exists($file)) {
+      throw new RuntimeException('could not find template: ' . $file);
+    }
+
+    include $file;
   }
 }

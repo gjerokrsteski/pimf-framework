@@ -34,7 +34,7 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     $validator = new Pimf_Util_Validator($this->request->fromGet());
 
     if (!$validator->digit('id') || !$validator->value('id', '>', 0)) {
-      throw new Pimf_Controller_Exception('not valid entry');
+      throw new Pimf_Controller_Exception('not valid entry for "id"');
     }
 
     $viewSingleEntry = new Pimf_View();
@@ -60,10 +60,8 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
       $this->request->fromGet()->get('id')
     );
 
-    Pimf_Util_Header::clear();
-    Pimf_Util_Header::contentTypeJson();
-
-    echo Pimf_Util_Json::encode($entry->getArrayCopy());
+    $view = new Pimf_View_Json();
+    echo $view->pump($entry->toArray())->render();
   }
 
   /**
@@ -74,8 +72,12 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
   {
     $validator = new Pimf_Util_Validator($this->request->fromCli());
 
-    if (!$validator->length('title', '>', 0) || !$validator->length('content', '>', 0)) {
-      throw new Pimf_Controller_Exception('not valid entry');
+    if (!$validator->length('title', '>', 0)) {
+      throw new Pimf_Controller_Exception('not valid entry for "title"');
+    }
+
+    if (!$validator->length('content', '>', 0)) {
+      throw new Pimf_Controller_Exception('not valid entry for "content"');
     }
 
     $registry = new Pimf_Registry();
@@ -97,8 +99,12 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
   {
     $validator = new Pimf_Util_Validator($this->request->fromGet());
 
-    if (!$validator->length('title', '>', 0) || !$validator->length('content', '>', 0)) {
-      throw new Pimf_Controller_Exception('not valid entry');
+    if (!$validator->length('title', '>', 0)) {
+      throw new Pimf_Controller_Exception('not valid entry for "title"');
+    }
+
+    if (!$validator->length('content', '>', 0)) {
+      throw new Pimf_Controller_Exception('not valid entry for "content"');
     }
 
     $registry = new Pimf_Registry();
@@ -133,5 +139,25 @@ class MyFirstBlog_Controller_Index extends Pimf_Controller_Abstract
     } catch (PDOException $e) {
       throw new Pimf_Controller_Exception($e->getMessage());
     }
+  }
+
+  public function twigtestAction()
+  {
+    $view = new Pimf_View_Twig();
+    $view->setTemplate('parent');
+    $view->assign('hello', 'Hello world')
+         ->assign('now', date('d M Y h:i:s', time()));
+
+    echo $view->render();
+  }
+
+  public function haangatestAction()
+  {
+    $view = new Pimf_View_Haanga();
+    $view->setTemplate('parent');
+    $view->assign('hello', 'Hello world')
+         ->assign('now', date('d M Y h:i:s', time()));
+
+    echo $view->render();
   }
 }
