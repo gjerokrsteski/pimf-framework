@@ -248,7 +248,7 @@ class Pimf_Util_Header
   public static function toLocation($url)
   {
     header('Location: '.$url);
-    exit;
+    exit(1);
   }
 
   /**

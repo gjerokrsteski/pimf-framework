@@ -72,6 +72,7 @@ class Pimf_View
   }
 
   /**
+   * Exchange all variables.
    * @param array $data
    * @return Pimf_View
    */

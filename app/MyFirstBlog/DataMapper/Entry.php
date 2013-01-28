@@ -18,7 +18,7 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
 
   /**
    * @param int $id
-   * @return mixed|object
+   * @return MyFirstBlog_Model_Entry
    * @throws OutOfRangeException
    */
   public function find($id)
@@ -102,16 +102,16 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
   }
 
   /**
-   * @param MyFirstBlog_Model_Entry $blogEntry
+   * @param int $id
    * @return bool
    */
-  public function delete(MyFirstBlog_Model_Entry $blogEntry)
+  public function delete($id)
   {
     $sth = $this->db->prepare(
-      "DELETE FROM blog WHERE id = :id;"
+      "DELETE FROM blog WHERE id = :id"
     );
 
-    $sth->bindValue(':id', $blogEntry->getId(), PDO::PARAM_INT);
+    $sth->bindValue(':id', $id, PDO::PARAM_INT);
     $sth->execute();
 
     if ($sth->rowCount() == 0) {

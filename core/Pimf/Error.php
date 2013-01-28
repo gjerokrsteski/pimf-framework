@@ -55,6 +55,7 @@ class Pimf_Error
 
     Pimf_Util_Header::clear();
     Pimf_Util_Header::sendInternalServerError($msg);
+    exit(1);
   }
 
   /**

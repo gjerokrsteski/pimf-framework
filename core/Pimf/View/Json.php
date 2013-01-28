@@ -30,6 +30,9 @@
  */
 class Pimf_View_Json extends Pimf_View
 {
+  /**
+   * @return string|void
+   */
   public function render()
   {
     Pimf_Util_Header::clear();

@@ -28,6 +28,8 @@
  */
 final class Pimf_Application
 {
+  const VERSION = '1.2';
+
   /**
    * Run a application, let application accept a request, route the request,
    * dispatch to controller/action, render response and return response to client finally.
@@ -41,21 +43,21 @@ final class Pimf_Application
    */
   public static function run(array $get, array $post, array $cookie, array $server)
   {
-    $cliArguments = array();
+    $cli = array();
 
     if (Pimf_Environment::isCli()) {
-      parse_str(implode('&', array_slice($server['argv'], 1)), $cliArguments);
+      parse_str(implode('&', array_slice($server['argv'], 1)), $cli);
 
-      if (count($cliArguments) < 1 || isset($cliArguments['list'])) {
-        self::printCommands();
-        exit(1);
+      if (count($cli) < 1 || isset($cli['list'])) {
+        Pimf_Cli::absorb();
+        exit(0);
       }
     }
 
     $conf = Pimf_Registry::get('conf');
 
     $resolver = new Pimf_Resolver(
-      new Pimf_Request($get, $post, $cookie, $cliArguments),
+      new Pimf_Request($get, $post, $cookie, $cli),
       'app' . '/' . $conf['app']['name'] . '/' . 'Controller',
       Pimf_Util_String::ensureTrailing('_', $conf['app']['name'])
     );
@@ -72,9 +74,9 @@ final class Pimf_Application
    */
   public static function bootstrap(array $config)
   {
-    static $isBootstrapped;
+    static $bootstrapped;
 
-    if ($isBootstrapped === true) {
+    if ($bootstrapped === true) {
       return;
     }
 
@@ -143,67 +145,7 @@ final class Pimf_Application
 
     unset($dbDsn, $dbUser, $dbPwd, $extension, $problems, $config);
 
-    $isBootstrapped = true;
-  }
-
-  /**
-   * Prints out a list of CLI commands for the system.
-   * @return void
-   */
-  protected static function printCommands()
-  {
-    $classes = array();
-
-    foreach (array( 'app/' ) as $dirPart) {
-
-      $regexIterator = new RegexIterator(
-        new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dirPart)),
-        '/^.+\.php$/i',
-        RecursiveRegexIterator::GET_MATCH
-      );
-
-      foreach (iterator_to_array($regexIterator, false) as $file) {
-        $file = str_replace('\\', '/', $file);
-        $path = str_replace($dirPart, '', current($file));
-        $name = str_replace('/', '_', $path);
-        $name = str_replace('.php', '', $name);
-
-        $classes[] = $name;
-      }
-    }
-
-    array_map(
-      function ($class) {
-
-        $conf = Pimf_Registry::get('conf');
-
-        if (preg_match("/" . $conf['app']['name'] . "_Controller/i", $class)) {
-
-          $reflection = new ReflectionClass ($class);
-          $methods    = $reflection->getMethods();
-          $controller = explode('_', $class);
-
-          echo PHP_EOL.'PIMF CLI 2.1 by Gjero Krsteski'.PHP_EOL.PHP_EOL;
-          echo 'Usage sample: php pimf controller=index action=insert title="Conan" content="action movie"'. PHP_EOL;
-          echo '+------------------------------------------------------------------------------------------+' . PHP_EOL;
-          echo 'controller: ' . end($controller) . '' . PHP_EOL.PHP_EOL;
-
-          array_map(
-            function ($method) {
-              if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
-                echo ' action: ' . $command . ' ';
-                $options = substr($method->getDocComment(), 3, -2);
-                $options = str_replace(array( '  ' ), ' ', $options);
-                $options = str_replace('* @argument ', ' --', $options);
-                echo PHP_EOL . ' arguments: ' . $options . PHP_EOL;
-              }
-            }, $methods
-          );
-
-          echo PHP_EOL;
-        }
-      }, $classes
-    );
+    $bootstrapped = true;
   }
 
   /**
