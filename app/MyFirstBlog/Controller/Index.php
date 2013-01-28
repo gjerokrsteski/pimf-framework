@@ -1,10 +1,10 @@
 <?php
 /**
- *       __________
- *      / ___  ___ \    This is a sample class which shows
- *     / / @ \/ @ \ \   everything what you can do
- *     \ \___/\___/ /\  with a PIMF controller!
- *     \____\/____/||
+ *      __________
+ *     / ___  ___ \    This is a sample class which shows
+ *    / / @ \/ @ \ \   everything what you can do
+ *    \ \___/\___/ /\  with a PIMF controller!
+ *    \____\/____/ ||
  *     /     /\\\\\//
  *     |     |\\\\\\
  *     \      \\\\\\
