@@ -77,19 +77,23 @@ final class Pimf_Application
       $prefix
     );
 
-    if (!Pimf_Environment::isCli() and $conf['session']['storage'] !== '') {
+    $inSession = (Pimf_Environment::isWeb() && $conf['session']['storage'] !== '');
+
+    if ($inSession) {
       Pimf_Session::load();
     }
 
     $pimf = $resolver->process();
 
-    if (!Pimf_Environment::isCli() and $conf['session']['storage'] !== '') {
+    if ($inSession) {
       Pimf_Session::save();
     }
 
-    // Like other headers, cookies must be sent before any output
-    // from your script - this is a protocol restriction!
-    Pimf_Cookie::send();
+    if (Pimf_Environment::isWeb()) {
+      // Like other headers, cookies must be sent before any output
+      // from your script - this is a protocol restriction!
+      Pimf_Cookie::send();
+    }
 
     $pimf->render();
   }
