@@ -43,7 +43,7 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
     }
 
     // set the protected id of user via reflection.
-    $blogEntry = $this->reflectId($blogEntry, $id);
+    $blogEntry = $this->reflect($blogEntry, $id);
 
     $this->identityMap->set($id, $blogEntry);
 
@@ -71,7 +71,7 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
 
     $id = (int)$this->db->lastInsertId();
 
-    $blogEntry = $this->reflectId($blogEntry, $id);
+    $blogEntry = $this->reflect($blogEntry, $id);
 
     $this->identityMap->set($id, $blogEntry);
 

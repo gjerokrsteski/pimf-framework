@@ -29,22 +29,22 @@ class Pimf_Request
   /**
    * @var Pimf_Param
    */
-  private $postData;
+  public static $postData;
 
   /**
    * @var Pimf_Param
    */
-  private $getData;
+  public static $getData;
 
   /**
    * @var Pimf_Param
    */
-  private $cookieData;
+  public static $cookieData;
 
   /**
    * @var Pimf_Param
    */
-  private $cliData;
+  public static $cliData;
 
   /**
    * @param array $getData
@@ -54,10 +54,10 @@ class Pimf_Request
    */
   public function __construct(array $getData, array $postData = array(), array $cookieData = array(), array $cliData = array())
   {
-    $this->getData    = new Pimf_Param($this->stripSlashesIfMagicQuotes($getData));
-    $this->postData   = new Pimf_Param($this->stripSlashesIfMagicQuotes($postData));
-    $this->cookieData = new Pimf_Param($cookieData);
-    $this->cliData    = new Pimf_Param($this->stripSlashesIfMagicQuotes($cliData));
+    static::$getData    = new Pimf_Param($this->stripSlashesIfMagicQuotes($getData));
+    static::$postData   = new Pimf_Param($this->stripSlashesIfMagicQuotes($postData));
+    static::$cookieData = new Pimf_Param($cookieData);
+    static::$cliData    = new Pimf_Param($this->stripSlashesIfMagicQuotes($cliData));
   }
 
   /**
@@ -66,9 +66,8 @@ class Pimf_Request
    */
   public function fromGet()
   {
-    return $this->getData;
+    return static::$getData;
   }
-
 
   /**
    * CLI arguments passed to script.
@@ -76,7 +75,7 @@ class Pimf_Request
    */
   public function fromCli()
   {
-    return $this->cliData;
+    return static::$cliData;
   }
 
   /**
@@ -85,7 +84,7 @@ class Pimf_Request
    */
   public function fromPost()
   {
-    return $this->postData;
+    return static::$postData;
   }
 
   /**
@@ -94,7 +93,7 @@ class Pimf_Request
    */
   public function fromCookie()
   {
-    return $this->cookieData;
+    return static::$cookieData;
   }
 
   /**
@@ -131,6 +130,5 @@ class Pimf_Request
       ), $rawData
     ) : stripslashes($rawData);
   }
-
 }
 

@@ -29,6 +29,8 @@
  */
 class Pimf_Util_Header
 {
+  protected static $cookies;
+
   /**
    * Removes previously set headers.
    */

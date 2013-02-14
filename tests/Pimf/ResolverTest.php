@@ -9,6 +9,16 @@ class Pimf_ResolverTest extends PHPUnit_Framework_TestCase
       'controller'=> 'index',
       'action'    => 'save'
     );
+
+    Pimf_Registry::set('conf',
+      array(
+        'app' => array(
+          'name' => 'test-app-name',
+          'key' => 'secret-key-here',
+          'default_controller' => 'index',
+        ),
+      )
+    );
   }
 
   public function testCreatingNewInstance()

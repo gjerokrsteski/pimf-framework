@@ -28,7 +28,9 @@
  */
 final class Pimf_Application
 {
-  const VERSION = '1.2';
+  const VERSION = '1.6';
+
+  private static $bootstrapped;
 
   /**
    * Run a application, let application accept a request, route the request,
@@ -37,16 +39,21 @@ final class Pimf_Application
    * @param array $get Array of variables passed to the current script via the URL parameters.
    * @param array $post Array of variables passed to the current script via the HTTP POST method.
    * @param array $cookie Array of variables passed to the current script via HTTP Cookies.
-   * @param array $server Array of information such as headers, paths, and script locations.
    *
+   * @throws LogicException If application not bootstrapped.
    * @return void
    */
-  public static function run(array $get, array $post, array $cookie, array $server)
+  public static function run(array $get, array $post, array $cookie)
   {
+    if (static::$bootstrapped !== true) {
+      throw new LogicException('Please bootstrap first, than run the application!');
+    }
+
     $cli = array();
 
     if (Pimf_Environment::isCli()) {
-      parse_str(implode('&', array_slice($server['argv'], 1)), $cli);
+
+      $cli = Pimf_Cli::parse((array)Pimf_Registry::get('env')->argv);
 
       if (count($cli) < 1 || isset($cli['list'])) {
         Pimf_Cli::absorb();
@@ -56,38 +63,64 @@ final class Pimf_Application
 
     $conf = Pimf_Registry::get('conf');
 
+    If (isset($cli['controller']) && $cli['controller'] == 'core') {
+      $prefix     = 'Pimf_';
+      $repository = 'core/Pimf/Controller';
+    } else {
+      $prefix     = Pimf_Util_String::ensureTrailing('_', $conf['app']['name']);
+      $repository = 'app/' . $conf['app']['name'] . '/Controller';
+    }
+
     $resolver = new Pimf_Resolver(
       new Pimf_Request($get, $post, $cookie, $cli),
-      'app' . '/' . $conf['app']['name'] . '/' . 'Controller',
-      Pimf_Util_String::ensureTrailing('_', $conf['app']['name'])
+      $repository,
+      $prefix
     );
 
-    $resolver->process()->render();
+    if (!Pimf_Environment::isCli() and $conf['session']['storage'] !== '') {
+      Pimf_Session::load();
+    }
+
+    $pimf = $resolver->process();
+
+    if (!Pimf_Environment::isCli() and $conf['session']['storage'] !== '') {
+      Pimf_Session::save();
+    }
+
+    // Like other headers, cookies must be sent before any output
+    // from your script - this is a protocol restriction!
+    Pimf_Cookie::send();
+
+    $pimf->render();
   }
 
   /**
-   * Mechanism used to do some initial config before a Application run.
+   * Mechanism used to do some initial config before a Application runs.
    *
    * @param array $config The array of configuration options.
+   * @param array $server Array of information such as headers, paths, and script locations.
    *
    * @return void
    */
-  public static function bootstrap(array $config)
+  public static function bootstrap(array $config, array $server = array())
   {
-    static $bootstrapped;
-
-    if ($bootstrapped === true) {
+    if (static::$bootstrapped === true) {
       return;
     }
 
     ini_set('default_charset', $config['encoding']);
+
+    if (Pimf_Environment::isWeb()){
+      ob_start('mb_output_handler');
+    }
+
     date_default_timezone_set($config['timezone']);
+    ini_set('display_errors', 'On');
 
     // setup the error reporting.
     if ($config['environment'] == 'testing') {
 
       error_reporting(E_ALL | E_STRICT);
-      ini_set('display_errors', 'on');
       $dbConf = $config['testing']['db'];
 
     } else {
@@ -106,7 +139,6 @@ final class Pimf_Application
       });
 
       error_reporting(-1);
-      ini_set('display_errors', 'off');
       $dbConf = $config['production']['db'];
     }
 
@@ -130,10 +162,10 @@ final class Pimf_Application
     $registry = new Pimf_Registry();
 
     try {
+      $registry->env    = new Pimf_Environment($server);
       $registry->em     = new Pimf_EntityManager(Pimf_Pdo_Factory::get($dbConf), $config['app']['name']);
       $registry->logger = new Pimf_Logger($config['bootstrap']['local_temp_directory']);
       $registry->logger->init();
-      $registry->env    = new Pimf_Environment($_SERVER);
       $registry->conf   = $config;
     } catch (Exception $e) {
       $problems[] = $e->getMessage();
@@ -145,7 +177,7 @@ final class Pimf_Application
 
     unset($dbDsn, $dbUser, $dbPwd, $extension, $problems, $config);
 
-    $bootstrapped = true;
+    static::$bootstrapped = true;
   }
 
   /**

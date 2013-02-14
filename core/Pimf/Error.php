@@ -51,6 +51,10 @@ class Pimf_Error
 				<pre>" . $exception->getFile() . " on line " . $exception->getLine() . "</pre>
         <h3>Stack Trace:</h3>
         <pre>" . $exception->getTraceAsString() . "</pre></html>";
+
+      if (Pimf_Environment::isCli()) {
+        $msg = Pimf_Util_String::cleanAggressive($msg);
+      }
     }
 
     Pimf_Util_Header::clear();

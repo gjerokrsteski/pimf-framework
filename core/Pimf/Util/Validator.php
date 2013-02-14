@@ -47,14 +47,59 @@ class Pimf_Util_Validator
   /**
    * @var Pimf_Param
    */
-  protected $request;
+  protected $attributes;
 
   /**
-   * @param Pimf_Param $request
+   * @param Pimf_Param $attributes
    */
-  public function __construct(Pimf_Param $request)
+  public function __construct(Pimf_Param $attributes)
   {
-    $this->request = $request;
+    $this->attributes = $attributes;
+  }
+
+  /**
+   * <code>
+   *  $attributes = array(
+   *    'fname'    => 'conan',
+   *    'age'      => 33,
+   *   );
+   *
+   *   $rules = array(
+   *     'fname'   => 'alpha|length[>,0]|lengthBetween[1,9]',
+   *     'age'     => 'digit|value[>,18]|value[=,33]',
+   *   );
+   *
+   *  $validator = Pimf_Util_Validator::factory($attributes, $rules);
+   *
+   * </code>
+   *
+   * @param array $attributes
+   * @param array|Pimf_Param $rules
+   * @return Pimf_Util_Validator
+   */
+  public static function factory($attributes, array $rules)
+  {
+    if (! ($attributes instanceof Pimf_Param)){
+      $attributes = new Pimf_Param((array)$attributes);
+    }
+
+    $validator = new self($attributes);
+
+    foreach ($rules as $key => $rule) {
+
+      $checks = (is_string($rule)) ? explode('|', $rule) : $rule;
+
+      foreach ($checks as $check) {
+
+        $items      = explode('[', str_replace(']', '', $check));
+        $method     = $items[0];
+        $parameters = array_merge(array( $key ), (isset($items[1]) ? explode(',', $items[1]) : array()));
+
+        call_user_func_array(array($validator, $method), $parameters);
+      }
+    }
+
+    return $validator;
   }
 
   /**
@@ -67,10 +112,10 @@ class Pimf_Util_Validator
   public function length($field, $operator, $length)
   {
     $isValid    = false;
-    $fieldValue = $this->request->get($field);
+    $fieldValue = $this->attributes->get($field);
 
     if ($fieldValue === null) {
-      $this->setError($field, 101);
+      $this->setError($field, __FUNCTION__);
       return $isValid;
     }
 
@@ -110,7 +155,7 @@ class Pimf_Util_Validator
     }
 
     if ($isValid === false) {
-      $this->setError($field, 101);
+      $this->setError($field, __FUNCTION__);
     }
 
     return $isValid;
@@ -123,13 +168,13 @@ class Pimf_Util_Validator
    */
   public function email($field)
   {
-    $address = trim($this->request->get($field));
+    $address = trim($this->attributes->get($field));
 
     if (preg_match('#^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$#', $address)) {
       return true;
     }
 
-    $this->setError($field, 102);
+    $this->setError($field, __FUNCTION__);
     return false;
   }
 
@@ -142,12 +187,12 @@ class Pimf_Util_Validator
    */
   public function compare($field1, $field2, $caseInsensitive = false)
   {
-    $field1value = $this->request->get($field1);
-    $field2value = $this->request->get($field2);
+    $field1value = $this->attributes->get($field1);
+    $field2value = $this->attributes->get($field2);
     $isValid     = false;
 
     if ($field1value === null || $field2value === null) {
-      $this->setError($field1 . "|" . $field2, 103);
+      $this->setError($field1 . "|" . $field2, __FUNCTION__);
       return $isValid;
     }
 
@@ -162,7 +207,7 @@ class Pimf_Util_Validator
     }
 
     if ($isValid === false) {
-      $this->setError($field1 . "|" . $field2, 103);
+      $this->setError($field1 . "|" . $field2, __FUNCTION__);
     }
 
     return $isValid;
@@ -171,18 +216,18 @@ class Pimf_Util_Validator
   /**
    * check to see if the length of a field is between two numbers
    * @param string $field
-   * @param int $max
    * @param int $min
+   * @param int $max
    * @param bool $inclusive
    * @return bool
    */
-  public function lengthBetween($field, $max, $min, $inclusive = false)
+  public function lengthBetween($field, $min, $max, $inclusive = false)
   {
-    $fieldValue = $this->request->get($field);
+    $fieldValue = $this->attributes->get($field);
     $isValid    = false;
 
     if ($fieldValue === null){
-      $this->setError($field, 104);
+      $this->setError($field, __FUNCTION__);
       return $isValid;
     }
 
@@ -199,7 +244,7 @@ class Pimf_Util_Validator
     }
 
     if ($isValid === false) {
-      $this->setError($field, 104);
+      $this->setError($field, __FUNCTION__);
     }
 
     return $isValid;
@@ -212,15 +257,15 @@ class Pimf_Util_Validator
    */
   public function punctuation($field)
   {
-    $fieldValue = $this->request->get($field);
+    $fieldValue = $this->attributes->get($field);
 
     if ($fieldValue === null) {
-      $this->setError($field, 105);
+      $this->setError($field, __FUNCTION__);
       return false;
     }
 
     if (preg_match("#^[[:punct:]]+$#", $fieldValue)) {
-      $this->setError($field, 105);
+      $this->setError($field, __FUNCTION__);
       return false;
     }
 
@@ -236,11 +281,11 @@ class Pimf_Util_Validator
    */
   public function value($field, $operator, $length)
   {
-    $fieldValue = $this->request->get($field);
+    $fieldValue = $this->attributes->get($field);
     $isValid    = false;
 
     if ($fieldValue === null) {
-      $this->setError($field, 106);
+      $this->setError($field, __FUNCTION__);
       return $isValid;
     }
 
@@ -277,7 +322,7 @@ class Pimf_Util_Validator
     }
 
     if ($isValid === false) {
-      $this->setError($field, 106);
+      $this->setError($field, __FUNCTION__);
     }
 
     return $isValid;
@@ -286,18 +331,18 @@ class Pimf_Util_Validator
   /**
    * check if a number value is between $max and $min
    * @param string $field
-   * @param int $max
    * @param int $min
+   * @param int $max
    * @param bool $inclusive
    * @return bool
    */
-  public function valueBetween($field, $max, $min, $inclusive = false)
+  public function valueBetween($field, $min, $max, $inclusive = false)
   {
-    $fieldValue = $this->request->get($field);
+    $fieldValue = $this->attributes->get($field);
     $isValid    = false;
 
     if ($fieldValue === null) {
-      $this->setError($field, 107);
+      $this->setError($field, __FUNCTION__);
       return $isValid;
     }
 
@@ -312,7 +357,7 @@ class Pimf_Util_Validator
     }
 
     if ($isValid === false) {
-      $this->setError($field, 107);
+      $this->setError($field, __FUNCTION__);
     }
 
     return $isValid;
@@ -325,10 +370,10 @@ class Pimf_Util_Validator
    */
   public function digit($field)
   {
-    $fieldValue = $this->request->get($field);
+    $fieldValue = $this->attributes->get($field);
 
     if ($fieldValue === null) {
-      $this->setError($field, 111);
+      $this->setError($field, __FUNCTION__);
       return false;
     }
 
@@ -336,7 +381,7 @@ class Pimf_Util_Validator
       return true;
     }
 
-    $this->setError($field, 111);
+    $this->setError($field, __FUNCTION__);
     return false;
   }
 
@@ -348,10 +393,10 @@ class Pimf_Util_Validator
    */
   public function alpha($field)
   {
-    $fieldValue = $this->request->get($field);
+    $fieldValue = $this->attributes->get($field);
 
     if ($fieldValue === null) {
-      $this->setError($field, 108);
+      $this->setError($field, __FUNCTION__);
       return false;
     }
 
@@ -359,7 +404,7 @@ class Pimf_Util_Validator
       return true;
     }
 
-    $this->setError($field, 108);
+    $this->setError($field, __FUNCTION__);
     return false;
   }
 
@@ -370,10 +415,10 @@ class Pimf_Util_Validator
    */
   public function alphaNumeric($field)
   {
-    $fieldValue = $this->request->get($field);
+    $fieldValue = $this->attributes->get($field);
 
     if ($fieldValue === null) {
-      $this->setError($field, 109);
+      $this->setError($field, __FUNCTION__);
       return false;
     }
 
@@ -381,7 +426,7 @@ class Pimf_Util_Validator
       return true;
     }
 
-    $this->setError($field, 109);
+    $this->setError($field, __FUNCTION__);
     return false;
   }
 
@@ -399,10 +444,10 @@ class Pimf_Util_Validator
    */
   public function date($field, $format)
   {
-    $fieldValue = $this->request->get($field);
+    $fieldValue = $this->attributes->get($field);
 
     if ($fieldValue === null) {
-      $this->setError($field, 110);
+      $this->setError($field, __FUNCTION__);
       return false;
     }
 
@@ -504,7 +549,7 @@ class Pimf_Util_Validator
     }
 
     $this->resetValid();
-    $this->setError($field, 110);
+    $this->setError($field, __FUNCTION__);
     return false;
   }
 
@@ -566,7 +611,11 @@ class Pimf_Util_Validator
         $key = str_replace("|", " and ", $key);
       }
 
-      $messages[] = "Error $value: on field $key";
+      if(is_array($value)) {
+        $value = implode(' and ', $value);
+      }
+
+      $messages[] = "Error on field '$key' by '$value' check";
     }
 
     return $messages;

@@ -28,17 +28,17 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     $this->assertTrue($validator->compare("pass1", "pass2", false), 'on compare no inclusive validator');
 
-    $this->assertTrue($validator->lengthBetween("color", 15, 3, true), 'on lengthBetween validator');
+    $this->assertTrue($validator->lengthBetween("color", 3, 15, true), 'on lengthBetween validator');
 
-    $this->assertTrue($validator->lengthBetween("color", 15, 3, false), 'on lengthBetween no inclusive validator');
+    $this->assertTrue($validator->lengthBetween("color", 3, 15, false), 'on lengthBetween no inclusive validator');
 
     $this->assertTrue($validator->punctuation('sentence'), 'on punctuation validator');
 
     $this->assertTrue($validator->value("age", ">", 18), 'on value validator');
 
-    $this->assertTrue($validator->valueBetween("number", 16, 11), 'on value between validator');
+    $this->assertTrue($validator->valueBetween("number", 11, 16), 'on value between validator');
 
-    $this->assertTrue($validator->valueBetween("number", 16, 11, true), 'on value between with included validator');
+    $this->assertTrue($validator->valueBetween("number", 11, 16, true), 'on value between with included validator');
 
     $this->assertTrue($validator->alpha("car"), 'on alpha validator');
 
@@ -64,17 +64,17 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     $this->assertFalse($validator->compare("pass1", "pass2", false), 'on compare no inclusive validator');
 
-    $this->assertFalse($validator->lengthBetween("color", 15, 3, true), 'on lengthBetween validator');
+    $this->assertFalse($validator->lengthBetween("color", 3, 15, true), 'on lengthBetween validator');
 
-    $this->assertFalse($validator->lengthBetween("color", 15, 3, false), 'on lengthBetween no inclusive validator');
+    $this->assertFalse($validator->lengthBetween("color", 3, 15, false), 'on lengthBetween no inclusive validator');
 
     $this->assertFalse($validator->punctuation('sentence'), 'on punctuation validator');
 
     $this->assertFalse($validator->value("age", ">", 18), 'on value validator');
 
-    $this->assertFalse($validator->valueBetween("number", 16, 11), 'on value between validator');
+    $this->assertFalse($validator->valueBetween("number", 11, 16), 'on value between validator');
 
-    $this->assertFalse($validator->valueBetween("number", 16, 11, true), 'on value between with included validator');
+    $this->assertFalse($validator->valueBetween("number", 16, 16, true), 'on value between with included validator');
 
     $this->assertFalse($validator->alpha("car"), 'on alpha validator');
 
@@ -85,5 +85,27 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     $this->assertFalse($validator->date("date", "mm/dd/yyyy"), 'on date validator');
 
     $this->assertNotEmpty($validator->getErrors());
+  }
+
+  public function testCreatingAFactoryOfRules()
+  {
+    $attributes = array(
+      'fname'    => 'conan',
+      'age'      => 33,
+      'birth'    => '12-12-2040',
+      'monitor'  => 'sonyT2000',
+    );
+
+    $rules = array(
+      'fname'   => 'alpha|length[>,0]|lengthBetween[1,9]',
+      'age'     => 'digit|value[>,18]|value[=,33]',
+      'birth'   => 'length[>,0]|date[mm-dd-yyyy]',
+      'monitor' => 'alphaNumeric'
+    );
+
+    $validator = Pimf_Util_Validator::factory($attributes, $rules);
+
+    $this->assertEmpty($validator->getErrors());
+    $this->assertEmpty($validator->getErrorMessages());
   }
 }

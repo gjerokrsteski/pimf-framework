@@ -19,137 +19,168 @@
  */
 
 /**
- * Session Manager: delivers methods for save session handling.
- *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
 class Pimf_Session
 {
   /**
-   * @var object Instance of session class
+   * The session singleton instance for the request.
+   * @var Pimf_Session_Payload
    */
-  protected static $instance;
+  public static $instance;
 
   /**
-   * Get an instance of session class
-   * @return object Instance of session class
+   * The third-party storage registrar.
+   * @var array
    */
-  public static function getInstance()
-  {
-    if (self::$instance === null) {
-      self::$instance = new self();
-    }
+  public static $farm = array();
 
-    return self::$instance;
+  /**
+   * The string name of the CSRF token stored in the session.
+   * @var string
+   */
+  const CSRF = 'csrf_token';
+
+  /**
+   * Create the session payload and load the session.
+   * @return void
+   */
+  public static function load()
+  {
+    $conf = Pimf_Registry::get('conf');
+
+    static::start($conf['session']['storage']);
+
+    static::$instance->load(Pimf_Cookie::get($conf['session']['cookie']));
   }
 
   /**
-   * Constructor - start session
+   * Create the session payload instance for the request.
+   * @param string $storage
+   * @return void
    */
-  protected function __construct()
+  public static function start($storage)
   {
-    if (!isset($_SESSION)) {
-      session_start();
+    static::$instance = new Pimf_Session_Payload(static::factory($storage));
+  }
+
+  /**
+   * Create a new session storage instance.
+   * @param $storage
+   * @return Pimf_Session_Storages_Storage
+   * @throws RuntimeException
+   */
+  public static function factory($storage)
+  {
+    if (isset(static::$farm[$storage])) {
+      $resolver = static::$farm[$storage];
+      return $resolver();
     }
 
-    if (isset($_SESSION) === false) {
-      $_SESSION = array();
+    $conf = Pimf_Registry::get('conf');
+
+    switch ($storage) {
+      case 'apc':
+        return new Pimf_Session_Storages_Apc(Pimf_Cache::storage('apc'));
+
+      case 'cookie':
+        return new Pimf_Session_Storages_Cookie();
+
+      case 'file':
+        return new Pimf_Session_Storages_File($conf['session']['storage_path']);
+
+      case 'pdo':
+        return new Pimf_Session_Storages_Pdo(Pimf_Pdo_Factory::get($conf['session']['database']));
+
+      case 'memcached':
+        return new Pimf_Session_Storages_Memcached(Pimf_Cache::storage('memcached'));
+
+      case 'memory':
+        return new Pimf_Session_Storages_Memory();
+
+      case 'redis':
+        return new Pimf_Session_Storages_Redis(Pimf_Cache::storage('redis'));
+
+      case 'dba':
+        return new Pimf_Session_Storages_Dba(Pimf_Cache::storage('dba'));
+
+      default:
+        throw new RuntimeException("Session storage [$storage] is not supported.");
     }
   }
 
   /**
-   * Clone - prevent additional instances of the class
+   * Retrieve the active session payload instance for the request.
+   *
+   * <code>
+   *    // Retrieve the session instance and get an item
+   *    Pimf_Session::instance()->get('name');
+   *
+   *    // Retrieve the session instance and place an item in the session
+   *    Pimf_Session::instance()->put('name', 'Robin');
+   * </code>
+   *
+   * @return Pimf_Session_Payload
+   * @throws RuntimeException
    */
-  private function __clone() { }
-
-  /**
-   * Magic Method to set a session variable
-   * @param  string  $key   Registry array key
-   * @param  string  $value Value of session key
-   * @throws LogicException If stored value is a resource.
-   * @return mixed   TRUE on success otherwise FALSE
-   */
-  public function __set($key, $value)
+  public static function instance()
   {
-    if (is_resource($value)) {
-      throw new LogicException(
-        'storing resources in a session is not permitted!'
-      );
+    if (static::started()) {
+      return static::$instance;
     }
 
-    if (isset($_SESSION[$key]) === false) {
-      $_SESSION[$key] = $value;
-      return true;
-    }
-
-    return false;
+    throw new RuntimeException("A storage must be set before using the session.");
   }
 
   /**
-   * Magic Method to get a session variable
-   * @param  string  $key   Registry array key
-   * @return bool    TRUE on success otherwise NULL
-   */
-  public function &__get($key)
-  {
-    if (isset($_SESSION[$key])) {
-      return $_SESSION[$key];
-    }
-
-    return null;
-  }
-
-  /**
-   * Unset a session variable
-   * @param  string  $key   Registry array key
-   * @return bool    TRUE on success otherwise FALSE
-   */
-  public function __unset($key)
-  {
-    if (isset($_SESSION[$key])) {
-      unset($_SESSION[$key]);
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @param mixed $key
+   * Determine if session handling has been started for the request.
+   *
    * @return bool
    */
-  public function __isset($key)
+  public static function started()
   {
-    return isset($_SESSION[$key]);
+    return (static::$instance !== null);
   }
 
   /**
-   * @return bool
+   * Register a third-party cache storage.
+   *
+   * @param string $storage
+   * @param Closure $resolver
+   * @return void
    */
-  public function destroy()
+  public static function extend($storage, Closure $resolver)
   {
-    $sessionState = session_destroy();
-    session_write_close();
-    unset($_SESSION);
-
-    return $sessionState;
+    static::$farm[$storage] = $resolver;
   }
 
   /**
-   * Reset/delete old session and regenerate id.
+   * Magic Method for calling the methods on the session singleton instance.
+   *
+   * <code>
+   *    // Retrieve a value from the session
+   *    $value = Pimf_Session::get('name');
+   *
+   *    // Write a value to the session storage
+   *    $value = Pimf_Session::put('name', 'Robin');
+   *
+   *    // Equivalent statement using the "instance" method
+   *    $value = Pimf_Session::instance()->put('name', 'Robin');
+   * </code>
+   *
+   * @param $method
+   * @param $parameters
+   *
+   * @return Pimf_Session_Storages_Storage
    */
-  public function reset()
+  public static function __callStatic($method, $parameters)
   {
-    session_regenerate_id(true);
-    $_SESSION = array();
-  }
-
-  /**
-   * Get the current session id.
-   * @return string
-   */
-  public function getId()
-  {
-    return session_id();
+    return call_user_func_array(
+      array(
+        static::instance(),
+        $method
+      ), $parameters
+    );
   }
 }

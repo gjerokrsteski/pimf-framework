@@ -628,4 +628,46 @@ class Pimf_Util_String
       str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 5)), 0, $length
     );
   }
+
+  /**
+   * Determine if a given string contains a given sub-string.
+   *
+   * @param string $haystack
+   * @param string|array $needle
+   * @return bool
+   */
+  public static function contains($haystack, $needle)
+  {
+    foreach ((array)$needle as $n) {
+      if (strpos($haystack, $n) !== false) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Determine if a given string begins with a given value.
+   *
+   * @param string $haystack
+   * @param string $needle
+   * @return bool
+   */
+  public static function startsWith($haystack, $needle)
+  {
+  	return strpos($haystack, $needle) === 0;
+  }
+
+  /**
+   * Determine if a given string ends with a given value.
+   *
+   * @param string $haystack
+   * @param string $needle
+   * @return bool
+   */
+  public static function endsWith($haystack, $needle)
+  {
+  	return $needle == substr($haystack, strlen($haystack) - strlen($needle));
+  }
 }

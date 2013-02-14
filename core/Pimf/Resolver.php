@@ -60,7 +60,8 @@ class Pimf_Resolver
     }
 
     if (!$controllerName) {
-      $controllerName = 'index';
+      $conf = Pimf_Registry::get('conf');
+      $controllerName =  $conf['app']['default_controller'];
     }
 
     $this->controllerRepositoryPath = $controllerRepositoryPath;

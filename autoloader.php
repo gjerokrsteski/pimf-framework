@@ -34,6 +34,6 @@ spl_autoload_register(function($className){
     }
 
     if (isset($classes[$className])) {
-      require_once $classes[$className];
+      require $classes[$className];
     }
 });

@@ -9,7 +9,7 @@ require_once 'bootstrap.php';
 
 try{
 
-  Pimf_Application::run($_GET, $_POST, $_COOKIE, $_SERVER);
+  Pimf_Application::run($_GET, $_POST, $_COOKIE);
 
 } catch (Pimf_Resolver_Exception $e){ // thrown by the user requests resolver
 

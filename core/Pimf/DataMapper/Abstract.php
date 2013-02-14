@@ -60,16 +60,17 @@ abstract class Pimf_DataMapper_Abstract
   }
 
   /**
+   * Makes a given model-property accessible.
    * @param object $model
-   * @param int $idValue
-   * @param string $idKey
+   * @param int $value
+   * @param string $property
    * @return mixed
    */
-  public function reflectId($model, $idValue, $idKey = 'id')
+  public function reflect($model, $value, $property = 'id')
   {
-    $attribute = new ReflectionProperty($model, $idKey);
+    $attribute = new ReflectionProperty($model, $property);
     $attribute->setAccessible(true);
-    $attribute->setValue($model, $idValue);
+    $attribute->setValue($model, $value);
 
     return $model;
   }

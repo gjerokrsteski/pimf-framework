@@ -36,7 +36,7 @@ class Pimf_Util_Crypter
    */
   public static function encrypt($string)
   {
-    return base64_encode(self::key().$string);
+    return base64_encode($string);
   }
 
   /**
@@ -46,7 +46,7 @@ class Pimf_Util_Crypter
    */
   public static function decrypt($encrypted)
   {
-    return str_replace(self::key(), '', base64_decode($encrypted, true));
+    return base64_decode($encrypted, true);
   }
 
   /**
@@ -56,15 +56,5 @@ class Pimf_Util_Crypter
   public function getAlgorithm()
   {
     return 'Base64';
-  }
-
-  /**
-   * Get the encryption key from the application configuration.
-   * @return string
-   */
-  protected static function key()
-  {
-    $config = Pimf_Registry::get('config');
-    return $config['app']['name'];
   }
 }

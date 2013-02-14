@@ -66,7 +66,7 @@ class Pimf_Cli_Color
    * @param null $backgroundColor
    * @return string
    */
-  public static function paint($string, $foregroundColor = 'green', $backgroundColor = null)
+  public static function paint($string, $foregroundColor = 'cyan', $backgroundColor = null)
   {
     $colored = "";
 

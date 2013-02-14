@@ -39,7 +39,9 @@ class Pimf_Cli
    {
      $classes = array();
 
-     foreach (array( 'app/' ) as $dir) {
+     $conf = Pimf_Registry::get('conf');
+
+     foreach (array( 'app/'.$conf['app']['name'].'/Controller/', 'core/Pimf/Controller/' ) as $dir) {
 
        $iterator = new RegexIterator(
          new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir)),
@@ -48,55 +50,72 @@ class Pimf_Cli
        );
 
        foreach (iterator_to_array($iterator, false) as $file) {
-         $file = str_replace('\\', '/', $file);
-         $path = str_replace($dir, '', current($file));
-         $name = str_replace('/', '_', $path);
+         $file = str_replace('\\', '/', current($file));
+         $name = str_replace(array('app/', 'core/'), '', $file);
+         $name = str_replace('/', '_', $name);
          $name = str_replace('.php', '', $name);
          $classes[] = $name;
        }
      }
 
      echo Pimf_Cli_Color::paint(
-        'PIMF v'.Pimf_Application::VERSION.' PHP Command Line Interface by Gjero Krsteski'.PHP_EOL.PHP_EOL
-       .'+--------------------------------------------------------------------------------------+'. PHP_EOL
-       .'| Sample: php pimf controller=index action=insert title="Conan" content="action movie" |'. PHP_EOL
-       .'+--------------------------------------------------------------------------------------+'. PHP_EOL.PHP_EOL
+        'PIMF v'.Pimf_Application::VERSION.' PHP Command Line Interface by Gjero Krsteski'.PHP_EOL
+     );
+
+     echo Pimf_Cli_Color::paint(
+       '+------------------------------------------------------+'. PHP_EOL
      );
 
      array_map(
        function ($class) {
 
-         $conf = Pimf_Registry::get('conf');
+           $reflection = new ReflectionClass($class);
 
-         if (preg_match("/" . $conf['app']['name'] . "_Controller/i", $class)) {
+           if ($reflection->isSubclassOf('Pimf_Controller_Abstract')){
 
-           $reflection = new ReflectionClass ($class);
-           $methods    = $reflection->getMethods();
-           $controller = explode('_', $class);
+              $methods    = $reflection->getMethods();
+              $controller = explode('_', $class);
 
-           echo Pimf_Cli_Color::paint('controller: ' . end($controller) . '' . PHP_EOL);
+              echo Pimf_Cli_Color::paint('controller: ' . strtolower(end($controller)) . '' . PHP_EOL);
 
-           array_map(
-             function ($method) {
-               if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
+              array_map(
+                function ($method) {
+                  if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
+                    echo Pimf_Cli_Color::paint(PHP_EOL.' action: ' . $command . ' '.PHP_EOL);
+                  }
+                }, $methods
+              );
 
-                 echo Pimf_Cli_Color::paint(' action: ' . $command . ' ');
+             echo Pimf_Cli_Color::paint(
+               PHP_EOL.'+------------------------------------------------------+'. PHP_EOL
+             );
 
-                 $options = substr($method->getDocComment(), 3, -2);
-                 $options = str_replace(array( '  ' ), ' ', $options);
-                 $options = str_replace('* @argument ', ' --', $options);
+           }
 
-                 echo Pimf_Cli_Color::paint(PHP_EOL . ' arguments: ' . $options . PHP_EOL . PHP_EOL);
-               }
-             }, $methods
-           );
-
-           echo Pimf_Cli_Color::paint(
-             '+--------------------------------------------------------------------------------------+'. PHP_EOL
-           );
-         }
        }, $classes
      );
    }
 
+  /**
+   * @param array $commands
+   * @return array
+   */
+  public static function parse(array $commands)
+  {
+    $cli = array();
+
+    parse_str(implode('&', array_slice($commands, 1)), $cli);
+
+    $command = current(array_keys($cli, ''));
+
+    if (Pimf_Util_String::contains($command, ':')){
+
+      list($controller, $action) = explode(':', $command);
+
+      $cli['controller'] = $controller;
+      $cli['action'] = $action;
+    }
+
+    return $cli;
+  }
 }

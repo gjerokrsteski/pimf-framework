@@ -47,6 +47,11 @@ class Pimf_Environment
     return $this->envData;
   }
 
+  public function __get($key)
+  {
+    return $this->envData->get($key);
+  }
+
   /**
    * Is this an AJAX request?
    * @return bool

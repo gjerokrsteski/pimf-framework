@@ -76,7 +76,7 @@ class Pimf_Cli_Io
         break;
       }
 
-      echo Pimf_Cli_Color::paint("Value for " . $prompt . " is invalid!\n", 'red');
+      echo Pimf_Cli_Color::paint("Value format for " . $prompt . " is invalid!\n", 'red');
     }
 
     return $value;
