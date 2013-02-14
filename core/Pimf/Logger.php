@@ -83,15 +83,15 @@ class Pimf_Logger
       $this->logFileName = 'pimf-logs.txt';
     }
 
-    if (!file_exists($this->localeStorageDir)) {
+    if (!is_dir($this->localeStorageDir)) {
       mkdir($this->localeStorageDir, 0777);
     }
 
-    if (false === is_dir($this->localeStorageDir)) {
+    if (!is_dir($this->localeStorageDir)) {
       throw new RuntimeException('log_dir must be a directory ' . $this->localeStorageDir);
     }
 
-    if (false === is_writable($this->localeStorageDir)) {
+    if (!is_writable($this->localeStorageDir)) {
       throw new RuntimeException('log_dir is not writable ' . $this->localeStorageDir);
     }
 
