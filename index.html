@@ -138,32 +138,32 @@ Of course, if you want to name your database something besides "application", yo
 
 <ul>
 <li>go to "app/MyFirstBlog/" and create a new subdirectory "Controller" - the directory name is strict convention.</li>
-<li>create new PHP file with name for example "Index.php" into directory  "app/MyFirstBlog/Controller/"</li>
-<li>the file "Index.php" has to have strict class name like "MyFirstBlog_Controller_Index" and has to extend "Pimf_Controller_Abstract"</li>
+<li>create new PHP file with name for example "Blog.php" into directory  "app/MyFirstBlog/Controller/"</li>
+<li>the file "Blog.php" has to have strict class name like "MyFirstBlog_Controller_Blog" and has to extend "Pimf_Controller_Abstract"</li>
 <li>create new method action for example "indexAction()"</li>
 <li>optionally you can implement the method "init()" - it will be triggered before any action of the controller is executed.</li>
-<li>call the controller-action on sending the GET "index.php?controller=index&amp;action=index" parameters to your request</li>
+<li>call the controller-action on sending the GET "index.php?controller=blog&amp;action=index" parameters to your request</li>
 </ul><div class="highlight"><pre>|-- app/
 |   `-- MyFirstBlog/
 |       |-- Controller/
-|       |   '-- Index.php
+|       |   '-- Blog.php
 </pre></div>
 
 <h3>Accessing the controller action in two ways</h3>
 
 <ul>
 <li>at the browser, by calling the controller-action on sending the GET parameters to your request</li>
-</ul><div class="highlight"><pre>/index.php?controller<span class="o">=</span>index&amp;action<span class="o">=</span>showentry
+</ul><div class="highlight"><pre>/index.php?controller<span class="o">=</span>blog&amp;action<span class="o">=</span>showentry
 </pre></div>
 
 <ul>
 <li>at the command line interface by executing the command</li>
-</ul><div class="highlight"><pre>php pimf <span class="nv">controller</span><span class="o">=</span>index <span class="nv">action</span><span class="o">=</span>insert <span class="nv">title</span><span class="o">=</span><span class="s2">"Conan"</span> <span class="nv">content</span><span class="o">=</span><span class="s2">"action movie"</span>
+</ul><div class="highlight"><pre>php pimf blog:insert
 </pre></div>
 
-<p>Here you can see how they are defined at the index-controller:</p>
+<p>Here you can see how they are defined at the blog-controller:</p>
 
-<div class="highlight"><pre> <span class="k">class</span> <span class="nc">MyFirstBlog_Controller_Index</span>
+<div class="highlight"><pre> <span class="k">class</span> <span class="nc">MyFirstBlog_Controller_Blog</span>
  <span class="k">extends</span> <span class="nx">Pimf_Controller_Abstract</span>
  <span class="p">{</span>
    <span class="k">public</span> <span class="k">function</span> <span class="nf">showentryAction</span><span class="p">()</span>
@@ -195,7 +195,7 @@ If you want to send message to you interface than throw Pimf_Controller_Exceptio
 </ul><div class="highlight"><pre>|-- app/
 |   `-- MyFirstBlog/
 |       |-- Controller/
-|       |   '-- Index.php
+|       |   '-- Blog.php
 |       |-- DataMapper/
 |       |   '-- Entry.php
 |       |-- Model/
