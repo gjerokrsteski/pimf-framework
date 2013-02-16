@@ -24,7 +24,11 @@ git clone --recursive https://github.com/gjerokrsteski/pimf.git
 'local_temp_directory' => '/tmp/' //if necessary
 ```
 
-**Step 4.** Create at your local temp directory the files **pimf-logs.txt**, **pimf-warnings.txt**, **pimf-errors.txt** and verify that they are writable.
+**Step 4.** Go to your PIMF root directory and run the command:  
+
+```cli
+php pimf core:init
+```
 
 **Step 5.** Navigate to your application in a web browser.
 
