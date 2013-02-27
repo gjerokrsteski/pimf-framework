@@ -56,8 +56,7 @@ final class Pimf_Application
       $cli = Pimf_Cli::parse((array)Pimf_Registry::get('env')->argv);
 
       if (count($cli) < 1 || isset($cli['list'])) {
-        Pimf_Cli::absorb();
-        exit(0);
+        Pimf_Cli::absorb(); exit(0);
       }
     }
 
@@ -72,26 +71,20 @@ final class Pimf_Application
     }
 
     $resolver = new Pimf_Resolver(
-      new Pimf_Request($get, $post, $cookie, $cli),
-      $repository,
-      $prefix
+      new Pimf_Request($get, $post, $cookie, $cli), $repository, $prefix
     );
 
-    $inSession = (Pimf_Environment::isWeb() && $conf['session']['storage'] !== '');
+    $sessionized = (Pimf_Environment::isWeb() && $conf['session']['storage'] !== '');
 
-    if ($inSession) {
+    if ($sessionized) {
       Pimf_Session::load();
     }
 
     $pimf = $resolver->process();
 
-    if ($inSession) {
+    if ($sessionized) {
       Pimf_Session::save();
-    }
-
-    if (Pimf_Environment::isWeb()) {
-      // Like other headers, cookies must be sent before any output
-      // from your script - this is a protocol restriction!
+      // Cookies must be sent before any output.
       Pimf_Cookie::send();
     }
 
