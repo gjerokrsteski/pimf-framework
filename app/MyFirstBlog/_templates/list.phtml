@@ -4,7 +4,7 @@
       foreach($this->entries as $entry) :
       ?>
         <li>
-            <h2><a href="?action=showentry&id=<?=$entry->getId()?>"><?=$entry->getTitle()?></a></h2>
+            <h2><a href="?action=showentry&id=<?php echo $entry->getId()?>"><?php echo $entry->getTitle()?></a></h2>
         </li>
       <?php
       endforeach;

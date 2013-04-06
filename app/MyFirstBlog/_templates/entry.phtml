@@ -1,11 +1,11 @@
 <article>
-    <h2><?=$this->title?></h2>
-    <p><?=$this->content?></p>
+    <h2><?php echo $this->title?></h2>
+    <p><?php echo $this->content?></p>
 
    <p>
-       <a href="?action=listentries"><?=$this->back_link_title?></a>
+       <a href="?action=listentries"><?php echo $this->back_link_title?></a>
         &nbsp;&nbsp;
-       <a href="?action=delete&id=<?=$this->id?>"><?=$this->delete_link_title?></a>
+       <a href="?action=delete&id=<?php echo $this->id?>"><?php echo $this->delete_link_title?></a>
    </p>
 
 </article>
