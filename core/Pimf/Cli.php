@@ -59,7 +59,7 @@ class Pimf_Cli
      }
 
      echo Pimf_Cli_Color::paint(
-        'PIMF v'.Pimf_Application::VERSION.' PHP Command Line Interface by Gjero Krsteski'.PHP_EOL
+       PHP_EOL.'PIMF v'.Pimf_Application::VERSION.' PHP Command Line Interface by Gjero Krsteski'.PHP_EOL
      );
 
      echo Pimf_Cli_Color::paint(

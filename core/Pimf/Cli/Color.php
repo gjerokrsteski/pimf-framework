@@ -68,6 +68,10 @@ class Pimf_Cli_Color
    */
   public static function paint($string, $foregroundColor = 'cyan', $backgroundColor = null)
   {
+    if(Pimf_Environment::isWindows()){
+      return $string;
+    }
+
     $colored = "";
 
     // check if given foreground color found

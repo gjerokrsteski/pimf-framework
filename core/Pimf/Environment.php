@@ -334,4 +334,12 @@ class Pimf_Environment
   {
     return PHP_SAPI == 'isapi';
   }
+
+  /**
+   * @return bool
+   */
+  public static function isWindows()
+  {
+    return (boolean) (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
+  }
 }
