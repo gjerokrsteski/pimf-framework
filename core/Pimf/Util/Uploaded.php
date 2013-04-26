@@ -27,21 +27,25 @@
  * <code>
  *
  *   // Create a file instance.
- *   $file = new Pimf_Util_UploadedFile(
+ *   $upload = new Pimf_Util_Uploaded(
  *     $_FILES['tmp_name'], $_FILES['name'], $_FILES['type'], $_FILES['size'], $_FILES['error']
  *   );
  *
  *   // ... OR ..
  *
  *   // Create an instance using the factory method for more security.
- *   $file = Pimf_Util_UploadedFile::factory($_FILES);
+ *   $upload = Pimf_Util_Uploaded::factory($_FILES);
+ *
+ *   if ($upload instanceof Pimf_Util_Uploaded) {
+ *     $upload->move('path/to/your/images/dir', $upload->getClientOriginalName());
+ *   }
  *
  * </code>
  *
  * @package Pimf_Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_UploadedFile extends Pimf_Util_File
+class Pimf_Util_Uploaded extends Pimf_Util_File
 {
   /**
    * Whether the test mode is activated.
@@ -84,7 +88,7 @@ class Pimf_Util_UploadedFile extends Pimf_Util_File
    *
    * <code>
    *   // Create a file instance.
-   *   $file = new Pimf_Util_UploadedFile(
+   *   $file = new Pimf_Util_Uploaded(
    *     $_FILES['tmp_name'], $_FILES['name'], $_FILES['type'], $_FILES['size'], $_FILES['error']
    *   );
    * </code>
@@ -120,18 +124,18 @@ class Pimf_Util_UploadedFile extends Pimf_Util_File
    *
    * <code>
    *   // Create an instance using the factory method.
-   *   $file = Pimf_Util_UploadedFile::factory($_FILES);
+   *   $file = Pimf_Util_Uploaded::factory($_FILES);
    * </code>
    *
    * @param mixed $file A $_FILES multi-dimensional array of uploaded file information.
    * @param bool $test Whether the test mode is active for essayer unit-testing.
-   * @return array|null|Pimf_Util_UploadedFile
+   * @return null|Pimf_Util_Uploaded
    */
   public static function factory(array $file, $test = false)
   {
     $file = static::heal($file);
 
-    if (is_array($file)) {
+    if (is_array($file) && isset($file['name']) && empty($file['name']) === false) {
 
       $keys = array_keys($file);
       sort($keys);
@@ -146,7 +150,7 @@ class Pimf_Util_UploadedFile extends Pimf_Util_File
       }
     }
 
-    return $file;
+    return null;
   }
 
   /**

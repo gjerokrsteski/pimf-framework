@@ -75,7 +75,10 @@ class Pimf_Controller_Core extends Pimf_Controller_Abstract
     echo Pimf_Cli_Color::paint('Secure config.php' . PHP_EOL);
     chmod($root . 'config.php', 0744);
 
-    echo Pimf_Cli_Color::paint('Create logger files' . PHP_EOL);
+    echo Pimf_Cli_Color::paint('Secure autoload.core.php' . PHP_EOL);
+    chmod($root . 'autoload.core.php', 0644);
+
+    echo Pimf_Cli_Color::paint('Create logging files' . PHP_EOL);
     $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-logs.txt', "at+"); fclose($fp); chmod($file, 0777);
     $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-warnings.txt', "at+"); fclose($fp); chmod($file, 0777);
     $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-errors.txt', "at+"); fclose($fp); chmod($file, 0777);
