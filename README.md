@@ -51,4 +51,4 @@ In order to keep the codebase clean, stable and at high quality, even with so ma
 
 Powered by PHPStorm
 -------------------
-JetBRAINS supports the development of the APF with PHPStorm licenses and we feel confidential that PHPStorm strongly influences the APF's quality. Use PHPStorm! http://www.jetbrains.com/phpstorm/
+JetBRAINS supports the development of the PIMF with PHPStorm licenses and we feel confidential that PHPStorm strongly influences the PIMF's quality. Use PHPStorm! http://www.jetbrains.com/phpstorm/
