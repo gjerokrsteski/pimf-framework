@@ -49,3 +49,6 @@ In order to keep the codebase clean, stable and at high quality, even with so ma
 - **Documentation:** If you are adding a new feature or changing the API in any relevant way, this should be documented.
 - **Unit tests:** To keep old bugs from re-appearing and generally hold quality at a high level, the PIMF core is thoroughly unit-tested. Thus, when you create a pull request, it is expected that you unit test any new code you add. For any bug you fix, you should also add regression tests to make sure the bug will never appear again. If you are unsure about how to write tests, the core team or other contributors will gladly help.
 
+Powered by PHPStorm
+-------------------
+JetBRAINS supports the development of the APF with PHPStorm licenses and we feel confidential that PHPStorm strongly influences the APF's quality. Use PHPStorm! http://www.jetbrains.com/phpstorm/
