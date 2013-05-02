@@ -37,7 +37,7 @@ If all is well, you should see a pretty PIMF splash page. Get ready - there is l
 
 Usecases and documentation
 --------------------------
-Please read here: http://gjerokrsteski.github.com/pimf/
+Please read here: https://github.com/gjerokrsteski/pimf/wiki
 
 Contributing and pull request guidelines
 ----------------------------------------
