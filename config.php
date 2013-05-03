@@ -50,7 +50,7 @@ $config = array(
   'app' => array(
     'name' => 'MyFirstBlog',
     'key' => 'some5secret5key5here',
-    'default_controller' => 'blog',
+    'default_controller' => 'blog', //the name of the fallback controller
   ),
 
   /*
@@ -87,7 +87,7 @@ $config = array(
       'php_version' => 5.3,
       'extensions' => array('pdo', 'pdo_sqlite', 'date', 'reflection', 'session', 'json'),
     ),
-    'local_temp_directory' => 'c:\\xampp\\tmp\\'
+    'local_temp_directory' => '/tmp/'
   ),
 
   /*
@@ -97,8 +97,8 @@ $config = array(
   */
   'error' => array(
     'ignore_levels' => array(E_USER_DEPRECATED),
-    'debug_info' => true,
-  	'log' => true,
+    'debug_info' => false,
+  	'log' => false,
   ),
 
 
@@ -151,7 +151,7 @@ $config = array(
   */
   'cache' => array(
 
-      // Cache storage 'cookie', 'file', 'memcached', 'apc', 'redis', 'dba'
+      // Cache storage 'pdo', 'file', 'memcached', 'apc', 'redis', 'dba', 'wincache'
       'storage' => 'file',
 
       // If using file storage - default is null
