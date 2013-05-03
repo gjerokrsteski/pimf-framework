@@ -97,8 +97,8 @@ $config = array(
   */
   'error' => array(
     'ignore_levels' => array(E_USER_DEPRECATED),
-    'debug_info' => false,
-  	'log' => false,
+    'debug_info' => true,
+  	'log' => true,
   ),
 
 
