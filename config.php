@@ -18,7 +18,7 @@ $config = array(
   | The default environment modus for your application [testing|production]
   |------------------------------------------------------------------------
   */
-  'environment' => 'production',
+  'environment' => 'testing',
 
   /*
   |------------------------------------------------------------------------
