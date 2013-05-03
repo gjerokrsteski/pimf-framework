@@ -109,7 +109,7 @@ $config = array(
   */
   'session' => array(
 
-      // Session storage 'cookie', 'file', 'pdo', 'memcached', 'apc', 'redis', 'dba'
+      // Session storage 'cookie', 'file', 'pdo', 'memcached', 'apc', 'redis', 'dba', 'wincache', 'memory'
       'storage' => 'file',
 
       // If using file storage - default is null
@@ -151,7 +151,7 @@ $config = array(
   */
   'cache' => array(
 
-      // Cache storage 'pdo', 'file', 'memcached', 'apc', 'redis', 'dba', 'wincache'
+      // Cache storage 'pdo', 'file', 'memcached', 'apc', 'redis', 'dba', 'wincache', 'memory'
       'storage' => 'file',
 
       // If using file storage - default is null
