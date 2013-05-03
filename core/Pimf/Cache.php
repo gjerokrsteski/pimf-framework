@@ -19,6 +19,22 @@
  */
 
 /**
+ * Cache usage
+ *
+ * <code>
+ *    // Get the default cache storage instance
+ *    $storage = Pimf_Cache::storage();
+ *
+ *    // Get a specific cache storage instance by name
+ *    $storage = Pimf_Cache::storage('memcached');
+ *
+ *    // Call the "get" method on the default cache storage
+ *    $name = Pimf_Cache::get('name');
+ *
+ *    // Call the "put" method on the default cache storage
+ *    Pimf_Cache::put('name', 'Robin', 15);
+ * </code>
+ *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
@@ -39,15 +55,6 @@ class Pimf_Cache
 
   /**
    * Get a cache storage instance.
-   *
-   * <code>
-   *    // Get the default cache storage instance
-   *    $storage = Pimf_Cache::storage();
-   *
-   *    // Get a specific cache storage instance by name
-   *    $storage = Pimf_Cache::storage('memcached');
-   * </code>
-   *
    * @param string $storage
    * @return mixed
    */
@@ -119,15 +126,6 @@ class Pimf_Cache
 
   /**
    * Magic Method for calling the methods on the default cache storage.
-   *
-   * <code>
-   *    // Call the "get" method on the default cache storage
-   *    $name = Pimf_Cache::get('name');
-   *
-   *    // Call the "put" method on the default cache storage
-   *    Pimf_Cache::put('name', 'Robin', 15);
-   * </code>
-   *
    * @param $method
    * @param $parameters
    * @return mixed

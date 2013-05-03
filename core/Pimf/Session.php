@@ -19,6 +19,27 @@
  */
 
 /**
+ * Using the session
+ *
+ * <code>
+ *
+ *    // Retrieve the session instance and get an item
+ *    Pimf_Session::instance()->get('name');
+ *
+ *    // Retrieve the session instance and place an item in the session
+ *    Pimf_Session::instance()->put('name', 'Robin');
+ *
+ *    // Retrieve a value from the session
+ *    $value = Pimf_Session::get('name');
+ *
+ *    // Write a value to the session storage
+ *    $value = Pimf_Session::put('name', 'Robin');
+ *
+ *    // Equivalent statement using the "instance" method
+ *    $value = Pimf_Session::instance()->put('name', 'Robin');
+ *
+ * </code>
+ *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
@@ -112,15 +133,6 @@ class Pimf_Session
 
   /**
    * Retrieve the active session payload instance for the request.
-   *
-   * <code>
-   *    // Retrieve the session instance and get an item
-   *    Pimf_Session::instance()->get('name');
-   *
-   *    // Retrieve the session instance and place an item in the session
-   *    Pimf_Session::instance()->put('name', 'Robin');
-   * </code>
-   *
    * @return Pimf_Session_Payload
    * @throws RuntimeException
    */
@@ -157,18 +169,6 @@ class Pimf_Session
 
   /**
    * Magic Method for calling the methods on the session singleton instance.
-   *
-   * <code>
-   *    // Retrieve a value from the session
-   *    $value = Pimf_Session::get('name');
-   *
-   *    // Write a value to the session storage
-   *    $value = Pimf_Session::put('name', 'Robin');
-   *
-   *    // Equivalent statement using the "instance" method
-   *    $value = Pimf_Session::instance()->put('name', 'Robin');
-   * </code>
-   *
    * @param $method
    * @param $parameters
    *

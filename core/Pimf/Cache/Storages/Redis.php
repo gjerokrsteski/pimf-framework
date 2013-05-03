@@ -19,6 +19,13 @@
  */
 
 /**
+ * Redis usage
+ *
+ * <code>
+ *    // Put an item in the cache for 15 minutes
+ *    Pimf_Cache::put('name', 'Robin', 15);
+ * </code>
+ *
  * @package Pimf_Cache_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
@@ -62,12 +69,6 @@ class Pimf_Cache_Storages_Redis extends Pimf_Cache_Storages_Storage
 
   /**
    * Write an item to the cache for a given number of minutes.
-   *
-   * <code>
-   *    // Put an item in the cache for 15 minutes
-   *    Pimf_Cache::put('name', 'Robin', 15);
-   * </code>
-   *
    * @param string $key
    * @param mixed $value
    * @param int $minutes

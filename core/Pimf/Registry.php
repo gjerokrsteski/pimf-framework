@@ -23,13 +23,13 @@
  * Acts also as a dependency injection container.
  *
  * <code>
- * $registry = new Pimf_Registry();
- * $registry->your_key = "123";
+ *  $registry = new Pimf_Registry();
+ *  $registry->your_key = "123";
  *
- * // or ..
+ *  // or ..
  *
- * Pimf_Registry::set('your_key', "123")
- * Pimf_Registry::get('your_key')
+ *  Pimf_Registry::set('your_key', "123")
+ *  Pimf_Registry::get('your_key')
  * </code>
  *
  * @package Pimf

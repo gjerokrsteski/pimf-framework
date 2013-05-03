@@ -19,6 +19,30 @@
  */
 
 /**
+ * Using the session payload
+ *
+ * <code>
+ *
+ *    // Get an item from the session
+ *    $name = Pimf_Session::get('name');
+ *
+ *    // Return a default value if the item doesn't exist
+ *    $name = Pimf_Session::get('name', 'Robin');
+ *
+ *    // Write an item to the session payload
+ *    Pimf_Session::put('name', 'Robin');
+ *
+ *    // Write an item to the session payload's flash data
+ *    Pimf_Session::flash('name', 'Robin');
+ *
+ *    // Keep the "name" item from expiring from the flash data
+ *    Pimf_Session::keep('name');
+ *
+ *    // Keep the "name" and "email" items from expiring from the flash data
+ *    Pimf_Session::keep(array('name', 'email'));
+ *
+ * </code>
+ *
  * @package Pimf_Session
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
@@ -101,15 +125,6 @@ class Pimf_Session_Payload
 
   /**
    * Get an item from the session.
-   *
-   * <code>
-   *    // Get an item from the session
-   *    $name = Pimf_Session::get('name');
-   *
-   *    // Return a default value if the item doesn't exist
-   *    $name = Pimf_Session::get('name', 'Robin');
-   * </code>
-   *
    * @param string $key
    * @param null $default
    * @return null
@@ -153,12 +168,6 @@ class Pimf_Session_Payload
 
   /**
    * Write an item to the session.
-   *
-   * <code>
-   *    // Write an item to the session payload
-   *    Pimf_Session::put('name', 'Robin');
-   * </code>
-   *
    * @param $key
    * @param $value
    */
@@ -169,12 +178,6 @@ class Pimf_Session_Payload
 
   /**
    * Write an item to the session flash data.
-   *
-   * <code>
-   *    // Write an item to the session payload's flash data
-   *    Pimf_Session::flash('name', 'Robin');
-   * </code>
-   *
    * @param $key
    * @param $value
    */
@@ -197,15 +200,6 @@ class Pimf_Session_Payload
 
   /**
    * Keep a session flash item from expiring at the end of the request.
-   *
-   * <code>
-   *    // Keep the "name" item from expiring from the flash data
-   *    Pimf_Session::keep('name');
-   *
-   *    // Keep the "name" and "email" items from expiring from the flash data
-   *    Pimf_Session::keep(array('name', 'email'));
-   * </code>
-   *
    * @param $keys
    */
   public function keep($keys)

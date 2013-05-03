@@ -19,6 +19,23 @@
  */
 
 /**
+ * Redis usage
+ *
+ * <code>
+ *    // Get the default Redis database instance
+ *    $redis = Pimf_Redis::db();
+ *
+ *    // Get a specified Redis database instance
+ *    $reids = Pimf_Redis::db('redis_2');
+ *
+ *    // Execute the GET command for the "name" key
+ *    $name = Pimf_Redis::db()->run('get', array('name'));
+ *
+ *    // Execute the LRANGE command for the "list" key
+ *    $list = Pimf_Redis::db()->run('lrange', array(0, 5));
+ *
+ * </code>
+ *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
@@ -72,14 +89,6 @@ class Pimf_Redis
    *
    * The given name should correspond to a Redis database in the configuration file.
    *
-   * <code>
-   *    // Get the default Redis database instance
-   *    $redis = Pimf_Redis::db();
-   *
-   *    // Get a specified Redis database instance
-   *    $reids = Pimf_Redis::db('redis_2');
-   * </code>
-   *
    * @param string $name
    * @return mixed
    * @throws RuntimeException
@@ -103,15 +112,6 @@ class Pimf_Redis
 
   /**
    * Execute a command against the Redis database.
-   *
-   * <code>
-   *    // Execute the GET command for the "name" key
-   *    $name = Pimf_Redis::db()->run('get', array('name'));
-   *
-   *    // Execute the LRANGE command for the "list" key
-   *    $list = Pimf_Redis::db()->run('lrange', array(0, 5));
-   * </code>
-   *
    * @param string $method
    * @param array $parameters
    * @return mixed

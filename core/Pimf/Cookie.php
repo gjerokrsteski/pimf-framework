@@ -19,6 +19,26 @@
  */
 
 /**
+ * Using the cookie
+ *
+ * <code>
+ *    // Get the value of the "favorite" cookie
+ *    $favorite = Pimf_Cookie::get('favorite');
+ *
+ *    // Get the value of a cookie or return a default value
+ *    $favorite = Pimf_Cookie::get('framework', 'Pimf');
+ *
+ *    // Set the value of the "favorite" cookie
+ *    Pimf_Cookie::put('favorite', 'Pimf');
+ *
+ *    // Set the value of the "favorite" cookie for twenty minutes
+ *    Pimf_Cookie::put('favorite', 'Pimf', 20);
+ *
+ *    // Set a cookie that should last one year
+ *    Pimf_Cookie::forever('favorite', 'Blue');
+ *
+ * </code>
+ *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
@@ -49,15 +69,6 @@ class Pimf_Cookie
 
   /**
    * Get the value of a cookie.
-   *
-   * <code>
-   *    // Get the value of the "favorite" cookie
-   *    $favorite = Pimf_Cookie::get('favorite');
-   *
-   *    // Get the value of a cookie or return a default value
-   *    $favorite = Pimf_Cookie::get('framework', 'Pimf');
-   * </code>
-   *
    * @param $name
    * @param null $default
    * @return null|string
@@ -79,15 +90,6 @@ class Pimf_Cookie
 
   /**
    * Set the value of a cookie.
-   *
-   * <code>
-   *    // Set the value of the "favorite" cookie
-   *    Pimf_Cookie::put('favorite', 'Pimf');
-   *
-   *    // Set the value of the "favorite" cookie for twenty minutes
-   *    Pimf_Cookie::put('favorite', 'Pimf', 20);
-   * </code>
-   *
    * @param $name
    * @param $value
    * @param int $expiration
@@ -119,12 +121,6 @@ class Pimf_Cookie
 
   /**
    * Set a "permanent" cookie. The cookie will last for one year.
-   *
-   * <code>
-   *    // Set a cookie that should last one year
-   *    Pimf_Cookie::forever('favorite', 'Blue');
-   * </code>
-   *
    * @param $name
    * @param $value
    * @param string $path

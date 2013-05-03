@@ -18,7 +18,7 @@ $config = array(
   | The default environment modus for your application [testing|production]
   |------------------------------------------------------------------------
   */
-  'environment' => 'testing',
+  'environment' => 'production',
 
   /*
   |------------------------------------------------------------------------
@@ -87,7 +87,7 @@ $config = array(
       'php_version' => 5.3,
       'extensions' => array('pdo', 'pdo_sqlite', 'date', 'reflection', 'session', 'json'),
     ),
-    'local_temp_directory' => '/tmp/'
+    'local_temp_directory' => 'c:\\xampp\\tmp\\'
   ),
 
   /*

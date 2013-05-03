@@ -33,6 +33,23 @@
  *  ),
  *
  * </code>
+ *
+ * Memcached usage:
+ *
+ * <code>
+ *    // Get the Memcache connection and get an item from the cache
+ *    $name = Pimf_Memcached::connection()->get('name');
+ *
+ *    // Get the Memcache connection and place an item in the cache
+ *    Pimf_Memcached::connection()->set('name', 'Robin');
+ *
+ *		// Get an item from the Memcache instance
+ *		$name = Pimf_Memcached::get('name');
+ *
+ *		// Store data on the Memcache server
+ *		Pimf_Memcached::set('name', 'Robin');
+ * </code>
+ *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
@@ -44,14 +61,6 @@ class Pimf_Memcached
 	protected static $connection;
 
   /**
-   * <code>
-   *    // Get the Memcache connection and get an item from the cache
-   *    $name = Pimf_Memcached::connection()->get('name');
-   *
-   *    // Get the Memcache connection and place an item in the cache
-   *    Pimf_Memcached::connection()->set('name', 'Robin');
-   * </code>
-   *
    * @return Memcached
    */
   public static function connection()
@@ -89,15 +98,6 @@ class Pimf_Memcached
 
   /**
    * Dynamically pass all other method calls to the Memcache instance.
- 	 *
- 	 * <code>
- 	 *		// Get an item from the Memcache instance
- 	 *		$name = Pimf_Memcached::get('name');
- 	 *
- 	 *		// Store data on the Memcache server
- 	 *		Pimf_Memcached::set('name', 'Robin');
- 	 * </code>
-   *
    * @param $method
    * @param $parameters
    * @return mixed
