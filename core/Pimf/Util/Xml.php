@@ -35,7 +35,7 @@ class Pimf_Util_Xml
    * @throws InvalidArgumentException
    * @return DOMDocument
    */
-  public function toDOMDocument($xml)
+  public static function toDOMDocument($xml)
   {
     if ($xml instanceof DOMDocument) {
       // parameter is DOMDocument
@@ -78,7 +78,7 @@ class Pimf_Util_Xml
    * @throws InvalidArgumentException
    * @return SimpleXMLElement
    */
-  public function toSimpleXMLElement($xml)
+  public static function toSimpleXMLElement($xml)
   {
     if ($xml instanceof SimpleXMLElement) {
       // parameter is DOMDocument
@@ -114,7 +114,7 @@ class Pimf_Util_Xml
    * @throws OutOfBoundsException If namespace not found in the xml.
    * @return array
    */
-  public function toArray(SimpleXMLElement $xml, $namespace = null)
+  public static function toArray(SimpleXMLElement $xml, $namespace = null)
   {
     if ($namespace !== null) {
 

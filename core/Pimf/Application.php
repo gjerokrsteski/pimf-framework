@@ -159,11 +159,18 @@ final class Pimf_Application
     $registry = new Pimf_Registry();
 
     try {
+
       $registry->env    = new Pimf_Environment($server);
-      $registry->em     = new Pimf_EntityManager(Pimf_Pdo_Factory::get($dbConf), $config['app']['name']);
+
+      if(is_array($dbConf)) {
+        $registry->em = new Pimf_EntityManager(Pimf_Pdo_Factory::get($dbConf), $config['app']['name']);
+      }
+
       $registry->logger = new Pimf_Logger($config['bootstrap']['local_temp_directory']);
       $registry->logger->init();
+
       $registry->conf   = $config;
+
     } catch (Exception $e) {
       $problems[] = $e->getMessage();
     }
