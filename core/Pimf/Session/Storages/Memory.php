@@ -25,7 +25,7 @@
 class Pimf_Session_Storages_Memory extends Pimf_Session_Storages_Storage {
 
 	/**
-	 * The session payload that will be returned by the driver.
+	 * The session payload that will be returned by the storage.
 	 * @var array
 	 */
 	public $session;

@@ -76,7 +76,7 @@ abstract class Pimf_Session_Storages_Storage
   {
     $session = array();
 
-    // Just return any string since the Cookie driver has no idea.
+    // Just return any string since the Cookie storage has no idea.
     if ($this instanceof Pimf_Session_Storages_Cookie) {
       return Pimf_Util_String::random(40);
     }

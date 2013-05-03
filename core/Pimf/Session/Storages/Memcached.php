@@ -25,7 +25,7 @@
 class Pimf_Session_Storages_Memcached extends Pimf_Session_Storages_Storage
 {
   /**
-   * The Memcache cache driver instance.
+   * The Memcache cache storage instance.
    * @var Pimf_Cache_Storages_Memcached
    */
   private $memcached;

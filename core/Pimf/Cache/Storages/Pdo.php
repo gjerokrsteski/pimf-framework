@@ -36,7 +36,7 @@ class Pimf_Cache_Storages_Pdo extends Pimf_Cache_Storages_Storage
   protected $db;
 
   /**
-   * Create a new database cache driver instance.
+   * Create a new database cache storage instance.
    * @param Pimf_pdo $pdo
    * @param string $key
    */
@@ -47,7 +47,7 @@ class Pimf_Cache_Storages_Pdo extends Pimf_Cache_Storages_Storage
   }
 
   /**
-   * Retrieve an item from the cache driver.
+   * Retrieve an item from the cache storage.
    * @param string $key
    * @return mixed|void
    */

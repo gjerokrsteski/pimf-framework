@@ -25,7 +25,7 @@
 class Pimf_Session_Storages_Redis extends Pimf_Session_Storages_Storage
 {
   /**
-   * The Redis cache driver instance.
+   * The Redis cache storage instance.
    * @var Pimf_Cache_Storages_Redis
    */
   protected $redis;
