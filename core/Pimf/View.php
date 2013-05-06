@@ -27,15 +27,9 @@
 class Pimf_View
 {
   /**
-   * Path to the templates.
-   * @var string
+   * @var string Name of the template.
    */
-  protected $path = '_templates';
-
-  /**
-   * @var string Name of the template, in which case the default template.
-   */
-  protected $template = 'default.phtml';
+  protected $template;
 
   /**
    * Contains the variables that are to be embedded in the template.
@@ -48,12 +42,10 @@ class Pimf_View
    */
   public function __construct($template = 'default.phtml')
   {
-    $this->data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
-    $conf       = Pimf_Registry::get('conf');
-
-    $this
-      ->path(dirname(dirname(dirname(__FILE__))) . '/app/' . $conf['app']['name'])
-      ->with($template);
+    $this->data     = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+    $conf           = Pimf_Registry::get('conf');
+    $this->path     = dirname(dirname(dirname(__FILE__))) . '/app/' . $conf['app']['name'] . '/_templates';
+    $this->template = (string)$template;
   }
 
   /**
@@ -80,12 +72,12 @@ class Pimf_View
    * @param array $model
    * @return string
    */
-  public static function partial_loop($template, array $model = array())
+  public static function loop($template, array $model = array())
   {
     $out = '';
 
-    foreach ($model as $data) {
-      $out .= self::partial($template, $data);
+    foreach ($model as $row) {
+      $out .= self::partial($template, $row);
     }
 
     return $out;
@@ -111,27 +103,6 @@ class Pimf_View
   public function pump(array $model)
   {
     $this->data->exchangeArray($model);
-    return $this;
-  }
-
-  /**
-   * @param string $templateName Name of the template.
-   * @return Pimf_View
-   */
-  public function with($templateName)
-  {
-    $this->template = (string)$templateName;
-    return $this;
-  }
-
-  /**
-   * Sets the path to the templates directory
-   * @param string $templatesDir
-   * @return Pimf_View
-   */
-  protected function path($templatesDir)
-  {
-    $this->path = (string)$templatesDir . '/' . $this->path;
     return $this;
   }
 
