@@ -20,10 +20,8 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
    */
   protected function loadMainView(Pimf_View $view)
   {
-    $viewMain = new Pimf_View();
-
-    // use app/MyFirstBlog/_templates/theblog.phtml for rendering
-    $viewMain->setTemplate('theblog');
+    // use app/MyFirstBlog/_templates/theblog.phtml for viewing
+    $viewMain = new Pimf_View('theblog.phtml');
 
     // assign data to the template
     $viewMain->assign('blog_title', 'This is my firs Blog with PIMF')
@@ -46,11 +44,9 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
    */
   public function listentriesAction()
   {
-    $viewAllEntries = new Pimf_View();
+    // use app/MyFirstBlog/_templates/list.phtml for viewing
+    $viewAllEntries = new Pimf_View('list.phtml');
     $entries        = Pimf_Registry::get('em')->entry->getAll();
-
-    // use app/MyFirstBlog/_templates/list.phtml for rendering
-    $viewAllEntries->setTemplate('list');
 
     // assign data to the template
     $viewAllEntries->assign('entries', $entries);
@@ -72,11 +68,9 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
       throw new Pimf_Controller_Exception('not valid entry for "id"');
     }
 
-    // we open new view
-    $viewSingleEntry = new Pimf_View();
-
-    // use app/MyFirstBlog/_templates/entry.phtml for rendering
-    $viewSingleEntry->setTemplate('entry');
+    // we open new view and
+    // use app/MyFirstBlog/_templates/entry.phtml for viewing
+    $viewSingleEntry = new Pimf_View('entry.phtml');
 
     $entry = Pimf_Registry::get('em')->entry->find(
       $this->request->fromGet()->get('id')
@@ -201,10 +195,8 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
    */
   public function twigtestAction()
   {
-    $view = new Pimf_View_Twig();
-
-    // use app/MyFirstBlog/_templates/parent.twig for rendering
-    $view->setTemplate('parent');
+    // use app/MyFirstBlog/_templates/parent.twig for viewing
+    $view = new Pimf_View_Twig('parent.twig');
 
     // assign data to the template
     $view->assign('hello', 'Hello world')
@@ -218,15 +210,39 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
    */
   public function haangatestAction()
   {
-    $view = new Pimf_View_Haanga();
-
-    // use app/MyFirstBlog/_templates/parent.haanga for rendering
-    $view->setTemplate('parent');
+    // use app/MyFirstBlog/_templates/parent.haanga for viewing
+    $view = new Pimf_View_Haanga('parent.haanga');
 
     // assign data to the template
     $view->assign('hello', 'Hello world')
          ->assign('now', date('d M Y h:i:s', time()));
 
     echo $view->render();
+  }
+
+  /**
+   * A action which show how PIMF works great wit partials.
+   *
+   * @see app/MyFirstBlog/_templates/booklist.phtml
+   * @see app/MyFirstBlog/_templates/book.phtml
+   */
+  public function partialAction()
+  {
+    $data['books'] = array(
+      array(
+        'author' => 'Hernando de Soto',
+        'title'  => 'The Mystery of Capitalism'
+      ),
+      array(
+        'author' => 'Henry Hazlitt',
+        'title'  => 'Economics in One Lesson'
+      ),
+      array(
+        'author' => 'Milton Friedman',
+        'title'  => 'Free to Choose'
+      )
+    );
+
+    echo Pimf_View::produce('booklist.phtml')->pump($data)->render();
   }
 }

@@ -47,14 +47,11 @@
 class Pimf_View_Haanga extends Pimf_View implements Pimf_View_Reunitable
 {
   /**
-   * The template file extension.
-   * @var string
+   * @param string $template
    */
-  protected $extension = '.haanga';
-
-  public function __construct()
+  public function __construct($template)
   {
-    parent::__construct();
+    parent::__construct($template);
 
     $conf = Pimf_Registry::get('conf');
 
@@ -78,7 +75,7 @@ class Pimf_View_Haanga extends Pimf_View implements Pimf_View_Reunitable
   public function reunite()
   {
     return Haanga::Load(
-      $this->template . $this->extension,
+      $this->template,
       $this->data->getArrayCopy()
     );
   }

@@ -35,13 +35,7 @@ class Pimf_View
   /**
    * @var string Name of the template, in which case the default template.
    */
-  protected $template = 'default';
-
-  /**
-   * The template file extension.
-   * @var string
-   */
-  protected $extension = '.phtml';
+  protected $template = 'default.phtml';
 
   /**
    * Contains the variables that are to be embedded in the template.
@@ -49,14 +43,52 @@ class Pimf_View
    */
   protected $data;
 
-  public function __construct()
+  /**
+   * @param string $template
+   */
+  public function __construct($template = 'default.phtml')
   {
-    $registry   = new Pimf_Registry();
     $this->data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+    $conf       = Pimf_Registry::get('conf');
 
-    $this->setPath(
-      dirname(dirname(dirname(__FILE__))) . '/' . 'app' . '/' . $registry->conf['app']['name']
-    );
+    $this
+      ->path(dirname(dirname(dirname(__FILE__))) . '/app/' . $conf['app']['name'])
+      ->with($template);
+  }
+
+  /**
+   * @param string $template
+   * @return Pimf_View
+   */
+  public static function produce($template)
+  {
+    return new self($template);
+  }
+
+  /**
+   * @param string $template
+   * @param array $model
+   * @return mixed
+   */
+  public static function partial($template, array $model = array())
+  {
+    return self::produce($template)->pump($model)->render();
+  }
+
+  /**
+   * @param string $template
+   * @param array $model
+   * @return string
+   */
+  public static function partial_loop($template, array $model = array())
+  {
+    $out = '';
+
+    foreach ($model as $data) {
+      $out .= self::partial($template, $data);
+    }
+
+    return $out;
   }
 
   /**
@@ -73,29 +105,34 @@ class Pimf_View
 
   /**
    * Exchange all variables.
-   * @param array $data
+   * @param array $model
    * @return Pimf_View
    */
-  public function pump(array $data)
+  public function pump(array $model)
   {
-    $this->data->exchangeArray($data);
+    $this->data->exchangeArray($model);
     return $this;
   }
 
   /**
    * @param string $templateName Name of the template.
+   * @return Pimf_View
    */
-  public function setTemplate($templateName = 'default')
+  public function with($templateName)
   {
     $this->template = (string)$templateName;
+    return $this;
   }
 
   /**
+   * Sets the path to the templates directory
    * @param string $templatesDir
+   * @return Pimf_View
    */
-  protected function setPath($templatesDir)
+  protected function path($templatesDir)
   {
     $this->path = (string)$templatesDir . '/' . $this->path;
+    return $this;
   }
 
   /**
@@ -111,7 +148,9 @@ class Pimf_View
 
     $trace = debug_backtrace();
     trigger_error(
-      'undefined property for the view: ' . $name . ' at ' . $trace[0]['file'] . ' line ' . $trace[0]['line'], E_USER_NOTICE
+      'undefined property for the view: '
+        . $name . ' at ' . $trace[0]['file']
+        . ' line ' . $trace[0]['line'], E_USER_NOTICE
     );
 
     return null;
@@ -150,10 +189,14 @@ class Pimf_View
    */
   public function reunite()
   {
-    $file = $this->path . '/' . $this->template . $this->extension;
+    $file = $this->path . '/' . $this->template;
 
     if (!file_exists($file)) {
       throw new RuntimeException('could not find template: ' . $file);
+    }
+
+    if (!is_readable($file)) {
+      throw new RuntimeException('could not read template: ' . $file);
     }
 
     include $file;

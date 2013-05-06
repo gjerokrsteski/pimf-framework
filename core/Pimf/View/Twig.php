@@ -47,19 +47,16 @@
 class Pimf_View_Twig extends Pimf_View implements Pimf_View_Reunitable
 {
   /**
-   * The template file extension.
-   * @var string
-   */
-  protected $extension = '.twig';
-
-  /**
    * @var Twig_Environment
    */
   protected $twig;
 
-  public function __construct()
+  /**
+   * @param string $template
+   */
+  public function __construct($template)
   {
-    parent::__construct();
+    parent::__construct($template);
 
     $conf = Pimf_Registry::get('conf');
 
@@ -96,7 +93,7 @@ class Pimf_View_Twig extends Pimf_View implements Pimf_View_Reunitable
   public function reunite()
   {
     return $this->twig->render(
-      $this->template . $this->extension,
+      $this->template,
       $this->data->getArrayCopy()
     );
   }

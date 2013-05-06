@@ -1,0 +1,18 @@
+<?php if ($this->books) : ?>
+
+  <table border="1">
+
+      <thead>
+        <tr>
+            <th>Autor</th>
+            <th>Title</th>
+        </tr>
+      </thead>
+
+      <tbody>
+       <?php echo Pimf_View::partial_loop('book.phtml', $this->books); ?>
+      </tbody>
+
+    </table>
+
+<?php endif; ?>
