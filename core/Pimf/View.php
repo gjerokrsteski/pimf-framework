@@ -52,9 +52,11 @@ class Pimf_View
    * @param string $template
    * @return Pimf_View
    */
-  public static function produce($template)
+  public function produce($template)
   {
-    return new self($template);
+    $view = clone $this;
+    $view->template = (string)$template;
+    return $view;
   }
 
   /**
@@ -62,9 +64,9 @@ class Pimf_View
    * @param array $model
    * @return mixed
    */
-  public static function partial($template, array $model = array())
+  public function partial($template, array $model = array())
   {
-    return self::produce($template)->pump($model)->render();
+    return $this->produce($template)->pump($model)->render();
   }
 
   /**
@@ -72,12 +74,12 @@ class Pimf_View
    * @param array $model
    * @return string
    */
-  public static function loop($template, array $model = array())
+  public function loop($template, array $model = array())
   {
     $out = '';
 
     foreach ($model as $row) {
-      $out .= self::partial($template, $row);
+      $out .= $this->partial($template, $row);
     }
 
     return $out;

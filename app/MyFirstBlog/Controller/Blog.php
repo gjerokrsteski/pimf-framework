@@ -243,6 +243,8 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
       )
     );
 
-    echo Pimf_View::produce('booklist.phtml')->pump($data)->render();
+    $view = new Pimf_View('booklist.phtml');
+
+    echo $view->pump($data)->render();
   }
 }
