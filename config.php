@@ -168,7 +168,7 @@ $config = array(
 
       // Memcached servers - for more check out: http://memcached.org
       'memcached' => array(
-        array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
+        'servers' => array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
       ),
    ),
 
