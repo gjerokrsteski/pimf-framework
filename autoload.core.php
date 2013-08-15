@@ -81,12 +81,12 @@ spl_autoload_register(
         'pimf_view_haanga'                => '/Pimf/View/Haanga.php',
         'pimf_view_json'                  => '/Pimf/View/Json.php',
         'pimf_view_twig'                  => '/Pimf/View/Twig.php',
-        'pimf_contracts_reunitable'       => '/Pimf/View/Reunitable.php',
-        'pimf_contracts_arrayable'        => '/Pimf/View/Arrayable.php',
-        'pimf_contracts_jsonable'         => '/Pimf/View/Jsonable.php',
-        'pimf_contracts_messageprovider'  => '/Pimf/View/MessageProvider.php',
-        'pimf_contracts_renderable'       => '/Pimf/View/Renderable.php',
-        'pimf_contracts_cleanable'        => '/Pimf/Session/Storages/Cleanable.php',
+        'pimf_contracts_reunitable'       => '/Pimf/Contracts/Reunitable.php',
+        'pimf_contracts_arrayable'        => '/Pimf/Contracts/Arrayable.php',
+        'pimf_contracts_jsonable'         => '/Pimf/Contracts/Jsonable.php',
+        'pimf_contracts_messageprovider'  => '/Pimf/Contracts/MessageProvider.php',
+        'pimf_contracts_renderable'       => '/Pimf/Contracts/Renderable.php',
+        'pimf_contracts_cleanable'        => '/Pimf/Contracts/Cleanable.php',
       );
     }
     $cn = strtolower($class);
