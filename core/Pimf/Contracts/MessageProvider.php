@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_View
+ * Pimf
  *
  * PHP Version 5
  *
@@ -19,17 +19,17 @@
  */
 
 /**
- * A simply interface to give the view-adapters ro re-unite the template an the variables.
+ * A simply interface to get messages for the instance.
  *
- * @package Pimf_View
+ * @package Pimf_Contracts
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-interface Pimf_View_Reunitable
+interface Pimf_Contracts_MessageProvider
 {
-  /**
-   * Puts the template an the variables together.
-   * @throws Exception
-   * @return string
-   */
-  public function reunite();
+	/**
+	 * Get the messages for the instance.
+	 * @return Pimf_Util_Message[]
+	 */
+	public function getMessages();
+
 }

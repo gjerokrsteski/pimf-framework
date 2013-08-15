@@ -19,16 +19,18 @@
  */
 
 /**
- * @package Pimf_Session_Storages
+ * A simply interface to get instance to its JSON representation.
+ *
+ * @package Pimf_Contracts
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-interface Pimf_Session_Storages_Cleaner
+interface Pimf_Contracts_Jsonable
 {
-  /**
-   * Delete all expired sessions from persistent storage.
-   * @param int $expiration
-   * @return mixed
-   */
-  public function clean($expiration);
+	/**
+	 * Convert the object to its JSON representation.
+	 * @param  int  $options
+	 * @return string
+	 */
+	public function toJson($options = 0);
 
 }

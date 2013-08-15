@@ -20,6 +20,16 @@ class EventDummyClass
 
 class EventTest extends PHPUnit_Framework_TestCase
 {
+  /**
+ 	 * Tear down the testing environment.
+ 	 */
+ 	public function tearDown()
+ 	{
+ 		Pimf_Event::clear('test.event');
+    Pimf_Event::clear('start');
+    Pimf_Event::clear('queue.dummy.id');
+ 	}
+
   public function testCreateAndFireStartEvent()
   {
     $dummy = new EventDummyClass();
@@ -69,4 +79,26 @@ class EventTest extends PHPUnit_Framework_TestCase
     //run flusher and flush all queued events
     Pimf_Event::flush('queue.dummy.id');
   }
+
+  public function testListenersAreFiredForEvents()
+ 	{
+    Pimf_Event::listen('test.event', function() { return 1; });
+    Pimf_Event::listen('test.event', function() { return 2; });
+    Pimf_Event::listen('test.event', function() { return 3; });
+
+ 		$responses = Pimf_Event::fire('test.event');
+
+ 		$this->assertEquals(1, $responses[0]);
+ 		$this->assertEquals(2, $responses[1]);
+    $this->assertEquals(3, $responses[2]);
+ 	}
+
+ 	public function testParametersCanBePassedToEvents()
+ 	{
+    Pimf_Event::listen('test.event', function($var) { return $var; });
+
+ 		$responses = Pimf_Event::fire('test.event', array('Berry'));
+
+ 		$this->assertEquals('Berry', $responses[0]);
+ 	}
 }

@@ -24,7 +24,7 @@
  */
 class Pimf_Session_Storages_File
   extends Pimf_Session_Storages_Storage
-  implements Pimf_Session_Storages_Cleaner
+  implements Pimf_Contracts_Cleanable
 {
   /**
    * The path to which the session files should be written.

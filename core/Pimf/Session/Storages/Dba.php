@@ -24,7 +24,7 @@
  */
 class Pimf_Session_Storages_Dba
   extends Pimf_Session_Storages_Storage
-  implements Pimf_Session_Storages_Cleaner
+  implements Pimf_Contracts_Cleanable
 {
   /**
    * @var Pimf_Cache_Storages_Dba

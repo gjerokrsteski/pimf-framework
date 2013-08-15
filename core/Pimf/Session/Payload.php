@@ -293,7 +293,7 @@ class Pimf_Session_Payload
    */
   public function clean()
   {
-    if ($this->storage instanceof Pimf_Session_Storages_Cleaner) {
+    if ($this->storage instanceof Pimf_Contracts_Cleanable) {
       $conf = Pimf_Registry::get('conf');
       $this->storage->clean(time() - ($conf['session']['lifetime'] * 60));
     }

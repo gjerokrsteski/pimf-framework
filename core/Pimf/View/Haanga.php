@@ -44,7 +44,7 @@
  * @package Pimf_View
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_View_Haanga extends Pimf_View implements Pimf_View_Reunitable
+class Pimf_View_Haanga extends Pimf_View implements Pimf_Contracts_Reunitable
 {
   /**
    * @param string $template

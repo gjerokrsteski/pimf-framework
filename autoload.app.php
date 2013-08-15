@@ -55,5 +55,7 @@ spl_autoload_register(
         return require $file;
       }
     }
+
+    return false;
   }
 );

@@ -24,7 +24,7 @@
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_View
+class Pimf_View implements Pimf_Contracts_Renderable
 {
   /**
    * @var string Name of the template.

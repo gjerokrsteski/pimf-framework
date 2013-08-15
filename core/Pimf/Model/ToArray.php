@@ -29,7 +29,7 @@
  * @package Pimf_Model_ToArray
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class Pimf_Model_ToArray
+abstract class Pimf_Model_ToArray implements Pimf_Contracts_Arrayable
 {
   /**
    * Returns only protected and public properties of the given model-object.
@@ -38,8 +38,8 @@ abstract class Pimf_Model_ToArray
    */
   public function toArray()
   {
-    return $this->mapProperties(
-      $this->fetchClassVars()
+    return $this->map(
+      $this->fetch()
     );
   }
 
@@ -47,7 +47,7 @@ abstract class Pimf_Model_ToArray
    * Get the default properties of the class.
    * @return array
    */
-  protected function fetchClassVars()
+  protected function fetch()
   {
     return get_class_vars(get_class($this));
   }
@@ -58,14 +58,14 @@ abstract class Pimf_Model_ToArray
    * @param array $properties
    * @return array
    */
-  protected function mapProperties(array $properties)
+  protected function map(array $properties)
   {
-    $propertiesMap = array();
+    $map = array();
 
-    foreach ($properties as $name => $defaultVal) {
-      $propertiesMap[$name] = (true === empty($this->$name)) ? $defaultVal : $this->$name;
+    foreach ($properties as $name => $default) {
+      $map[$name] = (true === empty($this->$name)) ? $default : $this->$name;
     }
 
-    return $propertiesMap;
+    return $map;
   }
 }
