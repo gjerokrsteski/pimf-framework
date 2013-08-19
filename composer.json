@@ -19,10 +19,8 @@
     }
   ],
   "require" : {
-    "php" : ">=5.3"
-  },
-  "require-dev" : {
-    "phpunit/phpunit" : ">=3.6"
+    "php" : ">=5.3",
+    "gjerokrsteski/pimf": "dev-master"
   },
   "autoload" : {
     "psr-0" : {
