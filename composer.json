@@ -2,14 +2,11 @@
   "name" : "gjerokrsteski/pimf",
   "description" : "Micro framework for PHP that emphasises minimalism and simplicity",
   "type" : "project",
+  "version" : "1.6.0",
   "license" : "BSD",
   "homepage" : "http://gjerokrsteski.github.io/pimf/",
   "minimum-stability" : "master",
-  "keywords" : [
-    "framework",
-    "minimalism",
-    "simplicity"
-  ],
+  "keywords" : ["framework", "minimalism", "simplicity"],
   "authors" : [
     {
       "name" : "Gjero Krsteski",
@@ -20,6 +17,10 @@
   ],
   "require" : {
     "php" : ">=5.3"
+  },
+  "require-dev": {
+      "phpunit/phpunit":           ">=3.6"
+
   },
   "autoload" : {
     "psr-0" : {
