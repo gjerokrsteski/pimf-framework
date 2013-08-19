@@ -620,4 +620,12 @@ class Pimf_Util_Validator
 
     return $messages;
   }
+
+  /**
+   * @return bool
+   */
+  public function isValid()
+  {
+    return empty($this->errors);
+  }
 }

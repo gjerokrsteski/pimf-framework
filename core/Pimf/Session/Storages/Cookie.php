@@ -56,8 +56,6 @@ class Pimf_Session_Storages_Cookie extends Pimf_Session_Storages_Storage {
 	{
 		extract($config, EXTR_SKIP);
 
-		$payload = Pimf_Util_Crypter::encrypt(serialize($session));
-
     Pimf_Cookie::put(static::payload, Pimf_Util_Crypter::encrypt(serialize($session)), $lifetime, $path, $domain);
 	}
 
