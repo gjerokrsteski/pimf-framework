@@ -1,12 +1,11 @@
 {
   "name" : "gjerokrsteski/pimf",
   "description" : "Micro framework for PHP that emphasises minimalism and simplicity",
-  "type" : "library",
   "version" : "1.6.0",
   "license" : "BSD",
   "homepage" : "http://gjerokrsteski.github.io/pimf/",
   "minimum-stability" : "stable",
-  "keywords" : ["framework", "minimalism", "simplicity"],
+  "keywords" : ["framework", "pimf"],
   "support" : {
     "email" : "gjero@krsteski.de",
     "wiki" : "https://github.com/gjerokrsteski/pimf/wiki",
