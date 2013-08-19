@@ -77,6 +77,7 @@ spl_autoload_register(
         'pimf_util_validator'             => '/Pimf/Util/Validator.php',
         'pimf_util_value'                 => '/Pimf/Util/Value.php',
         'pimf_util_xml'                   => '/Pimf/Util/Xml.php',
+        'pimf_util_linebyline'            => '/Pimf/Util/LineByLine.php',
         'pimf_view'                       => '/Pimf/View.php',
         'pimf_view_haanga'                => '/Pimf/View/Haanga.php',
         'pimf_view_json'                  => '/Pimf/View/Json.php',
