@@ -19,8 +19,7 @@
     }
   ],
   "require" : {
-    "php" : ">=5.3",
-    "gjerokrsteski/pimf": "dev-master"
+    "php" : ">=5.3"
   },
   "autoload" : {
     "psr-0" : {
