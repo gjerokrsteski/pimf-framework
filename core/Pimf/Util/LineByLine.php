@@ -28,6 +28,15 @@
  *
  * <code>
  *
+ * $linebyline = new Pimf_Util_LineByLine(
+ *   function ($line) {
+ *     // do what you want with the line.
+ *    return $line;
+ *   }
+ * );
+ *
+ * $feedback = $linebyline->read('//path/to/your/file.txt');
+ *
  * </code>
  *
  * @package Pimf_Util
