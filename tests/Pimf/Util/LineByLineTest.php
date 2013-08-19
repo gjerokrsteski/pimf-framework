@@ -18,11 +18,8 @@ class LineByLineTest extends PHPUnit_Framework_TestCase
   {
     $linebyline = new Pimf_Util_LineByLine(
 
-      function ($line) {
+      function ($line) { return str_replace("\n", '', $line) . 'rocks'; }
 
-        return str_replace("\n", '', $line) . 'rocks';
-
-      }
     );
 
     $feedback = $linebyline->read(dirname(__FILE__) . '/_fixture/line-by-line.txt', true);
@@ -31,7 +28,7 @@ class LineByLineTest extends PHPUnit_Framework_TestCase
     $this->assertInternalType('array', $feedback);
     $this->assertEquals(3, count($feedback));
     $this->assertEquals('rambo1rocks', $feedback[0]);
-    $this->assertEquals('rambo2rocks', $feedback[0]);
-    $this->assertEquals('rambo3rocks', $feedback[0]);
+    $this->assertEquals('rambo2rocks', $feedback[1]);
+    $this->assertEquals('rambo3rocks', $feedback[2]);
   }
 }
