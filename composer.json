@@ -4,7 +4,7 @@
   "type" : "project",
   "license" : "BSD",
   "homepage" : "http://gjerokrsteski.github.io/pimf/",
-  "minimum-stability" : "dev",
+  "minimum-stability" : "dev-master",
   "keywords" : [
     "framework",
     "minimalism",
