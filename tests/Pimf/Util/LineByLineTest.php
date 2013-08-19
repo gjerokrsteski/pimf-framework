@@ -16,9 +16,14 @@ class LineByLineTest extends PHPUnit_Framework_TestCase
 
   public function testLoadingFile()
   {
-    $linebyline = new Pimf_Util_LineByLine(function ($line) {
-      return $line . 'rocks';
-    });
+    $linebyline = new Pimf_Util_LineByLine(
+
+      function ($line) {
+
+        return str_replace("\n", '', $line) . 'rocks';
+
+      }
+    );
 
     $feedback = $linebyline->read(dirname(__FILE__) . '/_fixture/line-by-line.txt', true);
 
