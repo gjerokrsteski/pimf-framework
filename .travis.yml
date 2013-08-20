@@ -9,6 +9,3 @@ php:
 notifications:
   email:
     - gjero@krsteski.de
-
-
-script: 
