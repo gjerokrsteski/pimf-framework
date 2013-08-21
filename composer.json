@@ -24,7 +24,9 @@
     "gjerokrsteski/pimf" : "1.6.*"
   },
   "require-dev" : {
-    "phpunit/phpunit" : ">=3.6"
+    "phpunit/phpunit" : ">=3.6",
+    "atoum/atoum": "dev-master",
+    "atoum/atoum-bundle": "dev-master"
   },
   "autoload" : {
     "psr-0" : {
