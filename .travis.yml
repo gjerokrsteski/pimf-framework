@@ -9,12 +9,4 @@ php:
 notifications:
   email:
     - gjero@krsteski.de
-    
-before_script:
-    - "[ ! -d ~/.composer ] && mkdir ~/.composer || true"
-    - "[ ! -z $GITHUB_TOKEN ] && echo \"{ \\\"config\\\": { \\\"github-oauth\\\": { \\\"github.com\\\": \\\"$GITHUB_TOKEN\\\" } } }\" > ~/.composer/config.json || true"
-    - wget http://getcomposer.org/composer.phar
-    - "[ ! -z $GITHUB_TOKEN ] && php composer.phar install --dev || php composer.phar install --dev --prefer-source"
 
-script:
-    - bin/atoum --test-all
