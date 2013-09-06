@@ -123,6 +123,16 @@ class Pimf_Util_Header
     header(Pimf_Registry::get('env')->getProtocolInfo() . ' ' . $code . ' ' . $status, $replace, $code);
   }
 
+  public static function sendXFrameDeny()
+  {
+    header('X-Frame-Options: DENY');
+  }
+
+  public static function sendXFrameSameOrigin()
+  {
+    header('X-Frame-Options: SAMEORIGIN');
+  }
+
   public static function sendContinue()
   {
     self::send(100, 'Continue');

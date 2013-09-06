@@ -201,12 +201,12 @@ class Pimf_Cache_Storages_Dba extends Pimf_Cache_Storages_Storage
    */
   public function clean()
   {
-    $dba     = $this->dba;
-    $pointer = dba_firstkey($dba);
+    $dba = $this->dba;
+    $key = dba_firstkey($dba);
 
-    while ($pointer) {
-      $this->retrieve($pointer);
-      $pointer = dba_nextkey($dba);
+    while ($key !== false && $key !== null) {
+      $this->retrieve($key);
+      $key = dba_nextkey($dba);
     }
 
     return dba_optimize($dba);
