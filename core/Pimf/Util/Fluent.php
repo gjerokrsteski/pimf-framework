@@ -39,19 +39,14 @@
  * @package Pimf_Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Fluent
+class Pimf_Util_Fluent extends ArrayObject
 {
-  /**
-   * @var ArrayObject
-   */
-  protected $attributes;
-
   /**
    * @param array $attributes
    */
   public function __construct(array $attributes = array())
   {
-    $this->attributes = new ArrayObject($attributes, ArrayObject::ARRAY_AS_PROPS | ArrayObject::STD_PROP_LIST);
+    parent::__construct($attributes,ArrayObject::ARRAY_AS_PROPS + ArrayObject::STD_PROP_LIST);
   }
 
   /**
@@ -61,8 +56,8 @@ class Pimf_Util_Fluent
    */
   protected function getAttribute($index, $defaultValue = null)
   {
-    if($this->attributes->offsetExists($index)) {
-      return $this->attributes->offsetGet($index);
+    if($this->offsetExists($index)) {
+      return $this->offsetGet($index);
     }
 
     return $defaultValue;
@@ -98,7 +93,7 @@ class Pimf_Util_Fluent
    */
   public function __set($key, $value)
   {
-    $this->attributes->offsetSet($key, $value);
+    $this->offsetSet($key, $value);
   }
 
   /**
@@ -108,7 +103,7 @@ class Pimf_Util_Fluent
    */
   public function __isset($key)
   {
-    return $this->attributes->offsetExists($key);
+    return $this->offsetExists($key);
   }
 
   /**
@@ -117,6 +112,6 @@ class Pimf_Util_Fluent
    */
   public function __unset($key)
   {
-    $this->attributes->offsetUnset($key);
+    $this->offsetUnset($key);
   }
 }
