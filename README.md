@@ -1,4 +1,4 @@
-Php Is My Framework
+PIMF Philosophy
 ===================
 Have you ever wished a PHP framework that perfectly adapts to your projects needs, your programming experience and your customers budget? A thin PHP framewrok with less implementing rools and easy to learn how to use it? PIMF is about to satisfy your demands!
 
@@ -36,9 +36,12 @@ php pimf core:init
 If all is well, you should see a pretty PIMF splash page. Get ready - there is lot more to learn!
 
 
-Usecases and documentation
---------------------------
+Learning PIMF
+-------------
+One of the best ways to learn PIMF is to read through the entirety of its documentation. This guide details all aspects of the framework and how to apply them to your application.
+
 Please read here: https://github.com/gjerokrsteski/pimf/wiki
+
 
 Contributing and pull request guidelines
 ----------------------------------------
@@ -50,6 +53,6 @@ In order to keep the codebase clean, stable and at high quality, even with so ma
 - **Documentation:** If you are adding a new feature or changing the API in any relevant way, this should be documented.
 - **Unit tests:** To keep old bugs from re-appearing and generally hold quality at a high level, the PIMF core is thoroughly unit-tested. Thus, when you create a pull request, it is expected that you unit test any new code you add. For any bug you fix, you should also add regression tests to make sure the bug will never appear again. If you are unsure about how to write tests, the core team or other contributors will gladly help.
 
-Powered by PHPStorm
+Framework Sponsor
 -------------------
 JetBRAINS supports the development of the PIMF with PHPStorm licenses and we feel confidential that PHPStorm strongly influences the PIMF's quality. Use PHPStorm! http://www.jetbrains.com/phpstorm/
