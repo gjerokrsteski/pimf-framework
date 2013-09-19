@@ -28,34 +28,38 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <h2>Welcome to PIMF</h2>
+          <h1>
+<a name="welcome-to-pimf" class="anchor" href="#welcome-to-pimf"><span class="octicon octicon-link"></span></a>Welcome to PIMF</h1>
 
 <p>Have you ever wished a PHP framework that perfectly adapts to your projects needs, your programming experience and your customers budget? A thin PHP framewrok with less implementing rools and easy to learn how to use it? PIMF is about to satisfy your demands!</p>
 
-<p><a href="http://travis-ci.org/gjerokrsteski/pimf"><img src="https://secure.travis-ci.org/gjerokrsteski/pimf.png?branch=master" alt="Build Status"></a></p>
+<p><a href="http://travis-ci.org/gjerokrsteski/pimf"><img src="https://secure.travis-ci.org/gjerokrsteski/pimf.png?branch=master" alt="Build Status"></a>
+<a href="https://www.versioneye.com/user/projects/52122a71632bac227d003d39"><img src="https://www.versioneye.com/user/projects/52122a71632bac227d003d39/badge.png" alt="Dependency Status"></a></p>
 
-<h2>PIMF principles</h2>
+<p>PIMF is based on proven design patterns and a fast object relational mapping mechanism, and is designed to be easily updated without having to rewrite your projects. It includes mechanisms for easily coupling controllers for RIAs.</p>
+
+<h2>
+<a name="pimf-philosophy" class="anchor" href="#pimf-philosophy"><span class="octicon octicon-link"></span></a>PIMF Philosophy</h2>
 
 <p>A good and robust business-logic is better that fat and complex framework. Most of the PHP framewroks are bigger than your problem. At all you need less than 20% of the functionality of the framework to solve you problem. Therefore we belive that the “right” 20% of the effort is the 80% of the results - and that is PIMF.</p>
 
-<h2>Behind PIMF</h2>
-
-<p>Actually we created PIMF for personal use. The aim was to create robust and secure projects and deliver them fast. We wanted just one easy framewrok, who can be used once for all  our projects. And than - PIMF was born!</p>
+<p>The aim was to create robust and secure projects and deliver them fast. We wanted just one easy framewrok, who can be used once for all  our projects. And than - PIMF was born!</p>
 
 <p>PIMFs implementation is based on well proved design patterns as well as fast objects relation mapping mechanism - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without to override your projects. And for all of you out there, who like to create rich application interfaces with ExtJs or Dojo - we have created mechanism to couple your GUI to the controllers in a easy and fast way.</p>
 
-<h3>Installation</h3>
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
 
 <p><strong>Step 1.</strong> Download PIMF</p>
 
-<div class="highlight"><pre><span class="nx">git</span> <span class="k">clone</span> <span class="o">--</span><span class="nx">recursive</span> <span class="nx">https</span><span class="o">://</span><span class="nx">github</span><span class="o">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">gjerokrsteski</span><span class="o">/</span><span class="nx">pimf</span><span class="o">.</span><span class="nx">git</span>
+<div class="highlight highlight-php"><pre><span class="nx">git</span> <span class="k">clone</span> <span class="o">--</span><span class="nx">recursive</span> <span class="nx">https</span><span class="o">://</span><span class="nx">github</span><span class="o">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">gjerokrsteski</span><span class="o">/</span><span class="nx">pimf</span><span class="o">.</span><span class="nx">git</span>
 </pre></div>
 
 <p><strong>Step 2.</strong> Extract the PIMF archive and upload the contents to your web server.</p>
 
 <p><strong>Step 3.</strong> Open the config.php file and set</p>
 
-<div class="highlight"><pre><span class="s1">'environment'</span> <span class="o">=&gt;</span> <span class="s1">'production'</span>
+<div class="highlight highlight-php"><pre><span class="s1">'environment'</span> <span class="o">=&gt;</span> <span class="s1">'production'</span>
 <span class="s1">'local_temp_directory'</span> <span class="o">=&gt;</span> <span class="s1">'/tmp/'</span> <span class="c1">//if necessary</span>
 </pre></div>
 
@@ -68,15 +72,29 @@
 
 <p>If all is well, you should see a pretty PIMF splash page. Get ready - there is lot more to learn!</p>
 
-<h3>Usecases and documentation</h3>
+<h2>
+<a name="learning-pimf" class="anchor" href="#learning-pimf"><span class="octicon octicon-link"></span></a>Learning PIMF</h2>
+
+<p>One of the best ways to learn PIMF is to read through the entirety of its documentation. This guide details all aspects of the framework and how to apply them to your application.</p>
 
 <p>Please read here: <a href="https://github.com/gjerokrsteski/pimf/wiki">https://github.com/gjerokrsteski/pimf/wiki</a></p>
 
-<h3>Support or contact</h3>
+<h2>
+<a name="contributing-and-pull-request-guidelines" class="anchor" href="#contributing-and-pull-request-guidelines"><span class="octicon octicon-link"></span></a>Contributing and pull request guidelines</h2>
 
-<p>Having trouble with PIMF? Check out the documentation here or contact <a href="mailto:gjero@krsteski.de">gjero@krsteski.de</a> and we’ll help you sort it out.</p>
+<p><a href="https://help.github.com/articles/using-pull-requests">GitHub pull requests</a> are a great way for everyone in the community to contribute to the PIMF codebase. Found a bug? Just fix it in your fork and submit a pull request. This will then be reviewed, and, if found as good, merged into the main repository.</p>
 
-<h3>Powered by PHPStorm</h3>
+<p>In order to keep the codebase clean, stable and at high quality, even with so many people contributing, some guidelines are necessary for high-quality pull requests:</p>
+
+<ul>
+<li>
+<strong>Branch:</strong> Unless they are immediate documentation fixes relevant for old versions, pull requests should be sent to the <code>develop</code> branch only. Make sure to select that branch as target when creating the pull request (GitHub will not automatically select it.)</li>
+<li>
+<strong>Documentation:</strong> If you are adding a new feature or changing the API in any relevant way, this should be documented.</li>
+<li>
+<strong>Unit tests:</strong> To keep old bugs from re-appearing and generally hold quality at a high level, the PIMF core is thoroughly unit-tested. Thus, when you create a pull request, it is expected that you unit test any new code you add. For any bug you fix, you should also add regression tests to make sure the bug will never appear again. If you are unsure about how to write tests, the core team or other contributors will gladly help.</li>
+</ul><h2>
+<a name="framework-sponsor" class="anchor" href="#framework-sponsor"><span class="octicon octicon-link"></span></a>Framework Sponsor</h2>
 
 <p>JetBRAINS supports the development of the PIMF with PHPStorm licenses and we feel confidential that PHPStorm strongly influences the PIMF's quality. Use PHPStorm! <a href="http://www.jetbrains.com/phpstorm/">http://www.jetbrains.com/phpstorm/</a></p>
         </section>
@@ -93,7 +111,7 @@
 
           <p class="repo-owner"><a href="https://github.com/gjerokrsteski/pimf"></a> is maintained by <a href="https://github.com/gjerokrsteski">gjerokrsteski</a>.</p>
 
-          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.</p>
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
         </aside>
       </div>
     </div>
