@@ -170,13 +170,65 @@ class Pimf_Util_Validator
   {
     $address = trim($this->attributes->get($field));
 
-    if (preg_match('#^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$#', $address)) {
+    if (filter_var($address, FILTER_VALIDATE_EMAIL) !== false) {
       return true;
     }
 
     $this->setError($field, __FUNCTION__);
     return false;
   }
+
+  /**
+   * Check is a valid IP.
+   * @param $field
+   * @return bool
+   */
+  public function ip($field)
+ 	{
+    $ip = trim($this->attributes->get($field));
+
+    if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+      return true;
+    }
+
+    $this->setError($field, __FUNCTION__);
+    return false;
+ 	}
+
+  /**
+   * Check is a valid URL.
+   * @param $field
+   * @return bool
+   */
+  public function url($field)
+ 	{
+    $url = trim($this->attributes->get($field));
+
+    if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+      return true;
+    }
+
+    $this->setError($field, __FUNCTION__);
+    return false;
+ 	}
+
+  /**
+   * Check is an active URL.
+   * @param $field
+   * @return bool
+   */
+  public function activeUrl($field)
+ 	{
+    $subject = strtolower(trim($this->attributes->get($field)));
+    $url     = str_replace(array('http://', 'https://', 'ftp://'), '', $subject);
+
+ 		if (checkdnsrr($url)) {
+      return true;
+    }
+
+    $this->setError($field, __FUNCTION__);
+    return false;
+ 	}
 
   /**
    * check to see if two fields are equal.

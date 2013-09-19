@@ -4,87 +4,101 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
   public function testAllTypesAsHappyPath()
   {
     $request = array(
-      'fname'    => 'conan',
-      'lname'    => 'the barbar',
-      'email'    => 'conan@movies.com',
-      'pass1'    => 'strong123',
-      'pass2'    => 'strong123',
-      'color'    => 'yellow',
-      'sentence' => 'Hi! Am I here?',
-      'age'      => 33,
-      'number'   => 12,
-      'car'      => 'ferrari',
-      'monitor'  => 'sonyT2000',
-      'date'     => '12/12/2040',
+      'fname'        => 'conan',
+      'lname'        => 'the barbar',
+      'email'        => 'conan@movies.com',
+      'pass1'        => 'strong123',
+      'pass2'        => 'strong123',
+      'color'        => 'yellow',
+      'sentence'     => 'Hi! Am I here?',
+      'age'          => 33,
+      'number'       => 12,
+      'car'          => 'ferrari',
+      'monitor'      => 'sonyT2000',
+      'date'         => '12/12/2040',
+      'ip-indonesia' => '203.161.24.74',
+      'ip-usa'       => '4.59.119.22',
+      'some-url'     => 'https://travis-ci.org/gjerokrsteski/pimf',
     );
 
-    $validator = new Pimf_Util_Validator(new Pimf_Param($request));
+    $valid = new Pimf_Util_Validator(new Pimf_Param($request));
 
-    $this->assertTrue($validator->length("lname", "<", 15), 'on length validator');
+    $this->assertTrue($valid->length("lname", "<", 15), 'on length validator');
 
-    $this->assertTrue($validator->email("email"), 'on email validator');
+    $this->assertTrue($valid->email("email"), 'on email validator');
 
-    $this->assertTrue($validator->compare("pass1", "pass2", true), 'on compare validator');
+    $this->assertTrue($valid->compare("pass1", "pass2", true), 'on compare validator');
 
-    $this->assertTrue($validator->compare("pass1", "pass2", false), 'on compare no inclusive validator');
+    $this->assertTrue($valid->compare("pass1", "pass2", false), 'on compare no inclusive validator');
 
-    $this->assertTrue($validator->lengthBetween("color", 3, 15, true), 'on lengthBetween validator');
+    $this->assertTrue($valid->lengthBetween("color", 3, 15, true), 'on lengthBetween validator');
 
-    $this->assertTrue($validator->lengthBetween("color", 3, 15, false), 'on lengthBetween no inclusive validator');
+    $this->assertTrue($valid->lengthBetween("color", 3, 15, false), 'on lengthBetween no inclusive validator');
 
-    $this->assertTrue($validator->punctuation('sentence'), 'on punctuation validator');
+    $this->assertTrue($valid->punctuation('sentence'), 'on punctuation validator');
 
-    $this->assertTrue($validator->value("age", ">", 18), 'on value validator');
+    $this->assertTrue($valid->value("age", ">", 18), 'on value validator');
 
-    $this->assertTrue($validator->valueBetween("number", 11, 16), 'on value between validator');
+    $this->assertTrue($valid->valueBetween("number", 11, 16), 'on value between validator');
 
-    $this->assertTrue($validator->valueBetween("number", 11, 16, true), 'on value between with included validator');
+    $this->assertTrue($valid->valueBetween("number", 11, 16, true), 'on value between with included validator');
 
-    $this->assertTrue($validator->alpha("car"), 'on alpha validator');
+    $this->assertTrue($valid->alpha("car"), 'on alpha validator');
 
-    $this->assertTrue($validator->alphaNumeric("monitor"), 'on alpha-num validator');
+    $this->assertTrue($valid->alphaNumeric("monitor"), 'on alpha-num validator');
 
-    $this->assertTrue($validator->digit("age"), 'on digit validator');
+    $this->assertTrue($valid->digit("age"), 'on digit validator');
 
-    $this->assertTrue($validator->date("date", "mm/dd/yyyy"), 'on date validator');
+    $this->assertTrue($valid->date("date", "mm/dd/yyyy"), 'on date validator');
 
-    $this->assertEmpty($validator->getErrors());
+    $this->assertTrue($valid->ip('ip-indonesia'), 'on ip validator');
+    $this->assertTrue($valid->ip('ip-usa'), 'on ip validator');
+
+    $this->assertTrue($valid->url('some-url'), 'on url validator');
+
+
+    $this->assertEmpty($valid->getErrors());
 
   }
 
   public function testSettingInvalidData()
   {
-    $validator = new Pimf_Util_Validator(new Pimf_Param(array()));
+    $valid = new Pimf_Util_Validator(new Pimf_Param(array()));
 
-    $this->assertFalse($validator->length("lname", "<", 0), 'on length validator');
+    $this->assertFalse($valid->length("lname", "<", 0), 'on length validator');
 
-    $this->assertFalse($validator->email("email"), 'on email validator');
+    $this->assertFalse($valid->email("email"), 'on email validator');
 
-    $this->assertFalse($validator->compare("pass1", "pass2", true), 'on compare validator');
+    $this->assertFalse($valid->compare("pass1", "pass2", true), 'on compare validator');
 
-    $this->assertFalse($validator->compare("pass1", "pass2", false), 'on compare no inclusive validator');
+    $this->assertFalse($valid->compare("pass1", "pass2", false), 'on compare no inclusive validator');
 
-    $this->assertFalse($validator->lengthBetween("color", 3, 15, true), 'on lengthBetween validator');
+    $this->assertFalse($valid->lengthBetween("color", 3, 15, true), 'on lengthBetween validator');
 
-    $this->assertFalse($validator->lengthBetween("color", 3, 15, false), 'on lengthBetween no inclusive validator');
+    $this->assertFalse($valid->lengthBetween("color", 3, 15, false), 'on lengthBetween no inclusive validator');
 
-    $this->assertFalse($validator->punctuation('sentence'), 'on punctuation validator');
+    $this->assertFalse($valid->punctuation('sentence'), 'on punctuation validator');
 
-    $this->assertFalse($validator->value("age", ">", 18), 'on value validator');
+    $this->assertFalse($valid->value("age", ">", 18), 'on value validator');
 
-    $this->assertFalse($validator->valueBetween("number", 11, 16), 'on value between validator');
+    $this->assertFalse($valid->valueBetween("number", 11, 16), 'on value between validator');
 
-    $this->assertFalse($validator->valueBetween("number", 16, 16, true), 'on value between with included validator');
+    $this->assertFalse($valid->valueBetween("number", 16, 16, true), 'on value between with included validator');
 
-    $this->assertFalse($validator->alpha("car"), 'on alpha validator');
+    $this->assertFalse($valid->alpha("car"), 'on alpha validator');
 
-    $this->assertFalse($validator->digit("age"), 'on digit validator');
+    $this->assertFalse($valid->digit("age"), 'on digit validator');
 
-    $this->assertFalse($validator->alphaNumeric("monitor"), 'on alpha-num validator');
+    $this->assertFalse($valid->alphaNumeric("monitor"), 'on alpha-num validator');
 
-    $this->assertFalse($validator->date("date", "mm/dd/yyyy"), 'on date validator');
+    $this->assertFalse($valid->date("date", "mm/dd/yyyy"), 'on date validator');
 
-    $this->assertNotEmpty($validator->getErrors());
+    $this->assertFalse($valid->ip('ip-indonesia'), 'on ip validator');
+    $this->assertFalse($valid->ip('ip-usa'), 'on ip validator');
+
+    $this->assertFalse($valid->url('some-url'), 'on url validator');
+
+    $this->assertNotEmpty($valid->getErrors());
   }
 
   public function testCreatingAFactoryOfRules()
