@@ -446,104 +446,20 @@ class Pimf_Util_Validator
   {
     $fieldValue = $this->attributes->get($field);
 
-    if ($fieldValue === null) {
+    if ($fieldValue === null || strtotime($fieldValue) === false) {
       $this->setError($field, __FUNCTION__);
       return false;
     }
 
-    $month               = false;
-    $day                 = false;
-    $year                = false;
-    $monthPos            = null;
-    $dayPos              = null;
-    $yearPos             = null;
-    $monthNum            = null;
-    $dayNum              = null;
-    $yearNum             = null;
-    $separator           = null;
-    $separatorCount      = null;
-    $fieldSeparatorCount = null;
+    $date = date_parse($fieldValue);
 
-    //determine the separator
-    if (strstr($format, "-")) {
-      $separator   = "-";
-      $this->valid = true;
-    } elseif (strstr($format, ".")) {
-      $separator   = ".";
-      $this->valid = true;
-    } elseif (strstr($format, "/")) {
-      $separator   = "/";
-      $this->valid = true;
-    } else {
-      $this->valid = false;
+    if (checkdate($date['month'], $date['day'], $date['year'])) {
+      $this->resetValid();
+      return true;
     }
 
-    if ($this->valid) {
-      //determine the number of separators in $format and $field
-      $separatorCount      = substr_count($format, $separator);
-      $fieldSeparatorCount = substr_count($fieldValue, $separator);
-
-      //if number of separators in $format and $field don't match return false
-      if (!strstr($fieldValue, $separator) || $fieldSeparatorCount != $separatorCount) {
-        $this->valid = false;
-      } else {
-        $this->valid = true;
-      }
-    }
-
-    if ($this->valid) {
-      //explode $format into $formatArray and get the index of the day, month, and year
-      //then get the number of occurances of either m, d, or y
-      $formatArray = explode($separator, $format);
-      for ($i = 0; $i < sizeof($formatArray); $i++) {
-        if (strstr($formatArray[$i], "m")) {
-          $monthPos = $i;
-          $monthNum = substr_count($formatArray[$i], "m");
-        } elseif (strstr($formatArray[$i], "d")) {
-          $dayPos = $i;
-          $dayNum = substr_count($formatArray[$i], "d");
-        } elseif (strstr($formatArray[$i], "y")) {
-          $yearPos = $i;
-          $yearNum = substr_count($formatArray[$i], "y");
-        } else {
-          $this->valid = false;
-        }
-      }
-
-      //set whether $format uses day, month, year
-      if ($monthNum) {
-        $month = true;
-      }
-
-      if ($dayNum) {
-        $day = true;
-      }
-
-      if ($yearNum) {
-        $year = true;
-      }
-
-      //explode date field into $dateArray
-      //check if the monthNum, dayNum, and yearNum match appropriately to the $dateArray
-      $dateArray = explode($separator, $fieldValue);
-      if ($month) {
-        if (!preg_match("#^[0-9]{" . $monthNum . "}+$#i", $dateArray[$monthPos]) || $dateArray[$monthPos] > 12) {
-          $this->valid = false;
-        }
-      }
-      if ($day) {
-        if (!preg_match("#^[0-9]{" . $dayNum . "}+$#i", $dateArray[$dayPos]) || $dateArray[$dayPos] > 31) {
-          $this->valid = false;
-        }
-      }
-      if ($year) {
-        if (!preg_match("#^[0-9]{" . $yearNum . "}+$#i", $dateArray[$yearPos])) {
-          $this->valid = false;
-        }
-      }
-    }
-
-    if ($this->valid) {
+    $parsed = date_parse_from_format($format, $fieldValue);
+    if ($parsed['error_count'] === 0) {
       $this->resetValid();
       return true;
     }
