@@ -51,7 +51,7 @@ class Pimf_Util_Fluent
    */
   public function __construct(array $attributes = array())
   {
-    $this->attributes = new ArrayObject($attributes, ArrayObject::ARRAY_AS_PROPS);
+    $this->attributes = new ArrayObject($attributes, ArrayObject::ARRAY_AS_PROPS | ArrayObject::STD_PROP_LIST);
   }
 
   /**
