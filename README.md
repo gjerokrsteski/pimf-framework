@@ -1,5 +1,5 @@
-PIMF Philosophy
-===================
+Welcome to PIMF
+===============
 Have you ever wished a PHP framework that perfectly adapts to your projects needs, your programming experience and your customers budget? A thin PHP framewrok with less implementing rools and easy to learn how to use it? PIMF is about to satisfy your demands!
 
 [![Build Status](https://secure.travis-ci.org/gjerokrsteski/pimf.png?branch=master)](http://travis-ci.org/gjerokrsteski/pimf)
@@ -8,8 +8,16 @@ Have you ever wished a PHP framework that perfectly adapts to your projects need
 PIMF (Php Is My Framework) is a micro framework for PHP that emphasises minimalism and simplicity. It is based on proven design patterns and a fast object relational mapping mechanism, and is designed to be easily updated without having to rewrite your projects. It includes mechanisms for easily coupling controllers to ExtJs and Dojo.
 
 
+PIMF Philosophy
+---------------
+A good and robust business-logic is better that fat and complex framework. Most of the PHP framewroks are bigger than your problem. At all you need less than 20% of the functionality of the framework to solve you problem. Therefore we belive that the “right” 20% of the effort is the 80% of the results - and that is PIMF.
+
+Actually we created PIMF for personal use. The aim was to create robust and secure projects and deliver them fast. We wanted just one easy framewrok, who can be used once for all  our projects. And than - PIMF was born!
+
+PIMFs implementation is based on well proved design patterns as well as fast objects relation mapping mechanism - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without to override your projects. And for all of you out there, who like to create rich application interfaces with ExtJs or Dojo - we have created mechanism to couple your GUI to the controllers in a easy and fast way.
+
 Installation
-----------------
+------------
 **Step 1.** Download PIMF
 
 ```php
