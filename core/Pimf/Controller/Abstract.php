@@ -52,8 +52,9 @@ abstract class Pimf_Controller_Abstract
       $suffix = 'CliAction';
       $action = $this->request->fromCli()->get('action') ?: 'index';
     } else {
+      $requestMethod = ucfirst(Pimf_Registry::get('env')->getRequestMethod());
       $suffix = 'Action';
-      $action = $this->request->fromGet()->get('action') ?: 'index';
+      $action = $this->request->{'from'.$requestMethod}()->get('action') ?: 'index';
     }
 
     $action = strtolower($action) . $suffix;

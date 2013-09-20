@@ -291,6 +291,15 @@ class Pimf_Environment
   }
 
   /**
+   * Which request method was used to access the page
+   * @return string Lower case get|post|put|delete|head|options
+   */
+  public function getRequestMethod()
+  {
+    return strtolower($this->envData->get('REQUEST_METHOD'));
+  }
+
+  /**
    * Are we in a web environment?
    * @return boolean
    */
