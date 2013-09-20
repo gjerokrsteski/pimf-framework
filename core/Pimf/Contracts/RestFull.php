@@ -1,11 +1,8 @@
 <?php
 /**
- * Pimf_View
+ * Pimf
  *
  * PHP Version 5
- *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
  *
  * LICENSE
  *
@@ -22,29 +19,28 @@
  */
 
 /**
- * A view for smooth JSON communication.
+ * A simply interface because Representational State Transfer has become
+ * the standard design architecture for developing web APIs.
  *
- * @link http://twig.sensiolabs.org/documentation
- * @package Pimf_View
+ * REST takes advantage of the HTTP request methods to layer itself
+ * into the existing HTTP architecture.
+ *
+ * @package Pimf_Contracts
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_View_Json extends Pimf_View
+interface Pimf_Contracts_RestFull
 {
   /**
-   * @param array $data
+   * Used to create a new object on the server.
+   * Used to modify an existing object on the server.
+   * Used to remove an object on the server.
+   * @return mixed
    */
-  public function __construct(array $data = array())
-  {
-    parent::__construct('', $data);
-  }
+  public function postAction();
 
   /**
-   * @return string|void
+   * Used for basic read requests to the server.
+   * @return mixed
    */
-  public function render()
-  {
-    Pimf_Util_Header::contentTypeJson();
-
-    die(Pimf_Util_Json::encode($this->data->getArrayCopy()));
-  }
+  public function getAction();
 }

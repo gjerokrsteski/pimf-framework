@@ -24,6 +24,14 @@ spl_autoload_register(
         'pimf_controller_abstract'        => '/Pimf/Controller/Abstract.php',
         'pimf_controller_core'            => '/Pimf/Controller/Core.php',
         'pimf_controller_exception'       => '/Pimf/Controller/Exception.php',
+        'pimf_controller_rest'            => '/Pimf/Controller/Rest.php',
+        'pimf_contracts_reunitable'       => '/Pimf/Contracts/Reunitable.php',
+        'pimf_contracts_arrayable'        => '/Pimf/Contracts/Arrayable.php',
+        'pimf_contracts_jsonable'         => '/Pimf/Contracts/Jsonable.php',
+        'pimf_contracts_messageprovider'  => '/Pimf/Contracts/MessageProvider.php',
+        'pimf_contracts_renderable'       => '/Pimf/Contracts/Renderable.php',
+        'pimf_contracts_cleanable'        => '/Pimf/Contracts/Cleanable.php',
+        'pimf_contracts_restfull'         => '/Pimf/Contracts/RestFull.php',
         'pimf_cookie'                     => '/Pimf/Cookie.php',
         'pimf_datamapper_abstract'        => '/Pimf/DataMapper/Abstract.php',
         'pimf_entitymanager'              => '/Pimf/EntityManager.php',
@@ -82,12 +90,6 @@ spl_autoload_register(
         'pimf_view_haanga'                => '/Pimf/View/Haanga.php',
         'pimf_view_json'                  => '/Pimf/View/Json.php',
         'pimf_view_twig'                  => '/Pimf/View/Twig.php',
-        'pimf_contracts_reunitable'       => '/Pimf/Contracts/Reunitable.php',
-        'pimf_contracts_arrayable'        => '/Pimf/Contracts/Arrayable.php',
-        'pimf_contracts_jsonable'         => '/Pimf/Contracts/Jsonable.php',
-        'pimf_contracts_messageprovider'  => '/Pimf/Contracts/MessageProvider.php',
-        'pimf_contracts_renderable'       => '/Pimf/Contracts/Renderable.php',
-        'pimf_contracts_cleanable'        => '/Pimf/Contracts/Cleanable.php',
       );
     }
     $cn = strtolower($class);

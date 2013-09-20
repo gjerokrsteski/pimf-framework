@@ -43,7 +43,7 @@ class Pimf_Util_Header
 
   public static function contentTypeJson()
   {
-    self::contentType('application/json');
+    self::contentType('application/json; charset=utf-8');
   }
 
   public static function contentTypePdf()

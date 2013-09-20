@@ -11,16 +11,30 @@ try{
 
   Pimf_Application::run($_GET, $_POST, $_COOKIE);
 
-} catch (Pimf_Resolver_Exception $e){ // thrown by the user requests resolver
+}
+/**
+ * thrown by the user requests resolver
+ */
+catch (Pimf_Resolver_Exception $pre) {
 
-  Pimf_Util_Header::sendNotFound($e->getMessage());
+  Pimf_Registry::get('logger')->error($pre->getMessage() . $pre->getTraceAsString());
+  Pimf_Util_Header::sendNotFound($pre->getMessage());
 
-} catch (Pimf_Controller_Exception $e){ // thrown by the controller
+}
+/**
+ * thrown by the controllers
+ */
+catch (Pimf_Controller_Exception $pce) {
 
-  Pimf_Util_Header::sendNotFound($e->getMessage());
+  Pimf_Registry::get('logger')->warn($pce->getMessage() . $pce->getTraceAsString());
+  Pimf_Util_Header::sendNotFound($pce->getMessage());
 
-} catch (Exception $e) { // finally fetch the remaining exceptions
+}
+/**
+ * finally fetch the remaining exceptions
+ */
+catch (Exception $e) {
 
-  Pimf_Util_Header::sendInternalServerError($e->getMessage());
   Pimf_Registry::get('logger')->error($e->getMessage() . $e->getTraceAsString());
+  Pimf_Util_Header::sendInternalServerError($e->getMessage());
 }

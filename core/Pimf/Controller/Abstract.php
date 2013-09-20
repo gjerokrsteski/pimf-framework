@@ -44,7 +44,8 @@ abstract class Pimf_Controller_Abstract
   /**
    * Method to show the content.
    * @return mixed
-   * @throws Pimf_Controller_Exception
+   * @throws Pimf_Controller_Exception if no action found
+   * @throws RuntimeException if bad request method
    */
   public function render()
   {
@@ -52,9 +53,15 @@ abstract class Pimf_Controller_Abstract
       $suffix = 'CliAction';
       $action = $this->request->fromCli()->get('action') ?: 'index';
     } else {
+
       $requestMethod = ucfirst(Pimf_Registry::get('env')->getRequestMethod());
       $suffix = 'Action';
-      $action = $this->request->{'from'.$requestMethod}()->get('action') ?: 'index';
+
+      if (!method_exists($this->request, $bag = 'from'.$requestMethod)) {
+        throw new Pimf_Controller_Exception("not supported request method");
+      }
+
+      $action = $this->request->{$bag}()->get('action') ?: 'index';
     }
 
     $action = strtolower($action) . $suffix;

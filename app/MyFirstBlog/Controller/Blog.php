@@ -20,15 +20,14 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
    */
   protected function loadMainView(Pimf_View $view)
   {
-    // use app/MyFirstBlog/_templates/theblog.phtml for viewing
-    $viewMain = new Pimf_View('theblog.phtml');
-
-    // assign data to the template
-    $viewMain->assign('blog_title', 'This is my firs Blog with PIMF')
-             ->assign('blog_content', $view->render())
-             ->assign('blog_footer', 'A Blog about cool and thin framework');
-
-    return $viewMain->render();
+    echo new Pimf_View(
+      'theblog.phtml',
+      array(
+        'blog_title'   => 'This is my firs Blog with PIMF',
+        'blog_content' => $view->render(),
+        'blog_footer'  => 'A Blog about cool and thin framework'
+      )
+    );
   }
 
   /**

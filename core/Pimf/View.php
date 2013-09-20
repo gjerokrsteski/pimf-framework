@@ -39,10 +39,11 @@ class Pimf_View implements Pimf_Contracts_Renderable
 
   /**
    * @param string $template
+   * @param array $data
    */
-  public function __construct($template = 'default.phtml')
+  public function __construct($template = 'default.phtml', array $data = array())
   {
-    $this->data     = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+    $this->data     = new ArrayObject($data, ArrayObject::ARRAY_AS_PROPS);
     $conf           = Pimf_Registry::get('conf');
     $this->path     = dirname(dirname(dirname(__FILE__))) . '/app/' . $conf['app']['name'] . '/_templates';
     $this->template = (string)$template;
@@ -173,5 +174,14 @@ class Pimf_View implements Pimf_Contracts_Renderable
     }
 
     include $file;
+  }
+
+  /**
+   * Act when the view is treated like a string
+   * @return string
+   */
+  public function __toString()
+  {
+    return $this->render();
   }
 }

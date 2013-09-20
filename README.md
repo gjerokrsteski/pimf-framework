@@ -5,8 +5,6 @@ Have you ever wished a PHP framework that perfectly adapts to your projects need
 [![Build Status](https://secure.travis-ci.org/gjerokrsteski/pimf.png?branch=master)](http://travis-ci.org/gjerokrsteski/pimf)
 [![Dependency Status](https://www.versioneye.com/user/projects/52122a71632bac227d003d39/badge.png)](https://www.versioneye.com/user/projects/52122a71632bac227d003d39)
 
-PIMF is based on proven design patterns and a fast object relational mapping mechanism, and is designed to be easily updated without having to rewrite your projects. It includes mechanisms for easily coupling controllers for RIAs.
-
 PIMF Philosophy
 ---------------
 A good and robust business-logic is better that fat and complex framework. Most of the PHP framewroks are bigger than your problem. At all you need less than 20% of the functionality of the framework to solve you problem. Therefore we belive that the “right” 20% of the effort is the 80% of the results - and that is PIMF.
