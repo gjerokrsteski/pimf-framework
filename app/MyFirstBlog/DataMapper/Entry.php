@@ -10,7 +10,12 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
       'SELECT * FROM blog'
     );
 
-    $sth->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'MyFirstBlog_Model_Entry');
+    $sth->setFetchMode(
+      PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
+      'MyFirstBlog_Model_Entry',
+      array('title', 'content')
+    );
+
     $sth->execute();
 
     return $sth->fetchAll();
@@ -32,7 +37,13 @@ class MyFirstBlog_DataMapper_Entry extends Pimf_DataMapper_Abstract
     );
 
     $sth->bindValue(':id', $id, PDO::PARAM_INT);
-    $sth->setFetchMode(PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE, 'MyFirstBlog_Model_Entry');
+
+    $sth->setFetchMode(
+      PDO::FETCH_CLASS | PDO::FETCH_PROPS_LATE,
+      'MyFirstBlog_Model_Entry',
+      array('title', 'content')
+    );
+
     $sth->execute();
 
     // let pdo fetch the User instance for you.

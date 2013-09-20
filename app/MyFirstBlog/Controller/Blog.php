@@ -62,9 +62,9 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
   public function showentryAction()
   {
     // first we check the input-parameters which are send with GET http method.
-    $validator = new Pimf_Util_Validator($this->request->fromGet());
+    $valid = new Pimf_Util_Validator($this->request->fromGet());
 
-    if (!$validator->digit('id') || !$validator->value('id', '>', 0)) {
+    if (!$valid->digit('id') || !$valid->value('id', '>', 0)) {
       throw new Pimf_Controller_Exception('not valid entry for "id"');
     }
 
@@ -100,8 +100,15 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
   /**
    * Sends a data for single entry as a JSON format.
    */
-  public function entryasjsonAction()
+  public function jsonAction()
   {
+    // first we check the input-parameters which are send with GET http method.
+    $valid = new Pimf_Util_Validator($this->request->fromGet());
+
+    if (!$valid->digit('id') || !$valid->value('id', '>', 0)) {
+      throw new Pimf_Controller_Exception('not valid entry for "id"');
+    }
+
     /* @var $em Pimf_EntityManager */
     $em = Pimf_Registry::get('em');
 
@@ -125,12 +132,9 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
     $title   = Pimf_Cli_Io::read('article title');
     $content = Pimf_Cli_Io::read('article content');
 
-    $entry = new MyFirstBlog_Model_Entry();
-
-    $entry->setTitle($title);
-    $entry->setContent($content);
-
-    $res = Pimf_Registry::get('em')->entry->insert($entry);
+    $res = Pimf_Registry::get('em')->entry->insert(
+      new MyFirstBlog_Model_Entry($title, $content)
+    );
 
     var_dump($res);
   }
@@ -145,10 +149,7 @@ class MyFirstBlog_Controller_Blog extends Pimf_Controller_Abstract
     $content = Pimf_Cli_Io::read('article content');
 
     $em    = Pimf_Registry::get('em');
-    $entry = new MyFirstBlog_Model_Entry();
-
-    $entry->setTitle($title);
-    $entry->setContent($content);
+    $entry = new MyFirstBlog_Model_Entry($title, $content);
 
     $entry = $em->entry->reflect($entry, $id);
 

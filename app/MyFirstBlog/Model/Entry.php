@@ -10,9 +10,10 @@ class MyFirstBlog_Model_Entry extends Pimf_Model_ToArray
 
   protected $content;
 
-  public function setContent($content)
+  public function __construct($title, $content)
   {
     $this->content = $content;
+    $this->title   = $title;
   }
 
   public function getContent()
@@ -23,11 +24,6 @@ class MyFirstBlog_Model_Entry extends Pimf_Model_ToArray
   public function getId()
   {
     return $this->id;
-  }
-
-  public function setTitle($title)
-  {
-    $this->title = $title;
   }
 
   public function getTitle()
