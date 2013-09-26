@@ -1,5 +1,5 @@
 <?php
-class MyFirstBlog_Controller_Rest extends Pimf_Controller_Rest implements Pimf_Contracts_RestFull
+class MyFirstBlog_Controller_Rest extends Pimf_Controller_Rest
 {
   /**
    * Used to create a new object on the server.

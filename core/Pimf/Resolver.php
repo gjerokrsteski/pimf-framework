@@ -55,12 +55,13 @@ class Pimf_Resolver
   {
     $controllerName = $request->fromGet()->get('controller');
 
-    if (Pimf_Environment::isCli()) {
+    $conf = Pimf_Registry::get('conf');
+
+    if (Pimf_Environment::isCli() && $conf['environment'] == 'production') {
       $controllerName = $request->fromCli()->get('controller');
     }
 
     if (!$controllerName) {
-      $conf = Pimf_Registry::get('conf');
       $controllerName =  $conf['app']['default_controller'];
     }
 

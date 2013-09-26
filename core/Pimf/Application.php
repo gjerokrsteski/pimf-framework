@@ -122,7 +122,7 @@ final class Pimf_Application
 
     } else {
 
-      // setup the error and exception handling.
+       // setup the error and exception handling.
       set_exception_handler(function($e){
         Pimf_Error::exception($e);
       });
@@ -160,7 +160,7 @@ final class Pimf_Application
 
     try {
 
-      $registry->env    = new Pimf_Environment($server);
+      $registry->env = new Pimf_Environment($server);
 
       if(is_array($dbConf)) {
         $registry->em = new Pimf_EntityManager(Pimf_Pdo_Factory::get($dbConf), $config['app']['name']);
@@ -198,4 +198,14 @@ final class Pimf_Application
    * PIMF Application can not be unserialized.
    */
   private function __wakeup() { }
+
+  /**
+   * Stopping the PHP process for PHP-FastCGI users to speed up some PHP queries.
+   */
+  public static function finish()
+  {
+    if (function_exists('fastcgi_finish_request')) {
+      fastcgi_finish_request();
+    }
+  }
 }

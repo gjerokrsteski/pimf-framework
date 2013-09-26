@@ -49,16 +49,20 @@ abstract class Pimf_Controller_Abstract
    */
   public function render()
   {
-    if (Pimf_Environment::isCli()) {
+    $conf = Pimf_Registry::get('conf');
+
+    if (Pimf_Environment::isCli() && $conf['environment'] == 'production') {
+
       $suffix = 'CliAction';
       $action = $this->request->fromCli()->get('action') ?: 'index';
+
     } else {
 
       $requestMethod = ucfirst(Pimf_Registry::get('env')->getRequestMethod());
-      $suffix = 'Action';
+      $suffix        = 'Action';
 
       if (!method_exists($this->request, $bag = 'from'.$requestMethod)) {
-        throw new Pimf_Controller_Exception("not supported request method");
+        throw new Pimf_Controller_Exception("not supported request method=".$requestMethod);
       }
 
       $action = $this->request->{$bag}()->get('action') ?: 'index';

@@ -17,6 +17,7 @@ class Pimf_ResolverTest extends PHPUnit_Framework_TestCase
           'key' => 'secret-key-here',
           'default_controller' => 'index',
         ),
+        'environment' => 'testing'
       )
     );
   }
@@ -45,7 +46,7 @@ class Pimf_ResolverTest extends PHPUnit_Framework_TestCase
       'Fixture_'
     );
 
-    $resolver->process()->render();
+    $resolver->process();
   }
 
   /**

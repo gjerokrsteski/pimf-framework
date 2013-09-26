@@ -22,12 +22,29 @@
  * REST in PHP can be done pretty simple. Use this abstract controller for REST calls.
  * This works with Apache and Lighttpd out of the box, and no rewrite rules are needed.
  *
+ * REST takes advantage of the HTTP request methods to layer itself
+ * into the existing HTTP architecture.
+ *
  * @package Pimf_Controller
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Controller_Rest extends Pimf_Controller_Abstract
+abstract class Pimf_Controller_Rest extends Pimf_Controller_Abstract
 {
   protected $data = array();
+
+  /**
+   * Used to create a new object on the server.
+   * Used to modify an existing object on the server.
+   * Used to remove an object on the server.
+   * @return mixed
+   */
+  abstract public function postAction();
+
+  /**
+   * Used for basic read requests to the server.
+   * @return mixed
+   */
+  abstract public function getAction();
 
   public function init()
   {

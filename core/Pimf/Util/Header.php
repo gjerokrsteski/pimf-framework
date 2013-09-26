@@ -120,7 +120,7 @@ class Pimf_Util_Header
    */
   public static function send($code, $status, $replace = true)
   {
-    header(Pimf_Registry::get('env')->getProtocolInfo() . ' ' . $code . ' ' . $status, $replace, $code);
+    header(''.Pimf_Registry::get('env')->getProtocolInfo().' ' . $code . ' ' . $status, $replace, $code);
   }
 
   public static function sendXFrameDeny()
@@ -269,7 +269,7 @@ class Pimf_Util_Header
    */
   protected static function view($code, $status)
   {
-    if(Pimf_Environment::isCli() || (Pimf_Environment::isWeb() && !empty($status) && $code == 500)) {
+    if(Pimf_Environment::isCli()) {
       die($status.PHP_EOL);
     }
 

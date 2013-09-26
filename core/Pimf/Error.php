@@ -45,10 +45,10 @@ class Pimf_Error
     if (isset($conf['error']['debug_info']) && $conf['error']['debug_info'] === true) {
       $msg =
         "<html><h2>Untreated Exception</h2>
-				<h3>Message:</h3>
-				<pre>" . $exception->getMessage() . "</pre>
-				<h3>Location:</h3>
-				<pre>" . $exception->getFile() . " on line " . $exception->getLine() . "</pre>
+        <h3>Message:</h3>
+        <pre>" . $exception->getMessage() . "</pre>
+        <h3>Location:</h3>
+        <pre>" . $exception->getFile() . " on line " . $exception->getLine() . "</pre>
         <h3>Stack Trace:</h3>
         <pre>" . $exception->getTraceAsString() . "</pre></html>";
 
@@ -111,7 +111,7 @@ class Pimf_Error
     $conf = Pimf_Registry::get('conf');
 
     if (isset($conf['error']['log']) && $conf['error']['log'] === true) {
-      Pimf_Registry::get('logger')->error($exception->getMessage() . $exception->getTraceAsString());
+      Pimf_Registry::get('logger')->error($exception->getMessage() .' '. $exception->getTraceAsString());
     }
   }
 }
