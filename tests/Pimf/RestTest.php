@@ -18,6 +18,9 @@ class Pimf_RestTest extends PHPUnit_Framework_TestCase
     $this->assertEmpty($result);
   }
 
+  /**
+   * @runInSeparateProcess
+   */
   public function testCallingControllerAction()
   {
     $resolver = new Pimf_Resolver(
