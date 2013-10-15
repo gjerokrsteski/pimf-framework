@@ -163,17 +163,7 @@ class Pimf_View implements Pimf_Contracts_Renderable
    */
   public function reunite()
   {
-    $file = $this->path . '/' . $this->template;
-
-    if (!file_exists($file)) {
-      throw new RuntimeException('could not find template: ' . $file);
-    }
-
-    if (!is_readable($file)) {
-      throw new RuntimeException('could not read template: ' . $file);
-    }
-
-    include $file;
+    include new Pimf_Util_File($this->path . '/' . $this->template);
   }
 
   /**
