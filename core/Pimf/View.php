@@ -62,11 +62,13 @@ class Pimf_View implements Pimf_Contracts_Renderable
 
   /**
    * @param string $template
-   * @param array $model
+   * @param array|Pimf_Contracts_Arrayable $model
    * @return mixed
    */
-  public function partial($template, array $model = array())
+  public function partial($template, $model = array())
   {
+    $model = ($model instanceof Pimf_Contracts_Arrayable) ? $model->toArray() : $model;
+
     return $this->produce($template)->pump($model)->render();
   }
 
@@ -100,7 +102,7 @@ class Pimf_View implements Pimf_Contracts_Renderable
 
   /**
    * Exchange all variables.
-   * @param array $model
+   * @param $model
    * @return Pimf_View
    */
   public function pump(array $model)
@@ -122,9 +124,10 @@ class Pimf_View implements Pimf_Contracts_Renderable
 
     $trace = debug_backtrace();
     trigger_error(
-      'undefined property for the view: '
-        . $name . ' at ' . $trace[0]['file']
-        . ' line ' . $trace[0]['line'], E_USER_NOTICE
+      'undefined property "'.$name
+      .'" at file '. $trace[0]['file']
+      . ' line ' . $trace[0]['line'],
+      E_USER_WARNING
     );
 
     return null;

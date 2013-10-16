@@ -80,3 +80,5 @@ $config = array(
   ),
 
 );
+
+if(is_file('config.app.php')) require 'config.app.php';
