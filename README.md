@@ -13,34 +13,6 @@ The aim was to create robust and secure projects and deliver them fast. We wante
 
 PIMFs implementation is based on well proved design patterns as well as fast objects relation mapping mechanism - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without to override your projects. And for all of you out there, who like to create rich application interfaces with ExtJs or Dojo - we have created mechanism to couple your GUI to the controllers in a easy and fast way.
 
-Installation
-------------
-**Step 1.** Download PIMF
-
-```php
-git clone --recursive https://github.com/gjerokrsteski/pimf.git
-```
-
-**Step 2.** Extract the PIMF archive and upload the contents to your web server.
-
-**Step 3.** Open the config.php file and set
-
-```php
-'environment' => 'production'
-'local_temp_directory' => '/tmp/' //if necessary
-```
-
-**Step 4.** Go to your PIMF root directory and run the command:  
-
-```cli
-php pimf core:init
-```
-
-**Step 5.** Navigate to your application in a web browser.
-
-If all is well, you should see a pretty PIMF splash page. Get ready - there is lot more to learn!
-
-
 Learning PIMF
 -------------
 One of the best ways to learn PIMF is to read through the entirety of its documentation. This guide details all aspects of the framework and how to apply them to your application.

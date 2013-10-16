@@ -28,7 +28,7 @@
  */
 final class Pimf_Application
 {
-  const VERSION = '1.6';
+  const VERSION = '1.7';
 
   private static $bootstrapped;
 
@@ -162,7 +162,7 @@ final class Pimf_Application
 
       $registry->env = new Pimf_Environment($server);
 
-      if(is_array($dbConf)) {
+      if(is_array($dbConf) && $config['environment'] != 'testing') {
         $registry->em = new Pimf_EntityManager(Pimf_Pdo_Factory::get($dbConf), $config['app']['name']);
       }
 

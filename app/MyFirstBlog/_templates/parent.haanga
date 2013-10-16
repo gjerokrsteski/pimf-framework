@@ -1,7 +1,0 @@
-<html>
-  <head></head>
-  <body>
-    <h1>Haanga Test</h1>
-    {{ hello }}. It is now {{ now }}
-  </body>
-</html>
