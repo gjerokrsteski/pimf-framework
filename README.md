@@ -2,7 +2,7 @@ Welcome to PIMF
 ===============
 Have you ever wished a PHP framework that perfectly adapts to your projects needs, your programming experience and your customers budget? A thin PHP framewrok with less implementing rools and easy to learn how to use it? PIMF is about to satisfy your demands!
 
-[![Build Status](https://secure.travis-ci.org/gjerokrsteski/pimf.png?branch=master)](http://travis-ci.org/gjerokrsteski/pimf)
+[![Build Status](https://travis-ci.org/gjerokrsteski/pimf-framework.png?branch=master)](https://travis-ci.org/gjerokrsteski/pimf-framework)
 [![Dependency Status](https://www.versioneye.com/user/projects/52122a71632bac227d003d39/badge.png)](https://www.versioneye.com/user/projects/52122a71632bac227d003d39)
 
 PIMF Philosophy
