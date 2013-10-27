@@ -55,11 +55,11 @@ class Pimf_Controller_Core extends Pimf_Controller_Abstract
     foreach ($assets as $asset) {
 
       if (!is_dir($asset)) {
-        echo Pimf_Cli_Color::paint("Pleas create '$asset' directory! " . PHP_EOL, 'red');
+        echo Pimf_Cli_Color::paint("Please create '$asset' directory! " . PHP_EOL, 'red');
       }
 
       if (!is_writable($asset)) {
-        echo Pimf_Cli_Color::paint("Pleas make '$asset' writable! " . PHP_EOL, 'red');
+        echo Pimf_Cli_Color::paint("Please make '$asset' writable! " . PHP_EOL, 'red');
       }
     }
 
