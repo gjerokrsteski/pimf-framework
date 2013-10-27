@@ -41,7 +41,7 @@ class Pimf_Controller_Core extends Pimf_Controller_Abstract
 
     $conf = Pimf_Registry::get('conf');
     $app  = 'app/' . $conf['app']['name'] . '/';
-    $root = Pimf_Util_String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+    $root = Pimf_Util_String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
 
     $assets = array(
       $root . $app . '_session/',
@@ -72,8 +72,8 @@ class Pimf_Controller_Core extends Pimf_Controller_Abstract
     echo Pimf_Cli_Color::paint('Secure index.php' . PHP_EOL);
     chmod($root . 'index.php', 0644);
 
-    echo Pimf_Cli_Color::paint('Secure config.php' . PHP_EOL);
-    chmod($root . 'config.php', 0744);
+    echo Pimf_Cli_Color::paint('Secure config.core.php' . PHP_EOL);
+    chmod($root . 'config.core.php', 0744);
 
     echo Pimf_Cli_Color::paint('Secure autoload.core.php' . PHP_EOL);
     chmod($root . 'autoload.core.php', 0644);

@@ -24,7 +24,7 @@
 /**
  * Wrapper for Lightweight Directory Access Protocol and for a access to "Directory Servers"
  *
- * For use please add the following to the end of the config.php file:
+ * For use please add the following to the end of the config.core.php file:
  *
  * <code>
  *

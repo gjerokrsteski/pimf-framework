@@ -62,12 +62,15 @@ final class Pimf_Application
 
     $conf = Pimf_Registry::get('conf');
 
+
+    $root = Pimf_Util_String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+
     If (isset($cli['controller']) && $cli['controller'] == 'core') {
       $prefix     = 'Pimf_';
-      $repository = 'core/Pimf/Controller';
+      $repository = $root.'pimf-framework/core/Pimf/Controller';
     } else {
       $prefix     = Pimf_Util_String::ensureTrailing('_', $conf['app']['name']);
-      $repository = 'app/' . $conf['app']['name'] . '/Controller';
+      $repository = $root.'app/' . $conf['app']['name'] . '/Controller';
     }
 
     $resolver = new Pimf_Resolver(
@@ -106,6 +109,10 @@ final class Pimf_Application
     }
 
     ini_set('default_charset', $config['encoding']);
+
+    // configure necessary things for the application.
+    $registry = new Pimf_Registry();
+    $registry->conf = $config;
 
     if (Pimf_Environment::isWeb()){
       ob_start('mb_output_handler');
@@ -155,9 +162,6 @@ final class Pimf_Application
       }
     }
 
-    // configure necessary things for the application.
-    $registry = new Pimf_Registry();
-
     try {
 
       $registry->env = new Pimf_Environment($server);
@@ -169,7 +173,6 @@ final class Pimf_Application
       $registry->logger = new Pimf_Logger($config['bootstrap']['local_temp_directory']);
       $registry->logger->init();
 
-      $registry->conf   = $config;
 
     } catch (Exception $e) {
       $problems[] = $e->getMessage();

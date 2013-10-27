@@ -6,6 +6,9 @@ class Pimf_LoggerTest extends PHPUnit_Framework_TestCase
   public static function setUpBeforeClass()
   {
     self::$localeStorageDir = dirname(__FILE__) . '/_drafts/';
+
+    Pimf_Registry::set('env', new Pimf_Environment(array('REMOTE_ADDR'=>'localhost.test', 'PHP_SELF'=>'self.test.php')));
+
   }
 
   public static function tearDownAfterClass()

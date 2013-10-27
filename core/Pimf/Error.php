@@ -42,6 +42,7 @@ class Pimf_Error
     $conf = Pimf_Registry::get('conf');
     $msg  = null;
 
+
     if (isset($conf['error']['debug_info']) && $conf['error']['debug_info'] === true) {
       $msg =
         "<html><h2>Untreated Exception</h2>
@@ -55,6 +56,7 @@ class Pimf_Error
       if (Pimf_Environment::isCli()) {
         $msg = Pimf_Util_String::cleanAggressive($msg);
       }
+      die($msg);
     }
 
     Pimf_Util_Header::clear();

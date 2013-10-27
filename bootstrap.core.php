@@ -4,8 +4,6 @@
 | PIMF bootstrap
 |--------------------------------------------------------------------------
 */
-require_once 'autoloader.php';
-require_once 'config.php';
+require_once 'autoload.core.php';
+require_once 'config.core.php';
 require_once 'utils.php';
-
-Pimf_Application::bootstrap($config, $_SERVER);

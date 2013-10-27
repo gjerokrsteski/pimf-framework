@@ -11,7 +11,7 @@
   backupStaticAttributes="false"
   forceCoversAnnotation="false"
   mapTestClassNameToCoveredClassName="false"
-  bootstrap="bootstrap.php">
+  bootstrap="bootstrap.core.php">
 
   <testsuites>
     <testsuite name="Pimf">
@@ -23,7 +23,7 @@
     <whitelist addUncoveredFilesFromWhitelist="true">
       <directory suffix=".php">core</directory>
       <exclude>
-       <file>bootstrap.php</file>
+       <file>bootstrap.core.php</file>
       </exclude>
     </whitelist>
   </filter>

@@ -45,7 +45,10 @@ class Pimf_View implements Pimf_Contracts_Renderable
   {
     $this->data     = new ArrayObject($data, ArrayObject::ARRAY_AS_PROPS);
     $conf           = Pimf_Registry::get('conf');
-    $this->path     = dirname(dirname(dirname(__FILE__))) . '/app/' . $conf['app']['name'] . '/_templates';
+
+    $root = Pimf_Util_String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+
+    $this->path     = $root. '/app/' . $conf['app']['name'] . '/_templates';
     $this->template = (string)$template;
   }
 

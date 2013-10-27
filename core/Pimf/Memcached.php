@@ -19,7 +19,7 @@
  */
 
 /**
- * For use please add the following code to the end of the config.php file:
+ * For use please add the following code to the end of the config.core.php file:
  *
  * <code>
  *

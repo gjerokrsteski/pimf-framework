@@ -41,7 +41,11 @@ class Pimf_Cli
 
      $conf = Pimf_Registry::get('conf');
 
-     foreach (array( 'app/'.$conf['app']['name'].'/Controller/', 'core/Pimf/Controller/' ) as $dir) {
+     $root = dirname(dirname(dirname(dirname(__FILE__))));
+     $coreClr =  $root.'/pimf-framework/core/Pimf/Controller/';
+     $appClr =  $root.'/app/'.$conf['app']['name'].'/Controller/';
+
+     foreach (array( $appClr, $coreClr) as $dir) {
 
        $iterator = new RegexIterator(
          new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir)),
@@ -51,7 +55,7 @@ class Pimf_Cli
 
        foreach (iterator_to_array($iterator, false) as $file) {
          $file = str_replace('\\', '/', current($file));
-         $name = str_replace(array('app/', 'core/'), '', $file);
+         $name = str_replace(array($root.'/pimf-framework/core/', $root.'/app/'), '', $file);
          $name = str_replace('/', '_', $name);
          $name = str_replace('.php', '', $name);
          $classes[] = $name;
