@@ -18,7 +18,7 @@ $config = array(
   | The default environment mode for your application [testing|production]
   |------------------------------------------------------------------------
   */
-  'environment' => 'production',
+  'environment' => 'testing',
 
   /*
   |------------------------------------------------------------------------
@@ -36,13 +36,6 @@ $config = array(
   'timezone' => 'UTC',
 
   /*
-  |--------------------------------------------------------------------------
-  | Is it regular HTTP or secure HTTPS
-  |--------------------------------------------------------------------------
-  */
-  'ssl' => false,
-
-  /*
   |------------------------------------------------------------------------
   | Testing environment settings
   |------------------------------------------------------------------------
@@ -53,7 +46,6 @@ $config = array(
       'database' => ':memory:'
     ),
   ),
-
 
   /*
   |------------------------------------------------------------------------
@@ -66,17 +58,6 @@ $config = array(
       'extensions' => array('pdo', 'pdo_sqlite', 'date', 'reflection', 'session', 'json'),
     ),
     'local_temp_directory' => '/tmp/'
-  ),
-
-  /*
-  |------------------------------------------------------------------------
-  | Settings for the error handling behavior
-  |------------------------------------------------------------------------
-  */
-  'error' => array(
-    'ignore_levels' => array(E_USER_DEPRECATED),
-    'debug_info' => true,
-  	'log' => true,
   ),
 
 );
