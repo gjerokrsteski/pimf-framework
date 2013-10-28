@@ -55,8 +55,9 @@ class Pimf_Cli
 
        foreach (iterator_to_array($iterator, false) as $file) {
          $file = str_replace('\\', '/', current($file));
-         $name = str_replace(array($root.'/pimf-framework/core/', $root.'/app/'), '', $file);
-         $name = str_replace('/', '_', $name);
+         $file = str_replace('/', DIRECTORY_SEPARATOR, $file);
+         $name = str_replace(array($root.DIRECTORY_SEPARATOR.'pimf-framework'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR, $root.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR), '', $file);
+         $name = str_replace(DIRECTORY_SEPARATOR, '_', $name);
          $name = str_replace('.php', '', $name);
          $classes[] = $name;
        }
