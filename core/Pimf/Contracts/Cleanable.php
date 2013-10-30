@@ -18,13 +18,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Contracts;
+
 /**
  * A simply interface to delete all expired data from persistent storage of the instance.
  *
- * @package Pimf_Contracts
+ * @package Contracts
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-interface Pimf_Contracts_Cleanable
+interface Cleanable
 {
   /**
    * Delete all expired instance-data from persistent storage.

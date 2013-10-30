@@ -18,13 +18,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Contracts;
+
 /**
  * A simply interface to give the view-adapters ro re-unite the template an the variables.
  *
- * @package Pimf_Contracts
+ * @package Contracts
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-interface Pimf_Contracts_Reunitable
+interface Reunitable
 {
   /**
    * Puts the template an the variables together.

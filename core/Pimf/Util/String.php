@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,13 +21,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
- * Pimf_Util_String
+ * String
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_String
+class String
 {
   /**
    * Check if a string is UTF-8 encoded.
@@ -158,143 +160,6 @@ class Pimf_Util_String
     }
 
     return true;
-  }
-
-  /**
-   * Function truncates a HTML string, preserving and closing all tags.
-   *
-   * @param string $str The string.
-   * @param integer $textMaxLength Max length.
-   * @param string $postString (Optional) Post string for the concatenation after the cutting.
-   * @param string $encoding (Optional) Which encoding - default is utf-8.
-   * @return string
-   */
-  public static function truncatePreservingTags($str, $textMaxLength, $postString = '...', $encoding = 'UTF-8')
-  {
-    // Complete string length with tags
-    $htmlLength = mb_strlen($str, $encoding);
-    // Cursor position
-    $htmlPos = 0;
-    // Extracted text length without tags
-    $textLength = 0;
-    // Tags that need to closed
-    $closeTag = array();
-
-    if ($htmlLength <= $textMaxLength) {
-      return $str;
-    }
-
-    // Loop through str, start at cursor position
-    for ($i = $htmlPos; $i < $htmlLength; $i++) {
-
-      // Extract multibyte encoded char on cursor position
-      $char = mb_substr($str, $i, 1, $encoding);
-
-      // Check on an angle bracket assuming text following is a tag
-      if ($char == '<') {
-        // Sub cursor position inside the tag (after the first angle bracket)
-        $tagPos = $i +1;
-        // Remember first position inside the tag
-        $tagFirst = $tagPos;
-        // Size of tag (including angle brackets <1234>)
-        $tagSize = 1;
-        // Tag name
-        $tagName = '';
-
-        // Tag is valid ( <tag> OR </tag> )
-        $isTag = true;
-        // Tag is a closing tag </tag>
-        $isClosingTag = false;
-
-        // Loop through text inside the tag until it is closed
-        for ($j = $tagPos; $j < $htmlLength; $j++) {
-
-          // Extract multibyte encoded char on sub cursor position
-          $charTag = mb_substr($str, $j, 1, $encoding);
-
-          // Another opening angle bracket = first angle bracket serves as "smaller as"
-          // Not a valid tag, set mark and break
-          if ($charTag === '<') {
-            $isTag = false;
-            break;
-          }
-          // Seems to be an '<>' entity
-          // Not a valid tag, set mark and break
-          elseif ($tagFirst == $j && $charTag === '>') {
-            $isTag = false;
-            break;
-          }
-          // Closing tag, set mark
-          elseif ($tagFirst == $j && $charTag === '/') {
-            $isClosingTag = true;
-          }
-          // Tag has ended, break
-          elseif ($charTag === '>') {
-            break;
-          }
-          // Remember char as tag name
-          else {
-            $tagName .= $charTag;
-          }
-
-          $tagSize++;
-        }
-
-        // Valid tag
-        if (!empty($isTag)) {
-          // Closing tag </tag>
-          if (!empty($isClosingTag)) {
-            // Remove it from closing array
-            array_pop($closeTag);
-          }
-          // Not a closing tag
-          else {
-            // Remember to close it
-            $closeTag[] = $tagName;
-          }
-
-          // Set cursor position, continue with next char after the tag
-          $i = $i + $tagSize;
-        }
-        // Not a valid tag
-        else {
-          // Set assumed tag size as additional textLength, because it is text
-          $textLength = $textLength + $tagSize;
-          // Set cursor position and reset the last < or > char to start a new check
-          $i = $i + $tagSize -1;
-        }
-      }
-      // Normal char, increase textLength
-      else {
-        $textLength++;
-      }
-
-      // If maximum length reached break
-      if ($textLength >= $textMaxLength) {
-        break;
-      }
-    }
-
-    // Set cursor to new position
-    $htmlPos = $i + 1;
-
-    // Extract preview text from 0 to current cursor position
-    $ret = mb_substr($str, 0, $htmlPos, $encoding);
-
-    // If necessary set placeholder string (before tags get closed)
-    if ($textLength >= $textMaxLength) {
-      $ret .= $postString;
-    }
-
-    // If we are between tags, close them correctly
-    if (count($closeTag)) {
-      foreach (array_reverse($closeTag) as $tag) {
-        $tokens = explode(' ', $tag);
-        $ret .= "</" . $tokens[0] . ">";
-      }
-    }
-
-    return $ret;
   }
 
   /**

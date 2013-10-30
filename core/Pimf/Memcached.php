@@ -18,6 +18,9 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Registry;
+
 /**
  * For use please add the following code to the end of the config.core.php file:
  *
@@ -38,22 +41,22 @@
  *
  * <code>
  *    // Get the Memcache connection and get an item from the cache
- *    $name = Pimf_Memcached::connection()->get('name');
+ *    $name = Memcached::connection()->get('name');
  *
  *    // Get the Memcache connection and place an item in the cache
- *    Pimf_Memcached::connection()->set('name', 'Robin');
+ *    Memcached::connection()->set('name', 'Robin');
  *
  *		// Get an item from the Memcache instance
- *		$name = Pimf_Memcached::get('name');
+ *		$name = Memcached::get('name');
  *
  *		// Store data on the Memcache server
- *		Pimf_Memcached::set('name', 'Robin');
+ *		Memcached::set('name', 'Robin');
  * </code>
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Memcached
+class Memcached
 {
 	/**
 	 * @var Memcached
@@ -66,7 +69,7 @@ class Pimf_Memcached
   public static function connection()
   {
     if (static::$connection === null) {
-      $conf = Pimf_Registry::get('conf');
+      $conf               = Registry::get('conf');
       static::$connection = static::connect(
         $conf['cache']['servers']
       );
@@ -83,14 +86,14 @@ class Pimf_Memcached
    */
   protected static function connect(array $servers)
   {
-    $memcache = new Memcached();
+    $memcache = new \Memcached();
 
     foreach ($servers as $server) {
       $memcache->addServer($server['host'], $server['port'], $server['weight']);
     }
 
     if ($memcache->getVersion() === false) {
-      throw new RuntimeException('could not establish memcached connection!');
+      throw new \RuntimeException('could not establish memcached connection!');
     }
 
     return $memcache;

@@ -18,22 +18,25 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session\Storages;
+use Pimf\Session\Storages\Storage;
+
 /**
- * @package Pimf_Session_Storages
+ * @package Session_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session_Storages_Redis extends Pimf_Session_Storages_Storage
+class Redis extends Storage
 {
   /**
    * The Redis cache storage instance.
-   * @var Pimf_Cache_Storages_Redis
+   * @var _Redis
    */
   protected $redis;
 
   /**
-   * @param Pimf_Cache_Storages_Redis $redis
+   * @param Redis $redis
    */
-  public function __construct(Pimf_Cache_Storages_Redis $redis)
+  public function __construct(\Pimf\Redis $redis)
   {
     $this->redis = $redis;
   }

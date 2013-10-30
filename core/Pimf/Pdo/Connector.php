@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Pdo
+ * Database
  *
  * PHP Version 5
  *
@@ -18,30 +18,32 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Pdo;
+
 /**
  * Abstract class for connections and connection management.
  *
- * @package Pimf_Pdo
+ * @package Database
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class Pimf_Pdo_Connector
+abstract class Connector
 {
   /**
    * The PDO connection options.
    * @var array
    */
   protected $options = array(
-    PDO::ATTR_CASE              => PDO::CASE_LOWER,
-    PDO::ATTR_ERRMODE           => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_ORACLE_NULLS      => PDO::NULL_NATURAL,
-    PDO::ATTR_STRINGIFY_FETCHES => false,
-    PDO::ATTR_EMULATE_PREPARES  => false,
+    \PDO::ATTR_CASE              => \PDO::CASE_LOWER,
+    \PDO::ATTR_ERRMODE           => \PDO::ERRMODE_EXCEPTION,
+    \PDO::ATTR_ORACLE_NULLS      => \PDO::NULL_NATURAL,
+    \PDO::ATTR_STRINGIFY_FETCHES => false,
+    \PDO::ATTR_EMULATE_PREPARES  => false,
   );
 
   /**
    * Establish a PDO database connection.
    * @param array $config
-   * @return Pimf_PDO
+   * @return PDO
    */
   abstract public function connect(array $config);
 

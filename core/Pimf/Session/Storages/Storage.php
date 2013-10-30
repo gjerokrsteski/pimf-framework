@@ -18,11 +18,14 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session\Storages;
+use Pimf\Util\String;
+
 /**
- * @package Pimf_Session_Storages
+ * @package Session_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class Pimf_Session_Storages_Storage
+abstract class Storage
 {
   /**
    * Load a session from storage by a given ID.
@@ -77,13 +80,13 @@ abstract class Pimf_Session_Storages_Storage
     $session = array();
 
     // Just return any string since the Cookie storage has no idea.
-    if ($this instanceof Pimf_Session_Storages_Cookie) {
-      return Pimf_Util_String::random(40);
+    if ($this instanceof \Pimf\Session\Storages\Cookie) {
+      return String::random(40);
     }
 
     // We'll find an random ID here.
     do {
-      $session = $this->load($id = Pimf_Util_String::random(40));
+      $session = $this->load($id = String::random(40));
     } while ($session !== null);
 
     return $id;

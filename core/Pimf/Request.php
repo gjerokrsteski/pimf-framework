@@ -18,31 +18,34 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Param;
+
 /**
  * Request Manager - for controlled access to the global state of the world.
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Request
+class Request
 {
   /**
-   * @var Pimf_Param
+   * @var Param
    */
   public static $postData;
 
   /**
-   * @var Pimf_Param
+   * @var Param
    */
   public static $getData;
 
   /**
-   * @var Pimf_Param
+   * @var Param
    */
   public static $cookieData;
 
   /**
-   * @var Pimf_Param
+   * @var Param
    */
   public static $cliData;
 
@@ -54,15 +57,15 @@ class Pimf_Request
    */
   public function __construct(array $getData, array $postData = array(), array $cookieData = array(), array $cliData = array())
   {
-    static::$getData    = new Pimf_Param($this->stripSlashesIfMagicQuotes($getData));
-    static::$postData   = new Pimf_Param($this->stripSlashesIfMagicQuotes($postData));
-    static::$cookieData = new Pimf_Param($cookieData);
-    static::$cliData    = new Pimf_Param($this->stripSlashesIfMagicQuotes($cliData));
+    static::$getData    = new Param($this->stripSlashesIfMagicQuotes($getData));
+    static::$postData   = new Param($this->stripSlashesIfMagicQuotes($postData));
+    static::$cookieData = new Param($cookieData);
+    static::$cliData    = new Param($this->stripSlashesIfMagicQuotes($cliData));
   }
 
   /**
    * HTTP GET variables.
-   * @return Pimf_Param
+   * @return Param
    */
   public function fromGet()
   {
@@ -71,7 +74,7 @@ class Pimf_Request
 
   /**
    * CLI arguments passed to script.
-   * @return Pimf_Param
+   * @return Param
    */
   public function fromCli()
   {
@@ -80,7 +83,7 @@ class Pimf_Request
 
   /**
    * HTTP POST variables.
-   * @return Pimf_Param
+   * @return Param
    */
   public function fromPost()
   {
@@ -89,7 +92,7 @@ class Pimf_Request
 
   /**
    * HTTP Cookies.
-   * @return Pimf_Param
+   * @return Param
    */
   public function fromCookie()
   {
@@ -125,7 +128,7 @@ class Pimf_Request
   {
     return is_array($rawData) ? array_map(
       array(
-        'self',
+        '\Pimf\Request',
         'stripSlashes'
       ), $rawData
     ) : stripslashes($rawData);

@@ -18,21 +18,24 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session\Storages;
+use Pimf\Session\Storages\Storage;
+
 /**
- * @package Pimf_Session_Storages
+ * @package Session_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session_Storages_Apc extends Pimf_Session_Storages_Storage {
+class Apc extends Storage {
 
 	/**
-	 * @var Pimf_Cache_Storages_Apc
+	 * @var Cache_Storages_Apc
 	 */
 	private $apc;
 
   /**
-   * @param Pimf_Cache_Storages_Apc $apc
+   * @param Cache_Storages_Apc $apc
    */
-  public function __construct(Pimf_Cache_Storages_Apc $apc)
+  public function __construct(\Pimf\Cache\Storages\Apc $apc)
 	{
 		$this->apc = $apc;
 	}

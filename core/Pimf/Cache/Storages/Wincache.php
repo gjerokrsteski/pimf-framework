@@ -18,11 +18,14 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Cache\Storages;
+use Pimf\Cache\Storages\Storage;
+
 /**
- * @package Pimf_Cache_Storages
+ * @package Cache_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cache_Storages_Wincache extends Pimf_Cache_Storages_Storage
+class Wincache extends Storage
 {
   /**
    * The cache key from the cache configuration file.
@@ -56,7 +59,7 @@ class Pimf_Cache_Storages_Wincache extends Pimf_Cache_Storages_Storage
    *
    * <code>
    *    // Put an item in the cache for 15 minutes
-   *    Pimf_Cache::put('name', 'Robin', 15);
+   *    Cache::put('name', 'Robin', 15);
    * </code>
    *
    * @param string $key

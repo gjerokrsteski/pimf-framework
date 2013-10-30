@@ -3,12 +3,12 @@ class FluentTest extends PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {
-    new Pimf_Util_Fluent(array( 'name' => 'Lammy' ));
+    new \Pimf\Util\Fluent(array( 'name' => 'Lammy' ));
   }
 
   public function testUsingMagic()
   {
-    $person = new Pimf_Util_Fluent();
+    $person = new \Pimf\Util\Fluent();
 
     $person->name('Lammy')->age(25)->nullable();
 
@@ -19,7 +19,7 @@ class FluentTest extends PHPUnit_Framework_TestCase
 
   public function testUsingAsArrayMagic()
   {
-    $person = new Pimf_Util_Fluent();
+    $person = new \Pimf\Util\Fluent();
 
     $person->name('Lammy')->age(25)->nullable();
 

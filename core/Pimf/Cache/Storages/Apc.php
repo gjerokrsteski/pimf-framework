@@ -18,11 +18,14 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Cache\Storages;
+use Pimf\Cache\Storages\Storage;
+
 /**
- * @package Pimf_Cache_Storages
+ * @package Cache_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cache_Storages_Apc extends Pimf_Cache_Storages_Storage
+class Apc extends Storage
 {
   /**
    * The cache key from the cache configuration file.

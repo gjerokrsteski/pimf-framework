@@ -18,6 +18,8 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+
 /**
  * Provides a great way to build de-coupled applications and allows plug-ins to tap
  * into the core of your application without modifying the code.
@@ -25,7 +27,7 @@
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Event
+class Event
 {
   /**
    * All registered events.
@@ -60,10 +62,10 @@ class Pimf_Event
    *
    * <code>
    *    // register a callback for the "start" event
-   *    Pimf_Event::listen('start', function() {return 'Started!';});
+   *    Event::listen('start', function() {return 'Started!';});
    *
    *    // register an object instance callback for the given event
-   *    Pimf_Event::listen('event', array($object, 'method'));
+   *    Event::listen('event', array($object, 'method'));
    * </code>
    *
    * @param string $event
@@ -124,10 +126,10 @@ class Pimf_Event
    *
    * <code>
    *    // fire the "start" event
-   *    $response = Pimf_Event::first('start');
+   *    $response = Event::first('start');
    *
    *    // fire the "start" event passing an array of parameters
-   *    $response = Pimf_Event::first('start', array('Pimf', 'Framework'));
+   *    $response = Event::first('start', array('Pimf', 'Framework'));
    * </code>
    *
    * @param string $event
@@ -178,13 +180,13 @@ class Pimf_Event
    *
    * <code>
    *    // fire the "start" event
-   *    $responses = Pimf_Event::fire('start');
+   *    $responses = Event::fire('start');
    *
    *    // fire the "start" event passing an array of parameters
-   *    $responses = Pimf_Event::fire('start', array('Pimf', 'Framework'));
+   *    $responses = Event::fire('start', array('Pimf', 'Framework'));
    *
    *    // fire multiple events with the same parameters
-   *    $responses = Pimf_Event::fire(array('start', 'loading'), $parameters);
+   *    $responses = Event::fire(array('start', 'loading'), $parameters);
    * </code>
    *
    * @param string|array $events

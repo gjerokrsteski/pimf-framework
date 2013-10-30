@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,31 +21,34 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+use Pimf\Util\File;
+
 /**
  * A file uploaded through a form.
  *
  * <code>
  *
  *   // Create a file instance.
- *   $upload = new Pimf_Util_Uploaded(
+ *   $upload = new Uploaded(
  *     $_FILES['tmp_name'], $_FILES['name'], $_FILES['type'], $_FILES['size'], $_FILES['error']
  *   );
  *
  *   // ... OR ..
  *
  *   // Create an instance using the factory method for more security.
- *   $upload = Pimf_Util_Uploaded::factory($_FILES);
+ *   $upload = Uploaded::factory($_FILES);
  *
- *   if ($upload instanceof Pimf_Util_Uploaded) {
+ *   if ($upload instanceof Uploaded) {
  *     $upload->move('path/to/your/images/dir', $upload->getClientOriginalName());
  *   }
  *
  * </code>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Uploaded extends Pimf_Util_File
+class Uploaded extends File
 {
   /**
    * Whether the test mode is activated.
@@ -88,7 +91,7 @@ class Pimf_Util_Uploaded extends Pimf_Util_File
    *
    * <code>
    *   // Create a file instance.
-   *   $file = new Pimf_Util_Uploaded(
+   *   $file = new Uploaded(
    *     $_FILES['tmp_name'], $_FILES['name'], $_FILES['type'], $_FILES['size'], $_FILES['error']
    *   );
    * </code>
@@ -105,7 +108,7 @@ class Pimf_Util_Uploaded extends Pimf_Util_File
   public function __construct($path, $name, $mime = null, $size = null, $error = null, $test = false)
   {
     if (!ini_get('file_uploads')) {
-      throw new RuntimeException(
+      throw new \RuntimeException(
         'Unable to create file because "file_uploads" is disabled in your php.ini'
       );
     }
@@ -124,12 +127,12 @@ class Pimf_Util_Uploaded extends Pimf_Util_File
    *
    * <code>
    *   // Create an instance using the factory method.
-   *   $file = Pimf_Util_Uploaded::factory($_FILES);
+   *   $file = Uploaded::factory($_FILES);
    * </code>
    *
    * @param mixed $file A $_FILES multi-dimensional array of uploaded file information.
    * @param bool $test Whether the test mode is active for essayer unit-testing.
-   * @return null|Pimf_Util_Uploaded
+   * @return null|Uploaded
    */
   public static function factory(array $file, $test = false)
   {
@@ -220,7 +223,7 @@ class Pimf_Util_Uploaded extends Pimf_Util_File
    *
    * @param string $dir
    * @param null $name
-   * @return Pimf_Util_File
+   * @return Util_File
    * @throws RuntimeException If the file has not been uploaded via Http or can not move the file.
    */
   public function move($dir, $name = null)
@@ -237,7 +240,7 @@ class Pimf_Util_Uploaded extends Pimf_Util_File
 
         if (!@move_uploaded_file($this->getPathname(), $target)) {
           $error = error_get_last();
-          throw new RuntimeException(
+          throw new \RuntimeException(
             "Could not move the file {$this->getPathname()} to $target ({$error['message']})"
           );
         }
@@ -248,7 +251,7 @@ class Pimf_Util_Uploaded extends Pimf_Util_File
       }
     }
 
-    throw new RuntimeException("The file {$this->getPathname()} has not been uploaded via Http");
+    throw new \RuntimeException("The file {$this->getPathname()} has not been uploaded via Http");
   }
 
   /**

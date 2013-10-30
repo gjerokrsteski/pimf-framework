@@ -1,14 +1,14 @@
 <?php
-class Pimf_SessionTest extends PHPUnit_Framework_TestCase
+class SessionTest extends PHPUnit_Framework_TestCase
 {
 
   #test configuration
 
   public function setUp()
   {
-    Pimf_Session::$instance = null;
+    \Pimf\Session::$instance = null;
 
-    Pimf_Registry::set(
+    \Pimf\Registry::set(
       'conf', array(
         'app'     => array( 'key' => 'rocker' ),
         'session' => array(
@@ -28,7 +28,7 @@ class Pimf_SessionTest extends PHPUnit_Framework_TestCase
 
   public function tearDown()
   {
-    Pimf_Registry::set(
+    \Pimf\Registry::set(
         'conf', array(
           'app'     => array( 'key' => 'rocker' ),
           'session' => array(
@@ -49,20 +49,20 @@ class Pimf_SessionTest extends PHPUnit_Framework_TestCase
   #test helpers
 
   /**
-   * @return Pimf_Session_Payload
+   * @return Session_Payload
    */
   protected function getPayload()
   {
-    return new Pimf_Session_Payload($this->getMockStorage());
+    return new \Pimf\Session\Payload($this->getMockStorage());
   }
 
   /**
-   * @return Pimf_Session_Storages_Storage
+   * @return Session_Storages_Storage
    */
   protected function getMockStorage()
   {
     $mock = $this->getMock(
-      'Pimf_Session_Storages_Storage', array(
+      '\\Pimf\\Session\\Storages\\Storage', array(
         'id',
         'load',
         'save',
@@ -70,7 +70,7 @@ class Pimf_SessionTest extends PHPUnit_Framework_TestCase
       )
     );
 
-    $mock->expects($this->any())->method('id')->will($this->returnValue(Pimf_Util_String::random(40)));
+    $mock->expects($this->any())->method('id')->will($this->returnValue(\Pimf\Util\String::random(40)));
 
     return $mock;
   }
@@ -103,16 +103,16 @@ class Pimf_SessionTest extends PHPUnit_Framework_TestCase
     $this->assertTrue(isset($payload->session['id']));
     $this->assertEquals(array(), $payload->session['data'][':new:']);
     $this->assertEquals(array(), $payload->session['data'][':old:']);
-    $this->assertTrue(isset($payload->session['data'][Pimf_Session::CSRF]));
+    $this->assertTrue(isset($payload->session['data'][\Pimf\Session::CSRF]));
   }
 
   #unit tests
 
   public function testStartedMethodIndicatesIfSessionIsStarted()
   {
-    $this->assertFalse(Pimf_Session::started());
-    Pimf_Session::$instance = 'rocker';
-    $this->assertTrue(Pimf_Session::started());
+    $this->assertFalse(\Pimf\Session::started());
+    \Pimf\Session::$instance = 'rocker';
+    $this->assertTrue(\Pimf\Session::started());
   }
 
   public function testLoadMethodCreatesNewSessionWithNullIDGiven()
@@ -260,7 +260,7 @@ class Pimf_SessionTest extends PHPUnit_Framework_TestCase
     $session          = $this->getSession();
     $payload->session = $session;
     $payload->exists  = true;
-    $conf             = Pimf_Registry::get('conf');
+    $conf             = \Pimf\Registry::get('conf');
 
     $expect                  = $session;
     $expect['data'][':old:'] = $session['data'][':new:'];
@@ -280,14 +280,14 @@ class Pimf_SessionTest extends PHPUnit_Framework_TestCase
 
     $payload          = $this->getPayload();
     $payload->storage = $this->getMock(
-      'Pimf_Session_Storages_File', array(
+      '\\Pimf\\Session\\Storages\\File', array(
         'save',
         'clean'
       ), array( null )
     );
 
     $payload->session = $this->getSession();
-    $conf             = Pimf_Registry::get('conf');
+    $conf             = \Pimf\Registry::get('conf');
     $expiration       = time() - ($conf['session']['lifetime'] * 60);
 
     // Here we set the time to the expected expiration minus 5 seconds
@@ -303,14 +303,14 @@ class Pimf_SessionTest extends PHPUnit_Framework_TestCase
 
     $payload          = $this->getPayload();
     $payload->storage = $this->getMock(
-      'Pimf_Session_Storages_File', array(
+      '\\Pimf\\Session\\Storages\\File', array(
         'save',
         'clean'
       ), array( null )
     );
 
     $payload->session = $this->getSession();
-    $conf             = Pimf_Registry::get('conf');
+    $conf             = \Pimf\Registry::get('conf');
     $expiration       = time() - ($conf['session']['lifetime'] * 60);
 
     $payload->storage
@@ -322,10 +322,9 @@ class Pimf_SessionTest extends PHPUnit_Framework_TestCase
 
   public function testCleanerShouldntBeCalledIfStorageIsntCleaner()
   {
-
     $payload          = $this->getPayload();
     $payload->storage = $this->getMock(
-      'Pimf_Session_Storages_Apc', array(
+      '\\Pimf\\Session\\Storages\\Apc', array(
         'save',
         'clean'
       ), array(), '', false
@@ -344,13 +343,13 @@ class Pimf_SessionTest extends PHPUnit_Framework_TestCase
     $payload->session = $this->getSession();
     $payload->save();
 
-    $conf = Pimf_Registry::get('conf');
+    $conf = \Pimf\Registry::get('conf');
 
-    $this->assertTrue(isset(Pimf_Cookie::$jar[$conf['session']['cookie']]));
+    $this->assertTrue(isset(\Pimf\Cookie::$jar[$conf['session']['cookie']]));
 
-    $cookie = Pimf_Cookie::$jar[$conf['session']['cookie']];
+    $cookie = \Pimf\Cookie::$jar[$conf['session']['cookie']];
 
-    $this->assertEquals(Pimf_Cookie::hash('rocker') . '+rocker', $cookie['value']);
+    $this->assertEquals(\Pimf\Cookie::hash('rocker') . '+rocker', $cookie['value']);
     $this->assertEquals($conf['session']['domain'], $cookie['domain']);
     $this->assertEquals($conf['session']['path'], $cookie['path']);
     $this->assertEquals($conf['session']['secure'], $cookie['secure']);

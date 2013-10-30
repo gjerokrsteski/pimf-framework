@@ -18,12 +18,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session\Storages;
+use Pimf\Session\Storages\Storage, Pimf\Util\Crypter;
+
 /**
- * @package Pimf_Session_Storages
+ * @package Session_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session_Storages_Cookie extends Pimf_Session_Storages_Storage {
-
+class Cookie extends Storage
+{
 	/**
 	 * The name of the cookie used to store the session payload.
 	 * @var string
@@ -37,10 +40,10 @@ class Pimf_Session_Storages_Cookie extends Pimf_Session_Storages_Storage {
 	 */
   public function load($id)
   {
-    if (Pimf_Cookie::has(static::payload)) {
+    if (Cookie::has(static::payload)) {
       return unserialize(
-        Pimf_Util_Crypter::decrypt(
-          Pimf_Cookie::get(static::payload)
+        Crypter::decrypt(
+          Cookie::get(static::payload)
         )
       );
     }
@@ -56,7 +59,7 @@ class Pimf_Session_Storages_Cookie extends Pimf_Session_Storages_Storage {
 	{
 		extract($config, EXTR_SKIP);
 
-    Pimf_Cookie::put(static::payload, Pimf_Util_Crypter::encrypt(serialize($session)), $lifetime, $path, $domain);
+    Cookie::put(static::payload, Crypter::encrypt(serialize($session)), $lifetime, $path, $domain);
 	}
 
   /**
@@ -64,6 +67,6 @@ class Pimf_Session_Storages_Cookie extends Pimf_Session_Storages_Storage {
    */
   public function delete($id)
 	{
-    Pimf_Cookie::forget(static::payload);
+    Cookie::forget(static::payload);
 	}
 }

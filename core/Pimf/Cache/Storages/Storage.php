@@ -18,11 +18,13 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Cache\Storages;
+
 /**
- * @package Pimf_Cache_Storages
+ * @package Cache_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class Pimf_Cache_Storages_Storage
+abstract class Storage
 {
   /**
    * Determine if an item exists in the cache.
@@ -39,10 +41,10 @@ abstract class Pimf_Cache_Storages_Storage
    *
    * <code>
    *    // Get an item from the cache storage
-   *    $name = Pimf_Cache::storage('name');
+   *    $name = Cache::storage('name');
    *
    *    // Return a default value if the requested item isn't cached
-   *    $name = Pimf_Cache::get('name', 'Robin');
+   *    $name = Cache::get('name', 'Robin');
    * </code>
    *
    * @param $key
@@ -66,7 +68,7 @@ abstract class Pimf_Cache_Storages_Storage
    *
    * <code>
    *    // Put an item in the cache for 15 minutes
-   *    Pimf_Cache::put('name', 'Robin', 15);
+   *    Cache::put('name', 'Robin', 15);
    * </code>
    *
    * @param string $key
@@ -81,10 +83,10 @@ abstract class Pimf_Cache_Storages_Storage
    *
    * <code>
    *    // Get an item from the cache, or cache a value for 15 minutes
-   *    $name = Pimf_Cache::remember('name', 'Robin', 15);
+   *    $name = Cache::remember('name', 'Robin', 15);
    *
    *    // Use a closure for deferred execution
-   *    $count = Pimf_Cache::remember('count', function() { return User::count(); }, 15);
+   *    $count = Cache::remember('count', function() { return User::count(); }, 15);
    * </code>
    *
    * @param string $key

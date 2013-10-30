@@ -18,6 +18,9 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Cache\Storages;
+use Pimf\Cache\Storages\Storage;
+
 /**
  * This class provides the functionality required to store
  * and retrieve PHP strings, integers or arrays.
@@ -27,10 +30,10 @@
  * to matter about the size of the cache-file. It depends on the free
  * space of your disk.
  *
- * @package Pimf_Cache_Storages
+ * @package Cache_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cache_Storages_Dba extends Pimf_Cache_Storages_Storage
+class Dba extends Storage
 {
   /**
    * @var resource
@@ -74,13 +77,13 @@ class Pimf_Cache_Storages_Dba extends Pimf_Cache_Storages_Storage
   public function __construct($file, $handler = 'flatfile', $mode = 'c', $persistently = true)
   {
     if (false === extension_loaded('dba')) {
-      throw new RuntimeException(
+      throw new \RuntimeException(
         'The DBA extension is required for this wrapper, but the extension is not loaded'
       );
     }
 
     if (false === in_array($handler, dba_handlers(false))) {
-      throw new RuntimeException(
+      throw new \RuntimeException(
         'The ' . $handler . ' handler is required for the DBA extension, but the handler is not installed'
       );
     }

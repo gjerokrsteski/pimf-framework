@@ -18,13 +18,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+
 /**
  * Logger with common logging options into a file.
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Logger
+class Logger
 {
   /**
    * @var resource
@@ -88,11 +90,11 @@ class Pimf_Logger
     }
 
     if (!is_dir($this->localeStorageDir)) {
-      throw new RuntimeException('log_dir must be a directory ' . $this->localeStorageDir);
+      throw new \RuntimeException('log_dir must be a directory ' . $this->localeStorageDir);
     }
 
     if (!is_writable($this->localeStorageDir)) {
-      throw new RuntimeException('log_dir is not writable ' . $this->localeStorageDir);
+      throw new \RuntimeException('log_dir is not writable ' . $this->localeStorageDir);
     }
 
     if (true === $this->trailingSeparator) {
@@ -102,27 +104,27 @@ class Pimf_Logger
     $this->fileHandle = fopen($this->localeStorageDir . $this->logFileName, "at+");
 
     if ($this->fileHandle === false) {
-      throw new RuntimeException("failed to obtain a handle to log file '" . $this->localeStorageDir . $this->logFileName  . "'");
+      throw new \RuntimeException("failed to obtain a handle to log file '" . $this->localeStorageDir . $this->logFileName  . "'");
     }
 
     $warningLogFile          = $this->localeStorageDir . "pimf-warnings.txt";
     $this->warningFileHandle = fopen($warningLogFile, "at+");
 
     if ($this->warningFileHandle === false) {
-      throw new RuntimeException("failed to obtain a handle to warning log file '" . $warningLogFile . "'");
+      throw new \RuntimeException("failed to obtain a handle to warning log file '" . $warningLogFile . "'");
     }
 
     $errorLogFile          = $this->localeStorageDir . "pimf-errors.txt";
     $this->errorFileHandle = fopen($errorLogFile, "at+");
 
     if ($this->errorFileHandle === false) {
-      throw new RuntimeException("failed to obtain a handle to error log file '" . $errorLogFile . "'");
+      throw new \RuntimeException("failed to obtain a handle to error log file '" . $errorLogFile . "'");
     }
   }
 
   /**
    * @param string $msg
-   * @return Pimf_Logger
+   * @return Logger
    */
   public function debug($msg)
   {
@@ -135,7 +137,7 @@ class Pimf_Logger
 
   /**
    * @param string $msg
-   * @return Pimf_Logger
+   * @return Logger
    */
   public function warn($msg)
   {
@@ -148,7 +150,7 @@ class Pimf_Logger
 
   /**
    * @param string $msg
-   * @return Pimf_Logger
+   * @return Logger
    */
   public function error($msg)
   {
@@ -159,7 +161,7 @@ class Pimf_Logger
 
   /**
    * @param string $msg
-   * @return Pimf_Logger
+   * @return Logger
    */
   public function info($msg)
   {
@@ -191,7 +193,7 @@ class Pimf_Logger
       }
     } else if ($this->fileHandle !== false) {
       if (fwrite($this->fileHandle, $textMessage) === false) {
-        throw new RuntimeException("There was an error writing to log file.");
+        throw new \RuntimeException("There was an error writing to log file.");
       }
     }
   }
@@ -220,12 +222,12 @@ class Pimf_Logger
    */
   private function formatMessage($message, $severity)
   {
-    $registry = new Pimf_Registry();
+    $registry = new Registry();
 
     $REMOTEADDR = $registry->env->getIp();
     $PHPSELF    = $registry->env->getSelf();
 
-    $msg = date("m-d-y") . " " . date("G:i:s") . " ";
+    $msg = date("m-d-Y") . " " . date("G:i:s") . " ";
     $msg .= $registry->env->getIp();
 
     $IPLength       = strlen($REMOTEADDR);

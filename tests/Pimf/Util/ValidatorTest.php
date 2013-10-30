@@ -15,13 +15,13 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
       'number'       => 12,
       'car'          => 'ferrari',
       'monitor'      => 'sonyT2000',
-      'date'         => '12/12/2040',
+      'date'         => '1999-12-13',
       'ip-indonesia' => '203.161.24.74',
       'ip-usa'       => '4.59.119.22',
       'some-url'     => 'https://travis-ci.org/gjerokrsteski/pimf',
     );
 
-    $valid = new Pimf_Util_Validator(new Pimf_Param($request));
+    $valid = new \Pimf\Util\Validator(new \Pimf\Param($request));
 
     $this->assertTrue($valid->length("lname", "<", 15), 'on length validator');
 
@@ -49,7 +49,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     $this->assertTrue($valid->digit("age"), 'on digit validator');
 
-    $this->assertTrue($valid->date("date", "mm/dd/yyyy"), 'on date validator');
+    $this->assertTrue($valid->date("date", "Y-m-d"), 'on date validator');
 
     $this->assertTrue($valid->ip('ip-indonesia'), 'on ip validator');
     $this->assertTrue($valid->ip('ip-usa'), 'on ip validator');
@@ -63,7 +63,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
   public function testSettingInvalidData()
   {
-    $valid = new Pimf_Util_Validator(new Pimf_Param(array()));
+    $valid = new \Pimf\Util\Validator(new \Pimf\Param(array()));
 
     $this->assertFalse($valid->length("lname", "<", 0), 'on length validator');
 
@@ -91,7 +91,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     $this->assertFalse($valid->alphaNumeric("monitor"), 'on alpha-num validator');
 
-    $this->assertFalse($valid->date("date", "mm/dd/yyyy"), 'on date validator');
+    $this->assertFalse($valid->date("date", "Y-m-d"), 'on date validator');
 
     $this->assertFalse($valid->ip('ip-indonesia'), 'on ip validator');
     $this->assertFalse($valid->ip('ip-usa'), 'on ip validator');
@@ -106,20 +106,20 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     $attributes = array(
       'fname'    => 'conan',
       'age'      => 33,
-      'birth'    => '12-12-2040',
+      'birth'    => '1888-11-25',
       'monitor'  => 'sonyT2000',
     );
 
     $rules = array(
       'fname'   => 'alpha|length[>,0]|lengthBetween[1,9]',
       'age'     => 'digit|value[>,18]|value[=,33]',
-      'birth'   => 'length[>,0]|date[mm-dd-yyyy]',
+      'birth'   => 'length[>,0]|date[Y-m-d]',
       'monitor' => 'alphaNumeric'
     );
 
-    $validator = Pimf_Util_Validator::factory($attributes, $rules);
+    $validator = \Pimf\Util\Validator::factory($attributes, $rules);
 
-    $this->assertEmpty($validator->getErrors());
-    $this->assertEmpty($validator->getErrorMessages());
+    $this->assertEmpty($msg = $validator->getErrors(), 'with validator errors '.print_r($msg,true));
+    $this->assertEmpty($msg = $validator->getErrorMessages(), 'with validator error messages'.print_r($msg,true));
   }
 }

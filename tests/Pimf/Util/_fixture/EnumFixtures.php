@@ -1,5 +1,9 @@
 <?php
-class WeekDays extends Pimf_Util_Enum
+namespace Fixture;
+
+use Pimf\Util\Enum;
+
+class WeekDays extends Enum
 {
   const __default = self::Monday;
   const Monday    = 1;
@@ -11,7 +15,7 @@ class WeekDays extends Pimf_Util_Enum
   const Sunday    = 7;
 }
 
-class State extends Pimf_Util_Enum
+class State extends Enum
 {
   const __default = self::Active;
   const Active    = 1;

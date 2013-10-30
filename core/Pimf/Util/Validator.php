@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,13 +21,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
- * Pimf_Util_Validator
+ * Validator
  *
- * @package Pimf_Util
+ * @package Util
  * @author  Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Validator
+class Validator
 {
   /**
    * @var bool
@@ -45,14 +47,14 @@ class Pimf_Util_Validator
   protected $errors = array();
 
   /**
-   * @var Pimf_Param
+   * @var Param
    */
   protected $attributes;
 
   /**
-   * @param Pimf_Param $attributes
+   * @param Param $attributes
    */
-  public function __construct(Pimf_Param $attributes)
+  public function __construct(\Pimf\Param $attributes)
   {
     $this->attributes = $attributes;
   }
@@ -69,18 +71,18 @@ class Pimf_Util_Validator
    *     'age'     => 'digit|value[>,18]|value[=,33]',
    *   );
    *
-   *  $validator = Pimf_Util_Validator::factory($attributes, $rules);
+   *  $validator = Validator::factory($attributes, $rules);
    *
    * </code>
    *
    * @param array $attributes
-   * @param array|Pimf_Param $rules
-   * @return Pimf_Util_Validator
+   * @param array|Param $rules
+   * @return Validator
    */
   public static function factory($attributes, array $rules)
   {
-    if (! ($attributes instanceof Pimf_Param)){
-      $attributes = new Pimf_Param((array)$attributes);
+    if (! ($attributes instanceof \Pimf\Param)){
+      $attributes = new \Pimf\Param((array)$attributes);
     }
 
     $validator = new self($attributes);
@@ -498,22 +500,16 @@ class Pimf_Util_Validator
   {
     $fieldValue = $this->attributes->get($field);
 
-    if ($fieldValue === null || strtotime($fieldValue) === false) {
-      $this->setError($field, __FUNCTION__);
-      return false;
-    }
+    try {
+      $date = new \DateTime($fieldValue);
 
-    $date = date_parse($fieldValue);
+      if ($fieldValue === $date->format($format)) {
+        $this->resetValid();
+        return true;
+      }
 
-    if (checkdate($date['month'], $date['day'], $date['year'])) {
-      $this->resetValid();
-      return true;
-    }
-
-    $parsed = date_parse_from_format($format, $fieldValue);
-    if ($parsed['error_count'] === 0) {
-      $this->resetValid();
-      return true;
+    } catch(\Exception $e) {
+      // do nothing
     }
 
     $this->resetValid();

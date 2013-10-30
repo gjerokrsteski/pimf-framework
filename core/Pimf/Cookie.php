@@ -18,31 +18,34 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Registry, Pimf\Request;
+
 /**
  * Using the cookie
  *
  * <code>
  *    // Get the value of the "favorite" cookie
- *    $favorite = Pimf_Cookie::get('favorite');
+ *    $favorite = Cookie::get('favorite');
  *
  *    // Get the value of a cookie or return a default value
- *    $favorite = Pimf_Cookie::get('framework', 'Pimf');
+ *    $favorite = Cookie::get('framework', 'Pimf');
  *
  *    // Set the value of the "favorite" cookie
- *    Pimf_Cookie::put('favorite', 'Pimf');
+ *    Cookie::put('favorite', 'Pimf');
  *
  *    // Set the value of the "favorite" cookie for twenty minutes
- *    Pimf_Cookie::put('favorite', 'Pimf', 20);
+ *    Cookie::put('favorite', 'Pimf', 20);
  *
  *    // Set a cookie that should last one year
- *    Pimf_Cookie::forever('favorite', 'Blue');
+ *    Cookie::forever('favorite', 'Blue');
  *
  * </code>
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cookie
+class Cookie
 {
   /**
    * How long is forever (in minutes)?
@@ -79,7 +82,7 @@ class Pimf_Cookie
       return static::parse(static::$jar[$name]['value']);
     }
 
-    $cookie = Pimf_Request::$cookieData;
+    $cookie = Request::$cookieData;
 
     if (!is_null($value = $cookie->get($name))) {
       return static::parse($value);
@@ -108,10 +111,10 @@ class Pimf_Cookie
     $value = static::hash($value) . '+' . $value;
 
     // If we are attempting to send a secure cookie over the insecure HTTP.
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
     if ($secure === true and $conf['ssl'] === false) {
-      throw new RuntimeException("Attempting to set secure cookie over HTTP!");
+      throw new \RuntimeException("Attempting to set secure cookie over HTTP!");
     }
 
     static::$jar[$name] = compact('name', 'value', 'expiration', 'path', 'domain', 'secure');
@@ -155,7 +158,7 @@ class Pimf_Cookie
    */
   public static function hash($value)
   {
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
     return hash_hmac('sha1', $value, $conf['app']['key']);
   }
 

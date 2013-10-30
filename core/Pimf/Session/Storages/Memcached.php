@@ -18,22 +18,25 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session\Storages;
+use Pimf\Session\Storages\Storage;
+
 /**
- * @package Pimf_Session_Storages
+ * @package Session_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session_Storages_Memcached extends Pimf_Session_Storages_Storage
+class Memcached extends Storage
 {
   /**
    * The Memcache cache storage instance.
-   * @var Pimf_Cache_Storages_Memcached
+   * @var _Memcached
    */
   private $memcached;
 
   /**
-   * @param Pimf_Cache_Storages_Memcached $memcached
+   * @param Memcached $memcached
    */
-  public function __construct(Pimf_Cache_Storages_Memcached $memcached)
+  public function __construct(\Pimf\Memcached $memcached)
   {
     $this->memcached = $memcached;
   }

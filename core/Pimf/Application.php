@@ -18,6 +18,11 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+
+use Pimf\Environment, Pimf\Cookie, Pimf\Session, Pimf\Logger, Pimf\Error,
+    Pimf\Registry, Pimf\Cli, Pimf\Resolver, Pimf\Request, Pimf\Util\String, Pimf\EntityManager;
+
 /**
  * Provides a facility for applications which provides reusable resources,
  * common-based bootstrapping and dependency checking.
@@ -26,7 +31,7 @@
  * @author Gjero Krsteski <gjero@krsteski.de>
  *
  */
-final class Pimf_Application
+final class Application
 {
   const VERSION = '1.7';
 
@@ -46,49 +51,47 @@ final class Pimf_Application
   public static function run(array $get, array $post, array $cookie)
   {
     if (static::$bootstrapped !== true) {
-      throw new LogicException('Please bootstrap first, than run the application!');
+      throw new \LogicException('Please bootstrap first, than run the application!');
     }
 
     $cli = array();
 
-    if (Pimf_Environment::isCli()) {
+    if (Environment::isCli()) {
 
-      $cli = Pimf_Cli::parse((array)Pimf_Registry::get('env')->argv);
+      $cli = Cli::parse((array)Registry::get('env')->argv);
 
       if (count($cli) < 1 || isset($cli['list'])) {
-        Pimf_Cli::absorb(); exit(0);
+        Cli::absorb(); exit(0);
       }
     }
 
-    $conf = Pimf_Registry::get('conf');
-
-
-    $root = Pimf_Util_String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+    $conf = Registry::get('conf');
+    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
 
     If (isset($cli['controller']) && $cli['controller'] == 'core') {
-      $prefix     = 'Pimf_';
+      $prefix     = 'Pimf\\';
       $repository = $root.'pimf-framework/core/Pimf/Controller';
     } else {
-      $prefix     = Pimf_Util_String::ensureTrailing('_', $conf['app']['name']);
+      $prefix     = String::ensureTrailing('\\', $conf['app']['name']);
       $repository = $root.'app/' . $conf['app']['name'] . '/Controller';
     }
 
-    $resolver = new Pimf_Resolver(
-      new Pimf_Request($get, $post, $cookie, $cli), $repository, $prefix
+    $resolver = new Resolver(
+      new Request($get, $post, $cookie, $cli), $repository, $prefix
     );
 
-    $sessionized = (Pimf_Environment::isWeb() && $conf['session']['storage'] !== '');
+    $sessionized = (Environment::isWeb() && $conf['session']['storage'] !== '');
 
     if ($sessionized) {
-      Pimf_Session::load();
+      Session::load();
     }
 
     $pimf = $resolver->process();
 
     if ($sessionized) {
-      Pimf_Session::save();
+      Session::save();
       // Cookies must be sent before any output.
-      Pimf_Cookie::send();
+      Cookie::send();
     }
 
     $pimf->render();
@@ -111,10 +114,12 @@ final class Pimf_Application
     ini_set('default_charset', $config['encoding']);
 
     // configure necessary things for the application.
-    $registry = new Pimf_Registry();
+    $registry = new Registry();
     $registry->conf = $config;
+    $registry->logger = new Logger($config['bootstrap']['local_temp_directory']);
+    $registry->logger->init();
 
-    if (Pimf_Environment::isWeb()){
+    if (Environment::isWeb()){
       ob_start('mb_output_handler');
     }
 
@@ -131,15 +136,15 @@ final class Pimf_Application
 
        // setup the error and exception handling.
       set_exception_handler(function($e){
-        Pimf_Error::exception($e);
+        Error::exception($e);
       });
 
       set_error_handler(function($code, $error, $file, $line){
-        Pimf_Error::native($code, $error, $file, $line);
+        Error::native($code, $error, $file, $line);
       });
 
       register_shutdown_function(function(){
-        Pimf_Error::shutdown();
+        Error::shutdown();
       });
 
       error_reporting(-1);
@@ -164,17 +169,13 @@ final class Pimf_Application
 
     try {
 
-      $registry->env = new Pimf_Environment($server);
+      $registry->env = new Environment($server);
 
       if(is_array($dbConf) && $config['environment'] != 'testing') {
-        $registry->em = new Pimf_EntityManager(Pimf_Pdo_Factory::get($dbConf), $config['app']['name']);
+        $registry->em = new EntityManager(\Pimf\Pdo\Factory::get($dbConf), $config['app']['name']);
       }
 
-      $registry->logger = new Pimf_Logger($config['bootstrap']['local_temp_directory']);
-      $registry->logger->init();
-
-
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $problems[] = $e->getMessage();
     }
 

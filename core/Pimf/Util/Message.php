@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,11 +21,13 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * Responsible for general message formatting, used for message flashing or with combination with the translator.
  *
  * <code>
- * $message = new Pimf_Util_Message(
+ * $message = new Message(
  *   'Hello %your_name my name is %my_name! '
  *    .'I am %my_age, how old are you? I like %object!'
  * );
@@ -44,10 +46,10 @@
  * .. output will be = "Hello Ben my name is Matt! I am 21, how old are you? I like food!"
  * </code>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Message
+class Message
 {
   /**
    * @var string The message.
@@ -84,7 +86,7 @@ class Pimf_Util_Message
 
   /**
    * @param string $message The message.
-   * @return Pimf_Util_Message
+   * @return Message
    */
   public function setMessage($message)
   {
@@ -94,7 +96,7 @@ class Pimf_Util_Message
 
   /**
    * @param string $char The character for the prexied delimitation of the tokens.
-   * @return Pimf_Util_Message
+   * @return Message
    */
   public function setDelimiter($char)
   {
@@ -107,7 +109,7 @@ class Pimf_Util_Message
    *
    * @param string $token The token.
    * @param string $value The value for replacement.
-   * @return Pimf_Util_Message
+   * @return Message
    */
   public function bind($token, $value)
   {

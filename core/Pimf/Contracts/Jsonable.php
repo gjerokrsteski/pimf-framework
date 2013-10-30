@@ -18,13 +18,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Contracts;
+
 /**
  * A simply interface to get instance to its JSON representation.
  *
- * @package Pimf_Contracts
+ * @package Contracts
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-interface Pimf_Contracts_Jsonable
+interface Jsonable
 {
 	/**
 	 * Convert the object to its JSON representation.

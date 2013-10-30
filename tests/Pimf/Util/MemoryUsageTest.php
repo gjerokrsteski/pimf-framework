@@ -3,7 +3,7 @@ class MemoryUsageTest extends PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {
-    new Pimf_Util_MemoryUsage(true);
+    new \Pimf\Util\MemoryUsage(true);
   }
 
   public function testAllocatingAndPrintingTheInformation()
@@ -11,7 +11,7 @@ class MemoryUsageTest extends PHPUnit_Framework_TestCase
     $this->expectOutputRegex('/Peak of memory usage: /i');
 
       // Create new MemoryUsageInformation class
-      $memoryUsage = new Pimf_Util_MemoryUsage(true);
+      $memoryUsage = new \Pimf\Util\MemoryUsage(true);
       // Set start
       $memoryUsage->setStart();
       // Set memory usage before loop

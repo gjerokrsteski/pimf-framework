@@ -18,12 +18,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session\Storages;
+use Pimf\Session\Storages\Storage;
+
 /**
- * @package Pimf_Session_Storages
+ * @package Session_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session_Storages_Memory extends Pimf_Session_Storages_Storage {
-
+class Memory extends Storage
+{
 	/**
 	 * The session payload that will be returned by the storage.
 	 * @var array

@@ -18,11 +18,13 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+
 /**
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Pdo extends PDO
+class Database extends \PDO
 {
   /**
    * The current transaction level.
@@ -37,7 +39,7 @@ class Pimf_Pdo extends PDO
   protected function nestable()
   {
     return in_array(
-      $this->getAttribute(PDO::ATTR_DRIVER_NAME),
+      $this->getAttribute(\PDO::ATTR_DRIVER_NAME),
       array("pgsql", "mysql")
     );
   }
@@ -77,7 +79,7 @@ class Pimf_Pdo extends PDO
   public function rollBack()
   {
     if ($this->transLevel == 0) {
-      throw new PDOException(
+      throw new \PDOException(
         'trying to rollback without a transaction-start'
       );
     }

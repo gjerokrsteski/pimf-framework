@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,11 +21,13 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * Identifier util for unified resource generation.
  *
  * <code>
- * $identifier = new class Pimf_Util_Identifier(1, '23', 123, 'ZZ-TOP', 'Some_Class_name');
+ * $identifier = new class Identifier(1, '23', 123, 'ZZ-TOP', 'Some_Class_name');
  *
  * print $identifier; // --> '1_23_123_zz_top_some_class_name'
  *
@@ -34,10 +36,10 @@
  * print $identifier->generate(); // --> '1/23/123/zz/top/some/class/name'
  * </code>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Identifier
+class Identifier
 {
   /**
    * @var string
@@ -60,7 +62,7 @@ class Pimf_Util_Identifier
     $args = func_get_args();
 
     if (!count($args) || !implode('', $args)) {
-      throw new BadMethodCallException('No identifiers received');
+      throw new \BadMethodCallException('No identifiers received');
     }
 
     $this->args = $args;

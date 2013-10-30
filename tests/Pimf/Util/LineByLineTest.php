@@ -3,7 +3,7 @@ class LineByLineTest extends PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {
-    new Pimf_Util_LineByLine(function(){});
+    new \Pimf\Util\LineByLine(function(){});
   }
 
   /**
@@ -11,14 +11,14 @@ class LineByLineTest extends PHPUnit_Framework_TestCase
    */
   public function testIfNoCallableOnCreatingNewInstance()
   {
-    new Pimf_Util_LineByLine('no callable');
+    new \Pimf\Util\LineByLine('no callable');
   }
 
   public function testLoadingFile()
   {
-    $linebyline = new Pimf_Util_LineByLine(
+    $linebyline = new \Pimf\Util\LineByLine(
 
-      function ($line) { return str_replace("\n", '', $line) . 'rocks'; }
+      function ($line) { return str_replace(PHP_EOL, '', $line) . 'rocks'; }
 
     );
 

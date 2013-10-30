@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,6 +21,8 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * Process file line by line.
  *
@@ -28,7 +30,7 @@
  *
  * <code>
  *
- * $linebyline = new Pimf_Util_LineByLine(
+ * $linebyline = new LineByLine(
  *   function ($line) {
  *     // do what you want with the line.
  *    return $line;
@@ -39,10 +41,10 @@
  *
  * </code>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_LineByLine
+class LineByLine
 {
   protected $callback;
 
@@ -53,7 +55,7 @@ class Pimf_Util_LineByLine
   public function __construct($callback)
   {
     if(!is_callable($callback)){
-      throw new RuntimeException('no callable given');
+      throw new \RuntimeException('no callable given');
     }
 
     $this->callback = $callback;
@@ -69,7 +71,7 @@ class Pimf_Util_LineByLine
   public function read($file, $feedback = false, $binary = false)
   {
     if(!is_resource($handle = fopen($file, ($binary === true ? 'rb':'r')))){
-      throw new RuntimeException('can not read handle');
+      throw new \RuntimeException('can not read handle');
     }
 
     $responses = array();

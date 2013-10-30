@@ -18,28 +18,31 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Registry;
+
 /**
  * Redis usage
  *
  * <code>
  *    // Get the default Redis database instance
- *    $redis = Pimf_Redis::db();
+ *    $redis = Redis::db();
  *
  *    // Get a specified Redis database instance
- *    $reids = Pimf_Redis::db('redis_2');
+ *    $reids = Redis::db('redis_2');
  *
  *    // Execute the GET command for the "name" key
- *    $name = Pimf_Redis::db()->run('get', array('name'));
+ *    $name = Redis::db()->run('get', array('name'));
  *
  *    // Execute the LRANGE command for the "list" key
- *    $list = Pimf_Redis::db()->run('lrange', array(0, 5));
+ *    $list = Redis::db()->run('lrange', array(0, 5));
  *
  * </code>
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Redis
+class Redis
 {
   /**
    * The address for the Redis host.
@@ -79,8 +82,8 @@ class Pimf_Redis
    */
   public function __construct($host, $port, $database = 0)
   {
-    $this->host = $host;
-    $this->port = $port;
+    $this->host     = $host;
+    $this->port     = $port;
     $this->database = $database;
   }
 
@@ -96,10 +99,10 @@ class Pimf_Redis
   public static function db($name = 'default')
   {
     if (!isset(static::$databases[$name])) {
-      $conf = Pimf_Registry::get('conf');
+      $conf = Registry::get('conf');
 
       if (!isset($conf['cache']['storage'])) {
-        throw new RuntimeException("Redis database [$name] is not defined.");
+        throw new \RuntimeException("Redis database [$name] is not defined.");
       }
 
       extract($conf['cache']['server']);
@@ -135,7 +138,7 @@ class Pimf_Redis
   {
     switch (substr($response, 0, 1)) {
       case '-':
-        throw new RuntimeException('Redis error: ' . substr(trim($response), 4));
+        throw new \RuntimeException('Redis error: ' . substr(trim($response), 4));
 
       case '+':
       case ':':
@@ -148,7 +151,7 @@ class Pimf_Redis
         return $this->multibulk($response);
 
       default:
-        throw new RuntimeException("Unknown Redis response: " . substr($response, 0, 1));
+        throw new \RuntimeException("Unknown Redis response: " . substr($response, 0, 1));
     }
   }
 
@@ -166,7 +169,7 @@ class Pimf_Redis
     $this->connection = @fsockopen($this->host, $this->port, $error, $message);
 
     if ($this->connection === false) {
-      throw new RuntimeException("Error making Redis connection: {$error} - {$message}");
+      throw new \RuntimeException("Error making Redis connection: {$error} - {$message}");
     }
 
     $this->select($this->database);

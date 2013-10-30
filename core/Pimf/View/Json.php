@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_View
+ * View
  *
  * PHP Version 5
  *
@@ -21,14 +21,17 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\View;
+use Pimf\View, Pimf\Util\Json as UtilJson, Pimf\Util\Header;
+
 /**
  * A view for smooth JSON communication.
  *
  * @link http://twig.sensiolabs.org/documentation
- * @package Pimf_View
+ * @package View
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_View_Json extends Pimf_View
+class Json extends View
 {
   /**
    * @param array $data
@@ -43,8 +46,8 @@ class Pimf_View_Json extends Pimf_View
    */
   public function render()
   {
-    Pimf_Util_Header::contentTypeJson();
+    Header::contentTypeJson();
 
-    die(Pimf_Util_Json::encode($this->data->getArrayCopy()));
+    die(UtilJson::encode($this->data->getArrayCopy()));
   }
 }

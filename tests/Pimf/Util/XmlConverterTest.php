@@ -4,7 +4,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   public function testConvertStringToSimpleXmlInstance()
   {
     $string = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
-    $simpleXml = Pimf_Util_Xml::toSimpleXMLElement($string);
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($string);
 
     $this->assertInstanceOf('SimpleXMLElement', $simpleXml);
   }
@@ -13,7 +13,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp.xml';
 
-    $simpleXml = Pimf_Util_Xml::toSimpleXMLElement($file);
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($file);
 
     $this->assertInstanceOf('SimpleXMLElement', $simpleXml);
   }
@@ -22,7 +22,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $string = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
 
-    $dom = Pimf_Util_Xml::toDOMDocument($string);
+    $dom = \Pimf\Util\Xml::toDOMDocument($string);
 
     $this->assertInstanceOf('DOMDocument', $dom);
   }
@@ -31,7 +31,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp.xml';
 
-    $dom = Pimf_Util_Xml::toDOMDocument($file);
+    $dom = \Pimf\Util\Xml::toDOMDocument($file);
 
     $this->assertInstanceOf('DOMDocument', $dom);
   }
@@ -40,8 +40,8 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp.xml';
 
-    $simpleXml = Pimf_Util_Xml::toSimpleXMLElement($file);
-    $result    = Pimf_Util_Xml::toArray($simpleXml);
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($file);
+    $result    = \Pimf\Util\Xml::toArray($simpleXml);
 
     $this->assertInternalType('array', $result);
     $this->assertNotEmpty($result);
@@ -53,8 +53,8 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp-with-namespace.xml';
 
-    $simpleXml = Pimf_Util_Xml::toSimpleXMLElement($file);
-    $result    = Pimf_Util_Xml::toArray($simpleXml, 'pimf');
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($file);
+    $result    = \Pimf\Util\Xml::toArray($simpleXml, 'pimf');
 
     $this->assertNotEmpty($result);
     $this->assertArrayHasKey('MediaElementGroup', $result);
@@ -68,8 +68,8 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp-with-namespace.xml';
 
-    $simpleXml = Pimf_Util_Xml::toSimpleXMLElement($file);
-    Pimf_Util_Xml::toArray($simpleXml, 'some-bad-namespace');
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($file);
+    \Pimf\Util\Xml::toArray($simpleXml, 'some-bad-namespace');
   }
 
   /**
@@ -77,7 +77,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
    */
   public function testConvertToSimpleXmlThrowingException()
   {
-    Pimf_Util_Xml::toSimpleXMLElement(new stdClass());
+    \Pimf\Util\Xml::toSimpleXMLElement(new stdClass());
   }
 
   /**
@@ -85,6 +85,6 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
    */
   public function testConvertToDOMDocThrowingException()
   {
-    Pimf_Util_Xml::toDOMDocument(new stdClass());
+    \Pimf\Util\Xml::toDOMDocument(new stdClass());
   }
 }

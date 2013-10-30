@@ -18,23 +18,24 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session\Storages;
+use Pimf\Session\Storages\Storage, Pimf\Contracts\Cleanable;
+
 /**
- * @package Pimf_Session_Storages
+ * @package Session_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session_Storages_Dba
-  extends Pimf_Session_Storages_Storage
-  implements Pimf_Contracts_Cleanable
+class Dba extends Storage implements Cleanable
 {
   /**
-   * @var Pimf_Cache_Storages_Dba
+   * @var Cache_Storages_Dba
    */
   private $dba;
 
   /**
-   * @param Pimf_Cache_Storages_Dba $dba
+   * @param Cache\Storages\Dba $dba
    */
-  public function __construct(Pimf_Cache_Storages_Dba $dba)
+  public function __construct(\Pimf\Cache\Storages\Dba $dba)
   {
     $this->dba = $dba;
   }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Cli
+ * Cli
  *
  * PHP Version 5
  *
@@ -21,13 +21,16 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Cli;
+use Pimf\Environment;
+
 /**
  * For easily use ANSI console colors in your application.
  *
- * @package Pimf_Cli
+ * @package Cli
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cli_Color
+class Color
 {
   protected static $foreground = array(
     'black'        => '0;30',
@@ -68,7 +71,7 @@ class Pimf_Cli_Color
    */
   public static function paint($string, $foregroundColor = 'cyan', $backgroundColor = null)
   {
-    if(Pimf_Environment::isWindows()){
+    if(Environment::isWindows()){
       return $string;
     }
 

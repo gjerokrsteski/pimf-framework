@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,14 +21,16 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * Represents a file in the file system and uses SplFileInfo a high-level object oriented interface to
  * information for an individual file.
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_File extends SplFileInfo
+class File extends \SplFileInfo
 {
   /**
    * Constructs a new file from the given path.
@@ -39,7 +41,7 @@ class Pimf_Util_File extends SplFileInfo
   public function __construct($path, $check = true)
   {
     if ($check && !is_file($path)) {
-      throw new OutOfRangeException("path $path is not a file");
+      throw new \OutOfRangeException("path $path is not a file");
     }
 
     parent::__construct($path);
@@ -59,7 +61,7 @@ class Pimf_Util_File extends SplFileInfo
    * Moves the file to a new location.
    * @param string $dir The destination folder
    * @param string $name The new file name
-   * @return Pimf_Util_File A File object representing the new file
+   * @return File A File object representing the new file
    * @throws RuntimeException if the target file could not be created
    */
   public function move($dir, $name = null)
@@ -68,7 +70,7 @@ class Pimf_Util_File extends SplFileInfo
 
     if (!@rename($this->getPathname(), $target)) {
       $error = error_get_last();
-      throw new RuntimeException(
+      throw new \RuntimeException(
         "Could not move the file {$this->getPathname()} to $target ({$error['message']})"
       );
     }
@@ -81,19 +83,19 @@ class Pimf_Util_File extends SplFileInfo
   /**
    * @param string $dir The destination folder
    * @param null|string $name
-   * @return Pimf_Util_File
+   * @return File
    * @throws RuntimeException
    */
   protected function getTargetFile($dir, $name = null)
   {
     if (!is_dir($dir)) {
       if (false === @mkdir($dir, 0777, true)) {
-        throw new RuntimeException("The destination folder $dir");
+        throw new \RuntimeException("The destination folder $dir");
       }
     }
 
     if (!is_writable($dir)) {
-      throw new RuntimeException("Unable to write in the $dir directory");
+      throw new \RuntimeException("Unable to write in the $dir directory");
     }
 
     return new self(

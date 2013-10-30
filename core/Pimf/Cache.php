@@ -18,27 +18,30 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Registry, Pimf\Util\String, Pimf\Cache\Storages as CS;
+
 /**
  * Cache usage
  *
  * <code>
  *    // Get the default cache storage instance
- *    $storage = Pimf_Cache::storage();
+ *    $storage = Cache::storage();
  *
  *    // Get a specific cache storage instance by name
- *    $storage = Pimf_Cache::storage('memcached');
+ *    $storage = Cache::storage('memcached');
  *
  *    // Call the "get" method on the default cache storage
- *    $name = Pimf_Cache::get('name');
+ *    $name = Cache::get('name');
  *
  *    // Call the "put" method on the default cache storage
- *    Pimf_Cache::put('name', 'Robin', 15);
+ *    Cache::put('name', 'Robin', 15);
  * </code>
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cache
+class Cache
 {
   /**
    * All of the active cache storages.
@@ -70,7 +73,7 @@ class Pimf_Cache
   /**
    * Create a new cache storage instance.
    * @param $storage
-   * @return Pimf_Cache_Storages_Storage
+   * @return Storage
    * @throws RuntimeException
    */
   protected static function factory($storage)
@@ -80,37 +83,37 @@ class Pimf_Cache
       return $resolver();
     }
 
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
     switch ($storage) {
       case 'apc':
-        return new Pimf_Cache_Storages_Apc($conf['cache']['key']);
+        return new CS\Apc($conf['cache']['key']);
 
       case 'file':
-        return new Pimf_Cache_Storages_File($conf['cache']['storage_path']);
+        return new CS\File($conf['cache']['storage_path']);
 
       case 'pdo':
-        return new Pimf_Cache_Storages_Pdo(Pimf_Pdo_Factory::get($conf['cache']['database']), $conf['cache']['key']);
+        return new CS\Pdo(Factory::get($conf['cache']['database']), $conf['cache']['key']);
 
       case 'memcached':
-        return new Pimf_Cache_Storages_Memcached(Pimf_Memcached::connection(), $conf['cache']['key']);
+        return new CS\Memcached(Memcached::connection(), $conf['cache']['key']);
 
       case 'memory':
-        return new Pimf_Cache_Storages_Memory();
+        return new CS\Memory();
 
       case 'redis':
-        return new Pimf_Cache_Storages_Redis(Pimf_Redis::db());
+        return new CS\Redis(Redis::db());
 
       case 'wincache':
-        return new Pimf_Cache_Storages_WinCache($conf['cache']['key']);
+        return new CS\WinCache($conf['cache']['key']);
 
       case 'dba':
-        return new Pimf_Cache_Storages_Dba(
-          Pimf_Util_String::ensureTrailing('/', $conf['cache']['storage_path']) . $conf['cache']['key']
+        return new CS\Dba(
+          String::ensureTrailing('/', $conf['cache']['storage_path']) . $conf['cache']['key']
         );
 
       default:
-        throw new RuntimeException("Cache storage {$storage} is not supported.");
+        throw new \RuntimeException("Cache storage {$storage} is not supported.");
     }
   }
 
@@ -119,7 +122,7 @@ class Pimf_Cache
    * @param $storage
    * @param callable $resolver
    */
-  public static function extend($storage, Closure $resolver)
+  public static function extend($storage, \Closure $resolver)
   {
     static::$farm[$storage] = $resolver;
   }

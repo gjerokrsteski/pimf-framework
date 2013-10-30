@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,15 +21,17 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * The identity map pattern is a database access design pattern used to improve performance
  * by providing a context-specific, in-memory cache to prevent duplicate retrieval of the
  * same object data from the database.
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_IdentityMap
+class IdentityMap
 {
   /**
    * @var ArrayObject
@@ -43,8 +45,8 @@ class Pimf_Util_IdentityMap
 
   public function __construct()
   {
-    $this->objectToId = new SplObjectStorage();
-    $this->idToObject = new ArrayObject();
+    $this->objectToId = new \SplObjectStorage();
+    $this->idToObject = new \ArrayObject();
   }
 
   /**
@@ -65,7 +67,7 @@ class Pimf_Util_IdentityMap
   public function getId($object)
   {
     if (false === $this->hasObject($object)) {
-      throw new OutOfBoundsException(
+      throw new \OutOfBoundsException(
         'no object='.get_class($object).' at the identity-map'
       );
     }
@@ -99,7 +101,7 @@ class Pimf_Util_IdentityMap
   public function getObject($id)
   {
     if (false === $this->hasId($id)) {
-      throw new OutOfBoundsException(
+      throw new \OutOfBoundsException(
         'no id='.$id.' at the identity-map'
       );
     }

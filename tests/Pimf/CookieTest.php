@@ -1,14 +1,14 @@
 <?php
-class Pimf_CookieTest extends PHPUnit_Framework_TestCase
+class PimfCookieTest extends PHPUnit_Framework_TestCase
 {
 
   # helpers
 
   public function setUp()
   {
-    Pimf_Cookie::$jar = array();
-    Pimf_Request::$cookieData = new Pimf_Param(array());
-    Pimf_Registry::set(
+    \Pimf\Cookie::$jar = array();
+    \Pimf\Request::$cookieData = new \Pimf\Param(array());
+    \Pimf\Registry::set(
       'conf', array(
         'ssl' => true,
         'app' => array( 'key' => '123secure' )
@@ -25,45 +25,45 @@ class Pimf_CookieTest extends PHPUnit_Framework_TestCase
 
   public function testHasMethodIndicatesIfCookieInSet()
   {
-    Pimf_Cookie::$jar['foo'] = array( 'value' => Pimf_Cookie::hash('bar') . '+bar' );
-    $this->assertTrue(Pimf_Cookie::has('foo'));
-    $this->assertFalse(Pimf_Cookie::has('bar'));
+    \Pimf\Cookie::$jar['foo'] = array( 'value' => \Pimf\Cookie::hash('bar') . '+bar' );
+    $this->assertTrue(\Pimf\Cookie::has('foo'));
+    $this->assertFalse(\Pimf\Cookie::has('bar'));
 
-    Pimf_Cookie::put('baz', 'foo');
-    $this->assertTrue(Pimf_Cookie::has('baz'));
+    \Pimf\Cookie::put('baz', 'foo');
+    $this->assertTrue(\Pimf\Cookie::has('baz'));
   }
 
   public function testGetMethodCanReturnValueOfCookies()
   {
-    Pimf_Cookie::$jar['foo'] = array( 'value' => Pimf_Cookie::hash('bar') . '+bar' );
-    $this->assertEquals('bar', Pimf_Cookie::get('foo'));
+    \Pimf\Cookie::$jar['foo'] = array( 'value' => \Pimf\Cookie::hash('bar') . '+bar' );
+    $this->assertEquals('bar', \Pimf\Cookie::get('foo'));
 
-    Pimf_Cookie::put('bar', 'baz');
-    $this->assertEquals('baz', Pimf_Cookie::get('bar'));
+    \Pimf\Cookie::put('bar', 'baz');
+    $this->assertEquals('baz', \Pimf\Cookie::get('bar'));
   }
 
   public function testForeverShouldUseATonOfMinutes()
   {
-    Pimf_Cookie::forever('foo', 'bar');
-    $this->assertEquals(Pimf_Cookie::hash('bar') . '+bar', Pimf_Cookie::$jar['foo']['value']);
+    \Pimf\Cookie::forever('foo', 'bar');
+    $this->assertEquals(\Pimf\Cookie::hash('bar') . '+bar', \Pimf\Cookie::$jar['foo']['value']);
 
     $this->setServerVar('HTTPS', 'on');
 
-    Pimf_Cookie::forever('bar', 'baz', 'path', 'domain', true);
+    \Pimf\Cookie::forever('bar', 'baz', 'path', 'domain', true);
 
-    $this->assertEquals('path', Pimf_Cookie::$jar['bar']['path']);
-    $this->assertEquals('domain', Pimf_Cookie::$jar['bar']['domain']);
-    $this->assertTrue(Pimf_Cookie::$jar['bar']['secure']);
+    $this->assertEquals('path', \Pimf\Cookie::$jar['bar']['path']);
+    $this->assertEquals('domain', \Pimf\Cookie::$jar['bar']['domain']);
+    $this->assertTrue(\Pimf\Cookie::$jar['bar']['secure']);
 
     $this->setServerVar('HTTPS', 'off');
   }
 
   public function testForgetSetsCookieWithExpiration()
   {
-    Pimf_Cookie::forget('bar', 'path', 'domain');
+    \Pimf\Cookie::forget('bar', 'path', 'domain');
 
-    $this->assertEquals('path', Pimf_Cookie::$jar['bar']['path']);
-    $this->assertEquals('domain', Pimf_Cookie::$jar['bar']['domain']);
-    $this->assertFalse(Pimf_Cookie::$jar['bar']['secure']);
+    $this->assertEquals('path', \Pimf\Cookie::$jar['bar']['path']);
+    $this->assertEquals('domain', \Pimf\Cookie::$jar['bar']['domain']);
+    $this->assertFalse(\Pimf\Cookie::$jar['bar']['secure']);
   }
 }

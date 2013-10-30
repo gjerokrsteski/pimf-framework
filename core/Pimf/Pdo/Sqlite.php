@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Pdo
+ * Database
  *
  * PHP Version 5
  *
@@ -18,13 +18,16 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Pdo;
+use Pimf\Pdo\Connector;
+
 /**
  * Connection management to SQLite.
  *
- * @package Pimf_Pdo
+ * @package Database
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Pdo_Sqlite extends Pimf_Pdo_Connector
+class Sqlite extends Connector
 {
   /**
    * @param array $config
@@ -37,9 +40,9 @@ class Pimf_Pdo_Sqlite extends Pimf_Pdo_Connector
     // SQLite provides supported for "in-memory" databases, which exist only for
     // lifetime of the request. These are mainly for tests.
     if ($config['database'] == ':memory:') {
-      return new Pimf_Pdo('sqlite::memory:', null, null, $options);
+      return new \Pimf\Database('sqlite::memory:', null, null, $options);
     }
 
-    return new Pimf_Pdo('sqlite:' . $config['database'], null, null, $options);
+    return new \Pimf\Database('sqlite:' . $config['database'], null, null, $options);
   }
 }

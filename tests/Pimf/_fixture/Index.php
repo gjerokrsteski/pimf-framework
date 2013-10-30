@@ -1,5 +1,8 @@
 <?php
-class Fixture_Controller_Index extends Pimf_Controller_Abstract
+
+namespace Fixture\Controller;
+
+class Index extends \Pimf\Controller\Base
 {
   public function init()
   {

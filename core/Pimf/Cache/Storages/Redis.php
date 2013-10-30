@@ -18,29 +18,32 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Cache\Storages;
+use Pimf\Cache\Storages\Storage;
+
 /**
  * Redis usage
  *
  * <code>
  *    // Put an item in the cache for 15 minutes
- *    Pimf_Cache::put('name', 'Robin', 15);
+ *    Cache::put('name', 'Robin', 15);
  * </code>
  *
- * @package Pimf_Cache_Storages
+ * @package Cache_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cache_Storages_Redis extends Pimf_Cache_Storages_Storage
+class Redis extends Storage
 {
   /**
    * The Redis database instance.
-   * @var Pimf_Redis
+   * @var Redis
    */
   protected $redis;
 
   /**
-   * @param Pimf_Redis $redis
+   * @param Redis $redis
    */
-  public function __construct(Pimf_Redis $redis)
+  public function __construct(\Pimf\Redis $redis)
   {
     $this->redis = $redis;
   }

@@ -18,29 +18,31 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+
 /**
  * A well-known object that other objects can use to find common objects and services.
  * Acts also as a dependency injection container.
  *
  * <code>
- *  $registry = new Pimf_Registry();
+ *  $registry = new Registry();
  *  $registry->your_key = "123";
  *
  *  // or ..
  *
- *  Pimf_Registry::set('your_key', "123")
- *  Pimf_Registry::get('your_key')
+ *  Registry::set('your_key', "123")
+ *  Registry::get('your_key')
  * </code>
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  *
- * @property Pimf_EntityManager $em
- * @property Pimf_Logger $logger
- * @property Pimf_Environment $env
+ * @property EntityManager $em
+ * @property Logger $logger
+ * @property Environment $env
  * @property array $conf
  */
-class Pimf_Registry
+class Registry
 {
   /**
    * The temporary storage for the accumulator.
@@ -55,7 +57,7 @@ class Pimf_Registry
   protected static function init()
   {
     if (!self::$battery) {
-      self::$battery = new ArrayObject(array(), ArrayObject::STD_PROP_LIST);
+      self::$battery = new \ArrayObject(array(), \ArrayObject::STD_PROP_LIST);
     }
   }
 
@@ -78,7 +80,7 @@ class Pimf_Registry
     self::init();
 
     if (is_resource($value)) {
-      throw new LogicException(
+      throw new \LogicException(
         'storing resources in a registry is not permitted!'
       );
     }

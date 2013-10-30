@@ -18,23 +18,24 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session\Storages;
+use Pimf\Session\Storages\Storage, Pimf\Contracts\Cleanable;
+
 /**
- * @package Pimf_Session_Storages
+ * @package Session_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session_Storages_Pdo
-  extends Pimf_Session_Storages_Storage
-  implements Pimf_Contracts_Cleanable
+class Pdo extends Storage implements Cleanable
 {
   /**
-   * @var Pimf_Pdo
+   * @var Pdo
    */
   protected $db;
 
   /**
-   * @param Pimf_Pdo $pdo
+   * @param Pdo $pdo
    */
-  public function __construct(Pimf_Pdo $pdo)
+  public function __construct(\Pimf\Database $pdo)
   {
     $this->db = $pdo;
   }
@@ -52,19 +53,19 @@ class Pimf_Session_Storages_Pdo
         'SELECT * FROM sessions WHERE id = :id'
       );
 
-      $sth->bindValue(':id', $id, PDO::PARAM_INT);
+      $sth->bindValue(':id', $id, \PDO::PARAM_INT);
       $sth->execute();
 
       $session = $sth->fetchObject();
 
-      if ($session instanceof stdClass) {
+      if ($session instanceof \stdClass) {
         return array(
           'id'            => $session->id,
           'last_activity' => $session->last_activity,
           'data'          => unserialize($session->data)
         );
       }
-    } catch (PDOException $e) {
+    } catch (\PDOException $e) {
       return null;
     }
   }
@@ -87,7 +88,7 @@ class Pimf_Session_Storages_Pdo
       );
     }
 
-    $sth->bindValue(':id', $session['id'], PDO::PARAM_INT);
+    $sth->bindValue(':id', $session['id'], \PDO::PARAM_INT);
     $sth->bindValue(':last_activity', $session['last_activity']);
     $sth->bindValue(':data', serialize($session['data']));
     $sth->execute();
@@ -103,7 +104,7 @@ class Pimf_Session_Storages_Pdo
       "DELETE FROM sessions WHERE id = :id"
     );
 
-    $sth->bindValue(':id', $id, PDO::PARAM_INT);
+    $sth->bindValue(':id', $id, \PDO::PARAM_INT);
     $sth->execute();
   }
 

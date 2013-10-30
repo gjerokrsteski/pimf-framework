@@ -1,5 +1,7 @@
 <?php
-class Fixture_Controller_Rest extends Pimf_Controller_Rest
+namespace Fixture\Controller;
+
+class Rest extends \Pimf\Controller\Rest
 {
   public function postAction()
   {

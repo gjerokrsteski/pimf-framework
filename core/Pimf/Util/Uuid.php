@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,6 +21,9 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+use Pimf\Registry;
+
 /**
  * A class that generates RFC 4122 UUIDs
  *
@@ -31,11 +34,11 @@
  * registration process.
  * </pre>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  * @see http://www.ietf.org/rfc/rfc4122.txt
  */
-final class Pimf_Util_Uuid
+final class Uuid
 {
   /**
    * 32-bit integer that identifies this host.
@@ -60,12 +63,8 @@ final class Pimf_Util_Uuid
    */
   private static function getNodeId()
   {
-    $ip       = null;
-    $hostname = null;
-
-    if (true === isset($_SERVER['SERVER_ADDR'])) {
-        $ip = $_SERVER['SERVER_ADDR'];
-    }
+    $ip       = Registry::get('env')->getIp();
+    $hostname = Registry::get('env')->getHost();
 
     if ($ip === null && true === function_exists('gethostname')) {
         $hostname = gethostname();

@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_View
+ * View
  *
  * PHP Version 5
  *
@@ -20,6 +20,9 @@
  * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
+
+namespace Pimf\View;
+use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value;
 
 /**
  * A view for HAANGA template engine that uses Django syntax - fast and secure template engine for PHP.
@@ -41,10 +44,10 @@
  * </code>
  *
  * @link http://haanga.org/documentation
- * @package Pimf_View
+ * @package View
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_View_Haanga extends Pimf_View implements Pimf_Contracts_Reunitable
+class Haanga extends View implements Reunitable
 {
   /**
    * @param string $template
@@ -53,19 +56,19 @@ class Pimf_View_Haanga extends Pimf_View implements Pimf_Contracts_Reunitable
   {
     parent::__construct($template);
 
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
     $options = array(
-      'debug'        => Pimf_Util_Value::ensureBoolean($conf['view']['haanga']['debug']),
+      'debug'        => Value::ensureBoolean($conf['view']['haanga']['debug']),
       'template_dir' => $this->path,
-      'autoload'     => Pimf_Util_Value::ensureBoolean($conf['view']['haanga']['auto_reload']),
+      'autoload'     => Value::ensureBoolean($conf['view']['haanga']['auto_reload']),
     );
 
     if($conf['view']['haanga']['cache'] === true){
       $options['cache_dir'] = $this->path.'/haanga_cache';
     }
 
-    Haanga::configure($options);
+    \Haanga::configure($options);
   }
 
   /**
@@ -74,7 +77,7 @@ class Pimf_View_Haanga extends Pimf_View implements Pimf_Contracts_Reunitable
    */
   public function reunite()
   {
-    return Haanga::Load(
+    return \Haanga::Load(
       $this->template,
       $this->data->getArrayCopy()
     );

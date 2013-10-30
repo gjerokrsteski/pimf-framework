@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Controller
+ * Controller
  *
  * PHP Version 5
  *
@@ -18,6 +18,9 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Controller;
+use Pimf\Controller\Base, Pimf\Registry;
+
 /**
  * REST in PHP can be done pretty simple. Use this abstract controller for REST calls.
  * This works with Apache and Lighttpd out of the box, and no rewrite rules are needed.
@@ -25,10 +28,10 @@
  * REST takes advantage of the HTTP request methods to layer itself
  * into the existing HTTP architecture.
  *
- * @package Pimf_Controller
+ * @package Controller
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class Pimf_Controller_Rest extends Pimf_Controller_Abstract
+abstract class Rest extends Base
 {
   protected $data = array();
 
@@ -54,10 +57,10 @@ abstract class Pimf_Controller_Rest extends Pimf_Controller_Abstract
 
   public function indexAction()
   {
-    $method = Pimf_Registry::get('env')->getRequestMethod();
+    $method = Registry::get('env')->getRequestMethod();
 
     if (!method_exists($this, $method.'Action')) {
-      throw new Pimf_Controller_Exception("not supported REST method");
+      throw new \Exception("not supported REST method");
     }
 
     $this->data = $this->request->{'from'.ucfirst($method)}()->getAll();

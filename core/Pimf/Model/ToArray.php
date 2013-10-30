@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Model
+ * Model
  *
  * PHP Version 5
  *
@@ -18,18 +18,21 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Model;
+use Pimf\Contracts\Arrayable;
+
 /**
  * Returns only protected and public properties of the given model-object. You have to extend it.
  *
  * Normally you will use ArrayObject and than method getArrayCopy() to turn Classes to Array, but
- * with Pimf_Model_ToArray you have the opportunity to easily intercept the setting of the values at the array.
+ * with ToArray you have the opportunity to easily intercept the setting of the values at the array.
  *
  * Sure if you need it - otherwise please prefers using ArrayObject - is much faster!
  *
- * @package Pimf_Model_ToArray
+ * @package Model
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class Pimf_Model_ToArray implements Pimf_Contracts_Arrayable
+abstract class ToArray implements Arrayable
 {
   /**
    * Returns only protected and public properties of the given model-object.

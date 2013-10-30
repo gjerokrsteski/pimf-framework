@@ -27,7 +27,7 @@ class PropertyValueTest extends PHPUnit_Framework_TestCase
       array('0', false),
       array(array(), false),
       array(array(1), false),
-      array(new stdClass(), false),
+      array(new \stdClass(), false),
       array('true', true),
       array('false', false),
       array('yes', true),
@@ -42,7 +42,7 @@ class PropertyValueTest extends PHPUnit_Framework_TestCase
    */
   public function testEnsureBoolean($value, $expected)
   {
-    $this->assertSame($expected, Pimf_Util_Value::ensureBoolean($value));
+    $this->assertSame($expected, \Pimf\Util\Value::ensureBoolean($value));
   }
 
   public static function ensureArrayProvider()
@@ -57,8 +57,8 @@ class PropertyValueTest extends PHPUnit_Framework_TestCase
       array(true, array(true)),
       array(false, array(false)),
       array('[1,2,3]', array('1','2','3')),
-      array(new stdClass(), array()),
-      array(new xUser(), array('name' => 'public-conan', 'fruits' => array('public-banana'))),
+      array(new \stdClass(), array()),
+      array(new \xUser(), array('name' => 'public-conan', 'fruits' => array('public-banana'))),
     );
   }
 
@@ -69,17 +69,17 @@ class PropertyValueTest extends PHPUnit_Framework_TestCase
    */
   public function testEnsureArray($value, $expected)
   {
-    $this->assertSame($expected, Pimf_Util_Value::ensureArray($value));
+    $this->assertSame($expected, \Pimf\Util\Value::ensureArray($value));
   }
 
   public function testEnsureEnum()
   {
-    $this->assertSame(1, Pimf_Util_Value::ensureEnum('January', 'xEnum'));
+    $this->assertSame(1, \Pimf\Util\Value::ensureEnum('January', 'xEnum'));
   }
 
   public function testEnsureEnumNameByValue()
   {
-    $this->assertSame('January', Pimf_Util_Value::ensureEnum(1, 'xEnum', false));
+    $this->assertSame('January', \Pimf\Util\Value::ensureEnum(1, 'xEnum', false));
   }
 
   /**
@@ -87,6 +87,6 @@ class PropertyValueTest extends PHPUnit_Framework_TestCase
    */
   public function testEnsureEnumThrowingException()
   {
-    Pimf_Util_Value::ensureEnum('March', 'xEnum');
+    \Pimf\Util\Value::ensureEnum('March', 'xEnum');
   }
 }

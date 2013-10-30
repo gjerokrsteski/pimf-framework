@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,11 +21,13 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * Represents a enumeration and gives the ability to emulate and create enumeration objects natively in PHP.
  *
  * <code>
- * class Month extends Pimf_Util_Enum {
+ * class Month extends Enum {
  *   const __default = self::January;
  *
  *   const January = 1;
@@ -50,10 +52,10 @@
  * enum values. The values of the constants must be integers.
  * </pre>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class Pimf_Util_Enum
+abstract class Enum
 {
   /**
    * The current enum value
@@ -78,19 +80,19 @@ abstract class Pimf_Util_Enum
     // enum class behaves like traditional enums.
     if ($this->enums === null) {
 
-      $refClass    = new ReflectionClass($this);
+      $refClass    = new \ReflectionClass($this);
       $this->enums = $refClass->getConstants();
       unset($refClass);
 
       foreach ($this->enums as $const => $constval) {
         if ($constval !== (int)$constval) {
-          throw new RuntimeException("Enum constant '$const' values must be integers");
+          throw new \RuntimeException("Enum constant '$const' values must be integers");
         }
       }
 
       // All derived classes must include a __default constant
       if (!isset($this->enums['__default'])) {
-        throw new Exception("Class constant __default does not exist");
+        throw new \Exception("Class constant __default does not exist");
       }
     }
 
@@ -100,11 +102,11 @@ abstract class Pimf_Util_Enum
 
     if ($this->value === (string)$this->value) {
       if (!$const_key = $this->getArrayKey($this->value, $this->enums)) {
-        throw new UnexpectedValueException("The value '$value' is not one of the enum constants");
+        throw new \UnexpectedValueException("The value '$value' is not one of the enum constants");
       }
       $this->value = $this->enums[$const_key];
     } elseif ($this->value !== (int)$this->value) {
-      throw new InvalidArgumentException("The value must be a string or integer");
+      throw new \InvalidArgumentException("The value must be a string or integer");
     }
   }
 
@@ -144,7 +146,7 @@ abstract class Pimf_Util_Enum
    * @static
    * @param $value
    * @param $args
-   * @return Pimf_Util_Enum
+   * @return Enum
    */
   public static function __callStatic($value, $args)
   {

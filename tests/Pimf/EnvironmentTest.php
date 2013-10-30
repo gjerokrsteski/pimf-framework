@@ -1,5 +1,5 @@
 <?php
-class Pimf_EnvironmentTest extends PHPUnit_Framework_TestCase
+class EnvironmentTest extends PHPUnit_Framework_TestCase
 {
   public function setUp()
   {
@@ -17,12 +17,12 @@ class Pimf_EnvironmentTest extends PHPUnit_Framework_TestCase
 
   public function testCreatingNewInstance()
   {
-    new Pimf_Environment($_SERVER);
+    new \Pimf\Environment($_SERVER);
   }
 
   public function testRetreivingEnvData()
   {
-    $env = new Pimf_Environment($_SERVER);
+    $env = new \Pimf\Environment($_SERVER);
 
     $this->assertEquals(0, $env->getContentLength(), 'on getContentLength');
     $this->assertNotEmpty($env->getIp(), 'on getIp');

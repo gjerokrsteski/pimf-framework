@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Controller
+ * Controller
  *
  * PHP Version 5
  *
@@ -18,11 +18,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Controller;
+use Pimf\Controller\Base, Pimf\Registry, Pimf\Util\String, Pimf\Cli\Color,
+    Pimf\Cli\Io, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
+
 /**
- * @package Pimf_Controller
+ * @package Controller
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Controller_Core extends Pimf_Controller_Abstract
+class Core extends Base
 {
   /**
    * Because it is a PIMF restriction!
@@ -39,9 +43,9 @@ class Pimf_Controller_Core extends Pimf_Controller_Abstract
   {
     clearstatcache();
 
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
     $app  = 'app/' . $conf['app']['name'] . '/';
-    $root = Pimf_Util_String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
+    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
 
     $assets = array(
       $root . $app . '_session/',
@@ -50,35 +54,35 @@ class Pimf_Controller_Core extends Pimf_Controller_Abstract
       $root . $app . '_templates/',
     );
 
-    echo Pimf_Cli_Color::paint('Check app assets' . PHP_EOL);
+    echo Color::paint('Check app assets' . PHP_EOL);
 
     foreach ($assets as $asset) {
 
       if (!is_dir($asset)) {
-        echo Pimf_Cli_Color::paint("Please create '$asset' directory! " . PHP_EOL, 'red');
+        echo Color::paint("Please create '$asset' directory! " . PHP_EOL, 'red');
       }
 
       if (!is_writable($asset)) {
-        echo Pimf_Cli_Color::paint("Please make '$asset' writable! " . PHP_EOL, 'red');
+        echo Color::paint("Please make '$asset' writable! " . PHP_EOL, 'red');
       }
     }
 
-    echo Pimf_Cli_Color::paint('Secure root directory' . PHP_EOL);
+    echo Color::paint('Secure root directory' . PHP_EOL);
     chmod($root, 0755);
 
-    echo Pimf_Cli_Color::paint('Secure .htaccess' . PHP_EOL);
+    echo Color::paint('Secure .htaccess' . PHP_EOL);
     chmod($root . '.htaccess', 0644);
 
-    echo Pimf_Cli_Color::paint('Secure index.php' . PHP_EOL);
+    echo Color::paint('Secure index.php' . PHP_EOL);
     chmod($root . 'index.php', 0644);
 
-    echo Pimf_Cli_Color::paint('Secure config.core.php' . PHP_EOL);
+    echo Color::paint('Secure config.core.php' . PHP_EOL);
     chmod($root . 'pimf-framework/config.core.php', 0744);
 
-    echo Pimf_Cli_Color::paint('Secure autoload.core.php' . PHP_EOL);
+    echo Color::paint('Secure autoload.core.php' . PHP_EOL);
     chmod($root . 'pimf-framework/autoload.core.php', 0644);
 
-    echo Pimf_Cli_Color::paint('Create logging files' . PHP_EOL);
+    echo Color::paint('Create logging files' . PHP_EOL);
     $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-logs.txt', "at+"); fclose($fp); chmod($file, 0777);
     $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-warnings.txt', "at+"); fclose($fp); chmod($file, 0777);
     $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-errors.txt', "at+"); fclose($fp); chmod($file, 0777);
@@ -88,7 +92,7 @@ class Pimf_Controller_Core extends Pimf_Controller_Abstract
 
   public function create_session_tableCliAction()
   {
-    $type = Pimf_Cli_Io::read('database type [mysql|sqlite]', '(mysql|sqlite)');
+    $type = Io::read('database type [mysql|sqlite]', '(mysql|sqlite)');
 
     var_dump(
       $this->createTable($type, 'session')
@@ -97,7 +101,7 @@ class Pimf_Controller_Core extends Pimf_Controller_Abstract
 
   public function create_cache_tableCliAction()
   {
-    $type = Pimf_Cli_Io::read('database type [mysql|sqlite]', '(mysql|sqlite)');
+    $type = Io::read('database type [mysql|sqlite]', '(mysql|sqlite)');
 
     var_dump(
       $this->createTable($type, 'cache')
@@ -106,30 +110,31 @@ class Pimf_Controller_Core extends Pimf_Controller_Abstract
 
   protected function createTable($type, $for)
   {
+    $type = trim($type);
+
     try {
       $pdo = $file = null;
 
-      $conf = Pimf_Registry::get('conf');
+      $conf = Registry::get('conf');
 
       switch ($for){
         case 'cache':
-          $pdo = Pimf_Pdo_Factory::get($conf['cache']['database']);
+          $pdo = Factory::get($conf['cache']['database']);
           $file = 'create-cache-table-'.$type.'.sql';
         break;
         case 'session':
-          $pdo = Pimf_Pdo_Factory::get($conf['session']['database']);
+          $pdo = Factory::get($conf['session']['database']);
           $file = 'create-session-table-'.$type.'.sql';
         break;
       }
 
-      return $pdo->exec(
-        file_get_contents(
-          dirname(dirname(__FILE__)) .'/_database/'.$file
-        )
-      );
+      $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
+      $file = str_replace('/', DIRECTORY_SEPARATOR, $root .'pimf-framework/core/Pimf/_database/'.$file);
 
-    } catch (PDOException $e) {
-      throw new Pimf_Controller_Exception($e->getMessage());
+      return $pdo->exec(file_get_contents(new File($file))) or print_r($pdo->errorInfo(), true);
+
+    } catch (\PDOException $e) {
+      throw new Bomb($e->getMessage());
     }
   }
 }

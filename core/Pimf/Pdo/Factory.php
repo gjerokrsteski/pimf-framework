@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Pdo
+ * Database
  *
  * PHP Version 5
  *
@@ -18,33 +18,35 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Pdo;
+
 /**
  * Creates a PDO connection from the farm of connectors.
  *
- * @package Pimf_Pdo
+ * @package Database
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Pdo_Factory
+class Factory
 {
   /**
    * @param array $config
-   * @return Pimf_Pdo
+   * @return PDO
    * @throws RuntimeException
    * @throws UnexpectedValueException
    */
   public static function get(array $config)
   {
     if (!isset($config['driver'])) {
-      throw new RuntimeException('no driver specified');
+      throw new \RuntimeException('no driver specified');
     }
 
     $driver = strtolower($config['driver']);
 
     if (!in_array($driver, array('sqlite', 'mysql', 'sqlserver', 'postgre'))) {
-      throw new UnexpectedValueException('driver "'.$driver.'" not supported by PIMF');
+      throw new \UnexpectedValueException('driver "'.$driver.'" not supported by PIMF');
     }
 
-    $driver = 'Pimf_Pdo_'.ucfirst($driver);
+    $driver = '\Pimf\Pdo\\'.ucfirst($driver);
 
     $pdo = new $driver();
 

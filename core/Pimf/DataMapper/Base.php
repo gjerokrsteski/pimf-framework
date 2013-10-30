@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_DataMapper
+ * DataMapper
  *
  * PHP Version 5
  *
@@ -18,6 +18,9 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\DataMapper;
+use Pimf\Util\IdentityMap;
+
 /**
  * For mapping the domain models to the persistence layer.
  *
@@ -25,7 +28,7 @@
  *
  * You have to use it if you want to persist data.
  *
- * @package Pimf_DataMapper
+ * @package DataMapper
  * @author Gjero Krsteski <gjero@krsteski.de>
  *
  * @method insert($entity)
@@ -33,7 +36,7 @@
  * @method delete($entity)
  * @method find($id)
  */
-abstract class Pimf_DataMapper_Abstract
+abstract class Base
 {
   /**
    * @var PDO The database resource.
@@ -41,17 +44,17 @@ abstract class Pimf_DataMapper_Abstract
   protected $db;
 
   /**
-   * @var Pimf_Util_IdentityMap
+   * @var Util_IdentityMap
    */
   protected $identityMap;
 
   /**
    * @param PDO $db
    */
-  public function __construct(PDO $db)
+  public function __construct(\PDO $db)
   {
     $this->db          = $db;
-    $this->identityMap = new Pimf_Util_IdentityMap();
+    $this->identityMap = new IdentityMap();
   }
 
   public function __destruct()
@@ -68,7 +71,7 @@ abstract class Pimf_DataMapper_Abstract
    */
   public function reflect($model, $value, $property = 'id')
   {
-    $attribute = new ReflectionProperty($model, $property);
+    $attribute = new \ReflectionProperty($model, $property);
     $attribute->setAccessible(true);
     $attribute->setValue($model, $value);
 

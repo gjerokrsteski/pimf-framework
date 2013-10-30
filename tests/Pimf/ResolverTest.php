@@ -1,5 +1,5 @@
 <?php
-class Pimf_ResolverTest extends PHPUnit_Framework_TestCase
+class ResolverTest extends PHPUnit_Framework_TestCase
 {
   public static function setUpBeforeClass()
   {
@@ -10,7 +10,7 @@ class Pimf_ResolverTest extends PHPUnit_Framework_TestCase
       'action'    => 'save'
     );
 
-    Pimf_Registry::set('conf',
+    \Pimf\Registry::set('conf',
       array(
         'app' => array(
           'name' => 'test-app-name',
@@ -24,54 +24,54 @@ class Pimf_ResolverTest extends PHPUnit_Framework_TestCase
 
   public function testCreatingNewInstance()
   {
-    new Pimf_Resolver(new Pimf_Request($_GET));
+    new \Pimf\Resolver(new \Pimf\Request($_GET));
   }
 
   public function testLoadingControllerInstance()
   {
-    $resolver = new Pimf_Resolver(
-      new Pimf_Request($_GET),
+    $resolver = new \Pimf\Resolver(
+      new \Pimf\Request($_GET),
       dirname(__FILE__).'/_fixture/',
-      'Fixture_'
+      'Fixture\\'
     );
 
-    $this->assertInstanceOf('Pimf_Controller_Abstract', $resolver->process());
+    $this->assertInstanceOf('\Pimf\Controller\Base', $resolver->process());
   }
 
   public function testCallingControllerAction()
   {
-    $resolver = new Pimf_Resolver(
-      new Pimf_Request($_GET),
+    $resolver = new \Pimf\Resolver(
+      new \Pimf\Request($_GET),
       dirname(__FILE__).'/_fixture/',
-      'Fixture_'
+      'Fixture\\'
     );
 
     $resolver->process();
   }
 
   /**
-   * @expectedException Pimf_Resolver_Exception
+   * @expectedException \Pimf\Resolver\Exception
    */
   public function testIfNoControllerFoundAtTheRepositoryPath()
   {
-    $resolver = new Pimf_Resolver(
-      new Pimf_Request($_GET),
+    $resolver = new \Pimf\Resolver(
+      new \Pimf\Request($_GET),
       '/Undefined_Controller_Repository/',
-      'Fixture_'
+      'Fixture\\'
     );
 
     $resolver->process()->render();
   }
 
   /**
-   * @expectedException Pimf_Controller_Exception
+   * @expectedException Exception
    */
   public function testIfNoActionFoundAtController()
   {
-    $resolver = new Pimf_Resolver(
-      new Pimf_Request(array(),array(),array(),array('action'=>'undefined')),
+    $resolver = new \Pimf\Resolver(
+      new \Pimf\Request(array(),array(),array(),array('action'=>'undefined')),
       dirname(__FILE__).'/_fixture/',
-      'Fixture_'
+      'Fixture\\'
     );
 
     $resolver->process()->render();

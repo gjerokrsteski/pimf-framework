@@ -1,5 +1,5 @@
 <?php
-class Pimf_LoggerTest extends PHPUnit_Framework_TestCase
+class LoggerTest extends PHPUnit_Framework_TestCase
 {
   private static $localeStorageDir;
 
@@ -7,7 +7,7 @@ class Pimf_LoggerTest extends PHPUnit_Framework_TestCase
   {
     self::$localeStorageDir = dirname(__FILE__) . '/_drafts/';
 
-    Pimf_Registry::set('env', new Pimf_Environment(array('REMOTE_ADDR'=>'localhost.test', 'PHP_SELF'=>'self.test.php')));
+    \Pimf\Registry::set('env', new \Pimf\Environment(array('REMOTE_ADDR'=>'localhost.test', 'PHP_SELF'=>'self.test.php')));
 
   }
 
@@ -22,24 +22,24 @@ class Pimf_LoggerTest extends PHPUnit_Framework_TestCase
 
   public function testCreatingNewInstanceAndDestructingIt()
   {
-    new Pimf_Logger(self::$localeStorageDir);
+    new \Pimf\Logger(self::$localeStorageDir);
   }
 
   public function testCreatingNewInstanceWithTrailingSeparatorAndDestructingIt()
   {
-    new Pimf_Logger(self::$localeStorageDir, true);
+    new \Pimf\Logger(self::$localeStorageDir, true);
   }
 
   public function testInitialisingTheFileResources()
   {
-    $logger = new Pimf_Logger(self::$localeStorageDir);
+    $logger = new \Pimf\Logger(self::$localeStorageDir);
 
     $logger->init();
   }
 
   public function testLoggingMethods()
   {
-    $logger = new Pimf_Logger(self::$localeStorageDir);
+    $logger = new \Pimf\Logger(self::$localeStorageDir);
     $logger->init();
 
     $logger->debug('debug msg')->error('error msg')->info('info msg')->warn('warn msg');

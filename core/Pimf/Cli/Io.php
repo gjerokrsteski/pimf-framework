@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Cli
+ * Cli
  *
  * PHP Version 5
  *
@@ -21,13 +21,16 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Cli;
+use Pimf\Cli\Color;
+
 /**
  * Responsible for accessing I/O streams that allow access to PHP's own input and output streams.
  *
- * @package Pimf_Cli
+ * @package Cli
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cli_Io
+class Io
 {
   /**
    * Allow direct access to the corresponding input stream of the PHP process.
@@ -67,7 +70,7 @@ class Pimf_Cli_Io
 
     while (true) {
 
-      echo Pimf_Cli_Color::paint("Please enter a " . $prompt . ":\n");
+      echo Color::paint("Please enter a " . $prompt . ":\n");
 
       $value = fgets($fp, 1024);
       $value = substr($value, 0, -1);
@@ -76,7 +79,7 @@ class Pimf_Cli_Io
         break;
       }
 
-      echo Pimf_Cli_Color::paint("Value format for " . $prompt . " is invalid!\n", 'red');
+      echo Color::paint("Value format for " . $prompt . " is invalid!\n", 'red');
     }
 
     return $value;

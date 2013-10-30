@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,16 +21,18 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * Due to PHP Bug #39736 - serialize() consumes insane amount of RAM.
  *
  * Now we can put objects, strings, integers or arrays. Even instances of SimpleXMLElement can be put too!
  *
- * @package Pimf_Util
+ * @package Util
  * @link https://bugs.php.net/bug.php?id=39736
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Serializer
+class Serializer
 {
   /**
    * Serialize things.
@@ -47,12 +49,12 @@ class Pimf_Util_Serializer
       $masked = true;
     }
 
-    $objectInformation         = new stdClass();
+    $objectInformation         = new \stdClass();
     $objectInformation->type   = get_class($object);
     $objectInformation->object = $object;
     $objectInformation->fake   = $masked;
 
-    if ($object instanceof SimpleXMLElement) {
+    if ($object instanceof \SimpleXMLElement) {
       $objectInformation->object = $object->asXml();
     }
 
@@ -85,7 +87,7 @@ class Pimf_Util_Serializer
    * @throws RuntimeException If error during serialize.
    * @return string
    */
-  protected static function serializeNative($value)
+  public static function serializeNative($value)
   {
     $ret = (extension_loaded('igbinary') && function_exists('igbinary_serialize'))
     	  ? @igbinary_serialize($value)
@@ -93,7 +95,7 @@ class Pimf_Util_Serializer
 
     if ($ret === false) {
       $lastErr = error_get_last();
-      throw new RuntimeException($lastErr['message']);
+      throw new \RuntimeException($lastErr['message']);
     }
 
     return $ret;
@@ -104,7 +106,7 @@ class Pimf_Util_Serializer
    * @throws RuntimeException If error during unserialize.
    * @return mixed
    */
-  protected static function unserializeNative($serialized)
+  public static function unserializeNative($serialized)
   {
     $ret = (extension_loaded('igbinary') && function_exists('igbinary_unserialize'))
           ? @igbinary_unserialize($serialized)
@@ -112,7 +114,7 @@ class Pimf_Util_Serializer
 
     if ($ret === false) {
       $lastErr = error_get_last();
-      throw new RuntimeException($lastErr['message']);
+      throw new \RuntimeException($lastErr['message']);
     }
 
     return $ret;

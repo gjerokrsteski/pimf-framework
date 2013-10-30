@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Controller
+ * Controller
  *
  * PHP Version 5
  *
@@ -18,23 +18,26 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Controller;
+use \Pimf\Registry, \Pimf\Environment, \Pimf\Controller\Exception as Bomb;
+
 /**
  * Defines the general controller behaviour - you have to extend it.
  *
- * @package Pimf_Controller
+ * @package Controller
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class Pimf_Controller_Abstract
+abstract class Base
 {
   /**
-   * @var Pimf_Request
+   * @var Request
    */
   protected $request;
 
   /**
-   * @param Pimf_Request $request
+   * @param \Pimf\Request $request
    */
-  public function __construct(Pimf_Request $request)
+  public function __construct(\Pimf\Request $request)
   {
     $this->request = $request;
   }
@@ -44,25 +47,25 @@ abstract class Pimf_Controller_Abstract
   /**
    * Method to show the content.
    * @return mixed
-   * @throws Pimf_Controller_Exception if no action found
+   * @throws \Pimf\Controller\Exception if no action found
    * @throws RuntimeException if bad request method
    */
   public function render()
   {
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
-    if (Pimf_Environment::isCli() && $conf['environment'] == 'production') {
+    if (Environment::isCli() && $conf['environment'] == 'production') {
 
       $suffix = 'CliAction';
       $action = $this->request->fromCli()->get('action') ?: 'index';
 
     } else {
 
-      $requestMethod = ucfirst(Pimf_Registry::get('env')->getRequestMethod());
+      $requestMethod = ucfirst(Registry::get('env')->getRequestMethod());
       $suffix        = 'Action';
 
       if (!method_exists($this->request, $bag = 'from'.$requestMethod)) {
-        throw new Pimf_Controller_Exception("not supported request method=".$requestMethod);
+        throw new Bomb("not supported request method=".$requestMethod);
       }
 
       $action = $this->request->{$bag}()->get('action') ?: 'index';
@@ -75,7 +78,7 @@ abstract class Pimf_Controller_Abstract
     }
 
     if (!method_exists($this, $action)) {
-      throw new Pimf_Controller_Exception(
+      throw new Bomb(
         "no action '{$action}' defined at controller ". get_class($this)
       );
     }

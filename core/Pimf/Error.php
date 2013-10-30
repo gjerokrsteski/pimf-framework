@@ -18,6 +18,9 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Registry, Pimf\Environment, Pimf\Header;
+
 /**
  * Defines the default exception handler if an exception is not caught within a try/catch block.
  * Execution will stop after the exception_handler is called.
@@ -25,13 +28,13 @@
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Error
+class Error
 {
   /**
    * Handle an exception and display the exception report.
    * @param Exception $exception
    */
-  public static function exception(Exception $exception)
+  public static function exception(\Exception $exception)
   {
     static::log($exception);
 
@@ -39,28 +42,30 @@ class Pimf_Error
 
     // if detailed errors are enabled, just format the exception into
     // a simple error message and display it.
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
     $msg  = null;
 
-
     if (isset($conf['error']['debug_info']) && $conf['error']['debug_info'] === true) {
-      $msg =
-        "<html><h2>Untreated Exception</h2>
-        <h3>Message:</h3>
-        <pre>" . $exception->getMessage() . "</pre>
-        <h3>Location:</h3>
-        <pre>" . $exception->getFile() . " on line " . $exception->getLine() . "</pre>
-        <h3>Stack Trace:</h3>
-        <pre>" . $exception->getTraceAsString() . "</pre></html>";
-
-      if (Pimf_Environment::isCli()) {
-        $msg = Pimf_Util_String::cleanAggressive($msg);
+      if (Environment::isCli()) {
+        $msg = "+++ Untreated Exception +++".PHP_EOL.
+        "Message: " . $exception->getMessage() .PHP_EOL.
+        "Location: " . $exception->getFile() . " on line " . $exception->getLine() .PHP_EOL.
+        "Stack Trace: " .PHP_EOL. $exception->getTraceAsString() .PHP_EOL;
+      } else {
+        $msg =
+          "<html><h2>Untreated Exception</h2>
+          <h3>Message:</h3>
+          <pre>" . $exception->getMessage() . "</pre>
+          <h3>Location:</h3>
+          <pre>" . $exception->getFile() . " on line " . $exception->getLine() . "</pre>
+          <h3>Stack Trace:</h3>
+          <pre>" . $exception->getTraceAsString() . "</pre></html>";
       }
       die($msg);
     }
 
-    Pimf_Util_Header::clear();
-    Pimf_Util_Header::sendInternalServerError($msg);
+    Header::clear();
+    Header::sendInternalServerError($msg);
     exit(1);
   }
 
@@ -78,9 +83,9 @@ class Pimf_Error
     }
 
     // create an ErrorException for the PHP error
-    $exception = new ErrorException($error, $code, 0, $file, $line);
+    $exception = new \ErrorException($error, $code, 0, $file, $line);
 
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
     if (in_array($code, (array)$conf['error']['ignore_levels'])) {
       return static::log($exception);
@@ -100,7 +105,7 @@ class Pimf_Error
 
     if (!is_null($error)) {
       extract($error, EXTR_SKIP);
-      static::exception(new ErrorException($message, $type, 0, $file, $line));
+      static::exception(new \ErrorException($message, $type, 0, $file, $line));
     }
   }
 
@@ -108,12 +113,12 @@ class Pimf_Error
    * Log an exception.
    * @param Exception $exception
    */
-  public static function log(Exception $exception)
+  public static function log(\Exception $exception)
   {
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
     if (isset($conf['error']['log']) && $conf['error']['log'] === true) {
-      Pimf_Registry::get('logger')->error($exception->getMessage() .' '. $exception->getTraceAsString());
+      Registry::get('logger')->error($exception->getMessage() .' '. $exception->getTraceAsString());
     }
   }
 }

@@ -18,6 +18,9 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\DataMapper\Base, Pimf\Database;
+
 /**
  * Based on PDO it is a general manager for data persistence and object relational mapping.
  *
@@ -25,7 +28,7 @@
  * @author Gjero Krsteski <gjero@krsteski.de>
  *
  */
-class Pimf_EntityManager extends Pimf_DataMapper_Abstract
+class EntityManager extends Base
 {
   /**
    * @var string The namespace name of data-mappers repository.
@@ -33,18 +36,18 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
   protected $prefix;
 
   /**
-   * @param Pimf_Pdo $db
+   * @param Database $db
    * @param string $prefix The data-mappers repository name.
    */
-  public function __construct(Pimf_Pdo $db, $prefix = 'Pimf')
+  public function __construct(\PDO $db, $prefix = '\Pimf')
   {
     parent::__construct($db);
-    $this->prefix = $prefix . '_DataMapper_';
+    $this->prefix = $prefix . '\DataMapper\\';
   }
 
   /**
    * @param string $entity The name of the data-mapper class.
-   * @return Pimf_DataMapper_Abstract
+   * @return Base
    * @throws BadMethodCallException If no entity fount at the repository.
    */
   public function load($entity)
@@ -56,7 +59,7 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
     }
 
     if (!class_exists($entity)) {
-      throw new BadMethodCallException(
+      throw new \BadMethodCallException(
         'entity "'.$entity.'" found at the data-mapper repository'
       );
     }
@@ -94,7 +97,7 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
 
   /**
    * @param string $entity
-   * @return Pimf_DataMapper_Abstract
+   * @return Base
    */
   public function __get($entity)
   {
@@ -102,7 +105,7 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
   }
 
   /**
-   * @return PDO
+   * @return Database
    */
   public function getPDO()
   {

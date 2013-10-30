@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,13 +21,16 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+use Pimf\Registry, Pimf\Environment;
+
 /**
  * Manages a raw HTTP header sending.
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Header
+class Header
 {
   protected static $cookies;
 
@@ -95,9 +98,7 @@ class Pimf_Util_Header
    */
   public static function sendDownloadDialog($fileOrString, $fileName)
   {
-    $registry = new Pimf_Registry();
-
-    $disposition = (false !== strpos($registry->env->getUserAgent(), 'MSIE 5.5')) ? '' : 'attachment; ';
+    $disposition = (false !== strpos(Registry::get('env')->getUserAgent(), 'MSIE 5.5')) ? '' : 'attachment; ';
 
     header("Pragma: public");
     header("Expires: 0");
@@ -120,7 +121,7 @@ class Pimf_Util_Header
    */
   public static function send($code, $status, $replace = true)
   {
-    header(''.Pimf_Registry::get('env')->getProtocolInfo().' ' . $code . ' ' . $status, $replace, $code);
+    header(''.Registry::get('env')->getProtocolInfo().' ' . $code . ' ' . $status, $replace, $code);
   }
 
   public static function sendXFrameDeny()
@@ -269,17 +270,17 @@ class Pimf_Util_Header
    */
   protected static function view($code, $status)
   {
-    if(Pimf_Environment::isCli()) {
+    if(Environment::isCli()) {
       die($status.PHP_EOL);
     }
 
     self::send($code, $status);
 
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
     $root = dirname(dirname(dirname(dirname(__FILE__))));
 
-    $appTpl  = $root.'/app/'.$conf['app']['name'].'/_error/'.$code.'.php';
-    $coreTpl = $root.'/core/Pimf/_error/'.$code.'.php';
+    $appTpl  = str_replace('/', DIRECTORY_SEPARATOR, $root.'/app/'.$conf['app']['name'].'/_error/'.$code.'.php');
+    $coreTpl = str_replace('/', DIRECTORY_SEPARATOR, $root.'/core/Pimf/_error/'.$code.'.php');
 
     if(file_exists($appTpl) && is_readable($appTpl)){
       die(include $appTpl);

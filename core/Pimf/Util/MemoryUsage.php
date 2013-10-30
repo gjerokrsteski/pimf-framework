@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,6 +21,8 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * PHP Memory Usage Information
  *
@@ -29,7 +31,7 @@
  *
  * <code>
  * // Create new MemoryUsageInformation class
- * $memoryUsage = new Pimf_Util_MemoryUsage(true);
+ * $memoryUsage = new MemoryUsage(true);
  * // Set start
  * $memoryUsage->setStart();
  * // Set memory usage before loop
@@ -70,10 +72,10 @@
  * Peak of memory usage: 17.25 MB
  * </code>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_MemoryUsage
+class MemoryUsage
 {
   /**
    * Set this to TRUE to get the real size of memory allocated from system.

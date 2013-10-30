@@ -18,11 +18,13 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+
 /**
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Param
+class Param
 {
   /**
    * @var ArrayObject
@@ -34,7 +36,7 @@ class Pimf_Param
    */
   public function __construct(array $data = array())
   {
-    $this->data = new ArrayObject($data, ArrayObject::STD_PROP_LIST);
+    $this->data = new \ArrayObject($data, \ArrayObject::STD_PROP_LIST);
   }
 
   /**

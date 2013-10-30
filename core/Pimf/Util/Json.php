@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,11 +21,13 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Json
+class Json
 {
   /**
    * Returns the JSON representation of a value.
@@ -44,11 +46,12 @@ class Pimf_Util_Json
   /**
    * Decodes a JSON string.
    * @param string $jsonString
+   * @param boolean $assoc If should be converted into associative array/s.
    * @return mixed
    */
-  public static function decode($jsonString)
+  public static function decode($jsonString, $assoc = false)
   {
-    $json = json_decode($jsonString);
+    $json = json_decode($jsonString, $assoc);
 
     self::handleError(json_last_error());
 
@@ -82,7 +85,7 @@ class Pimf_Util_Json
     }
 
     if ($msg !== '') {
-      throw new RuntimeException($msg);
+      throw new \RuntimeException($msg);
     }
   }
 }

@@ -18,16 +18,19 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Param;
+
 /**
  * Server and execution environment information.
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Environment
+class Environment
 {
   /**
-   * @var Pimf_Param
+   * @var Param
    */
   private $envData;
 
@@ -36,11 +39,11 @@ class Pimf_Environment
    */
   public function __construct(array $envData)
   {
-    $this->envData = new Pimf_Param($envData);
+    $this->envData = new Param($envData);
   }
 
   /**
-   * @return Pimf_Param
+   * @return Param
    */
   public function getData()
   {

@@ -1,9 +1,9 @@
 <?php
-class Pimf_RegistryTest extends PHPUnit_Framework_TestCase
+class RegistryTest extends PHPUnit_Framework_TestCase
 {
   public function testSettingItems()
   {
-    $reg = new Pimf_Registry();
+    $reg = new \Pimf\Registry();
 
     $reg->list      = array(1,2,3);
     $reg->my_object = (object)array('a'=>1,'b'=>2);
@@ -11,21 +11,21 @@ class Pimf_RegistryTest extends PHPUnit_Framework_TestCase
 
   public function testGettingItems()
   {
-    $reg = new Pimf_Registry();
+    $reg = new \Pimf\Registry();
 
     $this->assertEquals(array(1,2,3), $reg->list);
   }
 
   public function testGettingItemsStatically()
   {
-    $this->assertEquals(array(1,2,3), Pimf_Registry::get('list'));
+    $this->assertEquals(array(1,2,3), \Pimf\Registry::get('list'));
   }
 
   public function testSettingItemsStatically()
   {
-    Pimf_Registry::set('list', array(1,2,3));
-    Pimf_Registry::set('list', array(1,2,3,4,5=>'test'));
+    \Pimf\Registry::set('list', array(1,2,3));
+    \Pimf\Registry::set('list', array(1,2,3,4,5=>'test'));
 
-    $this->assertEquals(array(1,2,3,4,5=>'test'), Pimf_Registry::get('list'));
+    $this->assertEquals(array(1,2,3,4,5=>'test'), \Pimf\Registry::get('list'));
   }
 }

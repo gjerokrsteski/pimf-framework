@@ -22,7 +22,7 @@
 
     <p>
       Perhaps you would like to go to our
-      <a href="<?php echo Pimf_Registry::get('env')->getUrl(); ?>"><?php echo Pimf_Registry::get('env')->getUrl(); ?></a> ?
+      <a href="<?php echo \Pimf\Registry::get('env')->getUrl(); ?>"><?php echo \Pimf\Registry::get('env')->getUrl(); ?></a> ?
     </p>
 
 </body>

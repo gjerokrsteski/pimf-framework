@@ -1,6 +1,8 @@
 <?php
 require_once dirname(__FILE__).'/_fixture/EnumFixtures.php';
 
+use Fixture\WeekDays, Fixture\State;
+
 class EnumTest extends PHPUnit_Framework_TestCase
 {
   public function testDefaultValue()

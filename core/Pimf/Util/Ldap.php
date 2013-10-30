@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -20,6 +20,9 @@
  * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
+
+namespace Pimf\Util;
+use Pimf\Registry;
 
 /**
  * Wrapper for Lightweight Directory Access Protocol and for a access to "Directory Servers"
@@ -48,10 +51,10 @@
  * </code>
  *
  * @link http://www.php.net/manual/en/intro.ldap.php
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Ldap
+class Ldap
 {
   /**
    * @var resource
@@ -61,7 +64,7 @@ class Pimf_Util_Ldap
   public function __construct()
   {
     if (!function_exists('ldap_connect')) {
-      throw new RuntimeException(
+      throw new \RuntimeException(
         'LDAP-auth requires the php-ldap extension to be installed'
       );
     }
@@ -83,17 +86,17 @@ class Pimf_Util_Ldap
   public function retrieve($token)
   {
     if (empty($token)) {
-      throw new RuntimeException('empty token given');
+      throw new \RuntimeException('empty token given');
     }
 
     if (is_null($this->conn)) {
 
-      $config = Pimf_Registry::get('ldap');
+      $config = Registry::get('ldap');
 
       try {
         $this->connect($config['user'], $config['password']);
-      } catch (Exception $e) {
-        throw new RuntimeException('LDAP control account error: ' . ldap_error($this->conn));
+      } catch (\Exception $e) {
+        throw new \RuntimeException('LDAP control account error: ' . ldap_error($this->conn));
       }
     }
 
@@ -101,7 +104,7 @@ class Pimf_Util_Ldap
       return $user;
     }
 
-    throw new RuntimeException('no user found for ' . $token);
+    throw new \RuntimeException('no user found for ' . $token);
   }
 
   /**
@@ -113,11 +116,11 @@ class Pimf_Util_Ldap
    */
   public function attempt($username, $password)
   {
-    $config = Pimf_Registry::get('ldap');
+    $config = Registry::get('ldap');
 
     try {
       return $this->login($username, $password, $config['group']);
-    } catch (RuntimeException $e) {
+    } catch (\RuntimeException $e) {
       return false;
     }
   }
@@ -130,22 +133,22 @@ class Pimf_Util_Ldap
    */
   protected function connect($user, $password)
   {
-    $config = Pimf_Registry::get('ldap');
+    $config = Registry::get('ldap');
 
     // guess base DN from domain
     if (!isset($config['basedn'])) {
-      $length                = strrpos($config['domain'], '.');
+      $length           = strrpos($config['domain'], '.');
       $config['basedn'] = sprintf(
         'dc=%s,dc=%s', substr($config['domain'], 0, $length), substr($config['domain'], $length + 1)
       );
 
       // override the basedn
-      Pimf_Registry::set('ldap', $config);
+      Registry::set('ldap', $config);
     }
 
     // connect to the controller
     if (!$this->conn = ldap_connect("ldap://{$config['host']}.{$config['domain']}")) {
-      throw new RuntimeException(
+      throw new \RuntimeException(
         "could not connect to LDAP host {$config['host']}.{$config['domain']}: " . ldap_error($this->conn)
       );
     }
@@ -156,7 +159,7 @@ class Pimf_Util_Ldap
 
     // try to authenticate
     if (!@ldap_bind($this->conn, "{$user}@{$config['domain']}", $password)) {
-      throw new RuntimeException(
+      throw new \RuntimeException(
         'could not bind to AD: ' . "{$user}@{$config['domain']}: " . ldap_error($this->conn)
       );
     }
@@ -174,18 +177,17 @@ class Pimf_Util_Ldap
   protected function login($user, $password, $group = null)
   {
     if (!$this->connect($user, $password)) {
-      throw new RuntimeException(
+      throw new \RuntimeException(
         'could not connect to LDAP: ' . ldap_error($this->conn)
       );
     }
 
-    $config = Pimf_Registry::get('ldap');
-
+    $config      = Registry::get('ldap');
     $groupObject = $this->getAccount($group, $config['basedn']);
     $userObject  = $this->getAccount($user, $config['basedn']);
 
     if ($group && !$this->checkGroup($userObject['dn'], $groupObject['dn'])) {
-      throw new RuntimeException('user is not part of the "' . $group . '" group.');
+      throw new \RuntimeException('user is not part of the "' . $group . '" group.');
     }
 
     return $this->fetch($userObject);
@@ -199,7 +201,7 @@ class Pimf_Util_Ldap
   protected function fetch($user)
   {
     if (!isset($user['cn'][0])) {
-      throw new RuntimeException('not a valid user object');
+      throw new \RuntimeException('not a valid user object');
     }
 
     return (object)array(
@@ -222,7 +224,7 @@ class Pimf_Util_Ldap
   protected function getAccount($account, $basedn)
   {
     if (is_null($this->conn)) {
-      throw new RuntimeException('no LDAP connection bound');
+      throw new \RuntimeException('no LDAP connection bound');
     }
 
     $result = ldap_search(
@@ -252,7 +254,7 @@ class Pimf_Util_Ldap
   public function checkGroup($userDN, $groupDN)
   {
     if (!$user = $this->getUser($userDN)) {
-      throw new RuntimeException('invalid user DN');
+      throw new \RuntimeException('invalid user DN');
     }
 
     for ($i = 0; $i < $user->memberof['count']; $i++) {
@@ -272,7 +274,7 @@ class Pimf_Util_Ldap
   public function getUser($userDN)
   {
     if (is_null($this->conn)) {
-      throw new RuntimeException('no LDAP connection bound');
+      throw new \RuntimeException('no LDAP connection bound');
     }
 
     $result = ldap_read($this->conn, $userDN, '(objectclass=*)');

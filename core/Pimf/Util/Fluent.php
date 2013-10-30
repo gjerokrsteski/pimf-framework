@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,13 +21,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * Creates ad-hoc object as data container, using fluent interface,
  * for any purpose you need. Implements tons of magic methods.
  *
  * <code>
  *    // Create a new fluent container with attributes
- *    $model = new Pimf_Util_Fluent(array('name' => 'Lammy'));
+ *    $model = new Fluent(array('name' => 'Lammy'));
  *
  *    // or fluently set the value of a few attributes
  *    $model->name('Lammy')->age(25);
@@ -36,17 +38,17 @@
  *    $model->nullable();
  * </code>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Fluent extends ArrayObject
+class Fluent extends \ArrayObject
 {
   /**
    * @param array $attributes
    */
   public function __construct(array $attributes = array())
   {
-    parent::__construct($attributes,ArrayObject::ARRAY_AS_PROPS + ArrayObject::STD_PROP_LIST);
+    parent::__construct($attributes, \ArrayObject::ARRAY_AS_PROPS + \ArrayObject::STD_PROP_LIST);
   }
 
   /**
@@ -67,7 +69,7 @@ class Pimf_Util_Fluent extends ArrayObject
    * Handle dynamic calls to the container to set attributes.
    * @param $method
    * @param $parameters
-   * @return Pimf_Util_Fluent
+   * @return Fluent
    */
   public function __call($method, $parameters)
   {

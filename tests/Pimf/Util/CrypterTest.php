@@ -5,14 +5,14 @@ class CrypterTest extends PHPUnit_Framework_TestCase
 
   protected function setUp()
   {
-    Pimf_Registry::set('config', array('app'=>array('name'=>'MyTestApp')));
+    \Pimf\Registry::set('config', array('app'=>array('name'=>'MyTestApp')));
   }
 
   public function testEncryptAndDecrypt()
   {
-    $encrypt = Pimf_Util_Crypter::encrypt(self::$testString);
+    $encrypt = Pimf\Util\Crypter::encrypt(self::$testString);
 
-    $decrypt = Pimf_Util_Crypter::decrypt($encrypt);
+    $decrypt = Pimf\Util\Crypter::decrypt($encrypt);
 
     $this->assertSame($decrypt, self::$testString);
   }

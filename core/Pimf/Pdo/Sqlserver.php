@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Pdo
+ * Database
  *
  * PHP Version 5
  *
@@ -18,24 +18,27 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Pdo;
+use Pimf\Pdo\Connector;
+
 /**
  * Connection management to SQL Server
  *
- * @package Pimf_Pdo
+ * @package Database
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Pdo_Sqlserver extends Pimf_Pdo_Connector
+class Sqlserver extends Connector
 {
   protected $options = array(
-    PDO::ATTR_CASE              => PDO::CASE_LOWER,
-    PDO::ATTR_ERRMODE           => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_ORACLE_NULLS      => PDO::NULL_NATURAL,
-    PDO::ATTR_STRINGIFY_FETCHES => false,
+    \PDO::ATTR_CASE              => \PDO::CASE_LOWER,
+    \PDO::ATTR_ERRMODE           => \PDO::ERRMODE_EXCEPTION,
+    \PDO::ATTR_ORACLE_NULLS      => \PDO::NULL_NATURAL,
+    \PDO::ATTR_STRINGIFY_FETCHES => false,
   );
 
   /**
    * @param array $config
-   * @return Pimf_Pdo
+   * @return Pdo
    */
   public function connect(array $config)
   {
@@ -50,6 +53,6 @@ class Pimf_Pdo_Sqlserver extends Pimf_Pdo_Connector
       $dsn = "sqlsrv:Server={$config['host']}{$port};Database={$config['database']}";
     }
 
-    return new Pimf_Pdo($dsn, $config['username'], $config['password'], $this->options($config));
+    return new \Pimf\Database($dsn, $config['username'], $config['password'], $this->options($config));
   }
 }

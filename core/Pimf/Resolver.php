@@ -18,13 +18,16 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Registry, Pimf\Resolver\Exception as Bomb;
+
 /**
  * Resolves the user requests to controller and action.
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Resolver
+class Resolver
 {
   /**
    * @var string
@@ -42,22 +45,22 @@ class Pimf_Resolver
   protected $controllerRepositoryPath;
 
   /**
-   * @var Pimf_Request
+   * @var Request
    */
   protected $request;
 
   /**
-   * @param Pimf_Request $request
+   * @param Request $request
    * @param string $controllerRepositoryPath
    * @param string $prefix
    */
-  public function __construct(Pimf_Request $request, $controllerRepositoryPath = '/Controller', $prefix = 'Pimf_')
+  public function __construct(Request $request, $controllerRepositoryPath = '/Controller', $prefix = 'Pimf\\')
   {
     $controllerName = $request->fromGet()->get('controller');
 
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
-    if (Pimf_Environment::isCli() && $conf['environment'] == 'production') {
+    if (Environment::isCli() && $conf['environment'] == 'production') {
       $controllerName = $request->fromCli()->get('controller');
     }
 
@@ -67,18 +70,18 @@ class Pimf_Resolver
 
     $this->controllerRepositoryPath = $controllerRepositoryPath;
     $this->request                  = $request;
-    $this->controllerClassName      = $prefix . 'Controller_';
+    $this->controllerClassName      = $prefix . 'Controller\\';
     $this->controllerFilePath       = $this->controllerRepositoryPath . '/' . ucfirst($controllerName) . '.php';
   }
 
   /**
-   * @return Pimf_Controller_Abstract
-   * @throws Pimf_Resolver_Exception If no controller specified or no controller found at the repository.
+   * @return Base
+   * @throws Exception If no controller specified or no controller found at the repository.
    */
   public function process()
   {
     if (!file_exists($this->controllerFilePath)) {
-      throw new Pimf_Resolver_Exception(
+      throw new Bomb(
         'no controller found at the repository path; ' . $this->controllerFilePath
       );
     }
@@ -88,7 +91,7 @@ class Pimf_Resolver
     $controller = str_replace('.php', '', $name);
 
     if (!class_exists($controller)) {
-      throw new Pimf_Resolver_Exception(
+      throw new Bomb(
         'can not load class "'.$controller.'" from the repository'
       );
     }

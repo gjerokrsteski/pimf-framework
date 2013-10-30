@@ -18,13 +18,14 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session\Storages;
+use Pimf\Session\Storages\Storage, Pimf\Contracts\Cleanable;
+
 /**
- * @package Pimf_Session_Storages
+ * @package Session_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session_Storages_File
-  extends Pimf_Session_Storages_Storage
-  implements Pimf_Contracts_Cleanable
+class File extends Storage implements Cleanable
 {
   /**
    * The path to which the session files should be written.

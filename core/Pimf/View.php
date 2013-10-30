@@ -18,13 +18,16 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Contracts\Renderable, Pimf\Registry, Pimf\Util\String, Pimf\Util\File, Pimf\Contracts\Arrayable;
+
 /**
  * A simply view for sending and rendering data.
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_View implements Pimf_Contracts_Renderable
+class View implements Renderable
 {
   /**
    * @var string Name of the template.
@@ -43,10 +46,10 @@ class Pimf_View implements Pimf_Contracts_Renderable
    */
   public function __construct($template = 'default.phtml', array $data = array())
   {
-    $this->data     = new ArrayObject($data, ArrayObject::ARRAY_AS_PROPS);
-    $conf           = Pimf_Registry::get('conf');
+    $this->data     = new \ArrayObject($data, \ArrayObject::ARRAY_AS_PROPS);
+    $conf           = Registry::get('conf');
 
-    $root = Pimf_Util_String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
 
     $this->path     = $root. '/app/' . $conf['app']['name'] . '/_templates';
     $this->template = (string)$template;
@@ -54,7 +57,7 @@ class Pimf_View implements Pimf_Contracts_Renderable
 
   /**
    * @param string $template
-   * @return Pimf_View
+   * @return View
    */
   public function produce($template)
   {
@@ -65,12 +68,12 @@ class Pimf_View implements Pimf_Contracts_Renderable
 
   /**
    * @param string $template
-   * @param array|Pimf_Contracts_Arrayable $model
+   * @param array|Arrayable $model
    * @return mixed
    */
   public function partial($template, $model = array())
   {
-    $model = ($model instanceof Pimf_Contracts_Arrayable) ? $model->toArray() : $model;
+    $model = ($model instanceof Arrayable) ? $model->toArray() : $model;
 
     return $this->produce($template)->pump($model)->render();
   }
@@ -95,7 +98,7 @@ class Pimf_View implements Pimf_Contracts_Renderable
    * Assigns a variable to a specific key for the template.
    * @param string $key The key.
    * @param mixed $value The Value.
-   * @return Pimf_View
+   * @return View
    */
   public function assign($key, $value)
   {
@@ -106,7 +109,7 @@ class Pimf_View implements Pimf_Contracts_Renderable
   /**
    * Exchange all variables.
    * @param $model
-   * @return Pimf_View
+   * @return View
    */
   public function pump(array $model)
   {
@@ -150,7 +153,7 @@ class Pimf_View implements Pimf_Contracts_Renderable
 
       echo $this->reunite();
 
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
 
       while (ob_get_level() > $level) {
         ob_end_clean();
@@ -169,7 +172,7 @@ class Pimf_View implements Pimf_Contracts_Renderable
    */
   public function reunite()
   {
-    include new Pimf_Util_File($this->path . '/' . $this->template);
+    include new File(str_replace('/', DIRECTORY_SEPARATOR, $this->path . '/' . $this->template));
   }
 
   /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Controller
+ * Controller
  *
  * PHP Version 5
  *
@@ -18,13 +18,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Controller;
+
 /**
  * Use this exception when you want slightly to show in a application.
  *
- * @package Pimf_Controller
+ * @package Controller
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Controller_Exception extends DomainException
+class Exception extends \DomainException
 {
 
 }

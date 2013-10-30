@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,6 +21,8 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
  * Instant caching into a file at you local system.
  *
@@ -28,19 +30,19 @@
  *
  * $data = 'some sample data here, as string, array or object!';
  *
- * Pimf_Cache::cache('my.data.cache.id', $data);
+ * Cache::cache('my.data.cache.id', $data);
  *
- * $hasData = Pimf_Cache::cache('my.data.cache.id');
+ * $hasData = Cache::cache('my.data.cache.id');
  *
  * if ($hasData !== null) {
  *   $data = $hasData
  * }
  * </code>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Cache
+class Cache
 {
   /**
    * Reads/writes temporary data to cache files.
@@ -78,15 +80,15 @@ class Pimf_Util_Cache
 
           $data = @file_get_contents($filename);
 
-          if (Pimf_Util_String::isSerialized($data) === true) {
-            $data = Pimf_Util_Serializer::unserialize($data);
+          if (String::isSerialized($data) === true) {
+            $data = Serializer::unserialize($data);
           }
         }
       }
     } elseif (is_writable(dirname($filename))) {
 
       if (!is_string($data)) {
-        $data = Pimf_Util_Serializer::serialize($data);
+        $data = Serializer::serialize($data);
       }
 
       @file_put_contents($filename, $data, LOCK_EX);

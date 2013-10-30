@@ -18,13 +18,15 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Contracts;
+
 /**
  * A simply interface to give the view-adapters teh contents of the object.
  *
- * @package Pimf_Contracts
+ * @package Contracts
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-interface Pimf_Contracts_Renderable
+interface Renderable
 {
 	/**
 	 * Get the evaluated contents of the object.

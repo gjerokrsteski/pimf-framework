@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,13 +21,16 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+use Pimf\Util\Json;
+
 /**
  * An XML util for converting XML to DOMDocument or SimpleXMLElement or to Array.
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Xml
+class Xml
 {
   /**
    * Convert anything DOMDocument|SimpleXMLElement|string to DOMDocument.
@@ -37,20 +40,20 @@ class Pimf_Util_Xml
    */
   public static function toDOMDocument($xml)
   {
-    if ($xml instanceof DOMDocument) {
+    if ($xml instanceof \DOMDocument) {
       // parameter is DOMDocument
       return $xml;
     }
 
-    if ($xml instanceof SimpleXMLElement) {
-      $doc = new DOMDocument();
+    if ($xml instanceof \SimpleXMLElement) {
+      $doc = new \DOMDocument();
       $doc->load($xml->asXML());
 
       return $doc;
     }
 
     if (is_string($xml)) {
-      $doc = new DOMDocument();
+      $doc = new \DOMDocument();
 
       if (is_file($xml)) {
           // parameter is file name
@@ -67,7 +70,7 @@ class Pimf_Util_Xml
 
     $type = is_object($xml) ? get_class($xml) : gettype($xml);
 
-    throw new InvalidArgumentException(
+    throw new \InvalidArgumentException(
       "Cannot convert instance of '$type' to DOMDocument"
     );
   }
@@ -80,12 +83,12 @@ class Pimf_Util_Xml
    */
   public static function toSimpleXMLElement($xml)
   {
-    if ($xml instanceof SimpleXMLElement) {
+    if ($xml instanceof \SimpleXMLElement) {
       // parameter is DOMDocument
       return $xml;
     }
 
-    if ($xml instanceof DOMDocument) {
+    if ($xml instanceof \DOMDocument) {
       return simplexml_import_dom($xml);
     }
 
@@ -102,7 +105,7 @@ class Pimf_Util_Xml
 
     $type = is_object($xml) ? get_class($xml) : gettype($xml);
 
-    throw new InvalidArgumentException(
+    throw new \InvalidArgumentException(
     	"Cannot convert instance of '$type' to DOMDocument"
     );
   }
@@ -114,14 +117,14 @@ class Pimf_Util_Xml
    * @throws OutOfBoundsException If namespace not found in the xml.
    * @return array
    */
-  public static function toArray(SimpleXMLElement $xml, $namespace = null)
+  public static function toArray(\SimpleXMLElement $xml, $namespace = null)
   {
     if ($namespace !== null) {
 
       $namespaces = $xml->getNamespaces();
 
       if (false === isset($namespaces[$namespace])) {
-        throw new OutOfBoundsException(
+        throw new \OutOfBoundsException(
           'namespace ['.$namespace.'] not found'
         );
       }
@@ -129,8 +132,6 @@ class Pimf_Util_Xml
       $xml = $xml->children($namespaces[$namespace]);
     }
 
-    return json_decode(
-      json_encode($xml), true
-    );
+    return Json::decode(Json::encode($xml), true);
   }
 }

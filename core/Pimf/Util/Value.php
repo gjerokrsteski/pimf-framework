@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
  * PHP Version 5
  *
@@ -21,6 +21,9 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+use Pimf\Util\Message;
+
 /**
  * A helper class that provides static methods to convert component property values to specific types.
  *
@@ -29,7 +32,7 @@
  * <code>
  * public function setPropertyName($value)
  * {
- *     $value = Pimf_Util_Value::ensureBoolean($value);
+ *     $value = Value::ensureBoolean($value);
  *     // $value is now of boolean type
  * }
  * </code>
@@ -44,10 +47,10 @@
  *          with the value to be ensured is returned.
  * </pre>
  *
- * @package Pimf_Util
+ * @package Util
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Value
+class Value
 {
 	/**
 	 * Converts a value to boolean type.
@@ -111,7 +114,7 @@ class Pimf_Util_Value
      static $types;
 
      if (!isset($types[$className])) {
-       $types[$className] = new ReflectionClass($className);
+       $types[$className] = new \ReflectionClass($className);
      }
 
      if ($returnEnumValue === true) {
@@ -128,8 +131,8 @@ class Pimf_Util_Value
        }
      }
 
-     throw new InvalidArgumentException(
-       new Pimf_Util_Message(
+     throw new \InvalidArgumentException(
+       new Message(
          'Invalid enumerable value "%value". Please make sure it is among (%enum).',
          array('value' => $value, 'enum'=> implode(', ', $types[$className]->getConstants()))
        )

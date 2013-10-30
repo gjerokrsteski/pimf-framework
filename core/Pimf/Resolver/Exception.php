@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Resolver
+ * Resolver
  *
  * PHP Version 5
  *
@@ -18,11 +18,13 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Resolver;
+
 /**
- * @package Pimf_Resolver
+ * @package Resolver
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Resolver_Exception extends RuntimeException
+class Exception extends \RuntimeException
 {
 
 }

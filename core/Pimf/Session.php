@@ -18,36 +18,39 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Registry, Pimf\Session\Payload, Pimf\Cookie, Pimf\Session\Storages as SS;
+
 /**
  * Using the session
  *
  * <code>
  *
  *    // Retrieve the session instance and get an item
- *    Pimf_Session::instance()->get('name');
+ *    Session::instance()->get('name');
  *
  *    // Retrieve the session instance and place an item in the session
- *    Pimf_Session::instance()->put('name', 'Robin');
+ *    Session::instance()->put('name', 'Robin');
  *
  *    // Retrieve a value from the session
- *    $value = Pimf_Session::get('name');
+ *    $value = Session::get('name');
  *
  *    // Write a value to the session storage
- *    $value = Pimf_Session::put('name', 'Robin');
+ *    $value = Session::put('name', 'Robin');
  *
  *    // Equivalent statement using the "instance" method
- *    $value = Pimf_Session::instance()->put('name', 'Robin');
+ *    $value = Session::instance()->put('name', 'Robin');
  *
  * </code>
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session
+class Session
 {
   /**
    * The session singleton instance for the request.
-   * @var Pimf_Session_Payload
+   * @var Payload
    */
   public static $instance;
 
@@ -69,11 +72,11 @@ class Pimf_Session
    */
   public static function load()
   {
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
     static::start($conf['session']['storage']);
 
-    static::$instance->load(Pimf_Cookie::get($conf['session']['cookie']));
+    static::$instance->load(Cookie::get($conf['session']['cookie']));
   }
 
   /**
@@ -83,13 +86,13 @@ class Pimf_Session
    */
   public static function start($storage)
   {
-    static::$instance = new Pimf_Session_Payload(static::factory($storage));
+    static::$instance = new Payload(static::factory($storage));
   }
 
   /**
    * Create a new session storage instance.
    * @param $storage
-   * @return Pimf_Session_Storages_Storage
+   * @return Storage
    * @throws RuntimeException
    */
   public static function factory($storage)
@@ -99,41 +102,41 @@ class Pimf_Session
       return $resolver();
     }
 
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
     switch ($storage) {
       case 'apc':
-        return new Pimf_Session_Storages_Apc(Pimf_Cache::storage('apc'));
+        return new SS\Apc(Cache::storage('apc'));
 
       case 'cookie':
-        return new Pimf_Session_Storages_Cookie();
+        return new SS\Cookie();
 
       case 'file':
-        return new Pimf_Session_Storages_File($conf['session']['storage_path']);
+        return new SS\File($conf['session']['storage_path']);
 
       case 'pdo':
-        return new Pimf_Session_Storages_Pdo(Pimf_Pdo_Factory::get($conf['session']['database']));
+        return new SS\Pdo(Factory::get($conf['session']['database']));
 
       case 'memcached':
-        return new Pimf_Session_Storages_Memcached(Pimf_Cache::storage('memcached'));
+        return new SS\Memcached(Cache::storage('memcached'));
 
       case 'memory':
-        return new Pimf_Session_Storages_Memory();
+        return new SS\Memory();
 
       case 'redis':
-        return new Pimf_Session_Storages_Redis(Pimf_Cache::storage('redis'));
+        return new SS\Redis(Cache::storage('redis'));
 
       case 'dba':
-        return new Pimf_Session_Storages_Dba(Pimf_Cache::storage('dba'));
+        return new SS\Dba(Cache::storage('dba'));
 
       default:
-        throw new RuntimeException("Session storage [$storage] is not supported.");
+        throw new \RuntimeException("Session storage [$storage] is not supported.");
     }
   }
 
   /**
    * Retrieve the active session payload instance for the request.
-   * @return Pimf_Session_Payload
+   * @return Payload
    * @throws RuntimeException
    */
   public static function instance()
@@ -142,7 +145,7 @@ class Pimf_Session
       return static::$instance;
     }
 
-    throw new RuntimeException("A storage must be set before using the session.");
+    throw new \RuntimeException("A storage must be set before using the session.");
   }
 
   /**
@@ -157,12 +160,10 @@ class Pimf_Session
 
   /**
    * Register a third-party cache storage.
-   *
-   * @param string $storage
-   * @param Closure $resolver
-   * @return void
+   * @param $storage
+   * @param callable $resolver
    */
-  public static function extend($storage, Closure $resolver)
+  public static function extend($storage, \Closure $resolver)
   {
     static::$farm[$storage] = $resolver;
   }
@@ -172,7 +173,7 @@ class Pimf_Session
    * @param $method
    * @param $parameters
    *
-   * @return Pimf_Session_Storages_Storage
+   * @return Storage
    */
   public static function __callStatic($method, $parameters)
   {

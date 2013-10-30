@@ -18,11 +18,14 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Cache\Storages;
+use Pimf\Cache\Storages\Storage, Pimf\Database;
+
 /**
- * @package Pimf_Cache_Storages
+ * @package Cache_Storages
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cache_Storages_Pdo extends Pimf_Cache_Storages_Storage
+class Pdo extends Storage
 {
   /**
    * The cache key from the cache configuration file.
@@ -31,16 +34,16 @@ class Pimf_Cache_Storages_Pdo extends Pimf_Cache_Storages_Storage
   protected $key;
 
   /**
-   * @var Pimf_pdo
+   * @var pdo
    */
   protected $db;
 
   /**
    * Create a new database cache storage instance.
-   * @param Pimf_pdo $pdo
-   * @param string $key
+   * @param Pdo $pdo
+   * @param $key
    */
-  public function __construct(Pimf_pdo $pdo, $key)
+  public function __construct(\Pimf\Database $pdo, $key)
   {
     $this->db  = $pdo;
     $this->key = (string)$key;
@@ -62,7 +65,7 @@ class Pimf_Cache_Storages_Pdo extends Pimf_Cache_Storages_Storage
 
     $cache = $sth->fetchObject();
 
-    if ($cache instanceof stdClass) {
+    if ($cache instanceof \stdClass) {
 
       if (time() >= $cache->expiration) {
         return $this->forget($key);
@@ -77,7 +80,7 @@ class Pimf_Cache_Storages_Pdo extends Pimf_Cache_Storages_Storage
    *
    * <code>
    *    // Put an item in the cache for 15 minutes
-   *    Pimf_Cache::put('name', 'Robin', 15);
+   *    Cache::put('name', 'Robin', 15);
    * </code>
    *
    * @param  string  $key

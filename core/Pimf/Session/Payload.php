@@ -18,35 +18,38 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Session;
+use Pimf\Registry, Pimf\Session, Pimf\Util\String, Pimf\Cookie;
+
 /**
  * Using the session payload
  *
  * <code>
  *
  *    // Get an item from the session
- *    $name = Pimf_Session::get('name');
+ *    $name = Session::get('name');
  *
  *    // Return a default value if the item doesn't exist
- *    $name = Pimf_Session::get('name', 'Robin');
+ *    $name = Session::get('name', 'Robin');
  *
  *    // Write an item to the session payload
- *    Pimf_Session::put('name', 'Robin');
+ *    Session::put('name', 'Robin');
  *
  *    // Write an item to the session payload's flash data
- *    Pimf_Session::flash('name', 'Robin');
+ *    Session::flash('name', 'Robin');
  *
  *    // Keep the "name" item from expiring from the flash data
- *    Pimf_Session::keep('name');
+ *    Session::keep('name');
  *
  *    // Keep the "name" and "email" items from expiring from the flash data
- *    Pimf_Session::keep(array('name', 'email'));
+ *    Session::keep(array('name', 'email'));
  *
  * </code>
  *
- * @package Pimf_Session
+ * @package Session
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Session_Payload
+class Payload
 {
   /**
    * The session array that is stored by the storage.
@@ -56,7 +59,7 @@ class Pimf_Session_Payload
 
   /**
    * The session storage used to retrieve and store the session payload.
-   * @var Pimf_Session_Storages_Storage
+   * @var Storage
    */
   public $storage;
 
@@ -67,9 +70,9 @@ class Pimf_Session_Payload
   public $exists = true;
 
   /**
-   * @param Pimf_Session_Storages_Storage $storage
+   * @param Storages\Storage $storage
    */
-  public function __construct(Pimf_Session_Storages_Storage $storage)
+  public function __construct(\Pimf\Session\Storages\Storage $storage)
   {
     $this->storage = $storage;
   }
@@ -92,8 +95,8 @@ class Pimf_Session_Payload
 
     // A CSRF token is stored in every session to protect
     // the application from cross-site request
-    if (!$this->has(Pimf_Session::CSRF)) {
-      $this->put(Pimf_Session::CSRF, Pimf_Util_String::random(40));
+    if (!$this->has(Session::CSRF)) {
+      $this->put(Session::CSRF, String::random(40));
     }
   }
 
@@ -104,7 +107,7 @@ class Pimf_Session_Payload
    */
   protected static function expired($session)
   {
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
 
     if(array_key_exists('last_activity', $session)){
       return (time() - $session['last_activity']) > ($conf['session']['lifetime'] * 60);
@@ -224,9 +227,9 @@ class Pimf_Session_Payload
   public function flush()
   {
     $this->session['data'] = array(
-      Pimf_Session::CSRF => $this->token(),
-      ':new:'                  => array(),
-      ':old:'                  => array()
+      Session::CSRF => $this->token(),
+      ':new:'       => array(),
+      ':old:'       => array()
     );
   }
 
@@ -245,7 +248,7 @@ class Pimf_Session_Payload
    */
   public function token()
   {
-    return $this->get(Pimf_Session::CSRF);
+    return $this->get(Session::CSRF);
   }
 
   /**
@@ -269,7 +272,7 @@ class Pimf_Session_Payload
     // age it that should expire at the end of the user's next request.
     $this->age();
 
-    $conf = Pimf_Registry::get('conf');
+    $conf = Registry::get('conf');
     $sessionConf = $conf['session'];
 
     // save data into the specialized storage.
@@ -293,8 +296,8 @@ class Pimf_Session_Payload
    */
   public function clean()
   {
-    if ($this->storage instanceof Pimf_Contracts_Cleanable) {
-      $conf = Pimf_Registry::get('conf');
+    if ($this->storage instanceof \Pimf\Contracts\Cleanable) {
+      $conf = Registry::get('conf');
       $this->storage->clean(time() - ($conf['session']['lifetime'] * 60));
     }
   }
@@ -320,6 +323,6 @@ class Pimf_Session_Payload
 
     $minutes = (!$expire_on_close) ? $lifetime : 0;
 
-    Pimf_Cookie::put($cookie, $this->session['id'], $minutes, $path, $domain, $secure);
+    Cookie::put($cookie, $this->session['id'], $minutes, $path, $domain, $secure);
   }
 }

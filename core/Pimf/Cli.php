@@ -21,6 +21,9 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf;
+use Pimf\Cli\Color, Pimf\Util\String, Pimf\Registry;
+
 /**
  * A full featured package for managing command-line options and arguments,
  * it allows the developer to easily build complex command line interfaces.
@@ -28,7 +31,7 @@
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Cli
+class Cli
 {
    /**
     * Prints out a list of CLI commands from the system,
@@ -39,59 +42,64 @@ class Pimf_Cli
    {
      $classes = array();
 
-     $conf = Pimf_Registry::get('conf');
+     $conf = Registry::get('conf');
 
-     $root = dirname(dirname(dirname(dirname(__FILE__))));
-     $coreClr =  $root.'/pimf-framework/core/Pimf/Controller/';
-     $appClr =  $root.'/app/'.$conf['app']['name'].'/Controller/';
+     $root    = dirname(dirname(dirname(dirname(__FILE__))));
+     $coreClr = str_replace('/', DIRECTORY_SEPARATOR, $root . '/pimf-framework/core/Pimf/Controller/');
+     $appClr  = str_replace('/', DIRECTORY_SEPARATOR, $root . '/app/' . $conf['app']['name'] . '/Controller/');
 
      foreach (array( $appClr, $coreClr) as $dir) {
 
-       $iterator = new RegexIterator(
-         new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir)),
+       $iterator = new \RegexIterator(
+         new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir)),
          '/^.+\.php$/i',
-         RecursiveRegexIterator::GET_MATCH
+         \RecursiveRegexIterator::GET_MATCH
        );
 
        foreach (iterator_to_array($iterator, false) as $file) {
-         $file = str_replace('\\', '/', current($file));
-         $file = str_replace('/', DIRECTORY_SEPARATOR, $file);
-         $name = str_replace(array($root.DIRECTORY_SEPARATOR.'pimf-framework'.DIRECTORY_SEPARATOR.'core'.DIRECTORY_SEPARATOR, $root.DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR), '', $file);
-         $name = str_replace(DIRECTORY_SEPARATOR, '_', $name);
-         $name = str_replace('.php', '', $name);
-         $classes[] = $name;
+         $file      = str_replace('\\', '/', current($file));
+         $file      = str_replace('/', DIRECTORY_SEPARATOR, $file);
+         $name      = str_replace(
+           array(
+             $root . DIRECTORY_SEPARATOR . 'pimf-framework' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR,
+             $root . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR
+           ), '', $file
+         );
+        // $name      = str_replace(DIRECTORY_SEPARATOR, '_', $name);
+         $name      = str_replace('.php', '', $name);
+         $classes[] = '\\'.$name;
        }
      }
 
-     echo Pimf_Cli_Color::paint(
-       PHP_EOL.'PIMF v'.Pimf_Application::VERSION.' PHP Command Line Interface by Gjero Krsteski'.PHP_EOL
+     echo Color::paint(
+       PHP_EOL.'PIMF v'.\Pimf\Application::VERSION.' PHP Command Line Interface by Gjero Krsteski'.PHP_EOL
      );
 
-     echo Pimf_Cli_Color::paint(
+     echo Color::paint(
        '+------------------------------------------------------+'. PHP_EOL
      );
 
      array_map(
        function ($class) {
 
-           $reflection = new ReflectionClass($class);
+           $reflection = new \ReflectionClass($class);
 
-           if ($reflection->isSubclassOf('Pimf_Controller_Abstract')){
+           if ($reflection->isSubclassOf('\Pimf\Controller\Base')){
 
               $methods    = $reflection->getMethods();
               $controller = explode('_', $class);
 
-              echo Pimf_Cli_Color::paint('controller: ' . strtolower(end($controller)) . '' . PHP_EOL);
+              echo Color::paint('controller: ' . strtolower(end($controller)) . '' . PHP_EOL);
 
               array_map(
                 function ($method) {
                   if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
-                    echo Pimf_Cli_Color::paint(PHP_EOL.' action: ' . $command . ' '.PHP_EOL);
+                    echo Color::paint(PHP_EOL.' action: ' . $command . ' '.PHP_EOL);
                   }
                 }, $methods
               );
 
-             echo Pimf_Cli_Color::paint(
+             echo Color::paint(
                PHP_EOL.'+------------------------------------------------------+'. PHP_EOL
              );
 
@@ -113,7 +121,7 @@ class Pimf_Cli
 
     $command = current(array_keys($cli, ''));
 
-    if (Pimf_Util_String::contains($command, ':')){
+    if (String::contains($command, ':')){
 
       list($controller, $action) = explode(':', $command);
 

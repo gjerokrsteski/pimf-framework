@@ -5,12 +5,12 @@ class MessageFormaterTest extends PHPUnit_Framework_TestCase
 
   public function testCreatingANewInstance()
   {
-    new Pimf_Util_Message('Some message here');
+    new \Pimf\Util\Message('Some message here');
   }
 
   public function testCreatingANewInstanceWithBindingParamsToTheMessage()
   {
-    $message = new Pimf_Util_Message(
+    $message = new \Pimf\Util\Message(
       'Hello %your_name my name is %my_name! '
         .'I am %my_age, how old are you? I like %object!',
       array(
@@ -26,7 +26,7 @@ class MessageFormaterTest extends PHPUnit_Framework_TestCase
 
   public function testCreatingANewInstanceAnAdditionalBindingParamsToTheMessage()
   {
-    $message = new Pimf_Util_Message(
+    $message = new \Pimf\Util\Message(
       'Hello %your_name my name is %my_name! '
         .'I am %my_age, how old are you? I like %object!'
     );
@@ -41,7 +41,7 @@ class MessageFormaterTest extends PHPUnit_Framework_TestCase
 
   public function testSettingAndUsingNewPrefixDelimitter()
   {
-    $message = new Pimf_Util_Message(
+    $message = new \Pimf\Util\Message(
       'Hello :your_name my name is :my_name! '
         .'I am :my_age, how old are you? I like :object!'
     );
@@ -61,7 +61,7 @@ class MessageFormaterTest extends PHPUnit_Framework_TestCase
       'Hello :your_name my name is :my_name! '
       .'I am :my_age, how old are you? I like :object!';
 
-    $message = new Pimf_Util_Message($messagethatCanNotBeFormatet);
+    $message = new \Pimf\Util\Message($messagethatCanNotBeFormatet);
 
     $message->bind('your_name', 'Ben')
       ->bind('my_name', 'Matt')

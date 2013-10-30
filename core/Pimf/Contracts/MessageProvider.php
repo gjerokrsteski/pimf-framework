@@ -18,17 +18,19 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Contracts;
+
 /**
  * A simply interface to get messages for the instance.
  *
- * @package Pimf_Contracts
+ * @package Contracts
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-interface Pimf_Contracts_MessageProvider
+interface MessageProvider
 {
 	/**
 	 * Get the messages for the instance.
-	 * @return Pimf_Util_Message[]
+	 * @return Message[]
 	 */
 	public function getMessages();
 

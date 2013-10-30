@@ -1,6 +1,6 @@
 <?php
 /**
- * Pimf_Pdo
+ * Database
  *
  * PHP Version 5
  *
@@ -18,17 +18,20 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Pdo;
+use Pimf\Pdo\Connector;
+
 /**
  * Connection management to MySQL.
  *
- * @package Pimf_Pdo
+ * @package Database
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Pdo_Mysql extends Pimf_Pdo_Connector
+class Mysql extends Connector
 {
   /**
    * @param array $config
-   * @return Pimf_Pdo
+   * @return Pdo
    */
   public function connect(array $config)
   {
@@ -42,7 +45,7 @@ class Pimf_Pdo_Mysql extends Pimf_Pdo_Connector
       $dsn .= ";unix_socket={$config['unix_socket']}";
     }
 
-    $connection = new Pimf_Pdo($dsn, $config['username'], $config['password'], $this->options($config));
+    $connection = new \Pimf\Database($dsn, $config['username'], $config['password'], $this->options($config));
 
     // set to UTF-8 which should be fine for most scenarios.
     if (isset($config['charset'])) {
