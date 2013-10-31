@@ -65,7 +65,8 @@ class Cli
              $root . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR
            ), '', $file
          );
-        // $name      = str_replace(DIRECTORY_SEPARATOR, '_', $name);
+
+        $name      = str_replace(DIRECTORY_SEPARATOR, '\\', $name);
          $name      = str_replace('.php', '', $name);
          $classes[] = '\\'.$name;
        }
