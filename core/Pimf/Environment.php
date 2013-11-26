@@ -50,6 +50,10 @@ class Environment
     return $this->envData;
   }
 
+  /**
+   * @param $key
+   * @return mixed|null
+   */
   public function __get($key)
   {
     return $this->envData->get($key);

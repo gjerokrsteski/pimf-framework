@@ -310,7 +310,7 @@ class Header
   {
     $env = Registry::get('env');
 
-    return !((strtotime($env->HTTP_IF_MODIFIED_SINCE) >= $mtime) || ($env->HTTP_IF_NONE_MATCH == $etag));
+    return !(strtotime($env->HTTP_IF_MODIFIED_SINCE) >= $mtime || $env->HTTP_IF_NONE_MATCH == $etag);
   }
 
   /**
