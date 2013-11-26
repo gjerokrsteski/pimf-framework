@@ -288,4 +288,38 @@ class Header
 
     die(include $coreTpl);
   }
+
+  /**
+   * Sends validation headers for HTTP caching.
+   * @param int $mtime
+   * @param string $etag
+   */
+  public static function sendValidation($mtime, $etag)
+  {
+    header('Last-Modified:' . gmdate('D, j M Y H:i:s', $mtime) . ' GMT');
+    header('ETag: ' . $etag);
+  }
+
+  /**
+   * Actual HTTP caching validation.
+   * @param int $mtime
+   * @param string $etag
+   * @return bool
+   */
+  public static function isModified($mtime, $etag)
+  {
+    $env = Registry::get('env');
+
+    return !((strtotime($env->HTTP_IF_MODIFIED_SINCE) >= $mtime) || ($env->HTTP_IF_NONE_MATCH == $etag));
+  }
+
+  /**
+   * Tell clients when your resource expires.
+   * @param int $seconds
+   */
+  public static function sendExpire($seconds)
+  {
+    header('Expires: ' . gmdate('D, j M Y H:i:s T', time() + $seconds));
+    header('Cache-Control: max-age=' . $seconds . ', must-revalidate');
+  }
 }
