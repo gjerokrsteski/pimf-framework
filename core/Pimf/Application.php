@@ -14,7 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to gjero@krsteski.de so we can send you a copy immediately.
  *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
+ * @copyright Copyright (c) Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
@@ -33,7 +33,7 @@ use Pimf\Environment, Pimf\Cookie, Pimf\Session, Pimf\Logger, Pimf\Error,
  */
 final class Application
 {
-  const VERSION = '1.7';
+  const VERSION = '1.8';
 
   private static $bootstrapped;
 
@@ -45,7 +45,7 @@ final class Application
    * @param array $post Array of variables passed to the current script via the HTTP POST method.
    * @param array $cookie Array of variables passed to the current script via HTTP Cookies.
    *
-   * @throws LogicException If application not bootstrapped.
+   * @throws \LogicException If application not bootstrapped.
    * @return void
    */
   public static function run(array $get, array $post, array $cookie)
@@ -175,6 +175,17 @@ final class Application
         $registry->em = new EntityManager(\Pimf\Pdo\Factory::get($dbConf), $config['app']['name']);
       }
 
+      if($config['app']['routeable'] === true) {
+        $registry->router = new Router();
+        $root             = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+
+        if(file_exists($routes = $root.'app/' . $config['app']['name'] . '/routes.php')){
+          foreach((array)(include $routes) as $route) {
+            $registry->router->map($route);
+          }
+        }
+      }
+
     } catch (\Exception $e) {
       $problems[] = $e->getMessage();
     }
@@ -182,8 +193,6 @@ final class Application
     if (!empty($problems)) {
       die(print_r($problems, true));
     }
-
-    unset($dbDsn, $dbUser, $dbPwd, $extension, $problems, $config);
 
     static::$bootstrapped = true;
   }

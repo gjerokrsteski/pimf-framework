@@ -14,12 +14,12 @@
  * obtain it through the world-wide-web, please send an email
  * to gjero@krsteski.de so we can send you a copy immediately.
  *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Controller;
-use \Pimf\Registry, \Pimf\Environment, \Pimf\Controller\Exception as Bomb;
+use \Pimf\Param,  \Pimf\Registry, \Pimf\Environment, \Pimf\Controller\Exception as Bomb, \Pimf\Request;
 
 /**
  * Defines the general controller behaviour - you have to extend it.
@@ -48,7 +48,7 @@ abstract class Base
    * Method to show the content.
    * @return mixed
    * @throws \Pimf\Controller\Exception if no action found
-   * @throws RuntimeException if bad request method
+   * @throws \RuntimeException if bad request method
    */
   public function render()
   {
@@ -69,6 +69,20 @@ abstract class Base
       }
 
       $action = $this->request->{$bag}()->get('action') ?: 'index';
+
+      if($conf['app']['routeable'] === true) {
+
+        $target = Registry::get('router')->find();
+
+        if($target instanceof \Pimf\Route\Target) {
+
+          $action = $target->getAction();
+
+          Request::$getData = new Param(Request::stripSlashesIfMagicQuotes(
+            array_merge($target->getParams(), Request::$getData->getAll())
+          ));
+        }
+      }
     }
 
     $action = strtolower($action) . $suffix;

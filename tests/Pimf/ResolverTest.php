@@ -16,6 +16,7 @@ class ResolverTest extends PHPUnit_Framework_TestCase
           'name' => 'test-app-name',
           'key' => 'secret-key-here',
           'default_controller' => 'index',
+          'routeable' => false,
         ),
         'environment' => 'testing'
       )

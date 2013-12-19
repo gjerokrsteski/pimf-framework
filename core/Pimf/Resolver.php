@@ -14,7 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to gjero@krsteski.de so we can send you a copy immediately.
  *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
@@ -56,9 +56,18 @@ class Resolver
    */
   public function __construct(Request $request, $controllerRepositoryPath = '/Controller', $prefix = 'Pimf\\')
   {
+    $conf = Registry::get('conf');
+
     $controllerName = $request->fromGet()->get('controller');
 
-    $conf = Registry::get('conf');
+    if($conf['app']['routeable'] === true) {
+
+      $target = Registry::get('router')->find();
+
+      if($target instanceof \Pimf\Route\Target) {
+        $controllerName = $target->getController();
+      }
+    }
 
     if (Environment::isCli() && $conf['environment'] == 'production') {
       $controllerName = $request->fromCli()->get('controller');

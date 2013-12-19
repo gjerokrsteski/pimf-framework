@@ -14,7 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to gjero@krsteski.de so we can send you a copy immediately.
  *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
@@ -57,10 +57,10 @@ class Request
    */
   public function __construct(array $getData, array $postData = array(), array $cookieData = array(), array $cliData = array())
   {
-    static::$getData    = new Param($this->stripSlashesIfMagicQuotes($getData));
-    static::$postData   = new Param($this->stripSlashesIfMagicQuotes($postData));
+    static::$getData    = new Param(self::stripSlashesIfMagicQuotes($getData));
+    static::$postData   = new Param(self::stripSlashesIfMagicQuotes($postData));
     static::$cookieData = new Param($cookieData);
-    static::$cliData    = new Param($this->stripSlashesIfMagicQuotes($cliData));
+    static::$cliData    = new Param(self::stripSlashesIfMagicQuotes($cliData));
   }
 
   /**
@@ -105,7 +105,7 @@ class Request
    * @param null $overrideStripSlashes
    * @return array|string
    */
-  public function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
+  public static function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
   {
     $hasMagicQuotes = function_exists('get_magic_quotes_gpc') ? get_magic_quotes_gpc() : false;
 

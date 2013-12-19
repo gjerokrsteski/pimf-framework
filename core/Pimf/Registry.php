@@ -14,7 +14,7 @@
  * obtain it through the world-wide-web, please send an email
  * to gjero@krsteski.de so we can send you a copy immediately.
  *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
@@ -41,6 +41,7 @@ namespace Pimf;
  * @property Logger $logger
  * @property Environment $env
  * @property array $conf
+ * @property router $router
  */
 class Registry
 {
