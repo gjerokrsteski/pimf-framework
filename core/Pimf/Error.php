@@ -66,7 +66,8 @@ class Error
 
     Header::clear();
 
-    if($exception instanceof \Pimf\Controller\Exception) {
+    if($exception instanceof \Pimf\Controller\Exception
+    || $exception instanceof \Pimf\Resolver\Exception) {
       Header::sendNotFound($msg);
     } else {
       Header::sendInternalServerError($msg);
