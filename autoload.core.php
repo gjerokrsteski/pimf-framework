@@ -67,6 +67,8 @@ spl_autoload_register(
         'Pimf\\Session\\Storages\\Database'  => '/Pimf/Session/Storages/Database.php',
         'Pimf\\Session\\Storages\\Redis'     => '/Pimf/Session/Storages/Redis.php',
         'Pimf\\Session\\Storages\\Storage'   => '/Pimf/Session/Storages/Storage.php',
+        'Pimf\\Uri'                          => '/Pimf/Uri.php',
+        'Pimf\\Url'                          => '/Pimf/Url.php',
         'Pimf\\Util\\Cache'                  => '/Pimf/Util/Cache.php',
         'Pimf\\Util\\Crypter'                => '/Pimf/Util/Crypter.php',
         'Pimf\\Util\\Csv'                    => '/Pimf/Util/Csv.php',

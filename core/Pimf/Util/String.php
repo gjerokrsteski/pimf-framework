@@ -535,4 +535,26 @@ class String
   {
   	return $needle == substr($haystack, strlen($haystack) - strlen($needle));
   }
+
+  /**
+ 	 * Determine if a given string matches a given pattern.
+   *
+   * Asterisks are translated into zero-or-more regular expression wildcards
+   * to make it convenient to check if string such as "library/*".
+   *
+ 	 * @param  string  $pattern
+ 	 * @param  string  $value
+   *
+   * @return bool
+ 	 */
+ 	public static function is($pattern, $value)
+ 	{
+ 		if ($pattern !== '/')	{
+ 			$pattern = str_replace('*', '(.*)', $pattern).'\z';
+ 		} else {
+ 			$pattern = '^/$';
+ 		}
+
+ 		return preg_match('#'.$pattern.'#', $value);
+ 	}
 }
