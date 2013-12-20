@@ -1,33 +1,33 @@
 {
-  "name" : "gjerokrsteski/pimf",
-  "description" : "Micro framework for PHP that emphasises minimalism and simplicity",
-  "version" : "1.6.0",
-  "license" : "BSD",
-  "homepage" : "http://gjerokrsteski.github.io/pimf/",
-  "minimum-stability" : "stable",
-  "keywords" : ["framework", "pimf", "php"],
-  "support" : {
-    "email" : "gjero@krsteski.de",
-    "wiki" : "https://github.com/gjerokrsteski/pimf/wiki",
-    "source" : "https://github.com/gjerokrsteski/pimf-framework"
-  },
-  "authors" : [
-    {
-      "name" : "Gjero Krsteski",
-      "email" : "gjero@krsteski.de",
-      "homepage" : "http://krsteski.de/",
-      "role" : "Developer"
+    "name": "gjerokrsteski/pimf",
+    "description": "Micro framework for PHP that emphasises minimalism and simplicity",
+    "version": "1.8.0",
+    "license": "BSD",
+    "homepage": "http://gjerokrsteski.github.io/pimf/",
+    "minimum-stability": "stable",
+    "keywords": ["framework", "pimf", "php"],
+    "support": {
+        "email": "gjero@krsteski.de",
+        "wiki": "https://github.com/gjerokrsteski/pimf/wiki",
+        "source": "https://github.com/gjerokrsteski/pimf-framework"
+    },
+    "authors": [
+        {
+            "name": "Gjero Krsteski",
+            "email": "gjero@krsteski.de",
+            "homepage": "http://krsteski.de/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": ">=3.6",
+    },
+    "autoload": {
+        "psr-0": {
+            "": "core/"
+        }
     }
-  ],
-  "require" : {
-    "php" : ">=5.3"
-  },
-  "require-dev" : {
-    "phpunit/phpunit" : ">=3.6",
-  },
-  "autoload" : {
-    "psr-0" : {
-      "" : "core/"
-    }
-  }
 }
