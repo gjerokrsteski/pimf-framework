@@ -46,7 +46,7 @@ function url($route = '', array $params = array(), $https = null, $asset = false
 {
   $conf = \Pimf\Registry::get('conf');
   if($conf['app']['routeable'] === true) {
-    list($controller, $action) = explode('/', $route);
+    list($action, $controller) = explode('/', $route);
     $params = array_merge(compact('controller', 'action'), $params);
     return \Pimf\Url::base().'?'.http_build_query($params);
   }
