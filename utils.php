@@ -34,7 +34,15 @@ function is_empty($value)
   return !isset($value) || (is_scalar($value) ? (trim($value) === '') : empty($value));
 }
 
-function url($url = '', array $params = array(), $https = null, $asset = false)
+/**
+ * @param string $route like controller/action
+ * @param array  $params
+ * @param null   $https
+ * @param bool   $asset
+ *
+ * @return string
+ */
+function url($route = '', array $params = array(), $https = null, $asset = false)
 {
   $slug = implode('/', $params);
 
@@ -42,5 +50,5 @@ function url($url = '', array $params = array(), $https = null, $asset = false)
     $slug = '/' . $slug;
   }
 
-  return \Pimf\Url::to($url, $https, $asset) . $slug;
+  return \Pimf\Url::to($route, $https, $asset) . $slug;
 }
