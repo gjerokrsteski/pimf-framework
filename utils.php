@@ -34,7 +34,13 @@ function is_empty($value)
   return !isset($value) || (is_scalar($value) ? (trim($value) === '') : empty($value));
 }
 
-function url($url = '', $https = null, $asset = false)
+function url($url = '', array $params = array(), $https = null, $asset = false)
 {
-  return \Pimf\Url::to($url, $https, $asset);
+  $slug = implode('/', $params);
+
+  if ($slug != '')  {
+    $slug = '/' . $slug;
+  }
+
+  return \Pimf\Url::to($url, $https, $asset) . $slug;
 }
