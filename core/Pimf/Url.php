@@ -18,7 +18,7 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 namespace Pimf;
-use Pimf\Util\String as Str;
+use Pimf\Util\String as Str, Pimf\Util\Identifier as Identifier, Pimf\Util\Value as Value;
 
 /**
  * URL
@@ -112,6 +112,20 @@ class Url
       return $url;
     }
 
+    $root = self::format($https, $asset);
+
+    return rtrim($root, '/') . '/' . ltrim($url, '/');
+  }
+
+  /**
+   * Computes the URl method
+   * @param null $https
+   * @param bool $asset
+   *
+   * @return mixed
+   */
+  private static function format($https = null, $asset = false)
+  {
     $root = static::base();
     $conf = Registry::get('conf');
 
@@ -127,12 +141,10 @@ class Url
     // disable SSL on all framework generated links to make it more
     // convenient to work with the site while developing locally.
     if ($https and $conf['ssl']) {
-      $root = preg_replace('~http://~', 'https://', $root, 1);
-    } else {
-      $root = preg_replace('~https://~', 'http://', $root, 1);
+      return preg_replace('~http://~', 'https://', $root, 1);
     }
 
-    return rtrim($root, '/') . '/' . ltrim($url, '/');
+    return preg_replace('~https://~', 'http://', $root, 1);
   }
 
   /**
@@ -193,5 +205,34 @@ class Url
     }
 
     return filter_var($url, FILTER_VALIDATE_URL) !== false;
+  }
+
+  /**
+   * Get cleaner URLs or old-fashioned » RFC 3986 URL-query string.
+   *
+   * @param string $route controller/action
+   * @param array  $params
+   * @param null   $https
+   * @param bool   $asset
+   *
+   * @return string
+   */
+  public static function compute($route = '', array $params = array(), $https = null, $asset = false)
+  {
+    // if your application should work with RFC 3986 URL-query strings
+    $conf = Registry::get('conf');
+    if($conf['app']['routeable'] === false) {
+      list($controller, $action) = explode('/', $route);
+      $params = array_merge(compact('controller', 'action'), $params);
+      return Str::ensureTrailing('/', self::format($https, $asset)).'?'.http_build_query($params, null, '&');
+    }
+
+    // otherwise PIMF will serve you cleaner URLs
+    $slug = implode('/', $params);
+    if ($slug != '')  {
+      $slug = '/' . $slug;
+    }
+
+    return self::to($route, $https, $asset) . $slug;
   }
 }

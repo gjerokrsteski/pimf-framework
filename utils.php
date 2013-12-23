@@ -35,7 +35,7 @@ function is_empty($value)
 }
 
 /**
- * @param string $route like controller/action
+ * @param string $route controller/action
  * @param array  $params
  * @param null   $https
  * @param bool   $asset
@@ -44,17 +44,5 @@ function is_empty($value)
  */
 function url($route = '', array $params = array(), $https = null, $asset = false)
 {
-  $conf = \Pimf\Registry::get('conf');
-  if($conf['app']['routeable'] === false) {
-    list($controller, $action) = explode('/', $route);
-    $params = array_merge(compact('controller', 'action'), $params);
-    return \Pimf\Url::base().'?'.http_build_query($params);
-  }
-
-  $slug = implode('/', $params);
-  if ($slug != '')  {
-    $slug = '/' . $slug;
-  }
-
-  return \Pimf\Url::to($route, $https, $asset) . $slug;
+  return \Pimf\Url::compute($route, $params, $https, $asset);
 }

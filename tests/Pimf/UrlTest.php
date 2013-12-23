@@ -7,14 +7,14 @@ class UrlTest extends PHPUnit_Framework_TestCase
     \Pimf\Registry::set('env', new \Pimf\Environment($_SERVER));
   }
 
-  protected static function fakeConf($index = 'index.php', $ssl = true)
+  protected static function fakeConf($index = 'index.php', $ssl = true, $routeable = true)
   {
     \Pimf\Registry::set('conf', array(
 
       'ssl' => $ssl,
 
       'app' => array(
-    	  'routeable' => true,
+    	  'routeable' => $routeable,
         'url' => 'http://localhost',
         'index' => $index,
         'asset_url' => '',
@@ -68,4 +68,24 @@ class UrlTest extends PHPUnit_Framework_TestCase
 		self::fakeHttps('on');
 		$this->assertEquals('https://localhost/image.jpg', \Pimf\Url::to_asset('image.jpg'));
 	}
+
+  public function testComputingCleanerURLs()
+ 	{
+    self::fakeConf('', true);
+ 		$this->assertEquals('http://localhost/user/profile/189', \Pimf\Url::compute('user/profile', array('id'=>189)), 'bad schema is ssl=off');
+ 		$this->assertEquals('https://localhost/user/profile/189', \Pimf\Url::compute('user/profile', array('id'=>189), true), 'bad schema is ssl=on');
+
+     self::fakeConf('', false);
+ 		$this->assertEquals('http://localhost/user/profile/189', \Pimf\Url::compute('user/profile', array('id'=>189), true), 'bad schema is ssl=off https=true');
+ 	}
+
+  public function testComputingRFC_3986_URLs()
+  {
+    self::fakeConf('', true, false);
+ 		$this->assertEquals('http://localhost/?controller=user&action=profile&id=189', \Pimf\Url::compute('user/profile', array('id'=>189)), 'bad schema is ssl=off');
+ 		$this->assertEquals('https://localhost/?controller=user&action=profile&id=189', \Pimf\Url::compute('user/profile', array('id'=>189), true), 'bad schema is ssl=on');
+
+     self::fakeConf('', false, false);
+ 		$this->assertEquals('http://localhost/?controller=user&action=profile&id=189', \Pimf\Url::compute('user/profile', array('id'=>189), true), 'bad schema is ssl=off https=true');
+  }
 }
