@@ -12,6 +12,12 @@ The aim was to create robust and secure projects and deliver them fast. We wante
 
 PIMFs implementation is based on well proved design patterns as well as fast objects relation mapping mechanism - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without to override your projects. And for all of you out there, who like to create rich application interfaces with ExtJs or Dojo - we have created mechanism to couple your GUI to the controllers in a easy and fast way.
 
+
+Start with PIMF blog bundle now
+-------------------------------
+This Blog is a run ready bundle, which uses PIMF framework including a blog application based on SQLite database. Here you can learn how to work with Pimf_EntityManager, Pimf_Util_Validator and Pimf_View. https://github.com/gjerokrsteski/pimf-blog
+
+
 Learning PIMF
 -------------
 One of the best ways to learn PIMF is to read through the entirety of its documentation. This guide details all aspects of the framework and how to apply them to your application.
