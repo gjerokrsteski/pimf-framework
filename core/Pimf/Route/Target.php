@@ -44,12 +44,6 @@ class Target
   protected $action = 'index';
 
   /**
-   * If parameter :id presents
-   * @var mixed
-   */
-  protected $id;
-
-  /**
    * List of additional params at teh URL.
    * @var array
    */
@@ -69,14 +63,6 @@ class Target
   public function setAction($action)
   {
     $this->action = $action;
-  }
-
-  /**
-   * @param mixed $id
-   */
-  public function setId($id)
-  {
-    $this->id = $id;
   }
 
   /**
@@ -102,14 +88,6 @@ class Target
   public function getController()
   {
     return $this->controller;
-  }
-
-  /**
-   * @return string|null
-   */
-  public function getId()
-  {
-    return $this->id;
   }
 
   /**

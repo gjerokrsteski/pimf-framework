@@ -75,10 +75,6 @@ class Router
       unset($params['action']);
     }
 
-    if(isset($params['id'])){
-      $target->setId($params['id']);
-    }
-
     $target->setParams($params);
 
     return $target;

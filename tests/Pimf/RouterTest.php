@@ -38,7 +38,21 @@ class RouterTest extends PHPUnit_Framework_TestCase
     $this->assertInstanceOf('\\Pimf\\Route\\Target', $target, 'bad target');
     $this->assertEquals('users', $target->getController(), 'bad controller name');
     $this->assertEquals('show', $target->getAction(), 'bad action name');
-    $this->assertEquals(null, $target->getId(), 'bad id');
     $this->assertEquals(array('firstname' => 'Boby'), $target->getParams(), 'bad params list');
+  }
+
+  public function testWildcardRouteParameters()
+  {
+    self::mockUri('/hello/Berry/White');
+
+    $route  = new \Pimf\Route('/hello/:name+', array('controller'=>'hello'));
+    $router = new \Pimf\Router();
+    $router->map($route);
+    $target = $router->find();
+
+    $this->assertInstanceOf('\\Pimf\\Route\\Target', $target, 'bad target');
+    $this->assertEquals('hello', $target->getController(), 'bad controller name');
+    $this->assertEquals('index', $target->getAction(), 'bad action name');
+    $this->assertEquals(array('name' => array('Berry', 'White')), $target->getParams(), 'bad params list');
   }
 }
