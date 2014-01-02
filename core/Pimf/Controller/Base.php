@@ -104,11 +104,18 @@ abstract class Base
    * Prepares the response object to return an HTTP Redirect response to the client.
    *
    * @param string $route The redirect destination like controller/action
+   * @param boolean $permanent If permanent redirection or not.
    */
-  public function redirect($route)
+  public function redirect($route, $permanent = false)
   {
     $url = \Pimf\Url::compute($route);
-    \Pimf\Util\Header::sendFound();
+
+    if ($permanent === true) {
+      \Pimf\Util\Header::sendMovedPermanently();
+    } else {
+      \Pimf\Util\Header::sendFound();
+    }
+
     \Pimf\Util\Header::toLocation($url);
   }
 }
