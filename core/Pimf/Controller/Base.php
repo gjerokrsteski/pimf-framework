@@ -99,4 +99,16 @@ abstract class Base
 
     return call_user_func(array($this, $action));
   }
+
+  /**
+   * Prepares the response object to return an HTTP Redirect response to the client.
+   *
+   * @param string $route The redirect destination like controller/action
+   */
+  public function redirect($route)
+  {
+    $url = \Pimf\Url::compute($route);
+    \Pimf\Util\Header::sendTemporaryRedirect();
+    \Pimf\Util\Header::toLocation($url);
+  }
 }
