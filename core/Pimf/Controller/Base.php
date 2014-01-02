@@ -108,7 +108,7 @@ abstract class Base
   public function redirect($route)
   {
     $url = \Pimf\Url::compute($route);
-    \Pimf\Util\Header::sendTemporaryRedirect();
+    \Pimf\Util\Header::sendFound();
     \Pimf\Util\Header::toLocation($url);
   }
 }
