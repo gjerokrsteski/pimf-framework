@@ -124,12 +124,14 @@ final class Application
     }
 
     date_default_timezone_set($config['timezone']);
-    ini_set('display_errors', 'On');
 
     // setup the error reporting.
     if ($config['environment'] == 'testing') {
 
-      error_reporting(E_ALL | E_STRICT);
+      ini_set('display_errors', 'On');
+      ini_set('display_startup_errors', 'On');
+      error_reporting(-1);
+
       $dbConf = $config['testing']['db'];
 
     } else {
@@ -147,7 +149,10 @@ final class Application
         Error::shutdown();
       });
 
-      error_reporting(-1);
+      ini_set('display_errors', 'Off');
+      ini_set('display_startup_errors', 'Off');
+      error_reporting(E_ALL);
+
       $dbConf = $config['production']['db'];
     }
 
