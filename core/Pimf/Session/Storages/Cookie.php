@@ -19,7 +19,7 @@
  */
 
 namespace Pimf\Session\Storages;
-use Pimf\Session\Storages\Storage, Pimf\Util\Crypter;
+use Pimf\Session\Storages\Storage, Pimf\Util\Crypter, Pimf\Cookie as Crumb;
 
 /**
  * @package Session_Storages
@@ -40,10 +40,10 @@ class Cookie extends Storage
 	 */
   public function load($id)
   {
-    if (Cookie::has(static::payload)) {
+    if (Crumb::has(static::payload)) {
       return unserialize(
         Crypter::decrypt(
-          Cookie::get(static::payload)
+          Crumb::get(static::payload)
         )
       );
     }
@@ -59,7 +59,7 @@ class Cookie extends Storage
 	{
 		extract($config, EXTR_SKIP);
 
-    Cookie::put(static::payload, Crypter::encrypt(serialize($session)), $lifetime, $path, $domain);
+    Crumb::put(static::payload, Crypter::encrypt(serialize($session)), $lifetime, $path, $domain);
 	}
 
   /**
@@ -67,6 +67,6 @@ class Cookie extends Storage
    */
   public function delete($id)
 	{
-    Cookie::forget(static::payload);
+    Crumb::forget(static::payload);
 	}
 }
