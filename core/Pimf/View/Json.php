@@ -4,9 +4,6 @@
  *
  * PHP Version 5
  *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
- *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled

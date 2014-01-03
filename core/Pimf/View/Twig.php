@@ -4,9 +4,6 @@
  *
  * PHP Version 5
  *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
- *
  * LICENSE
  *
  * This source file is subject to the new BSD license that is bundled
@@ -28,7 +25,7 @@ use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value;
 /**
  * A view for TWIG a flexible, fast, and secure template engine for PHP.
  *
- * For use please add the following code to the end of the config.core.php file:
+ * For use please add the following code to the end of the config.app.php file:
  *
  * <code>
  *
