@@ -19,7 +19,7 @@
  */
 
 namespace Pimf\View;
-use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value;
+use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\util\String as String;
 
 /**
  * A view for HAANGA template engine that uses Django syntax - fast and secure template engine for PHP.
@@ -66,7 +66,7 @@ class Haanga extends View implements Reunitable
       $options['cache_dir'] = $this->path.'/haanga_cache';
     }
 
-    $root = \Pimf\util\String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
+    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
 
     require_once $root."Haanga/lib/Haanga.php";
 

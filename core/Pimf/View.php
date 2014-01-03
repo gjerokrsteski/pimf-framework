@@ -141,8 +141,8 @@ class View implements Renderable
 
   /**
    * @return string The Output of the template.
-   * @throws RuntimeException If could not find template.
-   * @throws Exception If previous thrown.
+   * @throws \RuntimeException If could not find template.
+   * @throws \Exception If previous thrown.
    */
   public function render()
   {
@@ -167,7 +167,7 @@ class View implements Renderable
 
   /**
    * Puts the template an the variables together.
-   * @throws RuntimeException
+   * @throws \RuntimeException
    * @return string
    */
   public function reunite()
