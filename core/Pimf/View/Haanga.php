@@ -48,10 +48,11 @@ class Haanga extends View implements Reunitable
 {
   /**
    * @param string $template
+   * @param array  $data
    */
-  public function __construct($template)
+  public function __construct($template, array $data = array())
   {
-    parent::__construct($template);
+    parent::__construct($template, $data);
 
     $conf = Registry::get('conf');
 
@@ -64,6 +65,10 @@ class Haanga extends View implements Reunitable
     if($conf['view']['haanga']['cache'] === true){
       $options['cache_dir'] = $this->path.'/haanga_cache';
     }
+
+    $root = \Pimf\util\String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
+
+    require_once $root."Haanga/lib/Haanga.php";
 
     \Haanga::configure($options);
   }
