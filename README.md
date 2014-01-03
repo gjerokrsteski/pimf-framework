@@ -21,6 +21,11 @@ Start with PIMF-Vanilla bundle
 ------------------------------
 This is a run ready "Hello world" bundle using PIMF micro framework. Here you can learn how to work with \Pimf\View and \Pimf\Router. https://github.com/gjerokrsteski/pimf-vanilla
 
+Start with PIMF-Haanga bundle
+-----------------------------
+This is a run ready "Hello world" application using PIMF micro framework and Haanga (http://haanga.org/documentation) a fast and secure template engine for PHP that uses Django syntax.
+Here you can learn how to work with \Pimf\View\Haanga template engine and \Pimf\Router. https://github.com/gjerokrsteski/pimf-haanga
+
 
 Learning PIMF
 -------------
