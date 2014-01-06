@@ -54,10 +54,11 @@ class Twig extends View implements Reunitable
 
   /**
    * @param string $template
+   * @param array  $data
    */
-  public function __construct($template)
+  public function __construct($template, array $data = array())
   {
-    parent::__construct($template);
+    parent::__construct($template, $data);
 
     $conf = Registry::get('conf');
 
