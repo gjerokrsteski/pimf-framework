@@ -13,19 +13,24 @@ The aim was to create robust and secure projects and deliver them fast. We wante
 PIMFs implementation is based on well proved design patterns as well as fast objects relation mapping mechanism - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without to override your projects. And for all of you out there, who like to create rich application interfaces with ExtJs or Dojo - we have created mechanism to couple your GUI to the controllers in a easy and fast way.
 
 
-Start with PIMF-Blog bundle
+Quickstart with PIMF-Blog bundle
 ---------------------------
 This Blog is a run ready bundle, which uses PIMF framework including a blog application based on SQLite database. Here you can learn how to work with \Pimf\EntityManager, \Pimf\Util\Validator and \Pimf\View. https://github.com/gjerokrsteski/pimf-blog
 
-Start with PIMF-Vanilla bundle
+Quickstart with PIMF-Vanilla bundle
 ------------------------------
 This is a run ready "Hello world" bundle using PIMF micro framework. Here you can learn how to work with \Pimf\View and \Pimf\Router. https://github.com/gjerokrsteski/pimf-vanilla
 
-Start with PIMF-Haanga bundle
+Quickstart with PIMF-Haanga bundle
 -----------------------------
 This is a run ready "Hello world" application using PIMF micro framework and Haanga (http://haanga.org/documentation) a fast and secure template engine for PHP that uses Django syntax.
 Here you can learn how to work with \Pimf\View\Haanga template engine and \Pimf\Router. https://github.com/gjerokrsteski/pimf-haanga
 
+Quickstart with PIMF-Twig bundle
+-----------------------------
+This is a run ready "Hello world" application using PIMF micro framework and Twig a flexible, fast, and secure template
+engine for PHP (http://twig.sensiolabs.org) brought for us by Symfony framework developers. Here you can learn how to work
+with \Pimf\View\Twig template engine and \Pimf\Router. https://github.com/gjerokrsteski/pimf-twig
 
 Learning PIMF
 -------------
