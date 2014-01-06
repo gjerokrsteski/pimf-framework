@@ -19,7 +19,7 @@
  */
 
 namespace Pimf\View;
-use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value;
+use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\Util\String as String;
 
 
 /**
@@ -48,7 +48,7 @@ use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value;
 class Twig extends View implements Reunitable
 {
   /**
-   * @var Twig_Environment
+   * @var \Twig_Environment
    */
   protected $twig;
 
@@ -60,6 +60,10 @@ class Twig extends View implements Reunitable
     parent::__construct($template);
 
     $conf = Registry::get('conf');
+
+    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
+
+    require_once $root."Twig/lib/Autoloader.php";
 
     \Twig_Autoloader::register();
 
@@ -80,7 +84,7 @@ class Twig extends View implements Reunitable
   }
 
   /**
-   * @return Twig_Environment
+   * @return \Twig_Environment
    */
   public function getTwig()
   {
