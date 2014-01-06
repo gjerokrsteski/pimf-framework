@@ -21,8 +21,7 @@
     </p>
 
     <p>
-      Perhaps you would like to go to our
-      <a href="<?php echo \Pimf\Registry::get('env')->getUrl(); ?>"><?php echo \Pimf\Registry::get('env')->getUrl(); ?></a> ?
+      Perhaps you would like to go to our <a href="<?php echo $home = url('/') ?>"><?php echo $home ?></a>
     </p>
 
 </body>

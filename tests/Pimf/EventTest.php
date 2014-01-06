@@ -61,25 +61,6 @@ class EventTest extends PHPUnit_Framework_TestCase
     \Pimf\Event::fire('start');
   }
 
-  public function testQueuedEvents()
-  {
-    $dummy = new \EventDummyClass();
-
-    //#1 registering an event flusher for the queue
-    \Pimf\Event::flusher('queue.dummy.id', function($key, $data, $arg1, $arg2)
-    {
-        // do anytime something with $key, $data, $arg1, $arg2
-    });
-
-    //#2 registering queued events
-    \Pimf\Event::queue('queue.dummy.id', 1, array($dummy, 'param1', 'param_etc'));
-    \Pimf\Event::queue('queue.dummy.id', 2, array($dummy, 'param11', 'param_etc'));
-    \Pimf\Event::queue('queue.dummy.id', 3, array($dummy, 'param12', 'param_etc'));
-
-    //run flusher and flush all queued events
-    \Pimf\Event::flush('queue.dummy.id');
-  }
-
   public function testListenersAreFiredForEvents()
  	{
     \Pimf\Event::listen('test.event', function() { return 1; });
