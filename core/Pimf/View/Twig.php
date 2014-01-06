@@ -63,7 +63,7 @@ class Twig extends View implements Reunitable
 
     $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
 
-    require_once $root."Twig/lib/Autoloader.php";
+    require_once $root."Twig/lib/Twig/Autoloader.php";
 
     \Twig_Autoloader::register();
 
