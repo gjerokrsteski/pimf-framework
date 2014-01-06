@@ -194,7 +194,7 @@ class Cookie
   {
     foreach (static::$jar as $cookie) {
       extract($cookie);
-      setcookie($name, $value, $expiration, $path, $domain, $secure);
+      setcookie($name, $value, $expiration, $path, $domain, $secure, true);
     }
   }
 }
