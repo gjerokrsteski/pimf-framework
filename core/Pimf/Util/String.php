@@ -567,7 +567,7 @@ class String
   {
     // check if strange things happening.
     if (self::contains($userpath,
-        array('../', "..\\", '/..', '\..', '%2e%2e%2f', '%2e%2e%5C', '%2F%2e%2e', '%5C%2e%2e'))
+        array('../', "..\\", '/..', '\..', ' ', '%2e%2e%2f', '%2e%2e%5C', '%2F%2e%2e', '%5C%2e%2e', '%20'))
     ) {
       return true;
     }

@@ -129,6 +129,9 @@ class StringTest extends PHPUnit_Framework_TestCase
       array('http://www.example.com/%2e%2e%2f'),
       array('http://www.example.com/%2e%2e%5Ccontroller.php'),
       array('/foo/bar/controller.php?action=../00%'),
+      array('http://localhost/?controller=../%00'),
+      array('http://localhost/?controller=some bad controller name'),
+      array('http://localhost/?controller=some%20bad%20controller%20name'),
     );
   }
 
