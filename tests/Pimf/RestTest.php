@@ -3,7 +3,7 @@ class RestTest extends PHPUnit_Framework_TestCase
 {
   public static function setUpBeforeClass()
   {
-    require_once dirname(__FILE__).'/_fixture/Rest.php';
+    require_once dirname(__FILE__) . '/_fixture/Rest.php';
 
     \Pimf\Registry::set('env', new \Pimf\Environment(array('REQUEST_METHOD'=>'GET')));
   }

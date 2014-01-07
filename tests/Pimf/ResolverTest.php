@@ -3,7 +3,7 @@ class ResolverTest extends PHPUnit_Framework_TestCase
 {
   public static function setUpBeforeClass()
   {
-    require_once dirname(__FILE__).'/_fixture/Index.php';
+    require_once dirname(__FILE__) . '/_fixture/Index.php';
 
     $_GET    = array(
       'controller'=> 'index',
@@ -25,7 +25,7 @@ class ResolverTest extends PHPUnit_Framework_TestCase
 
   public function testCreatingNewInstance()
   {
-    new \Pimf\Resolver(new \Pimf\Request($_GET));
+    new \Pimf\Resolver(new \Pimf\Request($_GET), dirname(__FILE__).'/_fixture/');
   }
 
   public function testLoadingControllerInstance()

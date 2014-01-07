@@ -55,7 +55,7 @@ class Param
   public function get($index, $defaultValue = null)
   {
     if($this->data->offsetExists($index)) {
-      return $this->data->offsetGet($index);
+      return self::filter($this->data->offsetGet($index));
     }
 
     return $defaultValue;
@@ -69,5 +69,23 @@ class Param
   public function getParam($index, $defaultValue = null)
   {
     return $this->get($index, $defaultValue);
+  }
+
+  /**
+   * Never ever (ever) trust foreign input introduced to your PHP code!
+   *
+   * @param array|string $rawData
+   * @return array|string
+   */
+  public static function filter($rawData)
+  {
+    return is_array($rawData)
+      ? array_map(
+          array(
+            '\Pimf\Util\String',
+            'cleanXss'
+          ), $rawData
+        )
+      : \Pimf\Util\String::cleanXss($rawData);
   }
 }
