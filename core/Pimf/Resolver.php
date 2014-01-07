@@ -19,7 +19,7 @@
  */
 
 namespace Pimf;
-use Pimf\Registry, Pimf\Resolver\Exception as Bomb;
+use Pimf\Registry, Pimf\Resolver\Exception as Bomb, \Pimf\Util\String as Str;
 
 /**
  * Resolves the user requests to controller and action.
@@ -51,8 +51,8 @@ class Resolver
 
   /**
    * @param Request $request
-   * @param string $controllerRepositoryPath
-   * @param string $prefix
+   * @param string  $controllerRepositoryPath
+   * @param string  $prefix
    */
   public function __construct(Request $request, $controllerRepositoryPath = '/Controller', $prefix = 'Pimf\\')
   {
@@ -84,7 +84,7 @@ class Resolver
     $basepath   = $this->controllerRepositoryPath . '/';
     $controller = ucfirst($controllerName);
 
-    if(isEvilPath($basepath, $basepath.$controller)) {
+    if(Str::isEvilPath($basepath, $basepath.$controller)) {
       throw new Bomb(
         'directory traversal attack is not funny!'
       );

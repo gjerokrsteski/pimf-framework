@@ -119,4 +119,24 @@ class StringTest extends PHPUnit_Framework_TestCase
 
     );
   }
+
+  public static function providerOfEvilPaths()
+  {
+    return array(
+      array('http://www.example.com/index.foo?item=../../../Config.sys'),
+      array("http://www.example.com/index.foo?item=../../../Windows/System32/cmd.exe?/C+dir+C:\\"),
+      array('/foo/bar/../controller.php'),
+      array('http://www.example.com/%2e%2e%2f'),
+      array('http://www.example.com/%2e%2e%5Ccontroller.php'),
+      array('/foo/bar/controller.php?action=../00%'),
+    );
+  }
+
+  /**
+   * @dataProvider providerOfEvilPaths
+   */
+  public function testIsEvilPathContainsBadCombinations($path)
+  {
+    $this->assertTrue(\Pimf\Util\String::isEvilPath($path,$path));
+  }
 }
