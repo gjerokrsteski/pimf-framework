@@ -81,10 +81,10 @@ class Resolver
     $this->request                  = $request;
     $this->controllerClassName      = $prefix . 'Controller\\';
 
-    $basepath   = $this->controllerRepositoryPath . '/';
+    $basepath   = $this->controllerRepositoryPath . DIRECTORY_SEPARATOR;
     $controller = ucfirst($controllerName);
 
-    if(Str::isEvilPath($basepath, $basepath.$controller)) {
+    if(Str::isEvilPath($basepath.$controller)) {
       throw new Bomb(
         'directory traversal attack is not funny!'
       );
