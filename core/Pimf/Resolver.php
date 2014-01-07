@@ -81,7 +81,7 @@ class Resolver
     $this->request                  = $request;
     $this->controllerClassName      = $prefix . 'Controller\\';
 
-    $basepath   = $this->controllerRepositoryPath . DIRECTORY_SEPARATOR;
+    $basepath   = $this->controllerRepositoryPath . '/';
     $controller = ucfirst($controllerName);
 
     if(Str::isEvilPath($basepath.$controller)) {
