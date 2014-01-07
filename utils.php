@@ -46,3 +46,30 @@ function url($route = '', array $params = array(), $https = null, $asset = false
 {
   return \Pimf\Url::compute($route, $params, $https, $asset);
 }
+
+/**
+ * Tells you if it is a Directory Traversal Attack
+ *
+ * @param string $basepath
+ * @param string $userpath
+ *
+ * @return bool
+ */
+function isEvilPath($basepath, $userpath)
+{
+  // check if strange things happening.
+  if ( \Pimf\Util\String::contains(array('../', "..\\", '/..', '\..'), $userpath)) {
+    return true;
+  }
+
+  $realBase     = realpath($basepath);
+  $realUserPath = realpath($userpath);
+
+  if ($realUserPath === false
+    or strcmp($realUserPath, $realBase) !== 0
+    or strpos($realUserPath, $realBase . DIRECTORY_SEPARATOR) !== 0) {
+    return true;
+  }
+
+  return false;
+}

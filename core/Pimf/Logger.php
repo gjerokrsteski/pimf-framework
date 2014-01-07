@@ -31,32 +31,32 @@ class Logger
   /**
    * @var resource
    */
-  private $fileHandle;
+  private $handle;
 
   /**
    * @var resource
    */
-  private $warningFileHandle;
+  private $warnHandle;
 
   /**
    * @var resource
    */
-  private $errorFileHandle;
+  private $errorHandle;
 
   /**
    * @var string
    */
-  private $logFileName;
+  private $logfile;
 
   /**
    * @var string
    */
-  private $localeStorageDir;
+  private $storageDir;
 
   /**
    * @var bool
    */
-  private $trailingSeparator;
+  private $separator;
 
   /**
    * @param string $localeStorageDir Use better the local TMP dir or dir with mod 777.
@@ -65,59 +65,59 @@ class Logger
    */
   public function __construct($localeStorageDir, $logFileName = '', $trailingSeparator = true)
   {
-    $this->localeStorageDir  = (string)$localeStorageDir;
-    $this->logFileName       = (string)$logFileName;
-    $this->trailingSeparator = (bool)$trailingSeparator;
+    $this->storageDir = (string)$localeStorageDir;
+    $this->logfile    = (string)$logFileName;
+    $this->separator  = (bool)$trailingSeparator;
   }
 
   /**
-   * @throws RuntimeException If something went wrong on creating the log dir and file.
+   * @throws \RuntimeException If something went wrong on creating the log dir and file.
    */
   public function init()
   {
-    if(is_resource($this->errorFileHandle)
-      && is_resource($this->fileHandle)
-      && is_resource($this->warningFileHandle)) {
+    if(is_resource($this->errorHandle)
+      && is_resource($this->handle)
+      && is_resource($this->warnHandle)) {
       return;
     }
 
-    if (!$this->logFileName ) {
-      $this->logFileName = 'pimf-logs.txt';
+    if (!$this->logfile ) {
+      $this->logfile = 'pimf-logs.txt';
     }
 
-    if (!is_dir($this->localeStorageDir)) {
-      mkdir($this->localeStorageDir, 0777);
+    if (!is_dir($this->storageDir)) {
+      mkdir($this->storageDir, 0777);
     }
 
-    if (!is_dir($this->localeStorageDir)) {
-      throw new \RuntimeException('log_dir must be a directory ' . $this->localeStorageDir);
+    if (!is_dir($this->storageDir)) {
+      throw new \RuntimeException('log_dir must be a directory ' . $this->storageDir);
     }
 
-    if (!is_writable($this->localeStorageDir)) {
-      throw new \RuntimeException('log_dir is not writable ' . $this->localeStorageDir);
+    if (!is_writable($this->storageDir)) {
+      throw new \RuntimeException('log_dir is not writable ' . $this->storageDir);
     }
 
-    if (true === $this->trailingSeparator) {
-      $this->localeStorageDir = rtrim(realpath($this->localeStorageDir), '\\/') . DIRECTORY_SEPARATOR;
+    if (true === $this->separator) {
+      $this->storageDir = rtrim(realpath($this->storageDir), '\\/') . DIRECTORY_SEPARATOR;
     }
 
-    $this->fileHandle = fopen($this->localeStorageDir . $this->logFileName, "at+");
+    $this->handle = fopen($this->storageDir . $this->logfile, "at+");
 
-    if ($this->fileHandle === false) {
-      throw new \RuntimeException("failed to obtain a handle to log file '" . $this->localeStorageDir . $this->logFileName  . "'");
+    if ($this->handle === false) {
+      throw new \RuntimeException("failed to obtain a handle to log file '" . $this->storageDir . $this->logfile  . "'");
     }
 
-    $warningLogFile          = $this->localeStorageDir . "pimf-warnings.txt";
-    $this->warningFileHandle = fopen($warningLogFile, "at+");
+    $warningLogFile   = $this->storageDir . "pimf-warnings.txt";
+    $this->warnHandle = fopen($warningLogFile, "at+");
 
-    if ($this->warningFileHandle === false) {
+    if ($this->warnHandle === false) {
       throw new \RuntimeException("failed to obtain a handle to warning log file '" . $warningLogFile . "'");
     }
 
-    $errorLogFile          = $this->localeStorageDir . "pimf-errors.txt";
-    $this->errorFileHandle = fopen($errorLogFile, "at+");
+    $errorLogFile          = $this->storageDir . "pimf-errors.txt";
+    $this->errorHandle = fopen($errorLogFile, "at+");
 
-    if ($this->errorFileHandle === false) {
+    if ($this->errorHandle === false) {
       throw new \RuntimeException("failed to obtain a handle to error log file '" . $errorLogFile . "'");
     }
   }
@@ -173,26 +173,26 @@ class Logger
   }
 
   /**
-   * @param $textMessage
-   * @param string $severityLevel
-   * @throws RuntimeException
+   * @param $msg
+   * @param string $severity
+   * @throws \RuntimeException
    */
-  protected function write($textMessage, $severityLevel = 'DEBUG')
+  protected function write($msg, $severity = 'DEBUG')
   {
-    $textMessage = $this->formatMessage($textMessage, $severityLevel);
+    $msg = $this->format($msg, $severity);
 
     // if severity is WARNING then write to warning file
-    if ($severityLevel == 'WARNING') {
-      if ($this->warningFileHandle !== false) {
-        fwrite($this->warningFileHandle, $textMessage);
+    if ($severity == 'WARNING') {
+      if ($this->warnHandle !== false) {
+        fwrite($this->warnHandle, $msg);
       }
     } // if severity is ERROR then write to error file
-    else if ($severityLevel == 'ERROR') {
-      if ($this->errorFileHandle !== false) {
-        fwrite($this->errorFileHandle, $textMessage);
+    else if ($severity == 'ERROR') {
+      if ($this->errorHandle !== false) {
+        fwrite($this->errorHandle, $msg);
       }
-    } else if ($this->fileHandle !== false) {
-      if (fwrite($this->fileHandle, $textMessage) === false) {
+    } else if ($this->handle !== false) {
+      if (fwrite($this->handle, $msg) === false) {
         throw new \RuntimeException("There was an error writing to log file.");
       }
     }
@@ -200,17 +200,17 @@ class Logger
 
   public function __destruct()
   {
-    if (is_resource($this->fileHandle)
-      && is_resource($this->warningFileHandle)
-      && is_resource($this->errorFileHandle)) {
+    if (is_resource($this->handle)
+      && is_resource($this->warnHandle)
+      && is_resource($this->errorHandle)) {
 
-      if (fclose($this->fileHandle) === false) {
+      if (fclose($this->handle) === false) {
         // Failure to close the log file
         $this->write("Logger failed to close the handle to the log file", 'ERROR_SEVERITY');
       }
 
-      fclose($this->warningFileHandle);
-      fclose($this->errorFileHandle);
+      fclose($this->warnHandle);
+      fclose($this->errorHandle);
     }
   }
 
@@ -220,17 +220,17 @@ class Logger
    * @param $severity
    * @return string
    */
-  private function formatMessage($message, $severity)
+  private function format($message, $severity)
   {
     $registry = new Registry();
 
-    $REMOTEADDR = $registry->env->getIp();
-    $PHPSELF    = $registry->env->getSelf();
+    $remoteIP = $registry->env->getIp();
+    $me       = $registry->env->getSelf();
 
     $msg = date("m-d-Y") . " " . date("G:i:s") . " ";
     $msg .= $registry->env->getIp();
 
-    $IPLength       = strlen($REMOTEADDR);
+    $IPLength       = strlen($remoteIP);
     $numWhitespaces = 15 - $IPLength;
 
     for ($i = 0; $i < $numWhitespaces; $i++) {
@@ -240,11 +240,11 @@ class Logger
     $msg .= " " . $severity . ": ";
 
     //get the file name
-    $lastSlashIndex = strrpos($PHPSELF, "/");
-    $fileName       = $PHPSELF;
+    $lastSlashIndex = strrpos($me, "/");
+    $fileName       = $me;
 
     if ($lastSlashIndex !== false) {
-      $fileName = substr($PHPSELF, $lastSlashIndex + 1);
+      $fileName = substr($me, $lastSlashIndex + 1);
     }
 
     $msg .= $fileName . "\t";

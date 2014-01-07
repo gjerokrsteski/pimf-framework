@@ -80,21 +80,31 @@ class Resolver
     $this->controllerRepositoryPath = $controllerRepositoryPath;
     $this->request                  = $request;
     $this->controllerClassName      = $prefix . 'Controller\\';
-    $this->controllerFilePath       = $this->controllerRepositoryPath . '/' . ucfirst($controllerName) . '.php';
-  }
 
-  /**
-   * @return Base
-   * @throws Exception If no controller specified or no controller found at the repository.
-   */
-  public function process()
-  {
+    $basepath   = $this->controllerRepositoryPath . '/';
+    $controller = ucfirst($controllerName);
+
+    if(isEvilPath($basepath, $basepath.$controller)) {
+      throw new Bomb(
+        'directory traversal attack is not funny!'
+      );
+    }
+
+    $this->controllerFilePath = $basepath . $controller. '.php';
+
     if (!file_exists($this->controllerFilePath)) {
       throw new Bomb(
         'no controller found at the repository path; ' . $this->controllerFilePath
       );
     }
+  }
 
+  /**
+   * @return Base
+   * @throws \Exception If no controller specified or no controller found at the repository.
+   */
+  public function process()
+  {
     $path       = str_replace($this->controllerRepositoryPath, '', $this->controllerFilePath);
     $name       = str_replace('/', $this->controllerClassName, $path);
     $controller = str_replace('.php', '', $name);
