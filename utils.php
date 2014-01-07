@@ -58,7 +58,7 @@ function url($route = '', array $params = array(), $https = null, $asset = false
 function isEvilPath($basepath, $userpath)
 {
   // check if strange things happening.
-  if ( \Pimf\Util\String::contains(array('../', "..\\", '/..', '\..'), $userpath)) {
+  if ( \Pimf\Util\String::contains($userpath, array('../', "..\\", '/..', '\..'))) {
     return true;
   }
 
