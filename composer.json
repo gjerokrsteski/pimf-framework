@@ -1,11 +1,11 @@
 {
     "name": "gjerokrsteski/pimf-framework",
     "description": "Micro framework for PHP that emphasises minimalism and simplicity",
-    "version": "1.8.0",
+    "version": "1.8.*",
     "license": "BSD",
     "homepage": "http://pimf-framework.de",
     "minimum-stability": "stable",
-    "keywords": ["framework", "pimf", "php"],
+    "keywords": ["framework", "pimf"],
     "support": {
         "email": "gjero@krsteski.de",
         "wiki": "https://github.com/gjerokrsteski/pimf/wiki",
@@ -20,10 +20,7 @@
     }
   ],
   "require" : {
-    "php" : ">=5.3"
-  },
-  "require-dev" : {
-    "phpunit/phpunit" : ">=3.5"
+    "php" : ">5.2"
   },
   "autoload" : {
     "psr-0" : {
