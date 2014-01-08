@@ -1,9 +1,9 @@
 {
-    "name": "gjerokrsteski/pimf",
+    "name": "gjerokrsteski/pimf-framework",
     "description": "Micro framework for PHP that emphasises minimalism and simplicity",
     "version": "1.8.0",
     "license": "BSD",
-    "homepage": "http://gjerokrsteski.github.io/pimf/",
+    "homepage": "http://pimf-framework.de",
     "minimum-stability": "stable",
     "keywords": ["framework", "pimf", "php"],
     "support": {
