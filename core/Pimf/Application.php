@@ -116,6 +116,7 @@ final class Application
     // configure necessary things for the application.
     $registry = new Registry();
     $registry->conf = $config;
+    $registry->env  = new Environment($server);
     $registry->logger = new Logger($config['bootstrap']['local_temp_directory']);
     $registry->logger->init();
 
@@ -173,8 +174,6 @@ final class Application
     }
 
     try {
-
-      $registry->env = new Environment($server);
 
       if(is_array($dbConf) && $config['environment'] != 'testing') {
         $registry->em = new EntityManager(\Pimf\Pdo\Factory::get($dbConf), $config['app']['name']);
