@@ -191,7 +191,7 @@ final class Application
 
     if (!empty($problems)) {
       echo PHP_EOL .'+++ Please install following php/extensions on your system to ensure PIMF working proper +++'.PHP_EOL;
-      die(implode(PHP_EOL, $problems));
+      die(implode(PHP_EOL.PHP_EOL, $problems));
     }
 
     static::$bootstrapped = true;
