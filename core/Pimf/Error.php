@@ -68,8 +68,10 @@ class Error
 
     if($exception instanceof \Pimf\Controller\Exception
     || $exception instanceof \Pimf\Resolver\Exception) {
+      Event::first('404', array($exception));
       Header::sendNotFound($msg);
     } else {
+      Event::first('500', array($exception));
       Header::sendInternalServerError($msg);
     }
 

@@ -19,7 +19,7 @@
  */
 
 namespace Pimf;
-use Pimf\Registry, Pimf\Session\Payload, Pimf\Cookie, Pimf\Session\Storages as SS;
+use Pimf\Registry, Pimf\Session\Payload, Pimf\Cookie, Pimf\Session\Storages as Storage;
 
 /**
  * Using the session
@@ -91,9 +91,11 @@ class Session
 
   /**
    * Create a new session storage instance.
+   *
    * @param $storage
-   * @return Storage
-   * @throws RuntimeException
+   *
+   * @throws \RuntimeException
+   * @return Storage\Apc|Storage\Cookie|Storage\Dba|Storage\File|Storage\Memcached|Storage\Memory|Storage\Pdo|Storage\Redis
    */
   public static function factory($storage)
   {
@@ -106,28 +108,28 @@ class Session
 
     switch ($storage) {
       case 'apc':
-        return new SS\Apc(Cache::storage('apc'));
+        return new Storage\Apc(Cache::storage('apc'));
 
       case 'cookie':
-        return new SS\Cookie();
+        return new Storage\Cookie();
 
       case 'file':
-        return new SS\File($conf['session']['storage_path']);
+        return new Storage\File($conf['session']['storage_path']);
 
       case 'pdo':
-        return new SS\Pdo(Factory::get($conf['session']['database']));
+        return new Storage\Pdo(Factory::get($conf['session']['database']));
 
       case 'memcached':
-        return new SS\Memcached(Cache::storage('memcached'));
+        return new Storage\Memcached(Cache::storage('memcached'));
 
       case 'memory':
-        return new SS\Memory();
+        return new Storage\Memory();
 
       case 'redis':
-        return new SS\Redis(Cache::storage('redis'));
+        return new Storage\Redis(Cache::storage('redis'));
 
       case 'dba':
-        return new SS\Dba(Cache::storage('dba'));
+        return new Storage\Dba(Cache::storage('dba'));
 
       default:
         throw new \RuntimeException("Session storage [$storage] is not supported.");
@@ -137,7 +139,7 @@ class Session
   /**
    * Retrieve the active session payload instance for the request.
    * @return Payload
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   public static function instance()
   {
@@ -173,7 +175,7 @@ class Session
    * @param $method
    * @param $parameters
    *
-   * @return Storage
+   * @return mixed
    */
   public static function __callStatic($method, $parameters)
   {

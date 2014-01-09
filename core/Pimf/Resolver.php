@@ -53,6 +53,8 @@ class Resolver
    * @param Request $request
    * @param string  $controllerRepositoryPath
    * @param string  $prefix
+   *
+   * @throws Resolver\Exception
    */
   public function __construct(Request $request, $controllerRepositoryPath = '/Controller', $prefix = 'Pimf\\')
   {

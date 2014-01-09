@@ -174,15 +174,20 @@ final class Application
         $registry->em = new EntityManager(\Pimf\Pdo\Factory::get($dbConf), $config['app']['name']);
       }
 
+      $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+
       if($config['app']['routeable'] === true) {
         $registry->router = new Router();
-        $root             = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
 
-        if(file_exists($routes = $root.'app/' . $config['app']['name'] . '/routes.php')){
+        if(file_exists($routes = $root .'app/' . $config['app']['name'] . '/routes.php')){
           foreach((array)(include $routes) as $route) {
             $registry->router->map($route);
           }
         }
+      }
+
+      if(file_exists($events = $root .'app/' . $config['app']['name'] . '/events.php')){
+        include_once $events;
       }
 
     } catch (\Exception $e) {
@@ -190,7 +195,7 @@ final class Application
     }
 
     if (!empty($problems)) {
-      echo PHP_EOL .'+++ Please install following php/extensions on your system to ensure PIMF working proper +++'.PHP_EOL;
+      echo PHP_EOL .'+++ Please install following php/extensions on your system to ensure PIMF proper working +++'.PHP_EOL;
       die(implode(PHP_EOL.PHP_EOL, $problems));
     }
 
