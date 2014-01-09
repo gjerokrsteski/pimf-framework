@@ -191,7 +191,7 @@ final class Application
 
     if (!empty($problems)) {
       echo PHP_EOL .'+++ Please install following php/extensions on your system to ensure PIMF working proper +++'.PHP_EOL;
-      $info = array_map(function($problem){return join(PHP_EOL, (array)$problem);}, $problems);
+      $info = array_map(function($problem){return PHP_EOL.$problem;}, $problems);
       die($info);
     }
 
