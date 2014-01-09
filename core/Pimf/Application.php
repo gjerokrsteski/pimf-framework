@@ -157,14 +157,14 @@ final class Application
 
     // check php-version.
     if (version_compare(PHP_VERSION, $config['bootstrap']['expected']['php_version']) == -1) {
-      $problems[] = PHP_EOL . 'You have PHP '. PHP_VERSION
+      $problems[] = 'You have PHP '. PHP_VERSION
                    .' and you need PHP '.$config['bootstrap']['expected']['php_version'].' or higher!';
     }
 
     // check expected extensions.
     foreach ($config['bootstrap']['expected']['extensions'] as $extension => $info) {
       if (!extension_loaded($extension)) {
-        $problems[] = PHP_EOL . 'No "' . $extension . '" extension loaded!' . PHP_EOL . $info;
+        $problems[] = 'No "' . $extension . '" extension loaded!' . PHP_EOL . $info;
       }
     }
 
@@ -186,12 +186,13 @@ final class Application
       }
 
     } catch (\Exception $e) {
-      $problems[] = PHP_EOL . $e->getMessage();
+      $problems[] = $e->getMessage();
     }
 
     if (!empty($problems)) {
-      echo PHP_EOL .'+++ Please install following php/extensions on your system to ensure PIMF working proper +++'.PHP_EOL ;
-      die(print_r($problems, true));
+      echo PHP_EOL .'+++ Please install following php/extensions on your system to ensure PIMF working proper +++'.PHP_EOL;
+      $info = array_map('join', $problems, array(PHP_EOL));
+      die($info);
     }
 
     static::$bootstrapped = true;
