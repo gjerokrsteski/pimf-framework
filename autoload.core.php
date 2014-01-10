@@ -72,6 +72,7 @@ spl_autoload_register(
         'Pimf\\Util\\Cache'                  => '/Pimf/Util/Cache.php',
         'Pimf\\Util\\Crypter'                => '/Pimf/Util/Crypter.php',
         'Pimf\\Util\\Csv'                    => '/Pimf/Util/Csv.php',
+        'Pimf\\Util\\Dom'                    => '/Pimf/Util/Dom.php',
         'Pimf\\Util\\Enum'                   => '/Pimf/Util/Enum.php',
         'Pimf\\Util\\File'                   => '/Pimf/Util/File.php',
         'Pimf\\Util\\Fluent'                 => '/Pimf/Util/Fluent.php',
