@@ -84,7 +84,7 @@ class Serializer
 
   /**
    * @param mixed $value Item value.
-   * @throws RuntimeException If error during serialize.
+   * @throws \RuntimeException If error during serialize.
    * @return string
    */
   public static function serializeNative($value)
@@ -103,7 +103,7 @@ class Serializer
 
   /**
    * @param string $serialized The serialized item-string.
-   * @throws RuntimeException If error during unserialize.
+   * @throws \RuntimeException If error during unserialize.
    * @return mixed
    */
   public static function unserializeNative($serialized)
@@ -122,7 +122,7 @@ class Serializer
 
   /**
    * @param mixed $item Item
-   * @return stdClass
+   * @return \stdClass
    */
   private static function mask($item)
   {

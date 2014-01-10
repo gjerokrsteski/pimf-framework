@@ -81,8 +81,8 @@ class Memcached
   /**
    * Create a new Memcached connection instance.
    * @param array $servers
-   * @return Memcached
-   * @throws RuntimeException
+   * @return \Memcached
+   * @throws \RuntimeException
    */
   protected static function connect(array $servers)
   {

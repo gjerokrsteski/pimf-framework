@@ -103,7 +103,7 @@ class Uploaded extends File
    * @param null $error The error constant of the upload (one of PHP's UPLOAD_ERR_XXX constants)
    * @param bool $test Whether the test mode is active
    *
-   * @throws RuntimeException If file_uploads is disabled
+   * @throws \RuntimeException If file_uploads is disabled
    */
   public function __construct($path, $name, $mime = null, $size = null, $error = null, $test = false)
   {
@@ -223,8 +223,8 @@ class Uploaded extends File
    *
    * @param string $dir
    * @param null $name
-   * @return Util_File
-   * @throws RuntimeException If the file has not been uploaded via Http or can not move the file.
+   * @return \Pimf\Util\File
+   * @throws \RuntimeException If the file has not been uploaded via Http or can not move the file.
    */
   public function move($dir, $name = null)
   {

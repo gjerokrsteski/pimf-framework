@@ -30,9 +30,9 @@ class Factory
 {
   /**
    * @param array $config
-   * @return PDO
-   * @throws RuntimeException
-   * @throws UnexpectedValueException
+   * @return \Pimf\Database
+   * @throws \RuntimeException
+   * @throws \UnexpectedValueException
    */
   public static function get(array $config)
   {

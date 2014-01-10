@@ -28,12 +28,12 @@ use Pimf\Session\Storages\Storage, Pimf\Contracts\Cleanable;
 class Dba extends Storage implements Cleanable
 {
   /**
-   * @var Cache_Storages_Dba
+   * @var \Pimf\Cache\Storages\Dba
    */
   private $dba;
 
   /**
-   * @param Cache\Storages\Dba $dba
+   * @param \Pimf\Cache\Storages\Dba $dba
    */
   public function __construct(\Pimf\Cache\Storages\Dba $dba)
   {

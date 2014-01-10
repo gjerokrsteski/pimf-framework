@@ -43,7 +43,7 @@ abstract class Connector
   /**
    * Establish a PDO database connection.
    * @param array $config
-   * @return PDO
+   * @return \PDO
    */
   abstract public function connect(array $config);
 

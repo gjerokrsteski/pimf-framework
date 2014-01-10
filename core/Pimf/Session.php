@@ -117,7 +117,7 @@ class Session
         return new Storage\File($conf['session']['storage_path']);
 
       case 'pdo':
-        return new Storage\Pdo(Factory::get($conf['session']['database']));
+        return new Storage\Pdo(\Pimf\Pdo\Factory::get($conf['session']['database']));
 
       case 'memcached':
         return new Storage\Memcached(Cache::storage('memcached'));

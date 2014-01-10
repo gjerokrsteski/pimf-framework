@@ -41,7 +41,7 @@ class Redis extends Storage
   protected $redis;
 
   /**
-   * @param Redis $redis
+   * @param \Pimf\Cache\Storages\Redis|\Pimf\Redis $redis
    */
   public function __construct(\Pimf\Redis $redis)
   {

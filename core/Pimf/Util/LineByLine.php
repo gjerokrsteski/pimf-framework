@@ -49,8 +49,8 @@ class LineByLine
   protected $callback;
 
   /**
-   * @param string|array|Closure $callback
-   * @throws RuntimeException If no callable callback given.
+   * @param string|array|\Closure $callback
+   * @throws \RuntimeException If no callable callback given.
    */
   public function __construct($callback)
   {
@@ -66,7 +66,7 @@ class LineByLine
    * @param bool $feedback Should callback responses be collected.
    * @param bool $binary Is binary file.
    * @return array List of collected responses.
-   * @throws RuntimeException If can not create file handle.
+   * @throws \RuntimeException If can not create file handle.
    */
   public function read($file, $feedback = false, $binary = false)
   {

@@ -31,7 +31,7 @@ class Mysql extends Connector
 {
   /**
    * @param array $config
-   * @return Pdo
+   * @return \Pimf\Database
    */
   public function connect(array $config)
   {

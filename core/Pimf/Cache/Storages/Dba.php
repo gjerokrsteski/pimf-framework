@@ -72,7 +72,7 @@ class Dba extends Storage
    *
    * @param boolean $persistently
    *
-   * @throws RuntimeException If no DBA extension or handler installed.
+   * @throws \RuntimeException If no DBA extension or handler installed.
    */
   public function __construct($file, $handler = 'flatfile', $mode = 'c', $persistently = true)
   {
@@ -96,17 +96,17 @@ class Dba extends Storage
     $this->handler = $handler;
   }
 
-	/**
-	 * Closes an open dba resource
-	 * @return void
-	 */
-	public function __destruct()
-	{
-    if ($this->dba){
+  /**
+   * Closes an open dba resource
+   * @return void
+   */
+  public function __destruct()
+  {
+    if ($this->dba) {
       @dba_close($this->dba);
       $this->dba = null;
     }
-	}
+  }
 
   /**
    * @param string $key

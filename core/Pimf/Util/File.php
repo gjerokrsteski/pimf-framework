@@ -36,7 +36,7 @@ class File extends \SplFileInfo
    * Constructs a new file from the given path.
    * @param string $path The path to the file
    * @param boolean $check Whether to check the path or not
-   * @throws OutOfRangeException If the given path is not a file
+   * @throws \OutOfRangeException If the given path is not a file
    */
   public function __construct($path, $check = true)
   {
@@ -62,7 +62,7 @@ class File extends \SplFileInfo
    * @param string $dir The destination folder
    * @param string $name The new file name
    * @return File A File object representing the new file
-   * @throws RuntimeException if the target file could not be created
+   * @throws \RuntimeException if the target file could not be created
    */
   public function move($dir, $name = null)
   {
@@ -84,7 +84,7 @@ class File extends \SplFileInfo
    * @param string $dir The destination folder
    * @param null|string $name
    * @return File
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   protected function getTargetFile($dir, $name = null)
   {

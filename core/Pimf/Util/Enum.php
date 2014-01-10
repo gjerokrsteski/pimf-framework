@@ -69,10 +69,10 @@ abstract class Enum
   
   /**
    * @param null $value
-   * @throws RuntimeException If Enum constant values must be integers.
-   * @throws Exception If Class constant __default does not exist.
-   * @throws UnexpectedValueException The value '$value' is not one of the enum constants.
-   * @throws InvalidArgumentException The value must be a string or integer.
+   * @throws \RuntimeException If Enum constant values must be integers.
+   * @throws \Exception If Class constant __default does not exist.
+   * @throws \UnexpectedValueException The value '$value' is not one of the enum constants.
+   * @throws \InvalidArgumentException The value must be a string or integer.
    */
   public function __construct($value = null)
   {

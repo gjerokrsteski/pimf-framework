@@ -39,17 +39,17 @@ use Pimf\Util\IdentityMap;
 abstract class Base
 {
   /**
-   * @var PDO The database resource.
+   * @var \PDO The database resource.
    */
   protected $db;
 
   /**
-   * @var Util_IdentityMap
+   * @var \Pimf\Util\IdentityMap
    */
   protected $identityMap;
 
   /**
-   * @param PDO $db
+   * @param \PDO $db
    */
   public function __construct(\PDO $db)
   {

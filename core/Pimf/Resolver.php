@@ -102,7 +102,7 @@ class Resolver
   }
 
   /**
-   * @return Base
+   * @return \Pimf\Controller\Base
    * @throws \Exception If no controller specified or no controller found at the repository.
    */
   public function process()

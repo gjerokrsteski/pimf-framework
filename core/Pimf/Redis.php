@@ -94,7 +94,7 @@ class Redis
    *
    * @param string $name
    * @return mixed
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   public static function db($name = 'default')
   {
@@ -132,7 +132,7 @@ class Redis
    * Parse and return the response from the Redis database.
    * @param $response
    * @return array|string
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   protected function parse($response)
   {
@@ -158,7 +158,7 @@ class Redis
   /**
    * Establish the connection to the Redis database.
    * @return resource
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   protected function connect()
   {

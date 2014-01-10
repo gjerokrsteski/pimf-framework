@@ -30,7 +30,7 @@ interface MessageProvider
 {
 	/**
 	 * Get the messages for the instance.
-	 * @return Message[]
+	 * @return \Pimf\Util\Message[]
 	 */
 	public function getMessages();
 

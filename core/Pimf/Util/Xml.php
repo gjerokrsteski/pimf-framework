@@ -34,9 +34,9 @@ class Xml
 {
   /**
    * Convert anything DOMDocument|SimpleXMLElement|string to DOMDocument.
-   * @param DOMDocument|SimpleXMLElement|string $xml String may be filename or xml string
-   * @throws InvalidArgumentException
-   * @return DOMDocument
+   * @param \DOMDocument|\SimpleXMLElement|string $xml String may be filename or xml string
+   * @throws \InvalidArgumentException
+   * @return \DOMDocument
    */
   public static function toDOMDocument($xml)
   {
@@ -77,9 +77,9 @@ class Xml
 
   /**
    * Convert anything DOMDocument|SimpleXMLElement|string to SimpleXMLElement.
-   * @param DOMDocument|SimpleXMLElement|string $xml String may be filename or xml string
-   * @throws InvalidArgumentException
-   * @return SimpleXMLElement
+   * @param \DOMDocument|\SimpleXMLElement|string $xml String may be filename or xml string
+   * @throws \InvalidArgumentException
+   * @return \SimpleXMLElement
    */
   public static function toSimpleXMLElement($xml)
   {
@@ -112,9 +112,9 @@ class Xml
 
   /**
    * Convert SimpleXMLElement to multidimensional array.
-   * @param SimpleXMLElement $xml
+   * @param \SimpleXMLElement $xml
    * @param string $namespace The namespace that schould be used.
-   * @throws OutOfBoundsException If namespace not found in the xml.
+   * @throws \OutOfBoundsException If namespace not found in the xml.
    * @return array
    */
   public static function toArray(\SimpleXMLElement $xml, $namespace = null)

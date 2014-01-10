@@ -47,7 +47,7 @@ class Registry
 {
   /**
    * The temporary storage for the accumulator.
-   * @var ArrayObject
+   * @var \ArrayObject
    */
   protected static $battery;
 
@@ -74,7 +74,7 @@ class Registry
   /**
    * @param mixed $namespace The namespace or identifier.
    * @param mixed $value The value.
-   * @throws LogicException If key should be overwritten.
+   * @throws \LogicException If key should be overwritten.
    */
   public static function set($namespace, $value)
   {

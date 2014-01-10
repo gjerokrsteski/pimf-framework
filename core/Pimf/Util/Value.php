@@ -107,7 +107,7 @@ class Value
  	 * @param string $className The enumerable class name (make sure it is included before calling this function).
    * @param boolean $returnEnumValue Sets if whether to enum-name or enum-value be returned.
  	 * @return string The value of the valid enumeration.
- 	 * @throws InvalidArgumentException if the value is not a valid enumerable value
+ 	 * @throws \InvalidArgumentException if the value is not a valid enumerable value
  	 */
    public static function ensureEnum($value, $className, $returnEnumValue = true)
    {

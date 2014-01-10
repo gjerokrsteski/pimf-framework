@@ -47,12 +47,12 @@ class Validator
   protected $errors = array();
 
   /**
-   * @var Param
+   * @var \Pimf\Param
    */
   protected $attributes;
 
   /**
-   * @param Param $attributes
+   * @param \Pimf\Param $attributes
    */
   public function __construct(\Pimf\Param $attributes)
   {
@@ -76,7 +76,7 @@ class Validator
    * </code>
    *
    * @param array $attributes
-   * @param array|Param $rules
+   * @param array|\Pimf\Param $rules
    * @return Validator
    */
   public static function factory($attributes, array $rules)

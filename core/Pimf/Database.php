@@ -74,7 +74,7 @@ class Database extends \PDO
 
   /**
    * @return bool|void
-   * @throws PDOException
+   * @throws \PDOException
    */
   public function rollBack()
   {

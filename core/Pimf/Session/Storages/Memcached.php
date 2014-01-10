@@ -29,12 +29,12 @@ class Memcached extends Storage
 {
   /**
    * The Memcache cache storage instance.
-   * @var _Memcached
+   * @var \Pimf\Memcached
    */
   private $memcached;
 
   /**
-   * @param Memcached $memcached
+   * @param \Pimf\Memcached $memcached
    */
   public function __construct(\Pimf\Memcached $memcached)
   {

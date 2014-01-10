@@ -73,8 +73,8 @@ class Cache
   /**
    * Create a new cache storage instance.
    * @param $storage
-   * @return Storage
-   * @throws RuntimeException
+   * @return \Pimf\Cache\Storages\Storage
+   * @throws \RuntimeException
    */
   protected static function factory($storage)
   {
@@ -93,7 +93,7 @@ class Cache
         return new CS\File($conf['cache']['storage_path']);
 
       case 'pdo':
-        return new CS\Pdo(Factory::get($conf['cache']['database']), $conf['cache']['key']);
+        return new CS\Pdo(\Pimf\Pdo\Factory::get($conf['cache']['database']), $conf['cache']['key']);
 
       case 'memcached':
         return new CS\Memcached(Memcached::connection(), $conf['cache']['key']);

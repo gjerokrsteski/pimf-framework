@@ -100,7 +100,7 @@ class Cookie
    * @param null $domain
    * @param bool $secure
    * @return bool
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   public static function put($name, $value, $expiration = 0, $path = '/', $domain = null, $secure = false)
   {

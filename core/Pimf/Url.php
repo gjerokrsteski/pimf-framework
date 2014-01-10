@@ -18,7 +18,7 @@
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 namespace Pimf;
-use Pimf\Util\String as Str, Pimf\Util\Identifier as Identifier, Pimf\Util\Value as Value;
+use Pimf\Util\String as Str;
 
 /**
  * URL

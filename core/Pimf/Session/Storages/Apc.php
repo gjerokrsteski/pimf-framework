@@ -28,12 +28,12 @@ use Pimf\Session\Storages\Storage;
 class Apc extends Storage {
 
 	/**
-	 * @var Cache_Storages_Apc
+	 * @var \Pimf\Cache\Storages\Apc
 	 */
 	private $apc;
 
   /**
-   * @param Cache_Storages_Apc $apc
+   * @param \Pimf\Cache\Storages\Apc $apc
    */
   public function __construct(\Pimf\Cache\Storages\Apc $apc)
 	{

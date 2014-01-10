@@ -59,7 +59,7 @@ class Payload
 
   /**
    * The session storage used to retrieve and store the session payload.
-   * @var Storage
+   * @var \Pimf\Session\Storages\Storage
    */
   public $storage;
 

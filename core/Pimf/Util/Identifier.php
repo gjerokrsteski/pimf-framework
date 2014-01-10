@@ -55,7 +55,7 @@ class Identifier
    * Create a new Cache Identifier based on the given parameters.
    * Integer and string but not array and objects.
    *
-   * @throws BadMethodCallException If no identifiers received.
+   * @throws \BadMethodCallException If no identifiers received.
    */
   public function __construct()
   {

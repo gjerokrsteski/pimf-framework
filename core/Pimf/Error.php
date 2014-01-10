@@ -120,7 +120,7 @@ class Error
 
   /**
    * Log an exception.
-   * @param Exception $exception
+   * @param \Exception $exception
    */
   public static function log(\Exception $exception)
   {

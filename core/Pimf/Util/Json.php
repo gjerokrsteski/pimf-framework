@@ -60,7 +60,7 @@ class Json
 
   /**
    * @param int $status
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   protected static function handleError($status)
   {

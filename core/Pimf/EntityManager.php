@@ -36,7 +36,7 @@ class EntityManager extends Base
   protected $prefix;
 
   /**
-   * @param Database $db
+   * @param \PDO $db
    * @param string $prefix The data-mappers repository name.
    */
   public function __construct(\PDO $db, $prefix = '\Pimf')
@@ -48,7 +48,7 @@ class EntityManager extends Base
   /**
    * @param string $entity The name of the data-mapper class.
    * @return Base
-   * @throws BadMethodCallException If no entity fount at the repository.
+   * @throws \BadMethodCallException If no entity fount at the repository.
    */
   public function load($entity)
   {

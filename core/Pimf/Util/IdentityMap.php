@@ -34,12 +34,12 @@ namespace Pimf\Util;
 class IdentityMap
 {
   /**
-   * @var ArrayObject
+   * @var \ArrayObject
    */
   protected $idToObject;
 
   /**
-   * @var SplObjectStorage
+   * @var \SplObjectStorage
    */
   protected $objectToId;
 
@@ -61,7 +61,7 @@ class IdentityMap
 
   /**
    * @param mixed $object
-   * @throws OutOfBoundsException
+   * @throws \OutOfBoundsException
    * @return integer
    */
   public function getId($object)
@@ -95,7 +95,7 @@ class IdentityMap
 
   /**
    * @param integer $id
-   * @throws OutOfBoundsException
+   * @throws \OutOfBoundsException
    * @return object
    */
   public function getObject($id)

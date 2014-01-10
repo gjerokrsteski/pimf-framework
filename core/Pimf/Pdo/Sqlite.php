@@ -31,7 +31,7 @@ class Sqlite extends Connector
 {
   /**
    * @param array $config
-   * @return PDO
+   * @return \Pimf\Database
    */
   public function connect(array $config)
   {

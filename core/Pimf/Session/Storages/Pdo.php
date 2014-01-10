@@ -28,12 +28,12 @@ use Pimf\Session\Storages\Storage, Pimf\Contracts\Cleanable;
 class Pdo extends Storage implements Cleanable
 {
   /**
-   * @var Pdo
+   * @var \Pimf\Database
    */
   protected $db;
 
   /**
-   * @param Pdo $pdo
+   * @param \Pimf\Database $pdo
    */
   public function __construct(\Pimf\Database $pdo)
   {

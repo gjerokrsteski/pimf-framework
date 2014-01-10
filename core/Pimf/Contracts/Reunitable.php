@@ -30,7 +30,7 @@ interface Reunitable
 {
   /**
    * Puts the template an the variables together.
-   * @throws Exception
+   * @throws \Exception
    * @return string
    */
   public function reunite();

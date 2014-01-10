@@ -81,7 +81,7 @@ class Ldap
    * Get the current user of the application.
    * @param $token
    * @return object
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   public function retrieve($token)
   {
@@ -112,7 +112,7 @@ class Ldap
    * @param string $username
    * @param string $password
    * @return bool|object
-   * @throws Exception
+   * @throws \Exception
    */
   public function attempt($username, $password)
   {
@@ -129,7 +129,7 @@ class Ldap
    * @param string $user
    * @param string $password
    * @return bool
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   protected function connect($user, $password)
   {
@@ -172,7 +172,7 @@ class Ldap
    * @param string $password
    * @param null|string $group
    * @return object
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   protected function login($user, $password, $group = null)
   {
@@ -196,7 +196,7 @@ class Ldap
   /**
    * @param string $user
    * @return object Of stdClass
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   protected function fetch($user)
   {
@@ -219,7 +219,7 @@ class Ldap
    * @param string $account
    * @param string $basedn
    * @return array|null
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   protected function getAccount($account, $basedn)
   {
@@ -249,7 +249,7 @@ class Ldap
    * @param string $userDN
    * @param string $groupDN
    * @return bool
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   public function checkGroup($userDN, $groupDN)
   {
@@ -269,7 +269,7 @@ class Ldap
   /**
    * @param string $userDN
    * @return null|object
-   * @throws RuntimeException
+   * @throws \RuntimeException
    */
   public function getUser($userDN)
   {
