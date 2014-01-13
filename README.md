@@ -14,8 +14,8 @@ The aim was to create robust and secure projects and deliver them fast. We wante
 PIMFs implementation is based on well proved design patterns as well as fast objects relation mapping mechanism - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without to override your projects. And for all of you out there, who like to create rich application interfaces with ExtJs or Dojo - we have created mechanism to couple your GUI to the controllers in a easy and fast way.
 
 
-Quickstart with PIMF-Blog bundle
----------------------------
+Quickstart with PIMF-Blog bundle using SQLite
+---------------------------------------------
 This Blog is a run ready bundle, which uses PIMF framework including a blog application based on SQLite database. Here you can learn how to work with \Pimf\EntityManager, \Pimf\Util\Validator and \Pimf\View. https://github.com/gjerokrsteski/pimf-blog
 
 Quickstart with PIMF-Vanilla bundle
@@ -38,17 +38,6 @@ Learning PIMF
 One of the best ways to learn PIMF is to read through the entirety of its documentation. This guide details all aspects of the framework and how to apply them to your application.
 
 Please read here: https://github.com/gjerokrsteski/pimf/wiki
-
-
-Contributing and pull request guidelines
-----------------------------------------
-[GitHub pull requests](https://help.github.com/articles/using-pull-requests) are a great way for everyone in the community to contribute to the PIMF codebase. Found a bug? Just fix it in your fork and submit a pull request. This will then be reviewed, and, if found as good, merged into the main repository.
-
-In order to keep the codebase clean, stable and at high quality, even with so many people contributing, some guidelines are necessary for high-quality pull requests:
-
-- **Branch:** Unless they are immediate documentation fixes relevant for old versions, pull requests should be sent to the `develop` branch only. Make sure to select that branch as target when creating the pull request (GitHub will not automatically select it.)
-- **Documentation:** If you are adding a new feature or changing the API in any relevant way, this should be documented.
-- **Unit tests:** To keep old bugs from re-appearing and generally hold quality at a high level, the PIMF core is thoroughly unit-tested. Thus, when you create a pull request, it is expected that you unit test any new code you add. For any bug you fix, you should also add regression tests to make sure the bug will never appear again. If you are unsure about how to write tests, the core team or other contributors will gladly help.
 
 Framework Sponsor
 -------------------
