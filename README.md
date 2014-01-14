@@ -18,6 +18,11 @@ Quickstart with PIMF-Blog bundle using SQLite
 ---------------------------------------------
 This Blog is a run ready bundle, which uses PIMF framework including a blog application based on SQLite database. Here you can learn how to work with \Pimf\EntityManager, \Pimf\Util\Validator and \Pimf\View. https://github.com/gjerokrsteski/pimf-blog
 
+Quickstart with PIMF-Blog bundle using MySQL and SQLite
+-------------------------------------------------------
+This Blog is a run ready bundle, which uses PIMF framework including a blog application based on MySQL database. The session will be stored at SQLite database.
+Here you can learn how to work with Pimf\EntityManager, Pimf\Util\Validator and Pimf\View. https://github.com/gjerokrsteski/pimf-blog-mysql
+
 Quickstart with PIMF-Vanilla bundle
 ------------------------------
 This is a run ready "Hello world" bundle using PIMF micro framework. Here you can learn how to work with \Pimf\View and \Pimf\Router. https://github.com/gjerokrsteski/pimf-vanilla
