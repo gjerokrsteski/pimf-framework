@@ -49,13 +49,20 @@ class Param
 
   /**
    * @param string $index
-   * @param null $defaultValue
+   * @param null   $defaultValue
+   * @param bool   $filtered If you trust foreign input introduced to your PHP code - set to FALSE!
+   *
    * @return mixed|null
    */
-  public function get($index, $defaultValue = null)
+  public function get($index, $defaultValue = null, $filtered = true)
   {
     if($this->data->offsetExists($index)) {
-      return self::filter($this->data->offsetGet($index));
+
+      if($filtered === true) {
+        return self::filter($this->data->offsetGet($index));
+      }
+
+      return $this->data->offsetGet($index);
     }
 
     return $defaultValue;
