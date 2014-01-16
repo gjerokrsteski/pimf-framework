@@ -7,7 +7,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \RuntimeException
+   * @expectedException RuntimeException
    */
   public function testCreatingNewInstanceExpectingExceptionIfNoRequestMethodGiven()
   {
@@ -15,13 +15,13 @@ class ResponseTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \LogicException
+   * @expectedException LogicException
    */
   public function testBombingExceptionIfMultipleTypesUsed()
   {
     $response =new \Pimf\Response('POST');
 
-    $response->asHTML()->asMSWord()->asJSON();
+    $response->asHTML()->asMSWord()->asJSON()->send('');
   }
 
   /**
