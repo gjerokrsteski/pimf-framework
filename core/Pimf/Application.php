@@ -112,6 +112,7 @@ final class Application
     }
 
     ini_set('default_charset', $config['encoding']);
+    date_default_timezone_set($config['timezone']);
 
     // configure necessary things for the application.
     $registry = new Registry();
@@ -124,7 +125,6 @@ final class Application
       ob_start('mb_output_handler');
     }
 
-    date_default_timezone_set($config['timezone']);
     ini_set('display_errors', 'On');
 
     // setup the error reporting.

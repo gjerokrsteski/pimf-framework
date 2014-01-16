@@ -29,12 +29,7 @@ use \Pimf\Util\Header, Pimf\Util\Json as UtilJson;
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
 class Response
-{
-  /**
-   * @var boolean
-   */
-  public static $testing;
-
+{  
   /**
    * The request method send by the client-browser.
    * @var string
@@ -48,7 +43,7 @@ class Response
   protected $cached = false;
 
   /**
-   * Type of the data will be send to the client-browser.
+   * Type of the data that will be send to the client-browser.
    * @var string
    */
   protected $type = null;
@@ -136,8 +131,8 @@ class Response
   /**
    * Sends a download dialog to the browser.
    *
-   * @param string $stream Can be a file-path or a string.
-   * @param string $name   Name of the stream/file should be shown.
+   * @param string $stream Can be file-path or string.
+   * @param string $name   Name of the stream/file that should be shown to the browser.
    */
   public function sendStream($stream, $name)
   {
@@ -151,16 +146,15 @@ class Response
    */
   public function send($data, $exit = true)
   {
-    $out = $data;
+    $body = $data;
 
     if($this->type === 'asJSON') {
-      $out =  UtilJson::encode($data);
+      $body =  UtilJson::encode($data);
     } else if($data instanceof \Pimf\View) {
-      $out = $data->render();
+      $body = $data->render();
     }
 
-    echo ''.$out;
-    if ($exit) exit(0); else return;
+    echo ''.$body; if ($exit) exit(0);
   }
 
   /**
