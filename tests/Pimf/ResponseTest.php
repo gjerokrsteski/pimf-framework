@@ -21,11 +21,14 @@ class ResponseTest extends PHPUnit_Framework_TestCase
   {
     $this->markTestSkipped('need time to fix test case');
 
-    $response = new \Pimf\Response('POST');
+    $response =new \Pimf\Response('POST');
 
     $response->asHTML()->asMSWord();
   }
 
+  /**
+   * @outputBuffering enabled
+   */
   public function testSendingJsonData()
   {
     $response = new \Pimf\Response('POST');
@@ -34,6 +37,9 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     $this->expectOutputString('{"hello":"Barry"}');
   }
 
+  /**
+   * @outputBuffering enabled
+   */
   public function testSendingTextData()
   {
     $response = new \Pimf\Response('POST');
@@ -42,6 +48,9 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     $this->expectOutputString('hello Barry!');
   }
 
+  /**
+   * @outputBuffering enabled
+   */
   public function testSendingXmlData()
   {
     $response = new \Pimf\Response('GET');
