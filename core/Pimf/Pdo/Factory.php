@@ -47,10 +47,10 @@ class Factory
       throw new \UnexpectedValueException('PDO driver "'.$driver.'" not supported by PIMF');
     }
 
-    if(!extension_loaded('pdo') or !extension_loaded('pdo _'.$driver)) {
+    if(!extension_loaded('pdo') or !extension_loaded('pdo_'.$driver)) {
       throw new Bomb(
         'Please navigate to "http://php.net/manual/pdo.installation.php" '.
-        ' to find out how to install "PDO" with "pdo _'.$driver.'" on your system!'
+        ' to find out how to install "PDO" with "pdo_'.$driver.'" on your system!'
       );
     }
 
