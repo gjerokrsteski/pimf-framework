@@ -169,6 +169,7 @@ class Response
   private function preventMultipleTypes()
   {
     if(!is_empty($this->type)) {
+      Header::clear();
       throw new \RuntimeException('only one content-type can be send');
     }
   }
