@@ -55,14 +55,6 @@ $config = array(
   'bootstrap' => array(
     'expected' => array(
       'php_version' => 5.3,
-      'extensions' => array(
-        'pdo' => 'Please navigate to "http://php.net/manual/pdo.installation.php" to find out how to install "PDO" on your system!',
-        'pdo_sqlite' => 'Please navigate to "http://php.net/manual/ref.pdo-sqlite.php" to find out how to install "PDO_SQLITE" on your system!',
-        'pdo_mysql' => 'Please navigate to "http://php.net/manual/ref.pdo-mysql.php" to find out how to install "PDO_MYSQL" on your system!',
-        'mysql' => 'Please navigate to "http://php.net/manual/mysql.installation.php" to find out how to install "MySQL" on your system!',
-        'sqlite' => 'Please navigate to "http://php.net/manual/sqlite.installation.php" to find out how to install "SQLite" on your system!',
-        'date' => 'Please navigate to "http://php.net/manual/datetime.installation.php" to find out how to install "Date/Time" on your system!',
-      ),
     ),
     'local_temp_directory' => '/tmp/'
   ),

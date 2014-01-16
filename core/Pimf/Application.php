@@ -161,13 +161,6 @@ final class Application
                    .' and you need PHP '.$config['bootstrap']['expected']['php_version'].' or higher!';
     }
 
-    // check expected extensions.
-    foreach ($config['bootstrap']['expected']['extensions'] as $extension => $info) {
-      if (!extension_loaded($extension)) {
-        $problems[] = 'No "' . $extension . '" extension loaded!' . PHP_EOL . $info;
-      }
-    }
-
     try {
 
       if(is_array($dbConf) && $config['environment'] != 'testing') {
@@ -195,7 +188,7 @@ final class Application
     }
 
     if (!empty($problems)) {
-      echo PHP_EOL .'+++ Please install following php/extensions on your system to ensure PIMF proper working +++'.PHP_EOL;
+      echo PHP_EOL .'+++ Please install following php/extensions to ensure PIMF proper working +++'.PHP_EOL;
       die(implode(PHP_EOL.PHP_EOL, $problems));
     }
 

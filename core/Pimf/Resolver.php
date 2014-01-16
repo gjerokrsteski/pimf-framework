@@ -19,7 +19,8 @@
  */
 
 namespace Pimf;
-use Pimf\Registry, Pimf\Resolver\Exception as Bomb, \Pimf\Util\String as Str;
+use Pimf\Registry, Pimf\Resolver\Exception as Bomb,
+    Pimf\Util\String as Str, Pimf\Response;
 
 /**
  * Resolves the user requests to controller and action.
@@ -117,6 +118,6 @@ class Resolver
       );
     }
 
-    return new $controller($this->request);
+    return new $controller($this->request, new Response(Registry::get('env')->getRequestMethod()));
   }
 }

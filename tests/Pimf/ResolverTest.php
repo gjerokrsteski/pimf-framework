@@ -1,6 +1,10 @@
 <?php
 class ResolverTest extends PHPUnit_Framework_TestCase
 {
+
+  ## prepare the environment
+
+
   public static function setUpBeforeClass()
   {
     require_once dirname(__FILE__) . '/_fixture/Index.php';
@@ -21,7 +25,14 @@ class ResolverTest extends PHPUnit_Framework_TestCase
         'environment' => 'testing'
       )
     );
+
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+    \Pimf\Registry::set('env', new \Pimf\Environment($_SERVER));
   }
+
+
+  # start testing
+
 
   public function testCreatingNewInstance()
   {
@@ -64,13 +75,11 @@ class ResolverTest extends PHPUnit_Framework_TestCase
     $resolver->process()->render();
   }
 
-  /**
-   * @expectedException \Exception
-   */
-  public function testIfNoActionFoundAtController()
+
+  public function testIfNoActionFoundAtControllerTheRouterFindsTheIndexAction()
   {
     $resolver = new \Pimf\Resolver(
-      new \Pimf\Request(array(),array(),array(),array('action'=>'undefined')),
+      new \Pimf\Request(array(),array(),array(),array('action'=>'un de fi ned')),
       dirname(__FILE__).'/_fixture/',
       'Fixture\\'
     );

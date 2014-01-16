@@ -51,6 +51,7 @@ spl_autoload_register(
         'Pimf\\Redis'                        => '/Pimf/Redis.php',
         'Pimf\\Registry'                     => '/Pimf/Registry.php',
         'Pimf\\Request'                      => '/Pimf/Request.php',
+        'Pimf\\Response'                     => '/Pimf/Response.php',
         'Pimf\\Resolver'                     => '/Pimf/Resolver.php',
         'Pimf\\Route'                        => '/Pimf/Route.php',
         'Pimf\\Route\\Target'                => '/Pimf/Route/Target.php',

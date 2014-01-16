@@ -64,6 +64,11 @@ class Header
     self::contentType('text/plain');
   }
 
+  public static function contentTypeTextHTML()
+  {
+    self::contentType('text/html');
+  }
+
   public static function contentTypeZip()
   {
     self::contentType('application/zip');

@@ -19,7 +19,9 @@
  */
 
 namespace Pimf\Controller;
-use \Pimf\Param,  \Pimf\Registry, \Pimf\Environment, \Pimf\Controller\Exception as Bomb, \Pimf\Request;
+use \Pimf\Param,  \Pimf\Registry, \Pimf\Environment,
+    \Pimf\Controller\Exception as Bomb, \Pimf\Request,
+    \Pimf\Util\Header, \Pimf\Url, \Pimf\Response;
 
 /**
  * Defines the general controller behaviour - you have to extend it.
@@ -35,11 +37,18 @@ abstract class Base
   protected $request;
 
   /**
-   * @param \Pimf\Request $request
+   * @var Response
    */
-  public function __construct(\Pimf\Request $request)
+  protected $response;
+
+  /**
+   * @param \Pimf\Request  $request
+   * @param \Pimf\Response $response
+   */
+  public function __construct(\Pimf\Request $request, \Pimf\Response $response = null)
   {
     $this->request = $request;
+    $this->response = $response;
   }
 
   abstract public function indexAction();
@@ -108,14 +117,16 @@ abstract class Base
    */
   public function redirect($route, $permanent = false)
   {
-    $url = \Pimf\Url::compute($route);
+    $url = Url::compute($route);
+
+    Header::clear();
 
     if ($permanent === true) {
-      \Pimf\Util\Header::sendMovedPermanently();
+      Header::sendMovedPermanently();
     } else {
-      \Pimf\Util\Header::sendFound();
+      Header::sendFound();
     }
 
-    \Pimf\Util\Header::toLocation($url);
+    Header::toLocation($url);
   }
 }
