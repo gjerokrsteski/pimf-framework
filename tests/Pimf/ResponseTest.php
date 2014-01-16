@@ -22,8 +22,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
   {
     //$this->markTestSkipped('need time to fix test case');
 
-    $response =new \Pimf\Response('POST');
-
+    $response = new \Pimf\Response('POST');
     $response->asHTML()->asMSWord();
   }
 
