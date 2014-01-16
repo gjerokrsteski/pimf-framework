@@ -21,7 +21,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
   {
     $response =new \Pimf\Response('POST');
 
-    $response->asHTML()->asJSON();
+    $response->asHTML()->asMSWord()->asJSON();
   }
 
   /**
