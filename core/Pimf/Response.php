@@ -164,12 +164,12 @@ class Response
   }
 
   /**
-   * @throws \LogicException
+   * @throws \RuntimeException
    */
   private function preventMultipleTypes()
   {
-    if(!empty($this->type)) {
-      throw new \LogicException('only one content-type can be send');
+    if(!is_empty($this->type)) {
+      throw new \RuntimeException('only one content-type can be send');
     }
   }
 }

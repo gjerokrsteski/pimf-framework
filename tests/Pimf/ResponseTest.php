@@ -15,13 +15,13 @@ class ResponseTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException LogicException
+   * @expectedException RuntimeException
    */
   public function testBombingExceptionIfMultipleTypesUsed()
   {
     $response =new \Pimf\Response('POST');
 
-    $response->asHTML()->asMSWord()->asJSON()->send('');
+    $response->asHTML()->asMSWord();
   }
 
   /**
