@@ -20,8 +20,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
    */
   public function testBombingExceptionIfMultipleTypesUsed()
   {
-    //$this->markTestSkipped('need time to fix test case');
-
     $response = new \Pimf\Response('POST');
     $response->asHTML()->asMSWord();
   }
@@ -32,8 +30,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
    */
   public function testSendingJsonData()
   {
-    //$this->markTestSkipped('need time to fix test case');
-
     $response = new \Pimf\Response('POST');
     $response->asJSON()->send(array('hello'=>'Barry'), false);
 
@@ -46,8 +42,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
    */
   public function testSendingTextData()
   {
-    //$this->markTestSkipped('need time to fix test case');
-
     $response = new \Pimf\Response('POST');
     $response->asTEXT()->send('hello Barry!', false);
 
@@ -60,8 +54,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
    */
   public function testSendingXmlData()
   {
-    //$this->markTestSkipped('need time to fix test case');
-
     $response = new \Pimf\Response('GET');
     $response->asTEXT()->send('<hello>Barry!</hello>', false);
 
