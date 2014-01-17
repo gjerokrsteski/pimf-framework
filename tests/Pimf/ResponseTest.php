@@ -72,11 +72,21 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
   /**
    * @runInSeparateProcess
+   * @expectedException RuntimeException
+   */
+  public function testBombingExceptionIfNo_GET_RequestSent()
+  {
+    $response = new \Pimf\Response('POST');
+    $response->cacheBrowser(1);
+  }
+
+  /**
+   * @runInSeparateProcess
    * @outputBuffering enabled
    */
   public function testSendingCachedTextData()
   {
-    $response = new \Pimf\Response('POST');
+    $response = new \Pimf\Response('GET');
     $response->asTEXT()->cacheBrowser(60)->send('Barry is cached at the browser', false);
 
     $this->expectOutputString('Barry is cached at the browser');

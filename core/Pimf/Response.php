@@ -200,7 +200,7 @@ class Response
    *
    * @return $this
    */
-  public function cacheNoValidate($seconds)
+  public function cacheNoValidate($seconds = 60)
   {
     self::preventMultipleCaching();
     self::$cached = true;
@@ -239,6 +239,13 @@ class Response
    */
   private function preventMultipleCaching()
   {
+    if($this->method != 'GET') {
+      Header::clear();
+      throw new \RuntimeException(
+        'HTTP cache headers can only take effect if request was sent via GET method!'
+      );
+    }
+
     if(self::$cached === true) {
       Header::clear();
       throw new \RuntimeException('only one HTTP cache-control can be sent!');
