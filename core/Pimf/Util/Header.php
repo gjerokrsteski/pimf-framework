@@ -95,31 +95,6 @@ class Header
   }
 
   /**
-   * Sends file as header through any firewall and browser - IE6, IE7, IE8, IE9, FF3.6, FF11, Safari, Chrome, Opera.
-   * @link http://reeg.junetz.de/DSP/node16.html
-   * @link http://www.php.net/manual/de/function.header.php#88038
-   * @param string $fileOrString
-   * @param string $fileName
-   */
-  public static function sendDownloadDialog($fileOrString, $fileName)
-  {
-    $disposition = (false !== strpos(Registry::get('env')->getUserAgent(), 'MSIE 5.5')) ? '' : 'attachment; ';
-
-    header("Pragma: public");
-    header("Expires: 0");
-    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-    header("Cache-Control: private", false);
-    header("Content-Disposition: " . $disposition . "filename=" . $fileName . ";");
-
-    if (is_file($fileOrString)) {
-      readfile($fileOrString);
-    } else {
-      echo $fileOrString;
-    }
-    exit(0);
-  }
-
-  /**
    * @param int $code HTTP response code
    * @param string $status The header string which will be used to figure out the HTTP status code to send.
    * @param bool $replace Whether the header should replace a previous similar header.
@@ -182,6 +157,11 @@ class Header
   public static function sendFound()
   {
     self::send(302, 'Found');
+  }
+
+  public function sendNotModified()
+  {
+    self::send(304, 'Not Modified');
   }
 
   public static function sendTemporaryRedirect()
@@ -295,36 +275,109 @@ class Header
   }
 
   /**
-   * Sends validation headers for HTTP caching.
-   * @param int $mtime
-   * @param string $etag
+   * Handles setting pages that are always to be revalidated for freshness by any cache.
+   * @param int $last_modified Timestamp in seconds
    */
-  public static function sendValidation($mtime, $etag)
+  public static function exitIfNotModifiedSince($last_modified)
   {
-    header('Last-Modified:' . gmdate('D, j M Y H:i:s', $mtime) . ' GMT');
-    header('ETag: ' . $etag);
+    if (self::isModified($last_modified)) {
+      self::sendNotModified();
+      exit(0);
+    }
+
+    $last_modified = gmdate('D, d M Y H:i:s', $last_modified) . ' GMT';
+    header("Cache-Control: must-revalidate");
+    header("Last Modified: $last_modified");
   }
 
   /**
    * Actual HTTP caching validation.
-   * @param int $mtime
+   * @param int $mtime In seconds
    * @param string $etag
    * @return bool
    */
-  public static function isModified($mtime, $etag)
+  public static function isModified($mtime, $etag = '')
   {
     $env = Registry::get('env');
 
-    return !(strtotime($env->HTTP_IF_MODIFIED_SINCE) >= $mtime || $env->HTTP_IF_NONE_MATCH == $etag);
+    $modified_since = strtotime(preg_replace('/;.*$/', '', $env->HTTP_IF_MODIFIED_SINCE));
+
+    return !($modified_since >= $mtime || $env->HTTP_IF_NONE_MATCH == $etag);
   }
 
   /**
-   * Tell clients when your resource expires.
-   * @param int $seconds
+   * If you want to allow a page to be cached by shared proxies for one minute.
+   * @param int $seconds Interval in seconds
    */
-  public static function sendExpire($seconds)
+  public static function cacheNoValidate($seconds = 60)
   {
-    header('Expires: ' . gmdate('D, j M Y H:i:s T', time() + $seconds));
-    header('Cache-Control: max-age=' . $seconds . ', must-revalidate');
+    $now    = time();
+    $lmtime = gmdate('D, d M Y H:i:s', $now) . ' GMT';
+    $extime = gmdate('D, d M Y H:i:s', $now + $seconds) . 'GMT';
+    // backwards compatibility for HTTP/1.0 clients
+    header("Last Modified: $lmtime");
+    header("Expires: $extime");
+    // HTTP/1.1 support
+    header("Cache-Control: public,max-age=$seconds");
   }
+
+  /**
+   * If instead you have a page that has personalization on it
+   * (say, for example, the splash page contains local news as well),
+   * you can set a copy to be cached only by the browser.
+   *
+   * @param int $seconds Interval in seconds
+   */
+  public static function cacheBrowser($seconds = 60)
+  {
+    $now    = time();
+    $lmtime = gmdate('D, d M Y H:i:s', $now) . ' GMT';
+    $extime = gmdate('D, d M Y H:i:s', $now + $seconds) . ' GMT';
+    // backwards compatibility for HTTP/1.0 clients
+    header("Last Modified: $lmtime");
+    header("Expires: $extime");
+    // HTTP/1.1 support
+    header("Cache-Control: private,max-age=$seconds,s-maxage=0");
+  }
+
+
+  /**
+   * If you want to try as hard as possible to keep a page from being cached anywhere.
+   */
+  public static function cacheNone()
+  {
+    // backwards compatibility for HTTP/1.0 clients
+    header("Expires: 0");
+    header("Pragma: no-cache");
+    // HTTP/1.1 support
+    header("Cache-Control: no-cache,no-store,max-age=0,s-maxage=0,must-revalidate");
+  }
+
+  /**
+   * Sends file as download-header through any firewall to the browsers like >=IE6 >=FF3.6, Safari, Chrome, Opera.
+   *
+   * @link http://reeg.junetz.de/DSP/node16.html
+   * @link http://www.php.net/manual/de/function.header.php#88038
+   *
+   * @param string $fileOrString
+   * @param string $fileName
+   */
+  public static function sendDownloadDialog($fileOrString, $fileName)
+  {
+    $disposition = (false !== strpos(Registry::get('env')->getUserAgent(), 'MSIE 5.5')) ? '' : 'attachment; ';
+
+    header("Pragma: public");
+    header("Expires: 0");
+    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+    header("Cache-Control: private", false);
+    header("Content-Disposition: " . $disposition . "filename=" . $fileName . ";");
+
+    if (is_file($fileOrString)) {
+      readfile($fileOrString);
+    } else {
+      echo $fileOrString;
+    }
+    exit(0);
+  }
+
 }

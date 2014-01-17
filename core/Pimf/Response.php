@@ -29,7 +29,12 @@ use \Pimf\Util\Header, Pimf\Util\Json as UtilJson;
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
 class Response
-{  
+{
+  /**
+   * @var boolean
+   */
+  public static $testing;
+
   /**
    * The request method send by the client-browser.
    * @var string
@@ -40,13 +45,13 @@ class Response
    * If the response attempts to send any cached headers.
    * @var bool
    */
-  protected $cached = false;
+  protected static $cached = false;
 
   /**
-   * Type of the data that will be send to the client-browser.
+   * Type of the data will be send to the client-browser.
    * @var string
    */
-  protected $type = null;
+  protected static $typed = null;
 
   /**
    * @param string $requestMethod
@@ -67,7 +72,7 @@ class Response
   public function asJSON()
   {
     $this->preventMultipleTypes();
-    $this->type = __FUNCTION__;
+    self::$typed = __FUNCTION__;
     Header::contentTypeJson();
     return $this;
   }
@@ -75,7 +80,7 @@ class Response
   public function asHTML()
   {
     $this->preventMultipleTypes();
-    $this->type = __FUNCTION__;
+    self::$typed = __FUNCTION__;
     Header::contentTypeTextHTML();
     return $this;
   }
@@ -83,7 +88,7 @@ class Response
   public function asPDF()
   {
     $this->preventMultipleTypes();
-    $this->type = __FUNCTION__;
+    self::$typed = __FUNCTION__;
     Header::contentTypePdf();
     return $this;
   }
@@ -91,7 +96,7 @@ class Response
   public function asCSV()
   {
     $this->preventMultipleTypes();
-    $this->type = __FUNCTION__;
+    self::$typed = __FUNCTION__;
     Header::contentTypeCsv();
     return $this;
   }
@@ -99,7 +104,7 @@ class Response
   public function asTEXT()
   {
     $this->preventMultipleTypes();
-    $this->type = __FUNCTION__;
+    self::$typed = __FUNCTION__;
     Header::contentTypeTextPlain();
     return $this;
   }
@@ -107,7 +112,7 @@ class Response
   public function asZIP()
   {
     $this->preventMultipleTypes();
-    $this->type = __FUNCTION__;
+    self::$typed = __FUNCTION__;
     Header::contentTypeZip();
     return $this;
   }
@@ -115,7 +120,7 @@ class Response
   public function asXZIP()
   {
     $this->preventMultipleTypes();
-    $this->type = __FUNCTION__;
+    self::$typed = __FUNCTION__;
     Header::contentTypeXZip();
     return $this;
   }
@@ -123,7 +128,7 @@ class Response
   public function asMSWord()
   {
     $this->preventMultipleTypes();
-    $this->type = __FUNCTION__;
+    self::$typed = __FUNCTION__;
     Header::contentTypeMSWord();
     return $this;
   }
@@ -131,8 +136,8 @@ class Response
   /**
    * Sends a download dialog to the browser.
    *
-   * @param string $stream Can be file-path or string.
-   * @param string $name   Name of the stream/file that should be shown to the browser.
+   * @param string $stream Can be a file-path or a string.
+   * @param string $name   Name of the stream/file should be shown.
    */
   public function sendStream($stream, $name)
   {
@@ -148,13 +153,74 @@ class Response
   {
     $body = $data;
 
-    if($this->type === 'asJSON') {
+    if(self::$typed === 'asJSON') {
       $body =  UtilJson::encode($data);
     } else if($data instanceof \Pimf\View) {
       $body = $data->render();
     }
 
-    echo ''.$body; if ($exit) exit(0);
+    echo '' . $body; if ($exit) exit(0);
+  }
+
+
+  /**
+   * If instead you have a page that has personalization on it
+   * (say, for example, the splash page contains local news as well),
+   * you can set a copy to be cached only by the browser.
+   *
+   * @param int $seconds Interval in seconds
+   *
+   * @return $this
+   */
+  public function cacheBrowser($seconds)
+  {
+    self::preventMultipleCaching();
+    self::$cached = true;
+    Header::cacheBrowser($seconds);
+    return $this;
+  }
+
+  /**
+   * If you want to try as hard as possible to keep a page from being cached anywhere.
+   *
+   * @return $this
+   */
+  public function cacheNone()
+  {
+    self::preventMultipleCaching();
+    self::$cached = true;
+    Header::cacheNone();
+    return $this;
+  }
+
+  /**
+   * If you want to allow a page to be cached by shared proxies for one minute.
+   *
+   * @param int $seconds Interval in seconds
+   *
+   * @return $this
+   */
+  public function cacheNoValidate($seconds)
+  {
+    self::preventMultipleCaching();
+    self::$cached = true;
+    Header::cacheNoValidate($seconds);
+    return $this;
+  }
+
+  /**
+   * Handles setting pages that are always to be revalidated for freshness by any cache.
+   *
+   * @param int $last_modified Timestamp in seconds
+   *
+   * @return $this
+   */
+  public function exitIfNotModifiedSince($last_modified)
+  {
+    self::preventMultipleCaching();
+    self::$cached = true;
+    Header::exitIfNotModifiedSince($last_modified);
+    return $this;
   }
 
   /**
@@ -162,9 +228,20 @@ class Response
    */
   private function preventMultipleTypes()
   {
-    if(!is_empty($this->type)) {
+    if(!is_empty(self::$typed)) {
       Header::clear();
-      throw new \RuntimeException('only one content-type can be send');
+      throw new \RuntimeException('only one HTTP content-type can be sent!');
+    }
+  }
+
+  /**
+   * @throws \RuntimeException
+   */
+  private function preventMultipleCaching()
+  {
+    if(self::$cached === true) {
+      Header::clear();
+      throw new \RuntimeException('only one HTTP cache-control can be sent!');
     }
   }
 }
