@@ -31,11 +31,6 @@ use \Pimf\Util\Header, Pimf\Util\Json as UtilJson;
 class Response
 {
   /**
-   * @var boolean
-   */
-  public static $testing;
-
-  /**
    * The request method send by the client-browser.
    * @var string
    */
@@ -62,6 +57,7 @@ class Response
   {
     $this->method = '' . strtoupper($requestMethod);
 
+    // it is PIMF framework restriction
     if(!in_array($this->method, array('POST', 'GET'), true)) {
       throw new \RuntimeException('no request-method given');
     }
