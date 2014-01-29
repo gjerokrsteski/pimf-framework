@@ -6,7 +6,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
     new \Pimf\Util\Cache();
   }
 
-  public function testWritingData()
+  public function testWritingAndRetrievingData()
   {
     $data     = 'some sample data here, as string, array or object!';
     $path     = dirname(__FILE__) . '/_fixture/';
@@ -15,13 +15,6 @@ class CacheTest extends PHPUnit_Framework_TestCase
     $cached = \Pimf\Util\Cache::put($path.$cache_id, $data, '+40 seconds');
 
     $this->assertNotNull($cached);
-  }
-
-  public function testRetrievingData()
-  {
-    $data     = 'some sample data here, as string, array or object!';
-    $path     = dirname(__FILE__) . '/_fixture/';
-    $cache_id = 'my-data-cache-id.html';
 
     $cached = \Pimf\Util\Cache::retrieve($path.$cache_id);
 
@@ -37,6 +30,5 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
     $this->assertTrue($deleted);
   }
-  
 }
  
