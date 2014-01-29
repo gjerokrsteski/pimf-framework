@@ -16,15 +16,5 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
     $this->assertNotNull($cached, 'it is not cached');
   }
-
-  public function testDeletingCachedFile()
-  {
-    $path     = dirname(__FILE__) . '/_fixture/';
-    $cache_id = 'my-data-cache-id.html';
-
-    $deleted = \Pimf\Util\Cache::forget($path.$cache_id);
-
-    $this->assertTrue($deleted);
-  }
 }
  
