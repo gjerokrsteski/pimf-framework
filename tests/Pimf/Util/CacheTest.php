@@ -12,7 +12,7 @@ class CacheTest extends PHPUnit_Framework_TestCase
     $path     = dirname(__FILE__) . '/_fixture/';
     $cache_id = 'my-data-cache-id.html';
 
-    $cached = \Pimf\Util\Cache::put($path.$cache_id, $data, '+10 seconds');
+    $cached = \Pimf\Util\Cache::put($path.$cache_id, $data, '+40 seconds');
 
     $this->assertNotNull($cached);
   }
