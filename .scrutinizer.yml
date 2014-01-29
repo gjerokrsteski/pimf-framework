@@ -7,7 +7,7 @@ before_commands:
 tools:
 # Code Coverage
 external_code_coverage:
-    enabled: true
+    enabled: false
     timeout: 300
     filter:
         excluded_paths:
@@ -16,11 +16,11 @@ external_code_coverage:
 
 php_code_coverage:
     enabled:              true
-    test_command:         phpunit
+    test_command:         phpunit -c tests/
     filter:
         excluded_paths:
             - 'tests/*'
-    
+
 
 # Code Sniffer
 php_code_sniffer:
