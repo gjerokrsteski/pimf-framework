@@ -15,7 +15,7 @@ external_code_coverage:
     
 
 php_code_coverage:
-    enabled:              false
+    enabled:              true
     test_command:         phpunit
     filter:
         excluded_paths:
