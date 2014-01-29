@@ -24,18 +24,18 @@
 namespace Pimf\Util;
 
 /**
- * Instant caching into a file at you local system.
+ * Instant caching of data or HTML into a file at you local system.
  *
  * <code>
  *
- * $data = 'some sample data here, as string, array or object!';
+ * $html = 'some sample data here, as string, array or object!';
  *
- * Cache::cache('my.data.cache.id', $data);
+ * Cache::put('/path/to/directory/'.'my-data-cache-id.html', $html);
  *
- * $hasData = Cache::cache('my.data.cache.id');
+ * $hasData = Cache::retrieve('my.data.cache.id');
  *
  * if ($hasData !== null) {
- *   $data = $hasData
+ *   $html = $hasData
  * }
  * </code>
  *
@@ -45,6 +45,46 @@ namespace Pimf\Util;
 class Cache
 {
   /**
+   * Writes temporary data to cache files.
+   *
+   * @param string $path File path within /tmp to save the file - make sure it exists and is writeable.
+   * @param mixed $data The data to save to the temporary file.
+   * @param mixed $expires A valid strtotime string when the data expires.
+   * @return mixed The contents of the temporary file.
+   */
+  public static function put($path, $data = null, $expires = '+1 day')
+  {
+    return self::cache($path, $data, $expires);
+  }
+
+  /**
+   * Reads temporary data to cache files.
+   *
+   * @param string $path File path within /tmp to save the file - make sure it exists and is writeable.
+   * @return mixed The contents of the temporary file.
+   */
+  public static function retrieve($path)
+  {
+    return self::cache($path);
+  }
+
+  /**
+   * Delete the cached file.
+   * @param $path
+   * @return bool
+   */
+  public static function forget($path)
+  {
+    if (file_exists($path)) {
+      @unlink($path);
+      clearstatcache();
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Reads/writes temporary data to cache files.
    *
    * @param string $path File path within /tmp to save the file - make sure it exists and is writeable.
@@ -52,7 +92,7 @@ class Cache
    * @param mixed $expires A valid strtotime string when the data expires.
    * @return mixed The contents of the temporary file.
    */
-  public static function cache($path, $data = null, $expires = '+1 day')
+  protected static function cache($path, $data = null, $expires = '+1 day')
   {
     $now      = time();
     $filename = strtolower($path);
