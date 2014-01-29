@@ -29,10 +29,11 @@ namespace Pimf\Util;
  * <code>
  *
  * $html = 'some sample data here, as string, array or object!';
+ * $cache_id = '/path/to/directory/'.'my-data-cache-id.html';
  *
- * Cache::put('/path/to/directory/'.'my-data-cache-id.html', $html);
+ * Cache::put($cache_id, $html);
  *
- * $hasData = Cache::retrieve('my.data.cache.id');
+ * $hasData = Cache::retrieve($cache_id);
  *
  * if ($hasData !== null) {
  *   $html = $hasData
