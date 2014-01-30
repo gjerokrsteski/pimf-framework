@@ -1,15 +1,7 @@
 imports:
     - php
 
-
 tools:
-    # Code Coverage
-    php_code_coverage:
-        enabled: true
-        filter:
-            excluded_paths:
-                - 'tests/*'
-
     # Copy/Paste Detector
     php_cpd:
         enabled:              true
