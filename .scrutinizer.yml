@@ -89,6 +89,4 @@ tools:
         filter:
             excluded_paths:
                 - 'tests/*'
-    
-    # Security Advisory Checker
-    sensiolabs_security_checker: true
+
