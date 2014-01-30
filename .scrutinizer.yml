@@ -5,17 +5,14 @@ before_commands:
     - "composer install --prefer-source"
 
 tools:
-    # Code Sniffer
-    php_code_sniffer:
-        enabled:              true
-        command:              phpcs
-        config:
-            standard:         PSR2
+    # Code Coverage
+    external_code_coverage:
+        enabled: true
+        timeout: 300
         filter:
             excluded_paths:
                 - 'tests/*'
-        
-    
+
     # Copy/Paste Detector
     php_cpd:
         enabled:              true
