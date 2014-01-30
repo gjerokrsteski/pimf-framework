@@ -32,22 +32,22 @@ use \Pimf\Param,  \Pimf\Registry, \Pimf\Environment,
 abstract class Base
 {
   /**
-   * @var Request
+   * @var \Pimf\Request
    */
   protected $request;
 
   /**
-   * @var Response
+   * @var \Pimf\Response
    */
   protected $response;
 
   /**
-   * @param \Pimf\Request  $request
-   * @param \Pimf\Response $response
+   * @param Request  $request
+   * @param Response $response
    */
   public function __construct(\Pimf\Request $request, \Pimf\Response $response = null)
   {
-    $this->request = $request;
+    $this->request  = $request;
     $this->response = $response;
   }
 
@@ -56,8 +56,7 @@ abstract class Base
   /**
    * Method to show the content.
    * @return mixed
-   * @throws \Pimf\Controller\Exception if no action found
-   * @throws \RuntimeException if bad request method
+   * @throws \Exception If not supported request method or bad controller
    */
   public function render()
   {

@@ -34,7 +34,7 @@ class Pdo extends Storage
   protected $key;
 
   /**
-   * @var pdo
+   * @var Pdo|\Pimf\Database
    */
   protected $db;
 
@@ -99,7 +99,7 @@ class Pdo extends Storage
       $sth = $this->db->prepare(
         "INSERT INTO pimf_cache (key, value, expiration) VALUES (:key, :value, :expiration)"
       );
-    } catch (Exception $e) {
+    } catch (\Exception $e) {
       $sth = $this->db->prepare(
         "UPDATE pimf_cache SET value = :value, expiration = :expiration WHERE key = :key"
       );

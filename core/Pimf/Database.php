@@ -80,7 +80,7 @@ class Database extends \PDO
   {
     if ($this->transLevel == 0) {
       throw new \PDOException(
-        'trying to rollback without a transaction-start'
+        'trying to rollback without a transaction-start', 25000
       );
     }
 

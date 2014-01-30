@@ -130,7 +130,7 @@ class Payload
    * Get an item from the session.
    * @param string $key
    * @param null $default
-   * @return null
+   * @return mixed|null
    */
   public function get($key, $default = null)
   {
@@ -156,9 +156,11 @@ class Payload
 
   /**
    * Checks if key is in session.
-   * @param $key
+   *
+   * @param string $key
    * @param array $session
-   * @return null
+   *
+   * @return mixed|null
    */
   protected function isIn($key, array $session)
   {

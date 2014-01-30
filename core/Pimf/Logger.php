@@ -89,36 +89,16 @@ class Logger
       mkdir($this->storageDir, 0777);
     }
 
-    if (!is_dir($this->storageDir)) {
-      throw new \RuntimeException('log_dir must be a directory ' . $this->storageDir);
-    }
-
-    if (!is_writable($this->storageDir)) {
-      throw new \RuntimeException('log_dir is not writable ' . $this->storageDir);
-    }
-
     if (true === $this->separator) {
       $this->storageDir = rtrim(realpath($this->storageDir), '\\/') . DIRECTORY_SEPARATOR;
     }
 
-    $this->handle = fopen($this->storageDir . $this->logfile, "at+");
+    $this->handle      = fopen($this->storageDir . $this->logfile, "at+");
+    $this->warnHandle  = fopen($this->storageDir . "pimf-warnings.txt", "at+");
+    $this->errorHandle = fopen($this->storageDir . "pimf-errors.txt", "at+");
 
-    if ($this->handle === false) {
-      throw new \RuntimeException("failed to obtain a handle to log file '" . $this->storageDir . $this->logfile  . "'");
-    }
-
-    $warningLogFile   = $this->storageDir . "pimf-warnings.txt";
-    $this->warnHandle = fopen($warningLogFile, "at+");
-
-    if ($this->warnHandle === false) {
-      throw new \RuntimeException("failed to obtain a handle to warning log file '" . $warningLogFile . "'");
-    }
-
-    $errorLogFile          = $this->storageDir . "pimf-errors.txt";
-    $this->errorHandle = fopen($errorLogFile, "at+");
-
-    if ($this->errorHandle === false) {
-      throw new \RuntimeException("failed to obtain a handle to error log file '" . $errorLogFile . "'");
+    if (!$this->errorHandle || !$this->handle || !$this->warnHandle) {
+      throw new \RuntimeException("failed to obtain a handle to logger file");
     }
   }
 
@@ -183,15 +163,12 @@ class Logger
 
     // if severity is WARNING then write to warning file
     if ($severity == 'WARNING') {
-      if ($this->warnHandle !== false) {
-        fwrite($this->warnHandle, $msg);
-      }
+      fwrite($this->warnHandle, $msg);
     } // if severity is ERROR then write to error file
     else if ($severity == 'ERROR') {
-      if ($this->errorHandle !== false) {
-        fwrite($this->errorHandle, $msg);
-      }
-    } else if ($this->handle !== false) {
+      fwrite($this->errorHandle, $msg);
+    }
+    else if ($this->handle !== false) {
       if (fwrite($this->handle, $msg) === false) {
         throw new \RuntimeException("There was an error writing to log file.");
       }

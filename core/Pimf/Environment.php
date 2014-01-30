@@ -287,7 +287,7 @@ class Environment
         $headers[str_replace('-', '_', strtoupper($key))] = $value;
       }
     } else {
-      foreach ($this->envData as $key => $value) {
+      foreach ($this->envData->getAll() as $key => $value) {
         if ('HTTP_' === substr($key, 0, 5)) {
           $headers[substr($key, 5)] = $value;
         }

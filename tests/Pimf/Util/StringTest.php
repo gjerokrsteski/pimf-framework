@@ -10,17 +10,6 @@ class StringTest extends PHPUnit_Framework_TestCase
     $this->testString = file_get_contents(dirname(__FILE__).'/_fixture/samp-string.html');
   }
 
-  public function testIfStringIsUtf8()
-  {
-    $res = \Pimf\Util\String::isUTF8($this->testString);
-
-    $this->assertTrue($res);
-
-    $res = \Pimf\Util\String::isUTF8($this->testString, true);
-
-    $this->assertTrue($res);
-  }
-
   public function testCheckUtf8Encoding()
   {
     $res = \Pimf\Util\String::checkUtf8Encoding($this->testString);
@@ -36,13 +25,6 @@ class StringTest extends PHPUnit_Framework_TestCase
       file_get_contents(dirname(__FILE__).'/_fixture/expects-clean-aggressive.html'),
       str_replace(array(' ', PHP_EOL), '', $res)
     );
-  }
-
-  public function testCleanSmart()
-  {
-    $res = \Pimf\Util\String::cleanSmart($this->testString);
-
-    $this->assertEquals(' Mit Hilfe von samp-string.html', $res);
   }
 
   public function testEnsureTrailing()

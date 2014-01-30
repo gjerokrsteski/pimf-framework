@@ -29,7 +29,7 @@ class Memcached extends Storage
 {
   /**
    * The Memcache instance.
-   * @var Memcached
+   * @var \Memcached
    */
   public $memcache;
 
@@ -40,10 +40,10 @@ class Memcached extends Storage
   protected $key;
 
   /**
-   * @param Memcached $memcache
+   * @param \Memcached $memcache
    * @param $key
    */
-  public function __construct(Memcached $memcache, $key)
+  public function __construct(\Memcached $memcache, $key)
   {
     $this->key      = $key;
     $this->memcache = $memcache;

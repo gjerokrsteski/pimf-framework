@@ -45,7 +45,7 @@ class Cache
 {
   /**
    * All of the active cache storages.
-   * @var array
+   * @var \Pimf\Cache\Storages\Storage[]
    */
   public static $storages = array();
 

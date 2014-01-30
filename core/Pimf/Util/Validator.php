@@ -37,11 +37,6 @@ class Validator
   protected $valid = false;
 
   /**
-   * @var bool
-   */
-  protected $duplicate = false;
-
-  /**
    * @var array
    */
   protected $errors = array();
@@ -125,35 +120,22 @@ class Validator
 
     switch ($operator) {
       case "<":
-        if ($fieldValue < $length) {
-          $isValid = true;
-        }
+          $isValid = ($fieldValue < $length);
         break;
       case ">":
-        if ($fieldValue > $length) {
-          $isValid = true;
-        }
-
+        $isValid = ($fieldValue > $length);
         break;
       case "=":
-        if ($fieldValue == $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue == $length);
         break;
       case "<=":
-        if ($fieldValue <= $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue <= $length);
         break;
       case ">=":
-        if ($fieldValue >= $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue >= $length);
         break;
       default:
-        if ($fieldValue < $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue < $length);
     }
 
     if ($isValid === false) {
@@ -251,13 +233,9 @@ class Validator
     }
 
     if ($caseInsensitive) {
-      if (strcmp(strtolower($field1value), strtolower($field2value)) == 0) {
-        $isValid = true;
-      }
+      $isValid = (strcmp(strtolower($field1value), strtolower($field2value)) == 0);
     } else {
-      if (strcmp($field1value, $field2value) == 0) {
-        $isValid = true;
-      }
+      $isValid = (strcmp($field1value, $field2value) == 0);
     }
 
     if ($isValid === false) {
@@ -288,13 +266,9 @@ class Validator
     $fieldValue = strlen(trim($fieldValue));
 
     if (!$inclusive) {
-      if ($fieldValue < $max && $fieldValue > $min) {
-        $isValid = true;
-      }
+      $isValid = ($fieldValue < $max && $fieldValue > $min);
     } else {
-      if ($fieldValue <= $max && $fieldValue >= $min) {
-        $isValid = true;
-      }
+      $isValid = ($fieldValue <= $max && $fieldValue >= $min);
     }
 
     if ($isValid === false) {
@@ -345,34 +319,22 @@ class Validator
 
     switch ($operator) {
       case "<":
-        if ($fieldValue < $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue < $length);
         break;
       case ">":
-        if ($fieldValue > $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue > $length);
         break;
       case "=":
-        if ($fieldValue == $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue == $length);
         break;
       case "<=":
-        if ($fieldValue <= $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue <= $length);
         break;
       case ">=":
-        if ($fieldValue >= $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue >= $length);
         break;
       default:
-        if ($fieldValue < $length) {
-          $isValid = true;
-        }
+        $isValid = ($fieldValue < $length);
     }
 
     if ($isValid === false) {
@@ -401,13 +363,9 @@ class Validator
     }
 
     if (!$inclusive) {
-      if ($fieldValue < $max && $fieldValue > $min) {
-        $isValid = true;
-      }
+      $isValid = ($fieldValue < $max && $fieldValue > $min);
     } else {
-      if ($fieldValue <= $max && $fieldValue >= $min) {
-        $isValid = true;
-      }
+      $isValid = ($fieldValue <= $max && $fieldValue >= $min);
     }
 
     if ($isValid === false) {
@@ -524,25 +482,7 @@ class Validator
    */
   protected function setError($field, $error)
   {
-    if (!array_key_exists($field, $this->errors) || $this->errors[$field] !== $error && !is_array($this->errors[$field])) {
-      $tmpArray     = array( $field => $error );
-      $this->errors = array_merge_recursive($this->errors, $tmpArray);
-      return;
-    } elseif (is_array($this->errors[$field])) {
-      foreach ($this->errors[$field] as $value) {
-        if ($value == $error) {
-          $this->duplicate = true;
-        } else {
-          $this->duplicate = false;
-        }
-      }
-      if (!$this->duplicate) {
-        $tmpArray     = array( $field => $error );
-        $this->errors = array_merge_recursive($this->errors, $tmpArray);
-      }
-    } else {
-      $this->duplicate = false;
-    }
+    $this->errors = array_merge_recursive($this->errors, array( $field => $error ));
   }
 
   /**

@@ -45,6 +45,8 @@ use Pimf\Registry, Pimf\Session\Payload, Pimf\Cookie, Pimf\Session\Storages as S
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
+ *
+ * @method static save()
  */
 class Session
 {
@@ -94,8 +96,8 @@ class Session
    *
    * @param $storage
    *
-   * @throws \RuntimeException
    * @return Storage\Apc|Storage\Cookie|Storage\Dba|Storage\File|Storage\Memcached|Storage\Memory|Storage\Pdo|Storage\Redis
+   * @throws \RuntimeException
    */
   public static function factory($storage)
   {

@@ -50,7 +50,7 @@ final class Application
    */
   public static function run(array $get, array $post, array $cookie)
   {
-    if (static::$bootstrapped !== true) {
+    if (self::$bootstrapped !== true) {
       throw new \LogicException('Please bootstrap first, than run the application!');
     }
 
@@ -103,12 +103,12 @@ final class Application
    * @param array $config The array of configuration options.
    * @param array $server Array of information such as headers, paths, and script locations.
    *
-   * @return void
+   * @return boolean
    */
   public static function bootstrap(array $config, array $server = array())
   {
-    if (static::$bootstrapped === true) {
-      return;
+    if (self::$bootstrapped === true) {
+      return true;
     }
 
     ini_set('default_charset', $config['encoding']);
@@ -192,7 +192,7 @@ final class Application
       die(implode(PHP_EOL.PHP_EOL, $problems));
     }
 
-    static::$bootstrapped = true;
+    self::$bootstrapped = true;
   }
 
   /**

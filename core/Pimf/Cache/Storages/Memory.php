@@ -29,7 +29,7 @@ class Memory extends Storage
 {
   /**
    * The in-memory array of cached items.
-   * @var string
+   * @var array
    */
   public $storage = array();
 

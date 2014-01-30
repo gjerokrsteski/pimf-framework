@@ -27,7 +27,7 @@ namespace Pimf;
 class Param
 {
   /**
-   * @var \ArrayObject
+   * @var \ArrayObject|null
    */
   protected $data = null;
 
@@ -44,7 +44,7 @@ class Param
    */
   public function getAll()
   {
-    return $this->data->getArrayCopy();
+    return (array)$this->data->getArrayCopy();
   }
 
   /**
@@ -82,7 +82,8 @@ class Param
    * Never ever (ever) trust foreign input introduced to your PHP code!
    *
    * @param array|string $rawData
-   * @return array|string
+   *
+   * @return array|bool|string
    */
   public static function filter($rawData)
   {

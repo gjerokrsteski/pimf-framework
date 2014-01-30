@@ -32,45 +32,6 @@ namespace Pimf\Util;
 class String
 {
   /**
-   * Check if a string is UTF-8 encoded.
-   *
-   * @param string $string The string.
-   * @param boolean $useBuiltinCheck (Optional) Check if the string is valid utf-8 string.
-   * @return boolean
-   */
-  public static function isUTF8($string, $useBuiltinCheck = false)
-  {
-    if ($useBuiltinCheck === true && function_exists('mb_check_encoding')) {
-      return mb_check_encoding($string, 'UTF-8');
-    }
-
-    $length = strlen($string);
-
-    for ($i = 0; $i < $length; ++$i) {
-
-      if (ord($string[$i]) < 0x80) {
-        $n = 0;
-      } elseif ((ord($string[$i]) & 0xE0) == 0xC0) {
-        $n = 1;
-      } elseif ((ord($string[$i]) & 0xF0) == 0xE0) {
-        $n = 2;
-      } elseif ((ord($string[$i]) & 0xF0) == 0xF0) {
-        $n = 3;
-      } else {
-        return false;
-      }
-
-      for ($j = 0; $j < $n; $j++) {
-        if ((++$i == $length) || ((ord($string[$i]) & 0xC0) != 0x80)) {
-          return false;
-        }
-      }
-    }
-
-    return true;
-  }
-
-  /**
    * Replace special chars by underscores.
    * @param $value
    * @param string $replaceWith
@@ -283,56 +244,6 @@ class String
   public static function cleanAggressive($text)
   {
     return (string) preg_replace("/<.*?>/", "", (string) $text);
-  }
-
-  /**
-   * Tries to clean up the string from html and stuff but not to clean usefully information.
-   *
-   * @param string $string The string.
-   * @return string
-   */
-  public static function cleanSmart($string)
-  {
-    $string = trim($string);
-
-    if (!$string) {
-      return '';
-    }
-
-    // Multiline tags: head/script/style
-    $search = array(
-      '@<head[^>]*?>.*?</head>@si',
-      '@<script[^>]*?>.*?</script>@si',
-      '@<style[^>]*?>.*?</style>@si'
-    );
-
-    $cleanString = preg_replace($search, '', $string);
-
-    // Do we have any interesting attributes in the tags?
-    @preg_match_all('/\s(alt|title|src)="([^"]*)"/i', $cleanString, $imgLabels);
-
-    $cOut = '';
-
-    if (array_keys($imgLabels[1], "alt")) {
-      $altList = array_keys($imgLabels[1], "alt");
-      $cOut .= ' ' . html_entity_decode(
-        $imgLabels[2][(int) array_shift($altList)], ENT_NOQUOTES, "UTF-8"
-      );
-    }
-
-    if (array_keys($imgLabels[1], "title")) {
-      $titleList = array_keys($imgLabels[1], "title");
-      $cOut .= ' ' . html_entity_decode(
-        $imgLabels[2][(int) array_shift($titleList)], ENT_NOQUOTES, "UTF-8"
-      );
-    }
-
-    if (array_keys($imgLabels[1], "src")) {
-      $srcList = array_keys($imgLabels[1], "src");
-      $cOut .= ' ' . $imgLabels[2][(int) array_shift($srcList)];
-    }
-
-    return ($cOut !== '') ? $cOut : '';
   }
 
   /**

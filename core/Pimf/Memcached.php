@@ -55,16 +55,20 @@ use Pimf\Registry;
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
+ *
+ * @method get($key)
+ * @method put($key, $value, $expiration)
+ * @method forget($key);
  */
 class Memcached
 {
 	/**
-	 * @var Memcached
+	 * @var \Memcached
 	 */
 	protected static $connection;
 
   /**
-   * @return Memcached
+   * @return \Memcached
    */
   public static function connection()
   {

@@ -63,7 +63,7 @@ class Url
   /**
    * Get the URL for the application root.
    *
-   * @param  bool $https
+   * @param null|bool $https
    *
    * @return string
    */
@@ -99,7 +99,7 @@ class Url
    * Generate an application URL.
    *
    * @param string $url
-   * @param bool $https
+   * @param null|bool $https
    * @param bool $asset
    *
    * @return string
@@ -119,7 +119,7 @@ class Url
 
   /**
    * Computes the URl method
-   * @param null $https
+   * @param null|bool $https
    * @param bool $asset
    *
    * @return mixed

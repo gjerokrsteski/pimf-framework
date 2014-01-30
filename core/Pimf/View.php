@@ -36,9 +36,15 @@ class View implements Renderable
 
   /**
    * Contains the variables that are to be embedded in the template.
-   * @var array
+   * @var \ArrayObject
    */
   protected $data;
+
+  /**
+   * Path to templates - is framework restriction.
+   * @var string
+   */
+  protected $path;
 
   /**
    * @param string $template

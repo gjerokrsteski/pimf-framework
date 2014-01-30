@@ -57,10 +57,10 @@ class Request
    */
   public function __construct(array $getData, array $postData = array(), array $cookieData = array(), array $cliData = array())
   {
-    static::$getData    = new Param(self::stripSlashesIfMagicQuotes($getData));
-    static::$postData   = new Param(self::stripSlashesIfMagicQuotes($postData));
+    static::$getData    = new Param((array)self::stripSlashesIfMagicQuotes($getData));
+    static::$postData   = new Param((array)self::stripSlashesIfMagicQuotes($postData));
     static::$cookieData = new Param($cookieData);
-    static::$cliData    = new Param(self::stripSlashesIfMagicQuotes($cliData));
+    static::$cliData    = new Param((array)self::stripSlashesIfMagicQuotes($cliData));
   }
 
   /**
@@ -101,8 +101,10 @@ class Request
 
   /**
    * Strip slashes from string or array
-   * @param $rawData
+   *
+   * @param      $rawData
    * @param null $overrideStripSlashes
+   *
    * @return array|string
    */
   public static function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
@@ -120,8 +122,9 @@ class Request
 
   /**
    * Strip slashes from string or array
-   * @static
+   *
    * @param $rawData
+   *
    * @return array|string
    */
   protected static function stripSlashes($rawData)

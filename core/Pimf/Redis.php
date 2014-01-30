@@ -41,6 +41,11 @@ use Pimf\Registry;
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
+ *
+ * @method expire($key, $seconds)
+ * @method set($key, $value)
+ * @method del($key)
+ * @method select($database_id)
  */
 class Redis
 {
@@ -228,7 +233,7 @@ class Redis
   protected function bulk($head)
   {
     if ($head == '$-1') {
-      return;
+      return null;
     }
 
     list($read, $response, $size) = array(0, '', substr($head, 1));
@@ -258,7 +263,7 @@ class Redis
   protected function multibulk($head)
   {
     if (($count = substr($head, 1)) == '-1') {
-      return;
+      return null;
     }
 
     $response = array();
@@ -273,6 +278,11 @@ class Redis
 
   /**
    * Dynamically make calls to the Redis database.
+   *
+   * @param $method
+   * @param $parameters
+   *
+   * @return mixed
    */
   public function __call($method, $parameters)
   {
@@ -281,6 +291,11 @@ class Redis
 
   /**
    * Dynamically pass static method calls to the Redis instance.
+   *
+   * @param $method
+   * @param $parameters
+   *
+   * @return mixed
    */
   public static function __callStatic($method, $parameters)
   {

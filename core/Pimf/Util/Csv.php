@@ -63,7 +63,7 @@ class Csv
     $fp = fopen('php://temp', 'a');
 
     $bom = chr(0xEF) . chr(0xBB) . chr(0xBF);
-    fputs($fp, $bom);
+    fputs($fp, $bom, null);
 
     foreach ($data as $row) {
       fputcsv($fp, $row, $this->delimiter, $this->enclosure);
