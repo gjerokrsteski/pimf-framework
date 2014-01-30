@@ -46,11 +46,6 @@ class Logger
   /**
    * @var string
    */
-  private $logfile;
-
-  /**
-   * @var string
-   */
   private $storageDir;
 
   /**
@@ -60,13 +55,11 @@ class Logger
 
   /**
    * @param string $localeStorageDir Use better the local TMP dir or dir with mod 777.
-   * @param null|string $logFileName
    * @param bool $trailingSeparator
    */
-  public function __construct($localeStorageDir, $logFileName = '', $trailingSeparator = true)
+  public function __construct($localeStorageDir, $trailingSeparator = true)
   {
     $this->storageDir = (string)$localeStorageDir;
-    $this->logfile    = (string)$logFileName;
     $this->separator  = (bool)$trailingSeparator;
   }
 
@@ -81,10 +74,6 @@ class Logger
       return;
     }
 
-    if (!$this->logfile ) {
-      $this->logfile = 'pimf-logs.txt';
-    }
-
     if (!is_dir($this->storageDir)) {
       mkdir($this->storageDir, 0777);
     }
@@ -93,7 +82,7 @@ class Logger
       $this->storageDir = rtrim(realpath($this->storageDir), '\\/') . DIRECTORY_SEPARATOR;
     }
 
-    $this->handle      = fopen($this->storageDir . $this->logfile, "at+");
+    $this->handle      = fopen($this->storageDir . "pimf-logs.txt", "at+");
     $this->warnHandle  = fopen($this->storageDir . "pimf-warnings.txt", "at+");
     $this->errorHandle = fopen($this->storageDir . "pimf-errors.txt", "at+");
 
@@ -155,7 +144,6 @@ class Logger
   /**
    * @param $msg
    * @param string $severity
-   * @throws \RuntimeException
    */
   protected function write($msg, $severity = 'DEBUG')
   {
@@ -168,10 +156,8 @@ class Logger
     else if ($severity == 'ERROR') {
       fwrite($this->errorHandle, $msg);
     }
-    else if ($this->handle !== false) {
-      if (fwrite($this->handle, $msg) === false) {
-        throw new \RuntimeException("There was an error writing to log file.");
-      }
+    else {
+      fwrite($this->handle, $msg);
     }
   }
 
