@@ -5,7 +5,16 @@ before_commands:
     - "composer install --prefer-source"
 
 tools:
-    # Code Coverage
+    # Code Coverage external
+    external_code_coverage:
+        enabled: true
+        timeout: 600
+        filter:
+            excluded_paths:
+                - 'tests/*'
+
+
+     # Code Coverage external
     php_code_coverage:
         enabled:              true
         test_command:         phpunit
