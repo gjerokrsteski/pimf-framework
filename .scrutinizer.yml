@@ -1,14 +1,11 @@
 imports:
     - php
 
-before_commands:
-    - "composer install --prefer-source"
 
 tools:
     # Code Coverage
-    external_code_coverage:
+    php_code_coverage:
         enabled: true
-        timeout: 300
         filter:
             excluded_paths:
                 - 'tests/*'
