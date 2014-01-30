@@ -4,6 +4,7 @@ Have you ever wished a PHP framework that perfectly adapts to your projects need
 
 [![Build Status](https://travis-ci.org/gjerokrsteski/pimf-framework.png?branch=master)](https://travis-ci.org/gjerokrsteski/pimf-framework) 
 [![Dependency Status](https://www.versioneye.com/user/projects/52cd6533ec1375e42b000167/badge.png)](https://www.versioneye.com/user/projects/52cd6533ec1375e42b000167)
+[![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/badges/quality-score.png?s=6455d019460628327434d85520bd13c4d03a2673)](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/)
 
 PIMF Philosophy
 ---------------
