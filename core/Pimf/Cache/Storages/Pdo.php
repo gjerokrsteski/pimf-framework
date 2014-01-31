@@ -34,15 +34,15 @@ class Pdo extends Storage
   protected $key;
 
   /**
-   * @var Pdo|\Pimf\Database
+   * @var \Pimf\Database
    */
   protected $db;
 
   /**
    * Create a new database cache storage instance.
    *
-   * @param \Pimf\Cache\Storages\Pdo|\Pimf\Database $pdo
-   * @param                                         $key
+   * @param \Pimf\Database $pdo
+   * @param string $key
    */
   public function __construct(\Pimf\Database $pdo, $key)
   {

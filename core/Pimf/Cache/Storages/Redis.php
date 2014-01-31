@@ -36,7 +36,7 @@ class Redis extends Storage
 {
   /**
    * The Redis database instance.
-   * @var Redis
+   * @var \Pimf\Redis
    */
   protected $redis;
 

@@ -45,7 +45,10 @@ use Pimf\Registry;
  * @method expire($key, $seconds)
  * @method set($key, $value)
  * @method del($key)
+ * @method forget($key)
+ * @method get($key)
  * @method select($database_id)
+ * @method put($session_id, $session, $lifetime);
  */
 class Redis
 {
