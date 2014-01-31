@@ -49,7 +49,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
   #test helpers
 
   /**
-   * @return Session_Payload
+   * @return \Pimf\Session\Payload
    */
   protected function getPayload()
   {
@@ -57,7 +57,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @return Session_Storages_Storage
+   * @return Pimf\Session\Storages\Storage
    */
   protected function getMockStorage()
   {
