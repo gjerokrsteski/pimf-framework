@@ -2,6 +2,9 @@ imports:
     - php
 
 tools:
+    # External Code Coverage
+    external_code_coverage: true
+
     # Copy/Paste Detector
     php_cpd:
         enabled:              true
