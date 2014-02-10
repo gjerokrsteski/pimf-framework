@@ -32,11 +32,6 @@ namespace Pimf\Util;
 class Validator
 {
   /**
-   * @var bool
-   */
-  protected $valid = false;
-
-  /**
    * @var array
    */
   protected $errors = array();
@@ -91,8 +86,7 @@ class Validator
       return true;
     }
 
-    $this->setError($field, __FUNCTION__);
-    return false;
+    return $this->error($field, __FUNCTION__);
   }
 
   /**
@@ -106,8 +100,7 @@ class Validator
       return true;
     }
 
-    $this->setError($field, __FUNCTION__);
-    return false;
+    return $this->error($field, __FUNCTION__);
  	}
 
   /**
@@ -121,8 +114,7 @@ class Validator
       return true;
     }
 
-    $this->setError($field, __FUNCTION__);
-    return false;
+    return $this->error($field, __FUNCTION__);
  	}
 
   /**
@@ -144,7 +136,7 @@ class Validator
     }
 
     if ($valid === false) {
-      $this->setError($field1 . "|" . $field2, __FUNCTION__);
+      $this->error($field1 . "|" . $field2, __FUNCTION__);
     }
 
     return $valid;
@@ -169,7 +161,7 @@ class Validator
     }
 
     if ($valid === false) {
-      $this->setError($field, __FUNCTION__);
+      $this->error($field, __FUNCTION__);
     }
 
     return $valid;
@@ -183,8 +175,7 @@ class Validator
   public function punctuation($field)
   {
     if (preg_match("/[^\w\s\p{P}]/", ''.$this->get($field)) > 0) {
-      $this->setError($field, __FUNCTION__);
-      return false;
+      return $this->error($field, __FUNCTION__);
     }
 
     return true;
@@ -233,7 +224,7 @@ class Validator
     }
 
     if ($valid === false) {
-      $this->setError($fieldName, $operator);
+      $this->error($fieldName, $operator);
     }
 
     return $valid;
@@ -258,7 +249,7 @@ class Validator
     }
 
     if ($valid === false) {
-      $this->setError($field, __FUNCTION__);
+      $this->error($field, __FUNCTION__);
     }
 
     return $valid;
@@ -275,8 +266,7 @@ class Validator
       return true;
     }
 
-    $this->setError($field, __FUNCTION__);
-    return false;
+    return $this->error($field, __FUNCTION__);
   }
 
 
@@ -291,8 +281,7 @@ class Validator
       return true;
     }
 
-    $this->setError($field, __FUNCTION__);
-    return false;
+    return $this->error($field, __FUNCTION__);
   }
 
   /**
@@ -306,8 +295,7 @@ class Validator
       return true;
     }
 
-    $this->setError($field, __FUNCTION__);
-    return false;
+    return $this->error($field, __FUNCTION__);
   }
 
   /**
@@ -330,7 +318,6 @@ class Validator
       $date = new \DateTime($fieldValue);
 
       if ($fieldValue === $date->format($format)) {
-        $this->valid = false;
         return true;
       }
 
@@ -338,19 +325,19 @@ class Validator
       // do nothing
     }
 
-    $this->valid = false;
-    $this->setError($field, __FUNCTION__);
-    return false;
+    return $this->error($field, __FUNCTION__);
   }
 
   /**
    * @param string $field
    * @param int $error
-   * @return void
+   * @return boolean
    */
-  protected function setError($field, $error)
+  protected function error($field, $error)
   {
     $this->errors = array_merge_recursive($this->errors, array( $field => $error ));
+
+    return false;
   }
 
   /**
