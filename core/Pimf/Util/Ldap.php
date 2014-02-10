@@ -57,7 +57,7 @@ use Pimf\Registry;
 class Ldap
 {
   /**
-   * @var null|resource A positive LDAP link identifier
+   * @var resource A positive LDAP link identifier
    */
   protected $conn;
 
@@ -96,7 +96,7 @@ class Ldap
       try {
         $this->connect($config['user'], $config['password']);
       } catch (\Exception $e) {
-        throw new \RuntimeException('LDAP control account error: ' . ldap_error($this->conn));
+        throw new \RuntimeException('LDAP control account error');
       }
     }
 
@@ -151,7 +151,7 @@ class Ldap
     // connect to the controller
     if (!$this->conn = ldap_connect("ldap://{$config['host']}.{$config['domain']}")) {
       throw new \RuntimeException(
-        "could not connect to LDAP host {$config['host']}.{$config['domain']}: " . ldap_error($this->conn)
+        "could not connect to LDAP host {$config['host']}.{$config['domain']}"
       );
     }
 
@@ -162,7 +162,7 @@ class Ldap
     // try to authenticate
     if (!@ldap_bind($this->conn, "{$user}@{$config['domain']}", $password)) {
       throw new \RuntimeException(
-        'could not bind to AD: ' . "{$user}@{$config['domain']}: " . ldap_error($this->conn)
+        'could not bind to AD: ' . "{$user}@{$config['domain']}"
       );
     }
 
