@@ -108,15 +108,7 @@ class Validator
    */
   public function length($field, $operator, $length)
   {
-    $isValid    = false;
-    $fieldValue = $this->attributes->get($field);
-
-    if ($fieldValue === null) {
-      $this->setError($field, __FUNCTION__);
-      return $isValid;
-    }
-
-    $fieldValue = strlen(trim($fieldValue));
+    $fieldValue = strlen(trim($this->get($field)));
 
     switch ($operator) {
       case "<":
@@ -135,7 +127,7 @@ class Validator
         $isValid = ($fieldValue >= $length);
         break;
       default:
-        $isValid = ($fieldValue < $length);
+        $isValid = false;
     }
 
     if ($isValid === false) {
@@ -197,24 +189,6 @@ class Validator
  	}
 
   /**
-   * Check is an active URL.
-   * @param $field
-   * @return bool
-   */
-  public function activeUrl($field)
- 	{
-    $subject = strtolower(trim($this->attributes->get($field)));
-    $url     = str_replace(array('http://', 'https://', 'ftp://'), '', $subject);
-
- 		if (checkdnsrr($url)) {
-      return true;
-    }
-
-    $this->setError($field, __FUNCTION__);
-    return false;
- 	}
-
-  /**
    * check to see if two fields are equal.
    * @param string $field1
    * @param string $field2
@@ -225,12 +199,6 @@ class Validator
   {
     $field1value = $this->attributes->get($field1);
     $field2value = $this->attributes->get($field2);
-    $isValid     = false;
-
-    if ($field1value === null || $field2value === null) {
-      $this->setError($field1 . "|" . $field2, __FUNCTION__);
-      return $isValid;
-    }
 
     if ($caseInsensitive) {
       $isValid = (strcmp(strtolower($field1value), strtolower($field2value)) == 0);
@@ -255,15 +223,7 @@ class Validator
    */
   public function lengthBetween($field, $min, $max, $inclusive = false)
   {
-    $fieldValue = $this->attributes->get($field);
-    $isValid    = false;
-
-    if ($fieldValue === null){
-      $this->setError($field, __FUNCTION__);
-      return $isValid;
-    }
-
-    $fieldValue = strlen(trim($fieldValue));
+    $fieldValue = strlen(trim($this->get($field)));
 
     if (!$inclusive) {
       $isValid = ($fieldValue < $max && $fieldValue > $min);
@@ -285,14 +245,9 @@ class Validator
    */
   public function punctuation($field)
   {
-    $fieldValue = $this->attributes->get($field);
+    $fieldValue = $this->get($field);
 
-    if ($fieldValue === null) {
-      $this->setError($field, __FUNCTION__);
-      return false;
-    }
-
-    if (preg_match("#^[[:punct:]]+$#", $fieldValue)) {
+    if (preg_match("/[^\w\s\p{P}]/", ''.$fieldValue) > 0) {
       $this->setError($field, __FUNCTION__);
       return false;
     }
@@ -309,13 +264,7 @@ class Validator
    */
   public function value($field, $operator, $length)
   {
-    $fieldValue = $this->attributes->get($field);
-    $isValid    = false;
-
-    if ($fieldValue === null) {
-      $this->setError($field, __FUNCTION__);
-      return $isValid;
-    }
+    $fieldValue = $this->get($field);
 
     switch ($operator) {
       case "<":
@@ -334,7 +283,7 @@ class Validator
         $isValid = ($fieldValue >= $length);
         break;
       default:
-        $isValid = ($fieldValue < $length);
+        $isValid = false;
     }
 
     if ($isValid === false) {
@@ -354,13 +303,7 @@ class Validator
    */
   public function valueBetween($field, $min, $max, $inclusive = false)
   {
-    $fieldValue = $this->attributes->get($field);
-    $isValid    = false;
-
-    if ($fieldValue === null) {
-      $this->setError($field, __FUNCTION__);
-      return $isValid;
-    }
+    $fieldValue = $this->get($field);
 
     if (!$inclusive) {
       $isValid = ($fieldValue < $max && $fieldValue > $min);
@@ -382,12 +325,7 @@ class Validator
    */
   public function digit($field)
   {
-    $fieldValue = $this->attributes->get($field);
-
-    if ($fieldValue === null) {
-      $this->setError($field, __FUNCTION__);
-      return false;
-    }
+    $fieldValue = $this->get($field);
 
     if (ctype_digit((string)$fieldValue)) {
       return true;
@@ -405,12 +343,7 @@ class Validator
    */
   public function alpha($field)
   {
-    $fieldValue = $this->attributes->get($field);
-
-    if ($fieldValue === null) {
-      $this->setError($field, __FUNCTION__);
-      return false;
-    }
+    $fieldValue = $this->get($field);
 
     if (ctype_alpha((string)$fieldValue)) {
       return true;
@@ -427,12 +360,7 @@ class Validator
    */
   public function alphaNumeric($field)
   {
-    $fieldValue = $this->attributes->get($field);
-
-    if ($fieldValue === null) {
-      $this->setError($field, __FUNCTION__);
-      return false;
-    }
+    $fieldValue = $this->get($field);
 
     if (ctype_alnum((string)$fieldValue)) {
       return true;
@@ -456,13 +384,13 @@ class Validator
    */
   public function date($field, $format)
   {
-    $fieldValue = $this->attributes->get($field);
+    $fieldValue = $this->get($field);
 
     try {
       $date = new \DateTime($fieldValue);
 
       if ($fieldValue === $date->format($format)) {
-        $this->resetValid();
+        $this->valid = false;
         return true;
       }
 
@@ -470,7 +398,7 @@ class Validator
       // do nothing
     }
 
-    $this->resetValid();
+    $this->valid = false;
     $this->setError($field, __FUNCTION__);
     return false;
   }
@@ -486,19 +414,25 @@ class Validator
   }
 
   /**
+   * @param string $attribute
+   *
+   * @return mixed|null
+   * @throws \OutOfBoundsException If attribute not at range
+   */
+  protected function get($attribute)
+  {
+    if(!$value= $this->attributes->get($attribute)) {
+      throw new \OutOfBoundsException('no attribute with name "'.$attribute.'" set');
+    }
+    return $value;
+  }
+
+  /**
    * @return array
    */
   public function getErrors()
   {
     return $this->errors;
-  }
-
-  /**
-   * resets $valid to false
-   */
-  protected function resetValid()
-  {
-    $this->valid = false;
   }
 
   /**

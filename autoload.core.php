@@ -77,6 +77,8 @@ spl_autoload_register(
         'Pimf\\Util\\Enum'                   => '/Pimf/Util/Enum.php',
         'Pimf\\Util\\File'                   => '/Pimf/Util/File.php',
         'Pimf\\Util\\Header'                 => '/Pimf/Util/Header.php',
+        'Pimf\\Util\\Header\\ResponseStatus' => '/Pimf/Util/Header/ResponseStatus.php',
+        'Pimf\\Util\\Header\\ContentType'    => '/Pimf/Util/Header/ContentType.php',
         'Pimf\\Util\\Identifier'             => '/Pimf/Util/Identifier.php',
         'Pimf\\Util\\IdentityMap'            => '/Pimf/Util/IdentityMap.php',
         'Pimf\\Util\\Json'                   => '/Pimf/Util/Json.php',

@@ -37,5 +37,12 @@ class UriTest extends PHPUnit_Framework_TestCase {
 	{
 		$this->fakeUri($uri);
 		$this->assertEquals($expectation, \Pimf\Uri::current());
+    $this->assertEquals($expectation, \Pimf\Uri::current());
 	}
+
+  public function testDetermineIfCurrentUriMatchesGivenPattern()
+  {
+    $this->fakeUri('/user/profile');
+ 		$this->assertTrue(\Pimf\Uri::is('user/profile'));
+  }
 }

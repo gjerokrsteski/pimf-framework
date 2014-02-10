@@ -466,7 +466,7 @@ class String
  			$pattern = '^/$';
  		}
 
- 		return preg_match('#'.$pattern.'#', $value);
+ 		return (bool) preg_match('#'.$pattern.'#', $value);
  	}
 
   /**

@@ -108,7 +108,7 @@ class Url
   {
     $url = trim($url, '/');
 
-    if (static::valid($url) or Str::startsWith($url, '#')) {
+    if (static::valid($url)) {
       return $url;
     }
 

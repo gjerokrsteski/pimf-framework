@@ -275,9 +275,14 @@ class SessionTest extends PHPUnit_Framework_TestCase
     $this->assertEquals($session['data'][':new:'], $payload->session['data'][':old:']);
   }
 
+  /**
+   * @covers \Pimf\Session\Storages\File::clean
+   * @covers \Pimf\Session\Storages\File::save
+   * @covers \Pimf\Session\Payload::clean
+   * @covers \Pimf\Session\Payload::save
+   */
   public function testSaveMethodSweepsIfCleanerAndOddsHitWithTimeGreaterThanThreshold()
   {
-
     $payload          = $this->getPayload();
     $payload->storage = $this->getMock(
       '\\Pimf\\Session\\Storages\\File', array(
@@ -298,9 +303,12 @@ class SessionTest extends PHPUnit_Framework_TestCase
     $payload->save();
   }
 
+  /**
+   * @covers \Pimf\Session\Storages\File::clean
+   * @covers \Pimf\Session\Storages\File::save
+   */
   public function testSaveMethodSweepsIfCleanerAndOddsHitWithTimeLessThanThreshold()
   {
-
     $payload          = $this->getPayload();
     $payload->storage = $this->getMock(
       '\\Pimf\\Session\\Storages\\File', array(
@@ -320,6 +328,9 @@ class SessionTest extends PHPUnit_Framework_TestCase
     $payload->save();
   }
 
+  /**
+   * @covers \Pimf\Session\Storages\Apc::save
+   */
   public function testCleanerShouldntBeCalledIfStorageIsntCleaner()
   {
     $payload          = $this->getPayload();
@@ -331,9 +342,79 @@ class SessionTest extends PHPUnit_Framework_TestCase
     );
 
     $payload->session = $this->getSession();
-
     $payload->storage->expects($this->never())->method('clean');
+    $payload->save();
+  }
 
+  /**
+   * @covers \Pimf\Session\Storages\Memory::save
+   */
+  public function testCleanerShouldntBeCalledIfMemoryStorageIsntCleaner()
+  {
+    $payload          = $this->getPayload();
+    $payload->storage = $this->getMock(
+      '\\Pimf\\Session\\Storages\\Memory', array(
+        'save',
+        'clean'
+      ), array(), '', false
+    );
+
+    $payload->session = $this->getSession();
+    $payload->storage->expects($this->never())->method('clean');
+    $payload->save();
+  }
+
+  /**
+   * @covers \Pimf\Session\Storages\Cookie::save
+   */
+  public function testCleanerShouldntBeCalledIfCookieStorageIsntCleaner()
+  {
+    $payload          = $this->getPayload();
+    $payload->storage = $this->getMock(
+      '\\Pimf\\Session\\Storages\\Cookie', array(
+        'save',
+        'clean'
+      ), array(), '', false
+    );
+
+    $payload->session = $this->getSession();
+    $payload->storage->expects($this->never())->method('clean');
+    $payload->save();
+  }
+
+  /**
+   * @covers \Pimf\Session\Storages\Memcached::save
+   */
+  public function testCleanerShouldntBeCalledIfMemcachedStorageIsntCleaner()
+  {
+    $payload          = $this->getPayload();
+    $payload->storage = $this->getMock(
+      '\\Pimf\\Session\\Storages\\Memcached', array(
+        'save',
+        'clean'
+      ), array(), '', false
+    );
+
+    $payload->session = $this->getSession();
+    $payload->storage->expects($this->never())->method('clean');
+    $payload->save();
+  }
+
+  /**
+   * @covers \Pimf\Session\Storages\Redis::save
+   */
+  public function testCleanerShouldntBeCalledIfRedisStorageIsntCleaner()
+  {
+    $payload          = $this->getPayload();
+    $payload->storage = $this->getMock(
+      '\\Pimf\\Session\\Storages\\Redis', array(
+        'save',
+        'clean'
+      ), array(), '', false
+    );
+
+    $payload->session = $this->getSession();
+    $payload->storage->expects($this->never())->method('clean');
     $payload->save();
   }
 
@@ -361,5 +442,13 @@ class SessionTest extends PHPUnit_Framework_TestCase
     $payload->session['last_activity'] = 10;
 
     $this->assertEquals(10, $payload->activity());
+  }
+
+  /**
+   * @expectedException \RuntimeException
+   */
+  public function testGivingSessionFactoryBadStorage()
+  {
+    \Pimf\Session::factory('bad-bad-storage');
   }
 }
