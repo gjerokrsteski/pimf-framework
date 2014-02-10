@@ -97,10 +97,10 @@ class Uploaded extends File
    * </code>
    *
    * @param string $path The full temporary path to the file
-   * @param bool $name The original file name
-   * @param null $mime The type of the file as provided by PHP
-   * @param null $size The file size
-   * @param null $error The error constant of the upload (one of PHP's UPLOAD_ERR_XXX constants)
+   * @param string $name The original file name
+   * @param string|null $mime The type of the file as provided by PHP
+   * @param string|null $size The file size
+   * @param int|null $error The error constant of the upload (one of PHP's UPLOAD_ERR_XXX constants)
    * @param bool $test Whether the test mode is active
    *
    * @throws \RuntimeException If file_uploads is disabled

@@ -24,10 +24,10 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     $valid = new \Pimf\Util\Validator(new \Pimf\Param($request));
 
     $this->assertTrue($valid->length("lname", "<", 15), 'on length validator');
-    $this->assertTrue($valid->length("lname", "=", 10), 'on length validator');
-    $this->assertTrue($valid->length("lname", ">=", 10), 'on length validator');
-    $this->assertTrue($valid->length("lname", "<=", 10), 'on length validator');
-    $this->assertTrue($valid->length("lname", ">", 1), 'on length validator');
+    $this->assertTrue($valid->length("lname", "==", 10), 'on length validator is 10');
+    $this->assertTrue($valid->length("lname", ">=", 10), 'on length validator bigger same 10');
+    $this->assertTrue($valid->length("lname", "<=", 10), 'on length validator smaller same 10');
+    $this->assertTrue($valid->length("lname", ">", 1), 'on length validator bigger 1');
 
     $this->assertTrue($valid->email("email"), 'on email validator');
 
@@ -45,7 +45,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     $this->assertTrue($valid->value("age", "<", 50), 'on value validator');
     $this->assertTrue($valid->value("age", ">=", 33), 'on value validator');
     $this->assertTrue($valid->value("age", "<=", 33), 'on value validator');
-    $this->assertTrue($valid->value("age", "=", 33), 'on value validator');
+    $this->assertTrue($valid->value("age", "==", 33), 'on value validator');
 
     $this->assertTrue($valid->valueBetween("number", 11, 16), 'on value between validator');
 
@@ -144,7 +144,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     $rules = array(
       'fname'   => 'alpha|length[>,0]|lengthBetween[1,9]',
-      'age'     => 'digit|value[>,18]|value[=,33]',
+      'age'     => 'digit|value[>,18]|value[==,33]',
       'birth'   => 'length[>,0]|date[Y-m-d]',
       'monitor' => 'alphaNumeric'
     );

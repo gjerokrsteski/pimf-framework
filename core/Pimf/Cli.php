@@ -120,14 +120,14 @@ class Cli
 
     parse_str(implode('&', array_slice($commands, 1)), $cli);
 
-    $command = current(array_keys($cli, ''));
+    $command = current(array_keys((array)$cli, ''));
 
     if (String::contains($command, ':')){
 
       list($controller, $action) = explode(':', $command);
 
       $cli['controller'] = $controller;
-      $cli['action'] = $action;
+      $cli['action']     = $action;
     }
 
     return $cli;

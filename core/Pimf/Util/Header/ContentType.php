@@ -32,50 +32,50 @@ abstract class ContentType extends ResponseStatus
 {
   public static function contentTypeJson()
   {
-    self::contentType('application/json; charset=utf-8');
+    self::type('application/json; charset=utf-8');
   }
 
   public static function contentTypePdf()
   {
-    self::contentType('application/pdf');
+    self::type('application/pdf');
   }
 
   public static function contentTypeCsv()
   {
-    self::contentType('text/csv');
+    self::type('text/csv');
   }
 
   public static function contentTypeTextPlain()
   {
-    self::contentType('text/plain');
+    self::type('text/plain');
   }
 
   public static function contentTypeTextHTML()
   {
-    self::contentType('text/html');
+    self::type('text/html');
   }
 
   public static function contentTypeZip()
   {
-    self::contentType('application/zip');
+    self::type('application/zip');
   }
 
   public static function contentTypeXZip()
   {
-    self::contentType('application/x-zip');
+    self::type('application/x-zip');
   }
 
   public static function contentTypeMSWord()
   {
-    self::contentType('application/msword');
+    self::type('application/msword');
   }
 
   public static function contentTypeOctetStream()
   {
-    self::contentType('application/octet-stream');
+    self::type('application/octet-stream');
   }
 
-  public static function contentType($definition)
+  public static function type($definition)
   {
     header('Content-Type: '.$definition, true);
   }

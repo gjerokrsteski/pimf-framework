@@ -130,8 +130,8 @@ class Dba extends Storage
   }
 
   /**
-   * @param string $key
-   * @return bool
+   * @param $key
+   * @return bool|mixed|null
    */
   public function get($key)
   {

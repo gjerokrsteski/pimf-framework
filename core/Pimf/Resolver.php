@@ -33,17 +33,17 @@ class Resolver
   /**
    * @var string
    */
-  protected $controllerFilePath;
+  protected $controllerPath;
 
   /**
    * @var string
    */
-  protected $controllerClassName;
+  protected $controllerClass;
 
   /**
    * @var string
    */
-  protected $controllerRepositoryPath;
+  protected $repositoryPath;
 
   /**
    * @var Request
@@ -52,12 +52,12 @@ class Resolver
 
   /**
    * @param Request $request
-   * @param string  $controllerRepositoryPath
+   * @param string  $repositoryPath
    * @param string  $prefix
    *
    * @throws Resolver\Exception
    */
-  public function __construct(Request $request, $controllerRepositoryPath = '/Controller', $prefix = 'Pimf\\')
+  public function __construct(Request $request, $repositoryPath = '/Controller', $prefix = 'Pimf\\')
   {
     $conf = Registry::get('conf');
 
@@ -80,11 +80,11 @@ class Resolver
       $controllerName =  $conf['app']['default_controller'];
     }
 
-    $this->controllerRepositoryPath = $controllerRepositoryPath;
-    $this->request                  = $request;
-    $this->controllerClassName      = $prefix . 'Controller\\';
+    $this->repositoryPath  = $repositoryPath;
+    $this->request         = $request;
+    $this->controllerClass = $prefix . 'Controller\\';
 
-    $basepath   = $this->controllerRepositoryPath . '/';
+    $basepath   = $this->repositoryPath . '/';
     $controller = ucfirst($controllerName);
 
     if(Str::isEvilPath($basepath.$controller)) {
@@ -93,11 +93,11 @@ class Resolver
       );
     }
 
-    $this->controllerFilePath = $basepath . $controller. '.php';
+    $this->controllerPath = $basepath . $controller. '.php';
 
-    if (!file_exists($this->controllerFilePath)) {
+    if (!file_exists($this->controllerPath)) {
       throw new Bomb(
-        'no controller found at the repository path; ' . $this->controllerFilePath
+        'no controller found at the repository path; ' . $this->controllerPath
       );
     }
   }
@@ -108,8 +108,8 @@ class Resolver
    */
   public function process()
   {
-    $path       = str_replace($this->controllerRepositoryPath, '', $this->controllerFilePath);
-    $name       = str_replace('/', $this->controllerClassName, $path);
+    $path       = str_replace($this->repositoryPath, '', $this->controllerPath);
+    $name       = str_replace('/', $this->controllerClass, $path);
     $controller = str_replace('.php', '', $name);
 
     if (!class_exists($controller)) {

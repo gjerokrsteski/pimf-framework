@@ -130,8 +130,8 @@ class View implements Renderable
    */
   public function __get($name)
   {
-    if (array_key_exists($name, $this->data)) {
-      return $this->data[$name];
+    if ($this->data->offsetExists($name)) {
+      return $this->data->offsetGet($name);
     }
 
     $trace = debug_backtrace();

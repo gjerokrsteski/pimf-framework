@@ -57,7 +57,7 @@ class Url
    */
   public static function current()
   {
-    return static::to(Uri::current(), null, false, false);
+    return static::to(Uri::current(), null, false);
   }
 
   /**

@@ -63,7 +63,7 @@ class Validator
    *
    *   $rules = array(
    *     'fname'   => 'alpha|length[>,0]|lengthBetween[1,9]',
-   *     'age'     => 'digit|value[>,18]|value[=,33]',
+   *     'age'     => 'digit|value[>,18]|value[==,33]',
    *   );
    *
    *  $validator = Validator::factory($attributes, $rules);
@@ -100,53 +100,13 @@ class Validator
   }
 
   /**
-   * length functions on a field takes <, >, =, <=, and >= as operators.
-   * @param string $field
-   * @param string $operator
-   * @param int $length
-   * @return bool
-   */
-  public function length($field, $operator, $length)
-  {
-    $fieldValue = strlen(trim($this->get($field)));
-
-    switch ($operator) {
-      case "<":
-          $isValid = ($fieldValue < $length);
-        break;
-      case ">":
-        $isValid = ($fieldValue > $length);
-        break;
-      case "=":
-        $isValid = ($fieldValue == $length);
-        break;
-      case "<=":
-        $isValid = ($fieldValue <= $length);
-        break;
-      case ">=":
-        $isValid = ($fieldValue >= $length);
-        break;
-      default:
-        $isValid = false;
-    }
-
-    if ($isValid === false) {
-      $this->setError($field, __FUNCTION__);
-    }
-
-    return $isValid;
-  }
-
-  /**
    * check to see if valid email address
    * @param string $field
    * @return bool
    */
   public function email($field)
   {
-    $address = trim($this->attributes->get($field));
-
-    if (filter_var($address, FILTER_VALIDATE_EMAIL) !== false) {
+    if (filter_var(trim($this->attributes->get($field)), FILTER_VALIDATE_EMAIL) !== false) {
       return true;
     }
 
@@ -161,9 +121,7 @@ class Validator
    */
   public function ip($field)
  	{
-    $ip = trim($this->attributes->get($field));
-
-    if (filter_var($ip, FILTER_VALIDATE_IP) !== false) {
+    if (filter_var(trim($this->attributes->get($field)), FILTER_VALIDATE_IP) !== false) {
       return true;
     }
 
@@ -178,9 +136,7 @@ class Validator
    */
   public function url($field)
  	{
-    $url = trim($this->attributes->get($field));
-
-    if (filter_var($url, FILTER_VALIDATE_URL) !== false) {
+    if (filter_var(trim($this->attributes->get($field)), FILTER_VALIDATE_URL) !== false) {
       return true;
     }
 
@@ -200,17 +156,17 @@ class Validator
     $field1value = $this->attributes->get($field1);
     $field2value = $this->attributes->get($field2);
 
+    $valid = (strcmp($field1value, $field2value) == 0);
+
     if ($caseInsensitive) {
-      $isValid = (strcmp(strtolower($field1value), strtolower($field2value)) == 0);
-    } else {
-      $isValid = (strcmp($field1value, $field2value) == 0);
+      $valid = (strcmp(strtolower($field1value), strtolower($field2value)) == 0);
     }
 
-    if ($isValid === false) {
+    if ($valid === false) {
       $this->setError($field1 . "|" . $field2, __FUNCTION__);
     }
 
-    return $isValid;
+    return $valid;
   }
 
   /**
@@ -225,17 +181,17 @@ class Validator
   {
     $fieldValue = strlen(trim($this->get($field)));
 
+    $valid = ($fieldValue <= $max && $fieldValue >= $min);
+
     if (!$inclusive) {
-      $isValid = ($fieldValue < $max && $fieldValue > $min);
-    } else {
-      $isValid = ($fieldValue <= $max && $fieldValue >= $min);
+      $valid = ($fieldValue < $max && $fieldValue > $min);
     }
 
-    if ($isValid === false) {
+    if ($valid === false) {
       $this->setError($field, __FUNCTION__);
     }
 
-    return $isValid;
+    return $valid;
   }
 
   /**
@@ -245,9 +201,7 @@ class Validator
    */
   public function punctuation($field)
   {
-    $fieldValue = $this->get($field);
-
-    if (preg_match("/[^\w\s\p{P}]/", ''.$fieldValue) > 0) {
+    if (preg_match("/[^\w\s\p{P}]/", ''.$this->get($field)) > 0) {
       $this->setError($field, __FUNCTION__);
       return false;
     }
@@ -256,41 +210,52 @@ class Validator
   }
 
   /**
-   * number value functions takes <, >, =, <=, and >= as operators.
+   * length functions on a field takes <, >, =, <=, and >= as operators.
    * @param string $field
    * @param string $operator
    * @param int $length
    * @return bool
    */
-  public function value($field, $operator, $length)
+  public function length($field, $operator, $length)
   {
-    $fieldValue = $this->get($field);
+    return $this->middleware($field, strlen(trim($this->get($field))), $operator, $length);
+  }
 
-    switch ($operator) {
-      case "<":
-        $isValid = ($fieldValue < $length);
-        break;
-      case ">":
-        $isValid = ($fieldValue > $length);
-        break;
-      case "=":
-        $isValid = ($fieldValue == $length);
-        break;
-      case "<=":
-        $isValid = ($fieldValue <= $length);
-        break;
-      case ">=":
-        $isValid = ($fieldValue >= $length);
-        break;
-      default:
-        $isValid = false;
+  /**
+   * Number value functions takes <, >, =, <=, and >= as operators.
+   *
+   * @param string $field
+   * @param string $operator
+   * @param string|int $value
+   * @return bool
+   */
+  public function value($field, $operator, $value)
+  {
+    return $this->middleware($field, $this->get($field), $operator, $value);
+  }
+
+  /**
+   * @param string $fieldName
+   * @param string $comparing
+   * @param string $operator
+   * @param string|integer $expecting
+   *
+   * @return bool
+   */
+  protected function middleware($fieldName, $comparing, $operator, $expecting)
+  {
+    $valid = false;
+
+    if(in_array($operator, array("<", ">", "==", "<=", ">="), true)) {
+      $func = create_function('$a,$b', 'return ($a '.''.$operator.' $b);');
+      $valid = $func($comparing, $expecting);
     }
 
-    if ($isValid === false) {
-      $this->setError($field, __FUNCTION__);
+    if ($valid === false) {
+      $this->setError($fieldName, $operator);
     }
 
-    return $isValid;
+    return $valid;
   }
 
   /**
@@ -305,17 +270,17 @@ class Validator
   {
     $fieldValue = $this->get($field);
 
+    $valid = ($fieldValue <= $max && $fieldValue >= $min);
+
     if (!$inclusive) {
-      $isValid = ($fieldValue < $max && $fieldValue > $min);
-    } else {
-      $isValid = ($fieldValue <= $max && $fieldValue >= $min);
+      $valid = ($fieldValue < $max && $fieldValue > $min);
     }
 
-    if ($isValid === false) {
+    if ($valid === false) {
       $this->setError($field, __FUNCTION__);
     }
 
-    return $isValid;
+    return $valid;
   }
 
   /**
@@ -325,9 +290,7 @@ class Validator
    */
   public function digit($field)
   {
-    $fieldValue = $this->get($field);
-
-    if (ctype_digit((string)$fieldValue)) {
+    if (ctype_digit((string)$this->get($field))) {
       return true;
     }
 
@@ -343,9 +306,7 @@ class Validator
    */
   public function alpha($field)
   {
-    $fieldValue = $this->get($field);
-
-    if (ctype_alpha((string)$fieldValue)) {
+    if (ctype_alpha((string)$this->get($field))) {
       return true;
     }
 
@@ -360,9 +321,7 @@ class Validator
    */
   public function alphaNumeric($field)
   {
-    $fieldValue = $this->get($field);
-
-    if (ctype_alnum((string)$fieldValue)) {
+    if (ctype_alnum((string)$this->get($field))) {
       return true;
     }
 

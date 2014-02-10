@@ -218,7 +218,7 @@ class String
    * Wrapper for preg_quote supporting strings and array of strings.
    *
    * @param mixed $values The values.
-   * @param null $delimiter (Optional) The delimiter.
+   * @param null|string $delimiter (Optional) The delimiter.
    * @return string
    */
   public static function pregQuote($values, $delimiter = null)

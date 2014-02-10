@@ -77,14 +77,12 @@ abstract class Storage
    */
   public function id()
   {
-    // Just return any string since the Cookie storage has no idea.
+    // just return any string since the Cookie storage has no idea.
     if ($this instanceof \Pimf\Session\Storages\Cookie) {
       return String::random(40);
     }
 
-    $session = array();
-
-    // We'll find an random ID here.
+    // we'll find an random ID here.
     do {
       $session = $this->load($id = String::random(40));
     } while ($session !== null);

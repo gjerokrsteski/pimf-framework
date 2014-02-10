@@ -131,9 +131,9 @@ final class Uuid
     $time_low = (int)$time_lo;
     $time_mid = (int)substr($time_mid, 2);
 
-    $time_high_and_version = mt_rand(0, 0xfff);
+    $time_and_version = mt_rand(0, 0xfff);
     /* version 4 UUID */
-    $time_high_and_version |= 0x4000;
+    $time_and_version |= 0x4000;
 
     $clock_seq_low = mt_rand(0, 0xff);
 
@@ -146,7 +146,7 @@ final class Uuid
 
     return sprintf(
         '%08x-%04x-%04x-%02x%02x-%04x%08x',
-        $time_low, $time_mid & 0xffff, $time_high_and_version,
+        $time_low, $time_mid & 0xffff, $time_and_version,
         $clock_seq_high, $clock_seq_low,
         $node_low, $node
     );

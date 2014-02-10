@@ -59,7 +59,7 @@ class Cache
   /**
    * Get a cache storage instance.
    * @param string $storage
-   * @return mixed
+   * @return CS\Storage
    */
   public static function storage($storage = 'memory')
   {

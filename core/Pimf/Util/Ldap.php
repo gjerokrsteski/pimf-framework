@@ -57,7 +57,7 @@ use Pimf\Registry;
 class Ldap
 {
   /**
-   * @var resource
+   * @var null|resource A positive LDAP link identifier
    */
   protected $conn;
 
@@ -81,7 +81,7 @@ class Ldap
    * Get the current user of the application.
    * @param $token
    * @return object
-   * @throws \RuntimeException
+   * @throws \RuntimeException If no user found
    */
   public function retrieve($token)
   {
@@ -100,11 +100,13 @@ class Ldap
       }
     }
 
-    if ($user = $this->getUser($token)) {
-      return $user;
+    $user = $this->getUser($token);
+
+    if(!$user) {
+      throw new \RuntimeException('no user found for ' . $token);
     }
 
-    throw new \RuntimeException('no user found for ' . $token);
+    return $user;
   }
 
   /**
@@ -267,7 +269,7 @@ class Ldap
   }
 
   /**
-   * @param string $userDN
+   * @param $userDN
    * @return null|object
    * @throws \RuntimeException
    */
