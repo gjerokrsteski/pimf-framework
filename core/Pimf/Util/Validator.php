@@ -56,6 +56,7 @@ class Validator
 
   /**
    * <code>
+   *
    *  $attributes = array(
    *    'fname'    => 'conan',
    *    'age'      => 33,
@@ -70,33 +71,13 @@ class Validator
    *
    * </code>
    *
-   * @param array $attributes
-   * @param array|\Pimf\Param $rules
+   * @param array|\Pimf\Param $attributes
+   * @param array $rules
    * @return Validator
    */
   public static function factory($attributes, array $rules)
   {
-    if (! ($attributes instanceof \Pimf\Param)){
-      $attributes = new \Pimf\Param((array)$attributes);
-    }
-
-    $validator = new self($attributes);
-
-    foreach ($rules as $key => $rule) {
-
-      $checks = (is_string($rule)) ? explode('|', $rule) : $rule;
-
-      foreach ($checks as $check) {
-
-        $items      = explode('[', str_replace(']', '', $check));
-        $method     = $items[0];
-        $parameters = array_merge(array( $key ), (isset($items[1]) ? explode(',', $items[1]) : array()));
-
-        call_user_func_array(array($validator, $method), $parameters);
-      }
-    }
-
-    return $validator;
+    return \Pimf\Util\Validator\Factory::get($attributes, $rules);
   }
 
   /**
