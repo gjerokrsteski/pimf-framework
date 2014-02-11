@@ -276,7 +276,7 @@ class Environment extends Sapi
    *
    * @return array
    */
-  protected function getRequestHeaders()
+  public function getRequestHeaders()
   {
     $headers = array();
 

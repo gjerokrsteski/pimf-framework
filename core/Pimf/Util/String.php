@@ -44,64 +44,12 @@ class String
 
   /**
    * Check value to find if it was serialized.
-   *
-   * If $data is not an string, then returned value will always be false.
-   * Serialized data is always a string.
-   *
-   * @param   mixed  $data  Value to check to see if was serialized
+   * @param   mixed $string Value to check to see if was serialized
    * @return  bool
    */
-  public static function isSerialized($data)
+  public static function isSerialized($string)
   {
-    // If it isn't a string, it isn't serialized
-    if ($data !== (string)$data) {
-      return false;
-    }
-
-    $data = trim($data);
-
-    if ('N;' == $data) {
-      return true;
-    }
-
-    $length = strlen($data);
-
-    if ($length < 4) {
-      return false;
-    }
-
-    if (':' !== $data[1]) {
-      return false;
-    }
-
-    $lastChar = $data[$length - 1];
-
-    if (';' !== $lastChar && '}' !== $lastChar) {
-      return false;
-    }
-
-    $token = $data[0];
-
-    switch ($token) {
-
-      case 's':
-
-        if ('"' !== $data[$length - 2]) {
-          return false;
-        }
-
-        return true;
-
-      case 'a' :
-      case 'O' :
-        return (bool)preg_match("/^{$token}:[0-9]+:/s", $data);
-      case 'b' :
-      case 'i' :
-      case 'd' :
-        return (bool)preg_match("/^{$token}:[0-9.E-]+;\$/", $data);
-    }
-
-    return false;
+    return (@unserialize($string) !== false || $string == 'b:0;');
   }
 
   /**
@@ -112,11 +60,9 @@ class String
    */
   public static function checkUtf8Encoding($string)
   {
-    if (!mb_check_encoding($string, 'UTF-8')) {
-      return false;
-    }
-
-    if (!$string == mb_convert_encoding(mb_convert_encoding($string, 'UTF-32', 'UTF-8'), 'UTF-8', 'UTF-32')) {
+    if (!mb_check_encoding($string, 'UTF-8')
+    or !$string == mb_convert_encoding(mb_convert_encoding($string, 'UTF-32', 'UTF-8'), 'UTF-8', 'UTF-32')
+    ) {
       return false;
     }
 
@@ -265,14 +211,12 @@ class String
 
    /*
     * Validate standard character entities
-    * Add a semicolon if missing.  We do this to enable
-    * the conversion of entities to ASCII later.
+    * Add a semicolon if missing.  Enables the conversion of entities to ASCII later.
     */
     $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u', "\\1;", $string);
 
    /*
     * Validate UTF16 two byte encoding (x00)
-    * Just as above, adds a semicolon if missing.
     */
     $string = preg_replace('#(&\#x*)([0-9A-F]+);*#iu', "\\1\\2;", $string);
 
@@ -308,9 +252,7 @@ class String
 
    /*
     * Makes PHP tags safe
-    * Note: XML tags are inadvertently replaced too:
-    *	<?xml
-    * But it doesn't seem to pose a problem.
+    * Note: XML tags are inadvertently replaced too: <?xml
     */
     $string = str_replace(array('<?php', '<?PHP', '<?', '?>'),  array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;'), $string);
 
@@ -342,38 +284,33 @@ class String
    /*
     * Remove JavaScript Event Handlers
     * Note: This code is a little blunt.  It removes
-    * the event handler and anything up to the closing >,
-    * but it's unlikely to be a problem.
+    * the event handler and anything up to the closing >
     */
-    $string = preg_replace('#(<[^>]+.*?)(onblur|onchange|onclick|onfocus|onload|onmouseover|onmouseup|onmousedown|onselect|onsubmit|onunload|onkeypress|onkeydown|onkeyup|onresize)[^>]*>#iU', "\\1>", $string);
+    $string = preg_replace(
+      '#(<[^>]+.*?)(onblur|onchange|onclick|onfocus|onload|onmouseover|onmouseup|'.
+      'onmousedown|onselect|onsubmit|onunload|onkeypress|onkeydown|onkeyup|onresize)[^>]*>#iU', "\\1>", $string);
 
    /*
     * Sanitize naughty HTML elements
-    *
     * If a tag containing any of the words in the list
     * below is found, the tag gets converted to entities.
     * So this: <blink>
     * Becomes: &lt;blink&gt;
     */
-    $string = preg_replace('#<(/*\s*)(alert|applet|basefont|base|behavior|bgsound|blink|body|embed|expression|form|frameset|frame|head|html|ilayer|iframe|input|layer|link|meta|object|plaintext|style|script|textarea|title|xml|xss)([^>]*)>#is', "&lt;\\1\\2\\3&gt;", $string);
+    $string = preg_replace('#<(/*\s*)(alert|applet|basefont|base|behavior|bgsound|'.
+      'blink|body|embed|expression|form|frameset|frame|head|html|ilayer|iframe|input'.
+      '|layer|link|meta|object|plaintext|style|script|textarea|title|xml|xss)([^>]*)>#is', "&lt;\\1\\2\\3&gt;", $string);
 
    /*
     * Sanitize naughty scripting elements
-    *
-    * Similar to above, only instead of looking for
-    * tags it looks for PHP and JavaScript commands
-    * that are disallowed.  Rather than removing the
-    * code, it simply converts the parenthesis to entities
-    * rendering the code un-executable.
-    *
     * For example:	eval('some code')
     * Becomes:		eval&#40;'some code'&#41;
     */
-    $string = preg_replace('#(alert|cmd|passthru|eval|exec|system|fopen|fsockopen|file|file_get_contents|readfile|unlink)(\s*)\((.*?)\)#si', "\\1\\2&#40;\\3&#41;", $string);
+    $string = preg_replace('#(alert|cmd|passthru|eval|exec|system|fopen|fsockopen|'.
+      'file|file_get_contents|readfile|unlink)(\s*)\((.*?)\)#si', "\\1\\2&#40;\\3&#41;", $string);
 
    /*
     * Final clean up
-    *
     * This adds a bit of extra precaution in case
     * something got through the above filters
     */

@@ -124,4 +124,14 @@ class StringTest extends PHPUnit_Framework_TestCase
   {
     $this->assertTrue(\Pimf\Util\String::isEvilPath($path,$path));
   }
+
+  public function testStartsWith()
+  {
+    $this->assertTrue(\Pimf\Util\String::startsWith('//www.krsteski.de', '//'));
+  }
+
+  public function testEndsWith()
+  {
+    $this->assertTrue(\Pimf\Util\String::endsWith('//www.krsteski.de?index.php', '?index.php'));
+  }
 }
