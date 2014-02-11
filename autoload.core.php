@@ -89,6 +89,7 @@ spl_autoload_register(
         'Pimf\\Util\\Message'                => '/Pimf/Util/Message.php',
         'Pimf\\Util\\Serializer'             => '/Pimf/Util/Serializer.php',
         'Pimf\\Util\\String'                 => '/Pimf/Util/String.php',
+        'Pimf\\Util\\String\\Clean'          => '/Pimf/Util/String/Clean.php',
         'Pimf\\Util\\Uploaded'               => '/Pimf/Util/Uploaded.php',
         'Pimf\\Util\\Uuid'                   => '/Pimf/Util/Uuid.php',
         'Pimf\\Util\\Validator'              => '/Pimf/Util/Validator.php',

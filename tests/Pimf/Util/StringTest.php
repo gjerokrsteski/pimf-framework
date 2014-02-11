@@ -10,11 +10,9 @@ class StringTest extends PHPUnit_Framework_TestCase
     $this->testString = file_get_contents(dirname(__FILE__).'/_fixture/samp-string.html');
   }
 
-  public function testCheckUtf8Encoding()
+  public function testCheckEncoding()
   {
-    $res = \Pimf\Util\String::checkUtf8Encoding($this->testString);
-
-    $this->assertTrue($res);
+    $this->assertTrue(\Pimf\Util\String::checkUtf8Encoding($this->testString));
   }
 
   public function testCleanAggressive()
@@ -23,6 +21,16 @@ class StringTest extends PHPUnit_Framework_TestCase
 
     $this->assertEquals(
       file_get_contents(dirname(__FILE__).'/_fixture/expects-clean-aggressive.html'),
+      str_replace(array(' ', PHP_EOL), '', $res)
+    );
+  }
+
+  public function testCleanXss()
+  {
+    $res = \Pimf\Util\String::cleanXss($this->testString);
+
+    $this->assertEquals(
+      file_get_contents(dirname(__FILE__).'/_fixture/expects-clean-xss.html'),
       str_replace(array(' ', PHP_EOL), '', $res)
     );
   }
@@ -91,17 +99,6 @@ class StringTest extends PHPUnit_Framework_TestCase
     );
   }
 
-  public function testSlagStringFromSpecialChars()
-  {
-    $this->assertEquals(
-
-      '_1_2_3_These_words_are_quoted',
-
-      \Pimf\Util\String::slagSpecialChars('\"[1,2,3,<>#?==(/%/$§"!]{These,words,are,quoted}\"# "')
-
-    );
-  }
-
   public static function providerOfEvilPaths()
   {
     return array(
@@ -122,7 +119,12 @@ class StringTest extends PHPUnit_Framework_TestCase
    */
   public function testIsEvilPathContainsBadCombinations($path)
   {
-    $this->assertTrue(\Pimf\Util\String::isEvilPath($path,$path));
+    $this->assertTrue(\Pimf\Util\String::isEvilPath($path));
+  }
+
+  public function testIsEvilPathContainsNoBadCombinations()
+  {
+    $this->assertFalse(\Pimf\Util\String::isEvilPath('/foo/bar/controller.php'));
   }
 
   public function testStartsWith()
@@ -133,5 +135,38 @@ class StringTest extends PHPUnit_Framework_TestCase
   public function testEndsWith()
   {
     $this->assertTrue(\Pimf\Util\String::endsWith('//www.krsteski.de?index.php', '?index.php'));
+  }
+
+  public function testIsPattern()
+  {
+    $this->assertTrue(\Pimf\Util\String::is('user/profile', 'user/profile'));
+  }
+
+  public function testIsWildcard()
+  {
+    $this->assertTrue(\Pimf\Util\String::is('user/*', 'user/profile/update'));
+  }
+
+  public function testIsNotEmptyString()
+  {
+    $this->assertFalse(\Pimf\Util\String::is('/', 'home'));
+  }
+
+  public function testRandom()
+  {
+    $res = \Pimf\Util\String::random();
+
+    $this->assertInternalType('string', $res);
+    $this->assertEquals(32, strlen($res));
+  }
+
+  public function testContains()
+  {
+    $this->assertTrue(\Pimf\Util\String::contains('user/save', array('user', 'save', 'user/')));
+  }
+
+  public function testNotContains()
+  {
+    $this->assertFalse(\Pimf\Util\String::contains('user/save', 'hugo'));
   }
 }

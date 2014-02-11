@@ -197,5 +197,4 @@ class Header extends Header\ContentType
     }
     exit(0);
   }
-
 }
