@@ -50,32 +50,6 @@ class Validator
   }
 
   /**
-   * <code>
-   *
-   *  $attributes = array(
-   *    'fname'    => 'conan',
-   *    'age'      => 33,
-   *   );
-   *
-   *   $rules = array(
-   *     'fname'   => 'alpha|length[>,0]|lengthBetween[1,9]',
-   *     'age'     => 'digit|value[>,18]|value[==,33]',
-   *   );
-   *
-   *  $validator = Validator::factory($attributes, $rules);
-   *
-   * </code>
-   *
-   * @param array|\Pimf\Param $attributes
-   * @param array $rules
-   * @return Validator
-   */
-  public static function factory($attributes, array $rules)
-  {
-    return \Pimf\Util\Validator\Factory::get($attributes, $rules);
-  }
-
-  /**
    * check to see if valid email address
    * @param string $field
    * @return bool

@@ -133,28 +133,6 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
     $this->assertFalse($valid->isValid());
   }
 
-  public function testCreatingAFactoryOfRules()
-  {
-    $attributes = array(
-      'fname'    => 'conan',
-      'age'      => 33,
-      'birth'    => '1888-11-25',
-      'monitor'  => 'sonyT2000',
-    );
-
-    $rules = array(
-      'fname'   => 'alpha|length[>,0]|lengthBetween[1,9]',
-      'age'     => 'digit|value[>,18]|value[==,33]',
-      'birth'   => 'length[>,0]|date[Y-m-d]',
-      'monitor' => 'alphaNumeric'
-    );
-
-    $validator = \Pimf\Util\Validator::factory($attributes, $rules);
-
-    $this->assertEmpty($msg = $validator->getErrors(), 'with validator errors '.print_r($msg,true));
-    $this->assertEmpty($msg = $validator->getErrorMessages(), 'with validator error messages'.print_r($msg,true));
-  }
-
   /**
    * @expectedException \OutOfBoundsException
    */

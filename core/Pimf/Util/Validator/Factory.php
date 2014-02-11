@@ -22,7 +22,7 @@
  */
 
 namespace Pimf\Util\Validator;
-
+use Pimf\Param, Pimf\Util\Validator;
 /**
  * Validator Factory
  *
@@ -32,17 +32,33 @@ namespace Pimf\Util\Validator;
 abstract class Factory
 {
   /**
+   * <code>
+   *
+   *  $attributes = array(
+   *    'fname'    => 'conan',
+   *    'age'      => 33,
+   *   );
+   *
+   *   $rules = array(
+   *     'fname'   => 'alpha|length[>,0]|lengthBetween[1,9]',
+   *     'age'     => 'digit|value[>,18]|value[==,33]',
+   *   );
+   *
+   *  $validator = Validator::factory($attributes, $rules);
+   *
+   * </code>
+   *
    * @param array|\Pimf\Param $attributes
    * @param array $rules
    * @return \Pimf\Util\Validator
    */
   public static function get($attributes, array $rules)
   {
-    if (! ($attributes instanceof \Pimf\Param)){
-      $attributes = new \Pimf\Param((array)$attributes);
+    if (! ($attributes instanceof Param)){
+      $attributes = new Param((array)$attributes);
     }
 
-    $validator = new \Pimf\Util\Validator($attributes);
+    $validator = new Validator($attributes);
 
     foreach ($rules as $key => $rule) {
 
