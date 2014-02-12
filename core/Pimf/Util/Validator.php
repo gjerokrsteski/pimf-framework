@@ -72,11 +72,7 @@ class Validator
    */
   public function email($field)
   {
-    if (filter_var(trim($this->attributes->get($field)), FILTER_VALIDATE_EMAIL) !== false) {
-      return true;
-    }
-
-    return $this->error($field, __FUNCTION__);
+    return (filter_var(trim($this->get($field)), FILTER_VALIDATE_EMAIL) !== false) ?: $this->error($field, __FUNCTION__);
   }
 
   /**
@@ -86,11 +82,7 @@ class Validator
    */
   public function ip($field)
  	{
-    if (filter_var(trim($this->attributes->get($field)), FILTER_VALIDATE_IP) !== false) {
-      return true;
-    }
-
-    return $this->error($field, __FUNCTION__);
+    return (filter_var(trim($this->get($field)), FILTER_VALIDATE_IP) !== false) ?: $this->error($field, __FUNCTION__);
  	}
 
   /**
@@ -100,11 +92,7 @@ class Validator
    */
   public function url($field)
  	{
-    if (filter_var(trim($this->attributes->get($field)), FILTER_VALIDATE_URL) !== false) {
-      return true;
-    }
-
-    return $this->error($field, __FUNCTION__);
+    return (filter_var(trim($this->get($field)), FILTER_VALIDATE_URL) !== false) ?: $this->error($field, __FUNCTION__);
  	}
 
   /**
@@ -116,8 +104,8 @@ class Validator
    */
   public function compare($field1, $field2, $caseInsensitive = false)
   {
-    $field1value = $this->attributes->get($field1);
-    $field2value = $this->attributes->get($field2);
+    $field1value = $this->get($field1);
+    $field2value = $this->get($field2);
 
     $valid = (strcmp($field1value, $field2value) == 0);
 
@@ -156,11 +144,7 @@ class Validator
    */
   public function punctuation($field)
   {
-    if (preg_match("/[^\w\s\p{P}]/", ''.$this->get($field)) > 0) {
-      return $this->error($field, __FUNCTION__);
-    }
-
-    return true;
+    return (preg_match("/[^\w\s\p{P}]/", ''.$this->get($field)) > 0) ? $this->error($field, __FUNCTION__) : true;
   }
 
   /**
@@ -215,13 +199,8 @@ class Validator
    */
   public function digit($field)
   {
-    if (ctype_digit((string)$this->get($field))) {
-      return true;
-    }
-
-    return $this->error($field, __FUNCTION__);
+    return (ctype_digit((string)$this->get($field)) === true) ?: $this->error($field, __FUNCTION__);
   }
-
 
   /**
    * Check if a field contains only alphabetic characters
@@ -230,11 +209,7 @@ class Validator
    */
   public function alpha($field)
   {
-    if (ctype_alpha((string)$this->get($field))) {
-      return true;
-    }
-
-    return $this->error($field, __FUNCTION__);
+    return (ctype_alpha((string)$this->get($field)) === true) ?: $this->error($field, __FUNCTION__);
   }
 
   /**
@@ -244,41 +219,28 @@ class Validator
    */
   public function alphaNumeric($field)
   {
-    if (ctype_alnum((string)$this->get($field))) {
-      return true;
-    }
-
-    return $this->error($field, __FUNCTION__);
+    return (ctype_alnum((string)$this->get($field)) === true) ?: $this->error($field, __FUNCTION__);
   }
 
   /**
    * Check if field is a date by specified format.
-   *
-   * acceptable separators are "/" "." "-"
-   * acceptable formats use "m" for month, "d" for day, "y" for year
-   *
-   * date("date", "mm.dd.yyyy") will match a field called "date" containing 01-12.01-31.nnnn where n is any real number
-   *
    * @param string $field
-   * @param string $format
-   * @return bool
+   * @param string $format Find formats here http://www.php.net/manual/en/function.date.php
+   * @return boolean
    */
   public function date($field, $format)
   {
     $fieldValue = $this->get($field);
 
     try {
-      $date = new \DateTime($fieldValue);
 
-      if ($fieldValue === $date->format($format)) {
+      if ($fieldValue === by(new \DateTime($fieldValue))->format($format)) {
         return true;
       }
 
     } catch(\Exception $e) {
-      // do nothing
+      return $this->error($field, __FUNCTION__);
     }
-
-    return $this->error($field, __FUNCTION__);
   }
 
   /**
@@ -300,9 +262,10 @@ class Validator
    */
   protected function get($attribute)
   {
-    if(!$value= $this->attributes->get($attribute)) {
+    if(!$value = $this->attributes->get($attribute, null, false)) {
       throw new \OutOfBoundsException('no attribute with name "'.$attribute.'" set');
     }
+
     return $value;
   }
 
