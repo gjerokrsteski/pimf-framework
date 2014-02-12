@@ -22,7 +22,7 @@
  */
 
 namespace Pimf\Cli;
-use Pimf\Environment;
+use Pimf\Sapi;
 
 /**
  * For easily use ANSI console colors in your application.
@@ -71,7 +71,7 @@ class Color
    */
   public static function paint($string, $foregroundColor = 'cyan', $backgroundColor = null)
   {
-    if(Environment::isWindows()){
+    if(Sapi::isWindows()){
       return $string;
     }
 

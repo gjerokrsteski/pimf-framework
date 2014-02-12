@@ -19,7 +19,7 @@
  */
 
 namespace Pimf\Controller;
-use \Pimf\Param,  \Pimf\Registry, \Pimf\Environment,
+use \Pimf\Param,  \Pimf\Registry, \Pimf\Sapi,
     \Pimf\Controller\Exception as Bomb, \Pimf\Request,
     \Pimf\Util\Header, \Pimf\Url, \Pimf\Response;
 
@@ -62,14 +62,14 @@ abstract class Base
   {
     $conf = Registry::get('conf');
 
-    if (Environment::isCli() && $conf['environment'] == 'production') {
+    if (Sapi::isCli() && $conf['environment'] == 'production') {
 
       $suffix = 'CliAction';
       $action = $this->request->fromCli()->get('action') ?: 'index';
 
     } else {
 
-      $requestMethod = ucfirst(Registry::get('env')->getRequestMethod());
+      $requestMethod = ucfirst(Registry::get('env')->REQUEST_METHOD);
       $suffix        = 'Action';
 
       if (!method_exists($this->request, $bag = 'from'.$requestMethod)) {

@@ -186,12 +186,10 @@ class Logger
   private function format($message, $severity)
   {
     $registry = new Registry();
-
     $remoteIP = $registry->env->getIp();
-    $me       = $registry->env->getSelf();
+    $script   = $registry->env->PHP_SELF;
 
-    $msg = date("m-d-Y") . " " . date("G:i:s") . " ";
-    $msg .= $registry->env->getIp();
+    $msg = date("m-d-Y") . " " . date("G:i:s") . " ".$remoteIP;
 
     $IPLength       = strlen($remoteIP);
     $numWhitespaces = 15 - $IPLength;
@@ -203,11 +201,11 @@ class Logger
     $msg .= " " . $severity . ": ";
 
     //get the file name
-    $lastSlashIndex = strrpos($me, "/");
-    $fileName       = $me;
+    $lastSlashIndex = strrpos($script, "/");
+    $fileName       = $script;
 
     if ($lastSlashIndex !== false) {
-      $fileName = substr($me, $lastSlashIndex + 1);
+      $fileName = substr($script, $lastSlashIndex + 1);
     }
 
     $msg .= $fileName . "\t";

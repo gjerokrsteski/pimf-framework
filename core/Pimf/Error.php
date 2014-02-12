@@ -19,7 +19,7 @@
  */
 
 namespace Pimf;
-use Pimf\Registry, Pimf\Environment, Pimf\Util\Header;
+use Pimf\Registry, Pimf\Environment, Pimf\Util\Header, Pimf\Sapi;
 
 /**
  * Defines the default exception handler if an exception is not caught within a try/catch block.
@@ -46,7 +46,7 @@ class Error
     $msg  = null;
 
     if (isset($conf['error']['debug_info']) && $conf['error']['debug_info'] === true) {
-      if (Environment::isCli()) {
+      if (Sapi::isCli()) {
         $msg = "+++ Untreated Exception +++".PHP_EOL.
         "Message: " . $exception->getMessage() .PHP_EOL.
         "Location: " . $exception->getFile() . " on line " . $exception->getLine() .PHP_EOL.

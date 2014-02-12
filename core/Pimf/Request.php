@@ -101,10 +101,8 @@ class Request
 
   /**
    * Strip slashes from string or array
-   *
    * @param      $rawData
    * @param null $overrideStripSlashes
-   *
    * @return array|string
    */
   public static function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
@@ -124,17 +122,19 @@ class Request
    * Strip slashes from string or array
    *
    * @param $rawData
-   *
    * @return array|string
    */
-  protected static function stripSlashes($rawData)
+  public static function stripSlashes($rawData)
   {
-    return is_array($rawData) ? array_map(
-      array(
-        '\Pimf\Request',
-        'stripSlashes'
-      ), $rawData
-    ) : stripslashes($rawData);
+    return is_array($rawData)
+
+      ? array_map(
+          function($value){
+            return \Pimf\Request::stripSlashes($value);
+          }, $rawData
+        )
+
+      : stripslashes($rawData);
   }
 }
 

@@ -46,7 +46,7 @@ class Uri {
 	 */
 	public static function full()
 	{
-		return Registry::get('env')->getUri();
+		return Registry::get('env')->REQUEST_URI;
 	}
 
 	/**
@@ -61,7 +61,7 @@ class Uri {
     }
 
     //Format a given URI.
-    $uri = trim(Registry::get('env')->getPathInfo(), '/') ?: '/';
+    $uri = trim(Registry::get('env')->PATH_INFO, '/') ?: '/';
 
     //Set the URI segments for the request.
     $segments         = explode('/', trim($uri, '/'));

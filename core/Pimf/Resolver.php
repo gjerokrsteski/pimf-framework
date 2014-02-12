@@ -72,7 +72,7 @@ class Resolver
       }
     }
 
-    if (Environment::isCli() && $conf['environment'] == 'production') {
+    if (Sapi::isCli() && $conf['environment'] == 'production') {
       $controllerName = $request->fromCli()->get('controller');
     }
 
@@ -118,6 +118,6 @@ class Resolver
       );
     }
 
-    return new $controller($this->request, new Response(Registry::get('env')->getRequestMethod()));
+    return new $controller($this->request, new Response(Registry::get('env')->REQUEST_METHOD));
   }
 }

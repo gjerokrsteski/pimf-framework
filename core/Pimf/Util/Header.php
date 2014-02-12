@@ -22,7 +22,7 @@
  */
 
 namespace Pimf\Util;
-use Pimf\Registry, Pimf\Environment;
+use Pimf\Registry, Pimf\Sapi;
 
 /**
  * Manages a raw HTTP header sending.
@@ -57,7 +57,7 @@ class Header extends Header\ContentType
    */
   protected static function view($code, $status)
   {
-    if(Environment::isCli()) {
+    if(Sapi::isCli()) {
       die($status.PHP_EOL);
     }
 

@@ -17,9 +17,7 @@
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
-
 namespace Pimf;
-use Pimf\Param;
 
 /**
  * Server and execution environment information.
@@ -27,27 +25,29 @@ use Pimf\Param;
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  *
- * @property string X_REQUESTED_WITH
- * @property string HTTP
- * @property string HTTPS
- * @property string SERVER_PROTOCOL
- * @property string CONTENT_LENGTH
- * @property string HOST
- * @property string SERVER_NAME
- * @property string SERVER_PORT
- * @property string PHP_SELF
- * @property string SCRIPT_NAME
- * @property string PATH_INFO
- * @property string X_FORWARDED_FOR
- * @property string CLIENT_IP
- * @property string REMOTE_ADDR
- * @property string HTTP_REFERER
- * @property string USER_AGENT
- * @property string HTTP_USER_AGENT
- * @property string REQUEST_URI
- * @property string REQUEST_METHOD
+ * @property string X_REQUESTED_WITH It is sent by the Ajax functions of most major Frameworks
+ * @property string HTTP Is the application running under HTTP protocol?
+ * @property string HTTPS Is the application running under HTTPS protocol?
+ * @property string SERVER_PROTOCOL Name and revision of the information protocol via which the page was requested; i.e. 'HTTP/1.0';
+ * @property string CONTENT_LENGTH The Content-Length
+ * @property string HOST The name of the server host under which the current script is executing.
+ * @property string SERVER_NAME The name of the server host under which the current script is executing.
+ * @property string SERVER_PORT Get the port
+ * @property string PHP_SELF Filename of the currently executing script.
+ * @property string SCRIPT_NAME Get Script Name (physical path)
+ * @property string PATH_INFO Get Path Info (virtual path)
+ * @property string X_FORWARDED_FOR Do on your machine is behind the proxy than us it instead of REMOTE_ADDR
+ * @property string CLIENT_IP Get the client ip address
+ * @property string REMOTE_ADDR The IP address from which the user is viewing the current page.
+ * @property string HTTP_REFERER Get Referer - it cannot really be trusted.
+ * @property string USER_AGENT Contents of the User-Agent from the current request, if there is one.
+ * @property string HTTP_USER_AGENT Contents of the User-Agent: header from the current request, if there is one.
+ * @property string REQUEST_URI The URI which was given in order to access this page; for instance, '/index.html'.
+ * @property string REQUEST_METHOD Which request method was used to access the page; i.e. 'GET', 'HEAD', 'POST', 'PUT'.
+ * @property string HTTP_IF_MODIFIED_SINCE Get request header from Apache even on PHP running as a CGI
+ * @property string HTTP_IF_NONE_MATCH Get request header from Apache even on PHP running as a CGI
  */
-class Environment extends Sapi
+class Environment
 {
   /**
    * @var Param
@@ -76,7 +76,7 @@ class Environment extends Sapi
    */
   public function __get($key)
   {
-    return $this->envData->get($key, null, false);
+    return $this->envData->get($key);
   }
 
   /**
@@ -107,25 +107,6 @@ class Environment extends Sapi
   }
 
   /**
-   * Name and revision of the information protocol
-   * via which the page was requested; i.e. 'HTTP/1.0';
-   * @return mixed|null
-   */
-  public function getProtocolInfo()
-  {
-    return $this->SERVER_PROTOCOL;
-  }
-
-  /**
-   * Get Content-Length
-   * @return int
-   */
-  public function getContentLength()
-  {
-    return (int) $this->CONTENT_LENGTH;
-  }
-
-  /**
    * Get Host
    * @return string
    */
@@ -150,52 +131,16 @@ class Environment extends Sapi
    */
   public function getHostWithPort()
   {
-    return ''.$this->getHost().':'.$this->getPort();
+    return ''.$this->getHost().':'.$this->SERVER_PORT;
   }
 
   /**
-   * Get Port
-   * @return int
-   */
-  public function getPort()
-  {
-    return (int) $this->SERVER_PORT;
-  }
-
-  /**
-   * Filename of the currently executing script.
-   * @return string|null
-   */
-  public function getSelf()
-  {
-    return $this->PHP_SELF;
-  }
-
-  /**
-   * Get Script Name (physical path).
-   * @return string
-   */
-  public function getScriptName()
-  {
-    return $this->SCRIPT_NAME;
-  }
-
-  /**
-   * Get Path (physical path + virtual path)
+   * Physical path + virtual path
    * @return string
    */
   public function getPath()
   {
-    return $this->getScriptName() . $this->getPathInfo();
-  }
-
-  /**
-   * Get Path Info (virtual path)
-   * @return string
-   */
-  public function getPathInfo()
-  {
-    return $this->PATH_INFO;
+    return $this->SCRIPT_NAME . $this->PATH_INFO;
   }
 
   /**
@@ -220,15 +165,6 @@ class Environment extends Sapi
   }
 
   /**
-   * Get Referer - it cannot really be trusted.
-   * @return string|null
-   */
-  public function getReferer()
-  {
-    return $this->HTTP_REFERER;
-  }
-
-  /**
    * Get User Agent
    * @return string|null
    */
@@ -246,29 +182,12 @@ class Environment extends Sapi
   }
 
   /**
-   * @return mixed|null
-   */
-  public function getServerName()
-  {
-    return $this->SERVER_NAME;
-  }
-
-  /**
-   * The REQUEST_URI
-   * @return mixed|null
-   */
-  public function getUri()
-  {
-    return $this->REQUEST_URI;
-  }
-
-  /**
    * Gives you the current page URL
    * @return string
    */
   public function getUrl()
   {
-    $protocol = strpos(strtolower($this->getProtocolInfo()),'https') === false ? 'http' : 'https';
+    $protocol = strpos(strtolower($this->PATH_INFO),'https') === false ? 'http' : 'https';
 
     return $protocol . '://' . $this->getHost();
   }
@@ -306,14 +225,5 @@ class Environment extends Sapi
     }
 
     return $headers;
-  }
-
-  /**
-   * Which request method was used to access the page
-   * @return string Lower case get|post|put|delete|head|options
-   */
-  public function getRequestMethod()
-  {
-    return strtolower($this->REQUEST_METHOD);
   }
 }

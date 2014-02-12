@@ -51,7 +51,6 @@ class Param
    * @param string $index
    * @param null   $defaultValue
    * @param bool   $filtered If you trust foreign input introduced to your PHP code - set to FALSE!
-   *
    * @return mixed|null
    */
   public function get($index, $defaultValue = null, $filtered = true)
@@ -59,6 +58,7 @@ class Param
     if($this->data->offsetExists($index)) {
 
       if($filtered === true) {
+        // pretty high-level filtering here...
         return self::filter($this->data->offsetGet($index));
       }
 
@@ -69,31 +69,20 @@ class Param
   }
 
   /**
-   * @param string $index
-   * @param null $defaultValue
-   * @return mixed|null
-   */
-  public function getParam($index, $defaultValue = null)
-  {
-    return $this->get($index, $defaultValue);
-  }
-
-  /**
    * Never ever (ever) trust foreign input introduced to your PHP code!
-   *
    * @param array|string $rawData
-   *
    * @return array|bool|string
    */
   public static function filter($rawData)
   {
     return is_array($rawData)
+
       ? array_map(
-          array(
-            '\Pimf\Util\String',
-            'cleanXss'
-          ), $rawData
+          function($value){
+            return \Pimf\Util\String\Clean::xss($value);
+          }, $rawData
         )
-      : \Pimf\Util\String::cleanXss($rawData);
+
+      : \Pimf\Util\String\Clean::xss($rawData);
   }
 }

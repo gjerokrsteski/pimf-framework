@@ -38,7 +38,7 @@ abstract class ResponseStatus
    */
   public static function send($code, $status, $replace = true)
   {
-    header(''.Registry::get('env')->getProtocolInfo().' ' . $code . ' ' . $status, $replace, $code);
+    header(''.Registry::get('env')->SERVER_PROTOCOL.' ' . $code . ' ' . $status, $replace, $code);
   }
 
   public static function sendXFrameDeny()

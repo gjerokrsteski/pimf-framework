@@ -36,26 +36,25 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase
   {
     $env = new \Pimf\Environment(self::serverData());
 
-    $this->assertEquals(0, $env->getContentLength(), 'on getContentLength');
+    $this->assertEquals(0, $env->CONTENT_LENGTH, 'on getContentLength');
     $this->assertNotEmpty($env->getIp(), 'on getIp');
-    $this->assertNotEmpty($env->getPort(), 'on getPort');
-    $this->assertNotEmpty($env->getSelf(), 'on getSelf');
+    $this->assertNotEmpty($env->SERVER_PORT, 'on getPort');
+    $this->assertNotEmpty($env->PHP_SELF, 'on getSelf');
     $this->assertNotEmpty($env->getHost(), 'on getHost');
     $this->assertNotEmpty($env->getHostWithPort(), 'on getHostWithPort');
     $this->assertNotEmpty($env->getPath(), 'on getPath');
-    $this->assertNotEmpty($env->getPathInfo(), 'on getPathInfo');
-    $this->assertNotEmpty($env->getProtocolInfo(), 'on getProtocolInfo');
-    $this->assertNotEmpty($env->getReferer(), 'on getReferer');
-    $this->assertNotEmpty($env->getScriptName(), 'on getScriptName');
-    $this->assertNotEmpty($env->getServerName(), 'on getServerName');
-    $this->assertNotEmpty($env->getUri(), 'on getUri');
+    $this->assertNotEmpty($env->PATH_INFO, 'on getPathInfo');
+    $this->assertNotEmpty($env->SERVER_PROTOCOL, 'on getProtocolInfo');
+    $this->assertNotEmpty($env->HTTP_REFERER, 'on getReferer');
+    $this->assertNotEmpty($env->SCRIPT_NAME, 'on getScriptName');
+    $this->assertNotEmpty($env->SERVER_NAME, 'on getServerName');
+    $this->assertNotEmpty($env->REQUEST_URI, 'on getUri');
     $this->assertEquals('http://localhost', $env->getUrl(), 'on getUrl');
     $this->assertNotEmpty($env->getUserAgent(), 'on getUserAgent');
     $this->assertFalse($env->isAjax(), 'on isAjax');
     $this->assertFalse($env->isHttp(), 'on isHttp');
     $this->assertFalse($env->isHttps(), 'on isHttps');
-    $this->assertEquals('get', $env->getRequestMethod(), 'on getRequestMethod');
-    $this->assertEquals('GET', $env->REQUEST_METHOD, 'on REQUEST_METHOD called magically');
+    $this->assertEquals('GET', $env->REQUEST_METHOD, 'on getRequestMethod');
 
     $this->assertEquals(self::serverData(), $env->getData()->getAll(), 'on comparing all data');
 

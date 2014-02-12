@@ -20,7 +20,7 @@
 
 namespace Pimf;
 
-use Pimf\Environment, Pimf\Cookie, Pimf\Session, Pimf\Logger, Pimf\Error,
+use Pimf\Environment, Pimf\Cookie, Pimf\Session, Pimf\Logger, Pimf\Error, Pimf\Sapi,
     Pimf\Registry, Pimf\Cli, Pimf\Resolver, Pimf\Request, Pimf\Util\String, Pimf\EntityManager;
 
 /**
@@ -56,7 +56,7 @@ final class Application
 
     $cli = array();
 
-    if (Environment::isCli()) {
+    if (Sapi::isCli()) {
 
       $cli = Cli::parse((array)Registry::get('env')->argv);
 
@@ -80,7 +80,7 @@ final class Application
       new Request($get, $post, $cookie, $cli), $repository, $prefix
     );
 
-    $sessionized = (Environment::isWeb() && $conf['session']['storage'] !== '');
+    $sessionized = (Sapi::isWeb() && $conf['session']['storage'] !== '');
 
     if ($sessionized) {
       Session::load();
@@ -121,7 +121,7 @@ final class Application
     $registry->logger = new Logger($config['bootstrap']['local_temp_directory']);
     $registry->logger->init();
 
-    if (Environment::isWeb()){
+    if (Sapi::isWeb()){
       ob_start('mb_output_handler');
     }
 

@@ -147,7 +147,7 @@ class Route
    */
   private function computeUri()
   {
-    $uri = Registry::get('env')->getUri();
+    $uri = Registry::get('env')->REQUEST_URI;
     $pos = strpos($uri, '?');
 
     if ($pos !== false){
