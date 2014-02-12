@@ -36,7 +36,7 @@ class Param
    */
   public function __construct(array $data = array())
   {
-    $this->data = new \ArrayObject($data, \ArrayObject::STD_PROP_LIST);
+    $this->data = new \ArrayObject($data, \ArrayObject::STD_PROP_LIST + \ArrayObject::ARRAY_AS_PROPS);
   }
 
   /**

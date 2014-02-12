@@ -128,8 +128,7 @@ class ValidatorTest extends PHPUnit_Framework_TestCase
 
     $this->assertFalse($valid->url('some-url'), 'on url validator');
 
-
-    $this->assertNotEmpty($valid->getErrorMessages());
+    $this->assertNotEmpty($valid->getErrors());
     $this->assertFalse($valid->isValid());
   }
 

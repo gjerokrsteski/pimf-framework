@@ -50,6 +50,22 @@ class Validator
   }
 
   /**
+   * @return array
+   */
+  public function getErrors()
+  {
+    return $this->errors;
+  }
+
+  /**
+   * @return bool
+   */
+  public function isValid()
+  {
+    return empty($this->errors);
+  }
+
+  /**
    * check to see if valid email address
    * @param string $field
    * @return bool
@@ -92,7 +108,7 @@ class Validator
  	}
 
   /**
-   * check to see if two fields are equal.
+   * Check to see if two fields are equal.
    * @param string $field1
    * @param string $field2
    * @param bool $caseInsensitive
@@ -109,15 +125,11 @@ class Validator
       $valid = (strcmp(strtolower($field1value), strtolower($field2value)) == 0);
     }
 
-    if ($valid === false) {
-      $this->error($field1 . "|" . $field2, __FUNCTION__);
-    }
-
-    return $valid;
+    return ($valid === true) ?: $this->error($field1 . "|" . $field2, __FUNCTION__);
   }
 
   /**
-   * check to see if the length of a field is between two numbers
+   * Check to see if the length of a field is between two numbers
    * @param string $field
    * @param int $min
    * @param int $max
@@ -134,15 +146,11 @@ class Validator
       $valid = ($fieldValue < $max && $fieldValue > $min);
     }
 
-    if ($valid === false) {
-      $this->error($field, __FUNCTION__);
-    }
-
-    return $valid;
+    return ($valid === true) ?: $this->error($field, __FUNCTION__);
   }
 
   /**
-   * check to see if there is punctuation
+   * Check to see if there is punctuation
    * @param string $field
    * @return bool
    */
@@ -156,7 +164,7 @@ class Validator
   }
 
   /**
-   * length functions on a field takes <, >, =, <=, and >= as operators.
+   * length functions on a field takes <, >, ==, <=, and >= as operators.
    * @param string $field
    * @param string $operator
    * @param int $length
@@ -168,8 +176,7 @@ class Validator
   }
 
   /**
-   * Number value functions takes <, >, =, <=, and >= as operators.
-   *
+   * Number value functions takes <, >, ==, <=, and >= as operators.
    * @param string $field
    * @param string $operator
    * @param string|int $value
@@ -181,31 +188,7 @@ class Validator
   }
 
   /**
-   * @param string $fieldName
-   * @param string $comparing
-   * @param string $operator
-   * @param string|integer $expecting
-   *
-   * @return bool
-   */
-  protected function middleware($fieldName, $comparing, $operator, $expecting)
-  {
-    $valid = false;
-
-    if(in_array($operator, array("<", ">", "==", "<=", ">="), true)) {
-      $func = create_function('$a,$b', 'return ($a '.''.$operator.' $b);');
-      $valid = $func($comparing, $expecting);
-    }
-
-    if ($valid === false) {
-      $this->error($fieldName, $operator);
-    }
-
-    return $valid;
-  }
-
-  /**
-   * check if a number value is between $max and $min
+   * Check if a number value is between $max and $min
    * @param string $field
    * @param int $min
    * @param int $max
@@ -222,15 +205,11 @@ class Validator
       $valid = ($fieldValue < $max && $fieldValue > $min);
     }
 
-    if ($valid === false) {
-      $this->error($field, __FUNCTION__);
-    }
-
-    return $valid;
+    return ($valid === true) ?: $this->error($field, __FUNCTION__);
   }
 
   /**
-   * check if a field contains only decimal digit
+   * Check if a field contains only decimal digit
    * @param string $field
    * @return bool
    */
@@ -245,7 +224,7 @@ class Validator
 
 
   /**
-   * check if a field contains only alphabetic characters
+   * Check if a field contains only alphabetic characters
    * @param string $field
    * @return bool
    */
@@ -259,7 +238,7 @@ class Validator
   }
 
   /**
-   * check if a field contains only alphanumeric characters
+   * Check if a field contains only alphanumeric characters
    * @param string $field
    * @return bool
    */
@@ -316,7 +295,6 @@ class Validator
 
   /**
    * @param string $attribute
-   *
    * @return mixed|null
    * @throws \OutOfBoundsException If attribute not at range
    */
@@ -329,42 +307,20 @@ class Validator
   }
 
   /**
-   * @return array
-   */
-  public function getErrors()
-  {
-    return $this->errors;
-  }
-
-  /**
-   * A list of human readable messages.
-   * @return array
-   */
-  public function getErrorMessages()
-  {
-    $messages = array();
-
-    foreach ($this->getErrors() as $key => $value) {
-
-      if (strstr($key, "|")) {
-        $key = str_replace("|", " and ", $key);
-      }
-
-      if(is_array($value)) {
-        $value = implode(' and ', $value);
-      }
-
-      $messages[] = "Error on field '$key' by '$value' check";
-    }
-
-    return $messages;
-  }
-
-  /**
+   * @param string $fieldName
+   * @param string $comparing
+   * @param string $operator
+   * @param string|integer $expecting
+   *
    * @return bool
    */
-  public function isValid()
+  protected function middleware($fieldName, $comparing, $operator, $expecting)
   {
-    return empty($this->errors);
+    if(in_array($operator, array("<", ">", "==", "<=", ">="), true)) {
+      $func = create_function('$a,$b', 'return ($a '.''.$operator.' $b);');
+      return ($func($comparing, $expecting) === true) ?: $this->error($fieldName, $operator);
+    }
+
+    return false;
   }
 }

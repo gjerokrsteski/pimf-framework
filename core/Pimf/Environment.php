@@ -56,7 +56,7 @@ class Environment extends Sapi
    */
   public function __get($key)
   {
-    return $this->envData->get($key);
+    return $this->envData->get($key, null, false);
   }
 
   /**
@@ -65,7 +65,7 @@ class Environment extends Sapi
    */
   public function isAjax()
   {
-    return $this->envData->get('X_REQUESTED_WITH') === 'XMLHttpRequest';
+    return $this->X_REQUESTED_WITH === 'XMLHttpRequest';
   }
 
   /**
@@ -74,7 +74,7 @@ class Environment extends Sapi
    */
   public function isHttp()
   {
-    return (bool) $this->envData->get('HTTP');
+    return (bool) $this->HTTP;
   }
 
   /**
@@ -83,7 +83,7 @@ class Environment extends Sapi
    */
   public function isHttps()
   {
-    return $this->envData->get('HTTPS') === 'on';
+    return $this->HTTPS === 'on';
   }
 
   /**
@@ -93,7 +93,7 @@ class Environment extends Sapi
    */
   public function getProtocolInfo()
   {
-    return $this->envData->get('SERVER_PROTOCOL');
+    return $this->SERVER_PROTOCOL;
   }
 
   /**
@@ -102,7 +102,7 @@ class Environment extends Sapi
    */
   public function getContentLength()
   {
-    return (int) $this->envData->get('CONTENT_LENGTH');
+    return (int) $this->CONTENT_LENGTH;
   }
 
   /**
@@ -111,17 +111,17 @@ class Environment extends Sapi
    */
   public function getHost()
   {
-    if ($this->envData->get('HOST')) {
+    if ($this->HOST) {
 
-      if (strpos($this->envData->get('HOST'), ':') !== false) {
-        $hostParts = explode(':', $this->envData->get('HOST'));
+      if (strpos($this->HOST, ':') !== false) {
+        $hostParts = explode(':', $this->HOST);
         return $hostParts[0];
       }
 
-      return $this->envData->get('HOST');
+      return $this->HOST;
     }
 
-    return $this->envData->get('SERVER_NAME');
+    return $this->SERVER_NAME;
   }
 
   /**
@@ -139,7 +139,7 @@ class Environment extends Sapi
    */
   public function getPort()
   {
-    return (int) $this->envData->get('SERVER_PORT');
+    return (int) $this->SERVER_PORT;
   }
 
   /**
@@ -148,7 +148,7 @@ class Environment extends Sapi
    */
   public function getSelf()
   {
-    return $this->envData->get('PHP_SELF');
+    return $this->PHP_SELF;
   }
 
   /**
@@ -157,7 +157,7 @@ class Environment extends Sapi
    */
   public function getScriptName()
   {
-    return $this->envData->get('SCRIPT_NAME');
+    return $this->SCRIPT_NAME;
   }
 
   /**
@@ -175,7 +175,7 @@ class Environment extends Sapi
    */
   public function getPathInfo()
   {
-    return $this->envData->get('PATH_INFO');
+    return $this->PATH_INFO;
   }
 
   /**
@@ -184,19 +184,19 @@ class Environment extends Sapi
    */
   public function getIp()
   {
-    if ($this->envData->get('X_FORWARDED_FOR')) {
-      return $this->envData->get('X_FORWARDED_FOR');
+    if ($this->X_FORWARDED_FOR) {
+      return $this->X_FORWARDED_FOR;
     }
 
-    if ($this->envData->get('CLIENT_IP')) {
-      return $this->envData->get('CLIENT_IP');
+    if ($this->CLIENT_IP) {
+      return $this->CLIENT_IP;
     }
 
-    if ($this->envData->get('SERVER_NAME')) {
-      return gethostbyname($this->envData->get('SERVER_NAME'));
+    if ($this->SERVER_NAME) {
+      return gethostbyname($this->SERVER_NAME);
     }
 
-    return $this->envData->get('REMOTE_ADDR');
+    return $this->REMOTE_ADDR;
   }
 
   /**
@@ -205,7 +205,7 @@ class Environment extends Sapi
    */
   public function getReferer()
   {
-    return $this->envData->get('HTTP_REFERER');
+    return $this->HTTP_REFERER;
   }
 
   /**
@@ -214,12 +214,12 @@ class Environment extends Sapi
    */
   public function getUserAgent()
   {
-    if ($this->envData->get('USER_AGENT')) {
-      return $this->envData->get('USER_AGENT');
+    if ($this->USER_AGENT) {
+      return $this->USER_AGENT;
     }
 
-    if ($this->envData->get('HTTP_USER_AGENT')) {
-      return $this->envData->get('HTTP_USER_AGENT');
+    if ($this->HTTP_USER_AGENT) {
+      return $this->HTTP_USER_AGENT;
     }
 
     return null;
@@ -230,7 +230,7 @@ class Environment extends Sapi
    */
   public function getServerName()
   {
-    return $this->envData->get('SERVER_NAME');
+    return $this->SERVER_NAME;
   }
 
   /**
@@ -239,7 +239,7 @@ class Environment extends Sapi
    */
   public function getUri()
   {
-    return $this->envData->get('REQUEST_URI');
+    return $this->REQUEST_URI;
   }
 
   /**
@@ -261,7 +261,7 @@ class Environment extends Sapi
   public function getRequestHeader($header)
   {
     $header = str_replace('-', '_', strtoupper($header));
-    $value  = $this->envData->get('HTTP_' . $header);
+    $value  = $this->{'HTTP_' . $header};
 
     if (!$value) {
       $headers = $this->getRequestHeaders();
@@ -273,24 +273,15 @@ class Environment extends Sapi
 
   /**
    * Try to determine all request headers
-   *
    * @return array
    */
   public function getRequestHeaders()
   {
     $headers = array();
 
-    if (function_exists('apache_request_headers')) {
-      $tmpHeaders = apache_request_headers();
-
-      foreach ($tmpHeaders as $key => $value) {
-        $headers[str_replace('-', '_', strtoupper($key))] = $value;
-      }
-    } else {
-      foreach ($this->envData->getAll() as $key => $value) {
-        if ('HTTP_' === substr($key, 0, 5)) {
-          $headers[substr($key, 5)] = $value;
-        }
+    foreach ($this->envData->getAll() as $key => $value) {
+      if ('HTTP_' === substr($key, 0, 5)) {
+        $headers[substr($key, 5)] = $value;
       }
     }
 
@@ -303,6 +294,6 @@ class Environment extends Sapi
    */
   public function getRequestMethod()
   {
-    return strtolower($this->envData->get('REQUEST_METHOD'));
+    return strtolower($this->REQUEST_METHOD);
   }
 }

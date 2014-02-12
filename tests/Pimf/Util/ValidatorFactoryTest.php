@@ -21,7 +21,6 @@ class ValidatorFactoryTest extends PHPUnit_Framework_TestCase
 
     $this->assertInstanceOf('Pimf\\Util\\Validator', $validator);
     $this->assertEmpty($msg = $validator->getErrors(), 'with validator errors '.print_r($msg,true));
-    $this->assertEmpty($msg = $validator->getErrorMessages(), 'with validator error messages'.print_r($msg,true));
   }
 
 }

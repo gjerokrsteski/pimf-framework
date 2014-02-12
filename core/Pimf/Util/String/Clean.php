@@ -20,7 +20,6 @@
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
-
 namespace Pimf\Util\String;
 
 /**
@@ -50,40 +49,19 @@ class Clean
    */
   public static function xss($string, $charset = 'ISO-8859-1')
   {
-   /*
-    * Remove Null Characters
-    * This prevents sandwiching null characters
-    * between ascii characters, like Java\0script.
-    */
-    $string = preg_replace('/\0+/', '', $string);
-    $string = preg_replace('/(\\\\0)+/', '', $string);
+    // Remove Null Characters
+    $string = preg_replace(array('/\0+/', '/(\\\\0)+/'), '', $string);
 
-   /*
-    * Validate standard character entities
-    * Add a semicolon if missing.  Enables the conversion of entities to ASCII later.
-    */
+    // Validate standard character entities
     $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#u', "\\1;", $string);
 
-   /*
-    * Validate UTF16 two byte encoding (x00)
-    */
+    // Validate UTF16 two byte encoding (x00)
     $string = preg_replace('#(&\#x*)([0-9A-F]+);*#iu', "\\1\\2;", $string);
 
-   /*
-    * URL Decode
-    * Just in case stuff like this is submitted:
-    * <a href="http://%77%77%77%2E%67%6F%6F%67%6C%65%2E%63%6F%6D">Google</a>
-    * Note: Normally urldecode() would be easier but it removes plus signs
-    */
-    $string = preg_replace("/%u0([a-z0-9]{3})/i", "&#x\\1;", $string);
-    $string = preg_replace("/%([a-z0-9]{2})/i", "&#x\\1;", $string);
+    // Just in case stuff like this is submitted: <a href="http://%77%77%77%2E%67%6F%6F%67%6C%65%2E%63%6F%6D">Google</a>
+    $string = preg_replace(array("/%u0([a-z0-9]{3})/i", "/%([a-z0-9]{2})/i"), "&#x\\1;", $string);
 
-   /*
-    * Convert character entities to ASCII
-    * This permits our tests below to work reliably.
-    * We only convert entities that are within tags since
-    * these are the ones that will pose security problems.
-    */
+    // Convert character entities to ASCII
     if (preg_match_all("/<(.+?)>/si", $string, $matches)) {
       for ($i = 0; $i < count($matches['0']); $i++) {
         $string = str_replace(
@@ -92,24 +70,13 @@ class Clean
       }
     }
 
-   /*
-    * Convert all tabs to spaces
-    * This prevents strings like this: ja	vascript
-    * Note: we deal with spaces between characters later.
-    */
+    // Convert all tabs to spaces
     $string = preg_replace("#\t+#", " ", $string);
 
-   /*
-    * Makes PHP tags safe
-    * Note: XML tags are inadvertently replaced too: <?xml
-    */
+    // Makes PHP tags safe
     $string = str_replace(array('<?php', '<?PHP', '<?', '?>'),  array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;'), $string);
 
-   /*
-    * Compact any exploded words
-    * This corrects words like:  j a v a s c r i p t
-    * These words are compacted back to their correct state.
-    */
+    // Compact any exploded words
     $words = array('javascript', 'vbscript', 'script', 'applet', 'alert', 'document', 'write', 'cookie', 'window');
 
     foreach ($words as $word) {
@@ -123,54 +90,29 @@ class Clean
       $string = preg_replace('#' . ucfirst($temp) . '#s', ucfirst($word), $string);
     }
 
-   /*
-    * Remove disallowed Javascript in links or img tags
-    */
+    // Remove disallowed Javascript in links or img tags
     $string = preg_replace("#<a.+?href=.*?(alert\(|alert&\#40;|javascript\:|window\.|document\.|\.cookie|<script|<xss).*?\>.*?</a>#si", "", $string);
     $string = preg_replace("#<img.+?src=.*?(alert\(|alert&\#40;|javascript\:|window\.|document\.|\.cookie|<script|<xss).*?\>#si", "", $string);
     $string = preg_replace("#<(script|xss).*?\>#si", "", $string);
 
-   /*
-    * Remove JavaScript Event Handlers
-    * Note: This code is a little blunt.  It removes
-    * the event handler and anything up to the closing >
-    */
+    // Remove JavaScript Event Handlers
     $string = preg_replace(
       '#(<[^>]+.*?)(onblur|onchange|onclick|onfocus|onload|onmouseover|onmouseup|'.
       'onmousedown|onselect|onsubmit|onunload|onkeypress|onkeydown|onkeyup|onresize)[^>]*>#iU', "\\1>", $string);
 
-   /*
-    * Sanitize naughty HTML elements
-    * If a tag containing any of the words in the list
-    * below is found, the tag gets converted to entities.
-    * So this: <blink>
-    * Becomes: &lt;blink&gt;
-    */
+    // Sanitize naughty HTML elements
     $string = preg_replace('#<(/*\s*)(alert|applet|basefont|base|behavior|bgsound|'.
       'blink|body|embed|expression|form|frameset|frame|head|html|ilayer|iframe|input'.
       '|layer|link|meta|object|plaintext|style|script|textarea|title|xml|xss)([^>]*)>#is', "&lt;\\1\\2\\3&gt;", $string);
 
-   /*
-    * Sanitize naughty scripting elements
-    * For example:	eval('some code')
-    * Becomes:		eval&#40;'some code'&#41;
-    */
+    // Sanitize naughty scripting elements
     $string = preg_replace('#(alert|cmd|passthru|eval|exec|system|fopen|fsockopen|'.
       'file|file_get_contents|readfile|unlink)(\s*)\((.*?)\)#si', "\\1\\2&#40;\\3&#41;", $string);
 
-   /*
-    * Final clean up
-    * This adds a bit of extra precaution in case
-    * something got through the above filters
-    */
+    // Final clean up
     $bad = array(
-      'document.cookie'  => '',
-      'document.write'   => '',
-      'window.location'  => '',
-      "javascript\s*:"   => '',
-      "Redirect\s+302"   => '',
-      '<!--'             => '&lt;!--',
-      '-->'              => '--&gt;'
+      'document.cookie' => '', 'document.write' => '', 'window.location' => '', "javascript\s*:" => '',
+      "Redirect\s+302" => '', '<!--' => '&lt;!--', '-->' => '--&gt;'
     );
 
     foreach ($bad as $key => $val) {
