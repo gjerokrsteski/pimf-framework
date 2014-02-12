@@ -26,6 +26,26 @@ use Pimf\Param;
  *
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
+ *
+ * @property string X_REQUESTED_WITH
+ * @property string HTTP
+ * @property string HTTPS
+ * @property string SERVER_PROTOCOL
+ * @property string CONTENT_LENGTH
+ * @property string HOST
+ * @property string SERVER_NAME
+ * @property string SERVER_PORT
+ * @property string PHP_SELF
+ * @property string SCRIPT_NAME
+ * @property string PATH_INFO
+ * @property string X_FORWARDED_FOR
+ * @property string CLIENT_IP
+ * @property string REMOTE_ADDR
+ * @property string HTTP_REFERER
+ * @property string USER_AGENT
+ * @property string HTTP_USER_AGENT
+ * @property string REQUEST_URI
+ * @property string REQUEST_METHOD
  */
 class Environment extends Sapi
 {
