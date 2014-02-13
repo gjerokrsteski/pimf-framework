@@ -33,20 +33,80 @@ use Pimf\Cli\Color, Pimf\Util\String, Pimf\Registry;
  */
 final class Cli
 {
-   /**
-    * Prints out a list of CLI commands from the system,
-    * which is defined at the controllers with the "CliAction()" suffix at the method-name.
-    * @return void
-    */
-   public static function absorb()
-   {
-     $classes = array();
+  /**
+   * Prints out a list of CLI commands from the system,
+   * which is defined at the controllers with the "CliAction()" suffix at the method-name.
+   * @param null|string $appClr Path to application controller repository
+   * @param null|string $coreClr Path to core controller repository
+   * @param null|string $root Path to home directory
+   */
+  public static function absorb($appClr = null, $coreClr = null, $root = null)
+  {
+     echo Color::paint(
+       PHP_EOL.'PIMF v'.\Pimf\Application::VERSION.' PHP Command Line Interface by Gjero Krsteski'.PHP_EOL
+     );
 
-     $conf = Registry::get('conf');
+     echo Color::paint(
+       '+------------------------------------------------------+'. PHP_EOL
+     );
 
-     $root    = dirname(dirname(dirname(dirname(__FILE__))));
-     $coreClr = str_replace('/', DIRECTORY_SEPARATOR, $root . '/pimf-framework/core/Pimf/Controller/');
-     $appClr  = str_replace('/', DIRECTORY_SEPARATOR, $root . '/app/' . $conf['app']['name'] . '/Controller/');
+     self::reflect(self::collect($appClr, $coreClr, $root));
+   }
+
+  /**
+   * @param array $classes
+   */
+  public static function reflect(array $classes)
+  {
+    array_map(
+      function ($class) {
+
+          $reflection = new \ReflectionClass($class);
+
+          if ($reflection->isSubclassOf('\Pimf\Controller\Base')){
+
+             $methods    = $reflection->getMethods();
+             $controller = explode('_', $class);
+
+             echo Color::paint('controller: ' . strtolower(end($controller)) . '' . PHP_EOL);
+
+             array_map(
+               function ($method) {
+                 if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
+                   echo Color::paint(PHP_EOL.' action: ' . $command . ' '.PHP_EOL);
+                 }
+               }, $methods
+             );
+
+            echo Color::paint(
+              PHP_EOL.'+------------------------------------------------------+'. PHP_EOL
+            );
+
+          }
+
+      }, $classes
+    );
+  }
+
+  /**
+   * @param null $appClr
+   * @param null $coreClr
+   * @param null $root
+   *
+   * @return array
+   */
+  public static function collect($appClr = null, $coreClr = null, $root = null)
+  {
+    $classes = array();
+    $conf    = Registry::get('conf');
+    $dis     = DIRECTORY_SEPARATOR;
+
+     if(!$root && !$coreClr && !$appClr) {
+       // compute the PIMF framework path restriction.
+       $root    = dirname(dirname(dirname(dirname(__FILE__))));
+       $coreClr = str_replace('/', $dis, $root . '/pimf-framework/core/Pimf/Controller/');
+       $appClr  = str_replace('/', $dis, $root . '/app/' . $conf['app']['name'] . '/Controller/');
+     }
 
      foreach (array( $appClr, $coreClr) as $dir) {
 
@@ -57,58 +117,23 @@ final class Cli
        );
 
        foreach (iterator_to_array($iterator, false) as $file) {
-         $file      = str_replace('\\', '/', current($file));
-         $file      = str_replace('/', DIRECTORY_SEPARATOR, $file);
-         $name      = str_replace(
+         $file = str_replace('\\', '/', current($file));
+         $file = str_replace('/', $dis, $file);
+         $name = str_replace(
            array(
-             $root . DIRECTORY_SEPARATOR . 'pimf-framework' . DIRECTORY_SEPARATOR . 'core' . DIRECTORY_SEPARATOR,
-             $root . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR
+             $root . $dis . 'pimf-framework' . $dis . 'core' . $dis,
+             $root . $dis . 'app' . $dis
            ), '', $file
          );
 
-        $name      = str_replace(DIRECTORY_SEPARATOR, '\\', $name);
+         $name      = str_replace($dis, '\\', $name);
          $name      = str_replace('.php', '', $name);
-         $classes[] = '\\'.$name;
+         $classes[] = '\\' . $name;
        }
      }
 
-     echo Color::paint(
-       PHP_EOL.'PIMF v'.\Pimf\Application::VERSION.' PHP Command Line Interface by Gjero Krsteski'.PHP_EOL
-     );
-
-     echo Color::paint(
-       '+------------------------------------------------------+'. PHP_EOL
-     );
-
-     array_map(
-       function ($class) {
-
-           $reflection = new \ReflectionClass($class);
-
-           if ($reflection->isSubclassOf('\Pimf\Controller\Base')){
-
-              $methods    = $reflection->getMethods();
-              $controller = explode('_', $class);
-
-              echo Color::paint('controller: ' . strtolower(end($controller)) . '' . PHP_EOL);
-
-              array_map(
-                function ($method) {
-                  if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
-                    echo Color::paint(PHP_EOL.' action: ' . $command . ' '.PHP_EOL);
-                  }
-                }, $methods
-              );
-
-             echo Color::paint(
-               PHP_EOL.'+------------------------------------------------------+'. PHP_EOL
-             );
-
-           }
-
-       }, $classes
-     );
-   }
+    return $classes;
+  }
 
   /**
    * @param array $commands

@@ -58,8 +58,8 @@ final class Application
       }
     }
 
-    $conf = Registry::get('conf');
-    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+    $conf       = Registry::get('conf');
+    $root       = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
     $prefix     = String::ensureTrailing('\\', $conf['app']['name']);
     $repository = $root . 'app/' . $conf['app']['name'] . '/Controller';
 
