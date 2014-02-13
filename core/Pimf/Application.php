@@ -50,6 +50,7 @@ final class Application
    */
   public static function run(array $get, array $post, array $cookie)
   {
+    $cli = array();
     if (Sapi::isCli()) {
       $cli = Cli::parse((array)Registry::get('env')->argv);
       if (count($cli) < 1 || isset($cli['list'])) {
