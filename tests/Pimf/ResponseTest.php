@@ -11,7 +11,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
    */
   public function testCreatingNewInstanceExpectingExceptionIfNoRequestMethodGiven()
   {
-    new \Pimf\Response(null);
+    new \Pimf\Response('PUT');
   }
 
   /**
