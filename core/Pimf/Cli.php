@@ -31,7 +31,7 @@ use Pimf\Cli\Color, Pimf\Util\String, Pimf\Registry;
  * @package Pimf
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-class Cli
+final class Cli
 {
    /**
     * Prints out a list of CLI commands from the system,

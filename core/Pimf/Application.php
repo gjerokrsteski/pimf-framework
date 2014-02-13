@@ -35,9 +35,9 @@ final class Application
 {
   const VERSION = '1.8';
 
-  private static $bootstrapped;
-
   /**
+   * Please bootstrap first, than run the application!
+   *
    * Run a application, let application accept a request, route the request,
    * dispatch to controller/action, render response and return response to client finally.
    *
@@ -50,30 +50,21 @@ final class Application
    */
   public static function run(array $get, array $post, array $cookie)
   {
-    if (self::$bootstrapped !== true) {
-      throw new \LogicException('Please bootstrap first, than run the application!');
-    }
-
-    $cli = array();
-
     if (Sapi::isCli()) {
-
       $cli = Cli::parse((array)Registry::get('env')->argv);
-
       if (count($cli) < 1 || isset($cli['list'])) {
         Cli::absorb(); exit(0);
       }
     }
 
-    $conf = Registry::get('conf');
-    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+    $conf       = Registry::get('conf');
+    $root       = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+    $prefix     = String::ensureTrailing('\\', $conf['app']['name']);
+    $repository = $root . 'app/' . $conf['app']['name'] . '/Controller';
 
-    If (isset($cli['controller']) && $cli['controller'] == 'core') {
+    if (isset($cli['controller']) && $cli['controller'] == 'core') {
       $prefix     = 'Pimf\\';
       $repository = $root.'pimf-framework/core/Pimf/Controller';
-    } else {
-      $prefix     = String::ensureTrailing('\\', $conf['app']['name']);
-      $repository = $root.'app/' . $conf['app']['name'] . '/Controller';
     }
 
     $resolver = new Resolver(
@@ -90,7 +81,6 @@ final class Application
 
     if ($sessionized) {
       Session::save();
-      // Cookies must be sent before any output.
       Cookie::send();
     }
 
@@ -100,25 +90,21 @@ final class Application
   /**
    * Mechanism used to do some initial config before a Application runs.
    *
-   * @param array $config The array of configuration options.
+   * @param array $conf The array of configuration options.
    * @param array $server Array of information such as headers, paths, and script locations.
    *
    * @return boolean
    */
-  public static function bootstrap(array $config, array $server = array())
+  public static function bootstrap(array $conf, array $server = array())
   {
-    if (self::$bootstrapped === true) {
-      return true;
-    }
-
-    ini_set('default_charset', $config['encoding']);
-    date_default_timezone_set($config['timezone']);
+    ini_set('default_charset', $conf['encoding']);
+    date_default_timezone_set($conf['timezone']);
 
     // configure necessary things for the application.
-    $registry = new Registry();
-    $registry->conf = $config;
-    $registry->env  = new Environment($server);
-    $registry->logger = new Logger($config['bootstrap']['local_temp_directory']);
+    $registry         = new Registry();
+    $registry->conf   = $conf;
+    $registry->env    = new Environment($server);
+    $registry->logger = new Logger($conf['bootstrap']['local_temp_directory']);
     $registry->logger->init();
 
     if (Sapi::isWeb()){
@@ -128,10 +114,10 @@ final class Application
     ini_set('display_errors', 'On');
 
     // setup the error reporting.
-    if ($config['environment'] == 'testing') {
+    if ($conf['environment'] == 'testing') {
 
       error_reporting(E_ALL | E_STRICT);
-      $dbConf = $config['testing']['db'];
+      $dbConf = $conf['testing']['db'];
 
     } else {
 
@@ -149,37 +135,39 @@ final class Application
       });
 
       error_reporting(-1);
-      $dbConf = $config['production']['db'];
+      $dbConf = $conf['production']['db'];
     }
 
     // start checking the dependencies.
     $problems = array();
 
     // check php-version.
-    if (version_compare(PHP_VERSION, $config['bootstrap']['expected']['php_version']) == -1) {
+    if (version_compare(PHP_VERSION, $conf['bootstrap']['expected']['php_version']) == -1) {
       $problems[] = 'You have PHP '. PHP_VERSION
-                   .' and you need PHP '.$config['bootstrap']['expected']['php_version'].' or higher!';
+                   .' and you need PHP '.$conf['bootstrap']['expected']['php_version'].' or higher!';
     }
 
     try {
 
-      if(is_array($dbConf) && $config['environment'] != 'testing') {
-        $registry->em = new EntityManager(\Pimf\Pdo\Factory::get($dbConf), $config['app']['name']);
+      // load pdo driver
+      if(is_array($dbConf) && $conf['environment'] != 'testing') {
+        $registry->em = new EntityManager(\Pimf\Pdo\Factory::get($dbConf), $conf['app']['name']);
       }
 
       $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
 
-      if($config['app']['routeable'] === true) {
+      // load defined routes
+      if($conf['app']['routeable'] === true
+        && file_exists($routes = $root .'app/' . $conf['app']['name'] . '/routes.php')
+      ) {
         $registry->router = new Router();
-
-        if(file_exists($routes = $root .'app/' . $config['app']['name'] . '/routes.php')){
-          foreach((array)(include $routes) as $route) {
-            $registry->router->map($route);
-          }
+        foreach((array)(include $routes) as $route) {
+          $registry->router->map($route);
         }
       }
 
-      if(file_exists($events = $root .'app/' . $config['app']['name'] . '/events.php')){
+      // load defined event-listeners
+      if(file_exists($events = $root .'app/' . $conf['app']['name'] . '/events.php')) {
         include_once $events;
       }
 
@@ -188,11 +176,8 @@ final class Application
     }
 
     if (!empty($problems)) {
-      echo PHP_EOL .'+++ Please install following php/extensions to ensure PIMF proper working +++'.PHP_EOL;
       die(implode(PHP_EOL.PHP_EOL, $problems));
     }
-
-    self::$bootstrapped = true;
   }
 
   /**
