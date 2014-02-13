@@ -58,8 +58,8 @@ class Response
     $this->method = '' . strtoupper($requestMethod);
 
     // it is PIMF framework restriction
-    if(!in_array($this->method, array('POST', 'GET', null), true)) {
-      throw new \RuntimeException('no request-method given');
+    if(!in_array($this->method, array('POST', 'GET', null))) {
+      throw new \RuntimeException('unsupported request-method given');
     }
 
     Header::clear();

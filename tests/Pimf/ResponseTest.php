@@ -14,6 +14,12 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     new \Pimf\Response('PUT');
   }
 
+  public function testCreatingNewInstanceExpectingNoExceptionIfComesFromCli()
+  {
+    $this->assertInstanceOf('Pimf\\Response', new \Pimf\Response(null));
+    $this->assertInstanceOf('Pimf\\Response', new \Pimf\Response(NULL));
+  }
+
   /**
    * @runInSeparateProcess
    * @expectedException RuntimeException
