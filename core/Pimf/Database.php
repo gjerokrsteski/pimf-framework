@@ -36,7 +36,7 @@ class Database extends \PDO
    * Check database drivers that support savepoints.
    * @return bool
    */
-  protected function nestable()
+  public function nestable()
   {
     return in_array(
       $this->getAttribute(\PDO::ATTR_DRIVER_NAME),

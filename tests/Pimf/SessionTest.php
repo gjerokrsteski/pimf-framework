@@ -106,7 +106,10 @@ class SessionTest extends PHPUnit_Framework_TestCase
     $this->assertTrue(isset($payload->session['data'][\Pimf\Session::CSRF]));
   }
 
-  #unit tests
+
+
+  # start unit tests
+
 
   public function testStartedMethodIndicatesIfSessionIsStarted()
   {
@@ -236,9 +239,9 @@ class SessionTest extends PHPUnit_Framework_TestCase
 
   public function testRegenerateMethodSetsNewIDAndTurnsOffExistenceIndicator()
   {
-    $payload         = $this->getPayload();
-    $payload->sesion = $this->getSession();
-    $payload->exists = true;
+    $payload          = $this->getPayload();
+    $payload->session = $this->getSession();
+    $payload->exists  = true;
 
     $payload->regenerate();
 
