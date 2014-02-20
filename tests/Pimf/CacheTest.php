@@ -41,14 +41,5 @@ class CacheTest extends PHPUnit_Framework_TestCase
 
     $this->assertEquals('Robin', \Pimf\Cache::get('name'));
   }
-
-  public function testRegisterThirdPartyCacheStorage()
-  {
-    \Pimf\Cache::extend('third-party-storage', function(){ return true;});
-
-    $storage = \Pimf\Cache::storage('third-party-storage');
-
-    $this->assertTrue($storage);
-  }
 }
  

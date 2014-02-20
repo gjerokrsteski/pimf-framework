@@ -454,4 +454,41 @@ class SessionTest extends PHPUnit_Framework_TestCase
   {
     \Pimf\Session::factory('bad-bad-storage');
   }
+
+  public function testStartingSession()
+  {
+    \Pimf\Session::start('memory');
+    $this->assertInstanceOf('\\Pimf\\Session\\Payload', \Pimf\Session::$instance);
+  }
+
+
+  public function testIfInstanceStarted()
+  {
+    \Pimf\Session::start('memory');
+
+    $this->assertInstanceOf('\\Pimf\\Session\\Payload', \Pimf\Session::instance());
+  }
+
+  /**
+   * @expectedException \RuntimeException
+   */
+  public function testIfNoInstanceStarted()
+  {
+    \Pimf\Session::instance();
+  }
+
+  public function testMagicMethodCallingMethods()
+  {
+    \Pimf\Session::start('memory');
+    \Pimf\Session::put('name', 'Robin');
+
+    $this->assertEquals('Robin', \Pimf\Session::get('name'));
+  }
+
+  public function testLoadingSession()
+  {
+    \Pimf\Request::$cookieData = $this->getMock('\\Pimf\\Param');
+
+    \Pimf\Session::load();
+  }
 }

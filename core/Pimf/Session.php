@@ -57,12 +57,6 @@ class Session
   public static $instance;
 
   /**
-   * The third-party storage registrar.
-   * @var array
-   */
-  public static $farm = array();
-
-  /**
    * The string name of the CSRF token stored in the session.
    * @var string
    */
@@ -101,11 +95,6 @@ class Session
    */
   public static function factory($storage)
   {
-    if (isset(static::$farm[$storage])) {
-      $resolver = static::$farm[$storage];
-      return $resolver();
-    }
-
     $conf = Registry::get('conf');
 
     switch ($storage) {
@@ -160,16 +149,6 @@ class Session
   public static function started()
   {
     return (static::$instance !== null);
-  }
-
-  /**
-   * Register a third-party cache storage.
-   * @param $storage
-   * @param callable $resolver
-   */
-  public static function extend($storage, \Closure $resolver)
-  {
-    static::$farm[$storage] = $resolver;
   }
 
   /**

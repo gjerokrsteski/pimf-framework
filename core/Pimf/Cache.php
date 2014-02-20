@@ -50,13 +50,6 @@ class Cache
   public static $storages = array();
 
   /**
-   * The third-party storage registrar.
-   *
-   * @var array
-   */
-  public static $farm = array();
-
-  /**
    * Get a cache storage instance.
    * @param string $storage
    * @return CS\Storage
@@ -78,11 +71,6 @@ class Cache
    */
   protected static function factory($storage)
   {
-    if (isset(static::$farm[$storage])) {
-      $resolver = static::$farm[$storage];
-      return $resolver();
-    }
-
     $conf = Registry::get('conf');
 
     switch ($storage) {
@@ -115,16 +103,6 @@ class Cache
       default:
         throw new \RuntimeException("Cache storage {$storage} is not supported.");
     }
-  }
-
-  /**
-   * Register a third-party cache storage.
-   * @param $storage
-   * @param callable $resolver
-   */
-  public static function extend($storage, \Closure $resolver)
-  {
-    static::$farm[$storage] = $resolver;
   }
 
   /**
