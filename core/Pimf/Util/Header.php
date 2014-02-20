@@ -54,11 +54,12 @@ class Header extends Header\ContentType
   /**
    * @param int $code
    * @param string $status
+   * @param boolean $exit
    */
-  protected static function view($code, $status)
+  protected static function view($code, $status, $exit = true)
   {
     if(Sapi::isCli()) {
-      die($status.PHP_EOL);
+      echo $status.PHP_EOL; if ($exit) exit(0);
     }
 
     self::send($code, $status);
@@ -70,26 +71,28 @@ class Header extends Header\ContentType
     $coreTpl = str_replace('/', DIRECTORY_SEPARATOR, $root.'/core/Pimf/_error/'.$code.'.php');
 
     if(file_exists($appTpl) && is_readable($appTpl)){
-      die(include $appTpl);
+      echo include $appTpl; if ($exit) exit(0);
     }
 
-    die(include $coreTpl);
+    echo include $coreTpl; if ($exit) exit(0);
   }
 
   /**
    * @param string $msg
+   * @param boolean $exit
    */
-  public static function sendInternalServerError($msg = '')
+  public static function sendInternalServerError($msg = '', $exit = true)
   {
-    self::view(500, $msg);
+    self::view(500, $msg, $exit);
   }
 
   /**
    * @param string $msg
+   * @param boolean $exit
    */
-  public static function sendNotFound($msg = '')
+  public static function sendNotFound($msg = '', $exit = true)
   {
-    self::view(404, $msg);
+    self::view(404, $msg, $exit);
   }
 
   /**

@@ -33,35 +33,18 @@ class Error
   /**
    * Handle an exception and display the exception report.
    * @param \Exception $exception
+   * @param boolean $exit
    */
-  public static function exception(\Exception $exception)
+  public static function exception(\Exception $exception, $exit = true)
   {
     static::log($exception);
 
-    ob_get_level() and ob_end_clean();
+    ob_get_length() > 0 and ob_get_level() and ob_end_clean();
 
-    // if detailed errors are enabled, just format the exception into
-    // a simple error message and display it.
     $conf = Registry::get('conf');
-    $msg  = null;
 
     if (isset($conf['error']['debug_info']) && $conf['error']['debug_info'] === true) {
-      if (Sapi::isCli()) {
-        $msg = "+++ Untreated Exception +++".PHP_EOL.
-        "Message: " . $exception->getMessage() .PHP_EOL.
-        "Location: " . $exception->getFile() . " on line " . $exception->getLine() .PHP_EOL.
-        "Stack Trace: " .PHP_EOL. $exception->getTraceAsString() .PHP_EOL;
-      } else {
-        $msg =
-          "<html><h2>Untreated Exception</h2>
-          <h3>Message:</h3>
-          <pre>" . $exception->getMessage() . "</pre>
-          <h3>Location:</h3>
-          <pre>" . $exception->getFile() . " on line " . $exception->getLine() . "</pre>
-          <h3>Stack Trace:</h3>
-          <pre>" . $exception->getTraceAsString() . "</pre></html>";
-      }
-      die($msg);
+      echo static::format($exception); if ($exit) exit(0);
     }
 
     Header::clear();
@@ -69,13 +52,40 @@ class Error
     if($exception instanceof \Pimf\Controller\Exception
     || $exception instanceof \Pimf\Resolver\Exception) {
       Event::first('404', array($exception));
-      Header::sendNotFound($msg);
+      Header::sendNotFound(null, $exit);
     } else {
       Event::first('500', array($exception));
-      Header::sendInternalServerError($msg);
+      Header::sendInternalServerError(null, $exit);
     }
 
-    exit(1);
+    if ($exit) exit(1);
+  }
+
+  /**
+   * If detailed errors are enabled, just format the exception into
+   * a simple error message and display it.
+   *
+   * @param \Exception $exception
+   * @return string
+   */
+  public static function format(\Exception $exception)
+  {
+    if (Sapi::isCli()) {
+      return
+        "+++ Untreated Exception +++".PHP_EOL.
+        "Message: " . $exception->getMessage() .PHP_EOL.
+        "Location: " . $exception->getFile() . " on line " . $exception->getLine() .PHP_EOL.
+        "Stack Trace: " .PHP_EOL. $exception->getTraceAsString() .PHP_EOL;
+    }
+
+    return
+      "<html><h2>Untreated Exception</h2>
+      <h3>Message:</h3>
+      <pre>" . $exception->getMessage() . "</pre>
+      <h3>Location:</h3>
+      <pre>" . $exception->getFile() . " on line " . $exception->getLine() . "</pre>
+      <h3>Stack Trace:</h3>
+      <pre>" . $exception->getTraceAsString() . "</pre></html>";
   }
 
   /**
