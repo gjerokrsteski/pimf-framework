@@ -44,7 +44,7 @@ class Error
     $conf = Registry::get('conf');
 
     if (isset($conf['error']['debug_info']) && $conf['error']['debug_info'] === true) {
-      echo static::format($exception); if ($exit) exit(1);
+      echo static::format($exception); if ($exit) exit;
     }
 
     Header::clear();

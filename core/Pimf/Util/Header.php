@@ -59,7 +59,7 @@ class Header extends Header\ContentType
   protected static function view($code, $status, $exit = true)
   {
     if(Sapi::isCli()) {
-      echo $status.PHP_EOL; if ($exit) exit(0);
+      echo $status . PHP_EOL; if ($exit) exit;
     }
 
     self::send($code, $status);
@@ -71,10 +71,10 @@ class Header extends Header\ContentType
     $coreTpl = str_replace('/', DIRECTORY_SEPARATOR, $root.'/core/Pimf/_error/'.$code.'.php');
 
     if(file_exists($appTpl) && is_readable($appTpl)){
-      echo include $appTpl; if ($exit) exit(0);
+      echo include $appTpl; if ($exit) exit;
     }
 
-    echo include $coreTpl; if ($exit) exit(0);
+    echo include $coreTpl; if ($exit) exit;
   }
 
   /**
