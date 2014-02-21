@@ -191,6 +191,7 @@ class ResolverTest extends PHPUnit_Framework_TestCase
 
 
   /**
+   * @runInSeparateProcess
    * @outputBuffering enabled
    */
   public function testIfAppCanRedirect()
