@@ -257,27 +257,6 @@ class SessionTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('anne', $payload->token());
   }
 
-  public function testSaveMethodCorrectlyCallsStorage()
-  {
-    $payload          = $this->getPayload();
-    $session          = $this->getSession();
-    $payload->session = $session;
-    $payload->exists  = true;
-    $conf             = \Pimf\Registry::get('conf');
-
-    $expect                  = $session;
-    $expect['data'][':old:'] = $session['data'][':new:'];
-    $expect['data'][':new:'] = array();
-
-    $payload->storage
-      ->expects($this->once())
-      ->method('save')->with($this->equalTo($expect), $this->equalTo($conf['session']), $this->equalTo(true));
-
-    $payload->save();
-
-    $this->assertEquals($session['data'][':new:'], $payload->session['data'][':old:']);
-  }
-
   /**
    * @covers \Pimf\Session\Storages\File::clean
    * @covers \Pimf\Session\Storages\File::save
