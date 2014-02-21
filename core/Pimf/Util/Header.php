@@ -71,10 +71,10 @@ class Header extends Header\ContentType
     $coreTpl = str_replace('/', DIRECTORY_SEPARATOR, $root.'/core/Pimf/_error/'.$code.'.php');
 
     if(file_exists($appTpl) && is_readable($appTpl)){
-      echo include $appTpl; if ($exit) exit(1);
+      include $appTpl; if ($exit) exit(1);
     }
 
-    echo include $coreTpl; if ($exit) exit(1);
+    include $coreTpl; if ($exit) exit(1);
   }
 
   /**
