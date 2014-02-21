@@ -44,11 +44,11 @@ class Header extends Header\ContentType
 
   /**
    * @param string $url
+   * @param boolean $exit
    */
-  public static function toLocation($url)
+  public static function toLocation($url, $exit = true)
   {
-    header('Location: '.$url);
-    exit(1);
+    header('Location: '.$url); if ($exit) exit(1);
   }
 
   /**

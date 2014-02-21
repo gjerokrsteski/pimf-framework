@@ -109,7 +109,7 @@ class Redis
     if (!isset(static::$databases[$name])) {
       $conf = Registry::get('conf');
 
-      if (!isset($conf['cache']['storage'])) {
+      if (!isset($conf['cache']['storage']) || $conf['cache']['storage'] != 'redis') {
         throw new \RuntimeException("Redis database [$name] is not defined.");
       }
 

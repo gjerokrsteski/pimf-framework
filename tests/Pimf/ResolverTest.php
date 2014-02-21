@@ -188,4 +188,47 @@ class ResolverTest extends PHPUnit_Framework_TestCase
 
     $resolver->process();
   }
+
+
+  /**
+   * @outputBuffering enabled
+   */
+  public function testIfAppCanRedirect()
+  {
+    \Pimf\Registry::set('env',
+      new \Pimf\Environment(
+        array('HTTPS' => 'off', 'SCRIPT_NAME' => __FILE__, 'HOST' => 'http://localhost', 'SERVER_PROTOCOL' => 'HTTP/1.0')));
+
+    \Pimf\Registry::set('conf',
+      array(
+        'app' => array(
+          'name' => 'test-app-name',
+          'key' => 'secret-key-here',
+          'default_controller' => 'index',
+          'routeable' => true,
+          'url' => 'http://localhost',
+          'index' => 'index.php',
+          'asset_url' => '',
+        ),
+        'environment' => 'testing',
+        'ssl' => false,
+      )
+    );
+
+    \Pimf\Registry::set('router',
+      by(new \Pimf\Router())->map(new \Pimf\Route('index/save'))
+    );
+
+    # the test assertion
+
+    $resolver = new \Pimf\Resolver(
+      new \Pimf\Request(array(),array('action'=>'save')),
+      dirname(__FILE__).'/_fixture/',
+      'Fixture\\'
+    );
+
+    $resolver->process()->redirect('index/index', false, false);
+
+    $this->expectOutputString('');
+  }
 }

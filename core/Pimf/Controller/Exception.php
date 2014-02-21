@@ -25,6 +25,8 @@ namespace Pimf\Controller;
  *
  * @package Controller
  * @author Gjero Krsteski <gjero@krsteski.de>
+ *
+ * @codeCoverageIgnore
  */
 class Exception extends \DomainException
 {

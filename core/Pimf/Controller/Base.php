@@ -113,19 +113,16 @@ abstract class Base
    *
    * @param string $route The redirect destination like controller/action
    * @param boolean $permanent If permanent redirection or not.
+   * @param boolean $exit
    */
-  public function redirect($route, $permanent = false)
+  public function redirect($route, $permanent = false, $exit = true)
   {
     $url = Url::compute($route);
 
     Header::clear();
 
-    if ($permanent === true) {
-      Header::sendMovedPermanently();
-    } else {
-      Header::sendFound();
-    }
+    ($permanent === true) ? Header::sendMovedPermanently() : Header::sendFound();
 
-    Header::toLocation($url);
+    Header::toLocation($url, $exit);
   }
 }

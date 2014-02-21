@@ -23,6 +23,8 @@ namespace Pimf\Resolver;
 /**
  * @package Resolver
  * @author Gjero Krsteski <gjero@krsteski.de>
+ *
+ * @codeCoverageIgnore
  */
 class Exception extends \RuntimeException
 {
