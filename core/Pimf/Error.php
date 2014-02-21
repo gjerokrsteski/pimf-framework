@@ -44,7 +44,7 @@ class Error
     $conf = Registry::get('conf');
 
     if (isset($conf['error']['debug_info']) && $conf['error']['debug_info'] === true) {
-      echo static::format($exception); if ($exit) exit(0);
+      echo static::format($exception); if ($exit) exit(1);
     }
 
     Header::clear();
@@ -57,8 +57,6 @@ class Error
       Event::first('500', array($exception));
       Header::sendInternalServerError(null, $exit);
     }
-
-    if ($exit) exit(1);
   }
 
   /**

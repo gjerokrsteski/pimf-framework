@@ -44,7 +44,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     new \Pimf\Application();
   }
 
-  public function testHappyBootstraping()
+  public function testHappyBootstrapping()
   {
     $this->assertNull(
 

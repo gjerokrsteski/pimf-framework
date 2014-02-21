@@ -20,8 +20,7 @@
 
 namespace Pimf;
 
-use Pimf\Environment, Pimf\Cookie, Pimf\Session, Pimf\Logger, Pimf\Error, Pimf\Sapi,
-    Pimf\Registry, Pimf\Cli, Pimf\Resolver, Pimf\Request, Pimf\Util\String, Pimf\EntityManager;
+use Pimf\Session, Pimf\Cli, Pimf\Resolver, Pimf\Util\String;
 
 /**
  * Provides a facility for applications which provides reusable resources,
@@ -143,8 +142,8 @@ final class Application
     $problems = array();
 
     // check php-version.
-      if (version_compare(PHP_VERSION, $conf['bootstrap']['expected']['php_version']) == -1) {
-    $problems[] = 'You have PHP '. PHP_VERSION
+    if (version_compare(PHP_VERSION, $conf['bootstrap']['expected']['php_version']) == -1) {
+      $problems[] = 'You have PHP '. PHP_VERSION
                    .' and you need PHP '.$conf['bootstrap']['expected']['php_version'].' or higher!';
     }
 

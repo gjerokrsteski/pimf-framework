@@ -1,9 +1,7 @@
 <?php
 class ResolverTest extends PHPUnit_Framework_TestCase
 {
-
   ## prepare the environment
-
 
   public static function setUpBeforeClass()
   {
@@ -58,7 +56,13 @@ class ResolverTest extends PHPUnit_Framework_TestCase
       'Fixture\\'
     );
 
-    $resolver->process();
+    $this->assertEquals(
+
+      'indexAction',
+
+      $resolver->process()->render()
+
+    );
   }
 
   /**
@@ -66,15 +70,12 @@ class ResolverTest extends PHPUnit_Framework_TestCase
    */
   public function testIfNoControllerFoundAtTheRepositoryPath()
   {
-    $resolver = new \Pimf\Resolver(
+    new \Pimf\Resolver(
       new \Pimf\Request($_GET),
       '/Undefined_Controller_Repository/',
       'Fixture\\'
     );
-
-    $resolver->process()->render();
   }
-
 
   public function testIfNoActionFoundAtControllerTheRouterFindsTheIndexAction()
   {
@@ -84,6 +85,107 @@ class ResolverTest extends PHPUnit_Framework_TestCase
       'Fixture\\'
     );
 
-    $resolver->process()->render();
+    $this->assertEquals(
+
+      'indexAction',
+
+      $resolver->process()->render()
+
+    );
+  }
+
+  public function testIfAppIsRouteable()
+  {
+    \Pimf\Registry::set('conf',
+      array(
+        'app' => array(
+          'name' => 'test-app-name',
+          'key' => 'secret-key-here',
+          'default_controller' => 'index',
+          'routeable' => true,
+        ),
+        'environment' => 'testing'
+      )
+    );
+
+    \Pimf\Registry::set('router',
+      by(new \Pimf\Router())->map(new \Pimf\Route('index/save'))
+    );
+
+    $resolver = new \Pimf\Resolver(
+      new \Pimf\Request(array(),array('action'=>'save')),
+      dirname(__FILE__).'/_fixture/',
+      'Fixture\\'
+    );
+
+    $this->assertEquals(
+
+      'saveAction',
+
+      $resolver->process()->render()
+
+    );
+  }
+
+  /**
+   * @expectedException \Pimf\Resolver\Exception
+   */
+  public function testThatDirectoryTraversalAttackIsNotFunny()
+  {
+    new \Pimf\Resolver(
+      new \Pimf\Request(array('controller'=>'.../bad-path'), array(),array(),array()),
+       dirname(__FILE__).'/_fixture/',
+       'Fixture\\'
+     );
+  }
+
+  /**
+   * @expectedException \Pimf\Resolver\Exception
+   */
+  public function testThatDirectoryTraversalAttackIsNotFunnyOnProduction()
+  {
+    \Pimf\Registry::set('conf',
+      array(
+        'app' => array(
+          'name' => 'test-app-name',
+          'key' => 'secret-key-here',
+          'default_controller' => 'index',
+          'routeable' => true,
+        ),
+        'environment' => 'production'
+      )
+    );
+
+    new \Pimf\Resolver(
+      new \Pimf\Request(array(), array(),array(),array('controller'=>'.../bad-path')),
+       dirname(__FILE__).'/_fixture/',
+       'Fixture\\'
+     );
+  }
+
+  /**
+   * @expectedException \Pimf\Resolver\Exception
+   */
+  public function testIfCanNotLoadClassControllerFromRepository()
+  {
+    \Pimf\Registry::set('conf',
+      array(
+        'app' => array(
+          'name' => 'test-app-name',
+          'key' => 'secret-key-here',
+          'default_controller' => 'index',
+          'routeable' => true,
+        ),
+        'environment' => 'testing'
+      )
+    );
+
+    $resolver = new \Pimf\Resolver(
+      new \Pimf\Request(array('controller'=>'bad')),
+       dirname(__FILE__).'/_fixture/',
+       'Fixture\\'
+     );
+
+    $resolver->process();
   }
 }

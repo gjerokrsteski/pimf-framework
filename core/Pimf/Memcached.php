@@ -84,13 +84,18 @@ class Memcached
 
   /**
    * Create a new Memcached connection instance.
+   *
    * @param array $servers
-   * @return \Memcached
+   * @param null  $memcache
+   *
+   * @return \Memcached|null
    * @throws \RuntimeException
    */
-  protected static function connect(array $servers)
+  protected static function connect(array $servers, $memcache = null)
   {
-    $memcache = new \Memcached();
+    if (!$memcache) {
+      $memcache = new \Memcached();
+    }
 
     foreach ($servers as $server) {
       $memcache->addServer($server['host'], $server['port'], $server['weight']);
@@ -105,12 +110,14 @@ class Memcached
 
   /**
    * Dynamically pass all other method calls to the Memcache instance.
+   *
    * @param $method
    * @param $parameters
+   *
    * @return mixed
    */
   public static function __callStatic($method, $parameters)
-	{
-		return call_user_func_array(array(static::connection(), $method), $parameters);
-	}
+  {
+    return call_user_func_array(array(static::connection(), $method), $parameters);
+  }
 }
