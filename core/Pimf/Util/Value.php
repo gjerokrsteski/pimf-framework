@@ -22,7 +22,6 @@
  */
 
 namespace Pimf\Util;
-use Pimf\Util\Message;
 
 /**
  * A helper class that provides static methods to convert component property values to specific types.

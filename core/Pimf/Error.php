@@ -19,7 +19,7 @@
  */
 
 namespace Pimf;
-use Pimf\Registry, Pimf\Environment, Pimf\Util\Header, Pimf\Sapi;
+use Pimf\Util\Header;
 
 /**
  * Defines the default exception handler if an exception is not caught within a try/catch block.

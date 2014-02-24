@@ -19,7 +19,6 @@
  */
 
 namespace Pimf\Cache\Storages;
-use Pimf\Cache\Storages\Storage;
 
 /**
  * @package Cache_Storages

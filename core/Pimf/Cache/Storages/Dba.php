@@ -19,7 +19,6 @@
  */
 
 namespace Pimf\Cache\Storages;
-use Pimf\Cache\Storages\Storage;
 
 /**
  * This class provides the functionality required to store

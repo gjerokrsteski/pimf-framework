@@ -49,16 +49,16 @@ class Serializer
       $masked = true;
     }
 
-    $objectInformation         = new \stdClass();
-    $objectInformation->type   = get_class($object);
-    $objectInformation->object = $object;
-    $objectInformation->fake   = $masked;
+    $capsule         = new \stdClass();
+    $capsule->type   = get_class($object);
+    $capsule->object = $object;
+    $capsule->fake   = $masked;
 
     if ($object instanceof \SimpleXMLElement) {
-      $objectInformation->object = $object->asXml();
+      $capsule->object = $object->asXml();
     }
 
-    return '' . self::serializeNative($objectInformation);
+    return '' . self::serializeNative($capsule);
   }
 
   /**
@@ -69,17 +69,17 @@ class Serializer
    */
   public static function unserialize($object)
   {
-    $objectInformation = self::unserializeNative($object);
+    $capsule = self::unserializeNative($object);
 
-    if (true === $objectInformation->fake) {
-      $objectInformation->object = self::unmask($objectInformation->object);
+    if (true === $capsule->fake) {
+      $capsule->object = self::unmask($capsule->object);
     }
 
-    if ($objectInformation->type == 'SimpleXMLElement') {
-      $objectInformation->object = simplexml_load_string($objectInformation->object);
+    if ($capsule->type == 'SimpleXMLElement') {
+      $capsule->object = simplexml_load_string($capsule->object);
     }
 
-    return $objectInformation->object;
+    return $capsule->object;
   }
 
   /**
@@ -94,8 +94,8 @@ class Serializer
     	  : @serialize($value);
 
     if ($ret === false) {
-      $lastErr = error_get_last();
-      throw new \RuntimeException($lastErr['message']);
+      $err = error_get_last();
+      throw new \RuntimeException($err['message']);
     }
 
     return $ret;
@@ -113,8 +113,8 @@ class Serializer
           : @unserialize($serialized);
 
     if ($ret === false) {
-      $lastErr = error_get_last();
-      throw new \RuntimeException($lastErr['message']);
+      $err = error_get_last();
+      throw new \RuntimeException($err['message']);
     }
 
     return $ret;

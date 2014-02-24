@@ -19,7 +19,7 @@
  */
 
 namespace Pimf;
-use Pimf\Contracts\Renderable, Pimf\Registry, Pimf\Util\String, Pimf\Util\File, Pimf\Contracts\Arrayable;
+use Pimf\Contracts\Renderable, Pimf\Util\String, Pimf\Util\File, Pimf\Contracts\Arrayable;
 
 /**
  * A simply view for sending and rendering data.

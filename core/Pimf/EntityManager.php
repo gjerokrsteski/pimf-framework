@@ -19,7 +19,7 @@
  */
 
 namespace Pimf;
-use Pimf\DataMapper\Base, Pimf\Database;
+use Pimf\DataMapper\Base;
 
 /**
  * Based on PDO it is a general manager for data persistence and object relational mapping.

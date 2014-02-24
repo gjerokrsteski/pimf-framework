@@ -19,7 +19,7 @@
  */
 
 namespace Pimf;
-use Pimf\Registry, Pimf\Util\String, Pimf\Cache\Storages as CS;
+use Pimf\Util\String, Pimf\Cache\Storages as CS;
 
 /**
  * Cache usage

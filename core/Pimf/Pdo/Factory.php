@@ -19,7 +19,6 @@
  */
 
 namespace Pimf\Pdo;
-use \RuntimeException as Bomb;
 
 /**
  * Creates a PDO connection from the farm of connectors.
@@ -32,23 +31,23 @@ class Factory
   /**
    * @param array $config
    * @return \Pimf\Database
-   * @throws \RuntimeException
+   * @throws \RuntimeException If no driver specified or no PDO installed.
    * @throws \UnexpectedValueException
    */
   public static function get(array $config)
   {
-    if (!isset($config['driver'])) {
+    if (!isset($config['driver']) or !$config['driver']) {
       throw new \RuntimeException('no driver specified');
     }
 
     $driver = strtolower($config['driver']);
 
-    if (!in_array($driver, array('sqlite', 'mysql', 'sqlserver', 'postgre', true))) {
+    if (!in_array($driver, array('sqlite', 'mysql', 'sqlserver', 'postgre'), true)) {
       throw new \UnexpectedValueException('PDO driver "'.$driver.'" not supported by PIMF');
     }
 
     if(!extension_loaded('pdo') or !extension_loaded('pdo_'.$driver)) {
-      throw new Bomb(
+      throw new \RuntimeException(
         'Please navigate to "http://php.net/manual/pdo.installation.php" '.
         ' to find out how to install "PDO" with "pdo_'.$driver.'" on your system!'
       );

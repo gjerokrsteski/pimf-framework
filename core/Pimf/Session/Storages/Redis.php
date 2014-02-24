@@ -19,7 +19,6 @@
  */
 
 namespace Pimf\Session\Storages;
-use Pimf\Session\Storages\Storage;
 
 /**
  * @package Session_Storages

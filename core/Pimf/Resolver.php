@@ -19,8 +19,7 @@
  */
 
 namespace Pimf;
-use Pimf\Registry, Pimf\Resolver\Exception as Bomb,
-    Pimf\Util\String as Str, Pimf\Response;
+use Pimf\Resolver\Exception as Bomb, Pimf\Util\String as Str;
 
 /**
  * Resolves the user requests to controller and action.

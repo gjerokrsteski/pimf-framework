@@ -22,7 +22,6 @@
  */
 
 namespace Pimf\Cli;
-use Pimf\Cli\Color;
 
 /**
  * Responsible for accessing I/O streams that allow access to PHP's own input and output streams.

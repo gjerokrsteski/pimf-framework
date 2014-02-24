@@ -19,7 +19,7 @@
  */
 
 namespace Pimf\Session\Storages;
-use Pimf\Session\Storages\Storage, Pimf\Contracts\Cleanable;
+use Pimf\Contracts\Cleanable;
 
 /**
  * @package Session_Storages

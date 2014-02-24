@@ -22,7 +22,6 @@
  */
 
 namespace Pimf\Util;
-use Pimf\Util\File;
 
 /**
  * A file uploaded through a form.

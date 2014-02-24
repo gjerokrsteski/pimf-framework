@@ -19,7 +19,6 @@
  */
 
 namespace Pimf;
-use Pimf\Registry, Pimf\Request;
 
 /**
  * Using the cookie

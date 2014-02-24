@@ -19,7 +19,6 @@
  */
 
 namespace Pimf;
-use Pimf\Param;
 
 /**
  * Request Manager - for controlled access to the global state of the world.

@@ -19,7 +19,6 @@
  */
 
 namespace Pimf\Pdo;
-use Pimf\Pdo\Connector;
 
 /**
  * Connection management to PostgreSQL

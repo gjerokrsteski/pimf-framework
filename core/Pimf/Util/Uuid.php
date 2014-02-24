@@ -63,28 +63,28 @@ final class Uuid
    */
   private static function getNodeId()
   {
-    $ip       = Registry::get('env')->getIp();
+    $host     = Registry::get('env')->getIp();
     $hostname = Registry::get('env')->getHost();
 
-    if ($ip === null && true === function_exists('gethostname')) {
+    if ($host === null && true === function_exists('gethostname')) {
         $hostname = gethostname();
-        $ip       = gethostbyname($hostname);
+        $host       = gethostbyname($hostname);
     }
 
-    if ($ip === null && true === function_exists('php_uname')) {
+    if ($host === null && true === function_exists('php_uname')) {
         $hostname = php_uname('n');
-        $ip       = gethostbyname($hostname);
+        $host     = gethostbyname($hostname);
     }
 
-    if ($ip === null && $hostname !== null) {
-        $ip = crc32($hostname);
+    if ($host === null && $hostname !== null) {
+        $host = crc32($hostname);
     }
 
-    if ($ip === null) {
-        $ip = '127.0.0.1';
+    if ($host === null) {
+        $host = '127.0.0.1';
     }
 
-    return ip2long($ip);
+    return ip2long($host);
   }
 
   /**

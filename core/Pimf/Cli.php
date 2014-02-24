@@ -22,7 +22,7 @@
  */
 
 namespace Pimf;
-use Pimf\Cli\Color, Pimf\Util\String, Pimf\Registry;
+use Pimf\Cli\Color, Pimf\Util\String;
 
 /**
  * A full featured package for managing command-line options and arguments,

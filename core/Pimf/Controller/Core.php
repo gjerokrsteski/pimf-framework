@@ -19,7 +19,7 @@
  */
 
 namespace Pimf\Controller;
-use Pimf\Controller\Base, Pimf\Registry, Pimf\Util\String, Pimf\Cli\Color,
+use Pimf\Registry, Pimf\Util\String, Pimf\Cli\Color,
     Pimf\Cli\Io, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
 
 /**

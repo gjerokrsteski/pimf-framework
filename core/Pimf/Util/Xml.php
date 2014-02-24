@@ -22,7 +22,6 @@
  */
 
 namespace Pimf\Util;
-use Pimf\Util\Json;
 
 /**
  * An XML util for converting XML to DOMDocument or SimpleXMLElement or to Array.

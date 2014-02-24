@@ -19,7 +19,7 @@
  */
 
 namespace Pimf;
-use Pimf\Registry, Pimf\Session\Payload, Pimf\Cookie, Pimf\Session\Storages as Storage;
+use Pimf\Session\Payload, Pimf\Session\Storages as Storage;
 
 /**
  * Using the session
