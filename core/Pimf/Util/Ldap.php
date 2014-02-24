@@ -27,23 +27,26 @@ use Pimf\Registry;
 /**
  * Wrapper for Lightweight Directory Access Protocol and for a access to "Directory Servers"
  *
- * For use please add the following to the end of the config.core.php file:
+ * For use please add the following to the end of the config.app.php file:
  *
  * <code>
  *
  * 'ldap' => array(
  *
- *    //Hostname of the domain controller
+ *    // where in the directory tree to be started for specific objects searching (is optional)
+ *    'basedn' => 'dc=example,dc=com'
+ *
+ *    // hostname of the domain controller
  *    'host' => 'dc',
  *
- *    // The domain name
+ *    // the domain name
  *    'domain' => 'example.com',
  *
- *    // Optionally require users to be in this group
+ *    // optionally require users to be in this group
  *    //'group' => 'AppUsers',
  *
- *    // Domain credentials the app should use to validate users
- *    // This user does not need any privileges - it's just used to connect to the DC.
+ *    // domain credentials the app should use to validate users
+ *    // this user does not need any privileges - it's just used to connect to the DC.
  *    'user' => 'ldap-user_here',
  *    'password' => 'ldap-password-here',
  * ),
@@ -79,58 +82,39 @@ class Ldap
 
   /**
    * Get the current user of the application.
-   * @param $token
-   * @return object
-   * @throws \RuntimeException If no user found
+   *
+   * @param $userDN
+   *
+   * @return null|Ldap\User
    */
-  public function retrieve($token)
+  public function retrieve($userDN)
   {
-    if (empty($token)) {
-      throw new \RuntimeException('empty token given');
-    }
-
-    if (is_null($this->conn)) {
-
+    if (!is_resource($this->conn)) {
       $config = Registry::get('ldap');
-
-      try {
-        $this->connect($config['user'], $config['password']);
-      } catch (\Exception $e) {
-        throw new \RuntimeException('LDAP control account error');
-      }
+      $this->connect($config['user'], $config['password']);
     }
 
-    $user = $this->getUser($token);
-
-    if(!$user) {
-      throw new \RuntimeException('no user found for ' . $token);
-    }
-
-    return $user;
+    return $this->getUser($userDN);
   }
 
   /**
    * Attempt to log a user into the application.
-   * @param string $username
-   * @param string $password
-   * @return bool|object
-   * @throws \Exception
+   * @param $username
+   * @param $password
+   *
+   * @return Ldap\User
    */
   public function attempt($username, $password)
   {
     $config = Registry::get('ldap');
 
-    try {
-      return $this->login($username, $password, $config['group']);
-    } catch (\RuntimeException $e) {
-      return false;
-    }
+    return $this->login($username, $password, $config['group']);
   }
 
   /**
-   * @param string $user
-   * @param string $password
-   * @return bool
+   * @param $user
+   * @param $password
+   *
    * @throws \RuntimeException
    */
   protected function connect($user, $password)
@@ -165,24 +149,19 @@ class Ldap
         'could not bind to AD: ' . "{$user}@{$config['domain']}"
       );
     }
-
-    return true;
   }
 
   /**
-   * @param string $user
-   * @param string $password
-   * @param null|string $group
-   * @return object
+   * @param      $user
+   * @param      $password
+   * @param null $group
+   *
+   * @return Ldap\User
    * @throws \RuntimeException
    */
   protected function login($user, $password, $group = null)
   {
-    if (!$this->connect($user, $password)) {
-      throw new \RuntimeException(
-        'could not connect to LDAP: ' . ldap_error($this->conn)
-      );
-    }
+    $this->connect($user, $password);
 
     $config      = Registry::get('ldap');
     $groupObject = $this->getAccount($group, $config['basedn']);
@@ -196,45 +175,36 @@ class Ldap
   }
 
   /**
-   * @param string $user
-   * @return object Of stdClass
+   * @param array $user
+   *
+   * @return Ldap\User
    * @throws \RuntimeException
    */
-  protected function fetch($user)
+  protected function fetch(array $user)
   {
     if (!isset($user['cn'][0])) {
       throw new \RuntimeException('not a valid user object');
     }
 
-    return (object)array(
-      'dn'         => $user['dn'],
-      'name'       => $user['cn'][0],
-      'firstname'  => $user['givenname'][0],
-      'lastname'   => $user['sn'][0],
-      'objectguid' => $user['objectguid'][0],
-      'memberof'   => isset($user['memberof']) ? $user['memberof'] : array( 'count' => 0 ),
-    );
+    return Ldap\User::factory($user);
   }
 
   /**
    * Searches the LDAP tree for the specified account or group
-   * @param string $account
-   * @param string $basedn
-   * @return array|null
-   * @throws \RuntimeException
+   *
+   * @param $account
+   * @param $basedn
+   *
+   * @return null
    */
   protected function getAccount($account, $basedn)
   {
-    if (is_null($this->conn)) {
-      throw new \RuntimeException('no LDAP connection bound');
-    }
-
     $result = ldap_search(
       $this->conn, $basedn, "(samaccountname={$account})",
       array('dn', 'givenname', 'sn', 'cn', 'memberof', 'objectguid')
     );
 
-    if ($result === false) {
+    if (!$result) {
       return null;
     }
 
@@ -248,8 +218,9 @@ class Ldap
   /**
    * Checks group membership of the user, searching
    * in the specified group and its children (recursively)
-   * @param string $userDN
-   * @param string $groupDN
+   * @param $userDN
+   * @param $groupDN
+   *
    * @return bool
    * @throws \RuntimeException
    */
@@ -259,8 +230,10 @@ class Ldap
       throw new \RuntimeException('invalid user DN');
     }
 
-    for ($i = 0; $i < $user->memberof['count']; $i++) {
-      if ($groupDN == $user->memberof[$i]) {
+    $memberof = $user->getMemberof();
+
+    for ($i = 0; $i < $memberof['count']; $i++) {
+      if ($groupDN == $memberof[$i]) {
         return true;
       }
     }
@@ -270,18 +243,17 @@ class Ldap
 
   /**
    * @param $userDN
-   * @return null|object
+   *
+   * @return null|Ldap\User
    * @throws \RuntimeException
    */
   public function getUser($userDN)
   {
-    if (is_null($this->conn)) {
+    if (!is_resource($this->conn)) {
       throw new \RuntimeException('no LDAP connection bound');
     }
 
-    $result = ldap_read($this->conn, $userDN, '(objectclass=*)');
-
-    if ($result === false) {
+    if (!$result = ldap_read($this->conn, $userDN, '(objectclass=*)')) {
       return null;
     }
 

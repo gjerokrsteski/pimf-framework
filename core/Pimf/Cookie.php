@@ -192,8 +192,7 @@ class Cookie
   public static function send()
   {
     foreach (static::$jar as $cookie) {
-      extract($cookie);
-      setcookie($name, $value, $expiration, $path, $domain, $secure, true);
+      setcookie($cookie['name'], $cookie['value'], $cookie['expiration'], $cookie['path'], $cookie['domain'], $cookie['secure'], true);
     }
   }
 }

@@ -112,9 +112,11 @@ class Redis
         throw new \RuntimeException("Redis database [$name] is not defined.");
       }
 
-      extract($conf['cache']['server']);
-
-      static::$databases[$name] = new static($host, $port, $database);
+      static::$databases[$name] = new static(
+        $conf['cache']['server']['host'],
+        $conf['cache']['server']['port'],
+        $conf['cache']['server']['database']
+      );
     }
 
     return static::$databases[$name];

@@ -41,11 +41,7 @@ class Cookie extends Storage
   public function load($id)
   {
     if (Crumb::has(static::payload)) {
-      return unserialize(
-        Crypter::decrypt(
-          Crumb::get(static::payload)
-        )
-      );
+      return unserialize(Crypter::decrypt(Crumb::get(static::payload)));
     }
   }
 
@@ -57,9 +53,7 @@ class Cookie extends Storage
    */
   public function save($session, $config, $exists)
 	{
-		extract($config, EXTR_SKIP);
-
-    Crumb::put(static::payload, Crypter::encrypt(serialize($session)), $lifetime, $path, $domain);
+    Crumb::put(static::payload, Crypter::encrypt(serialize($session)), $config['lifetime'], $config['path'], $config['domain']);
 	}
 
   /**

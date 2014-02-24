@@ -321,10 +321,8 @@ class Payload
    */
   protected function cookie($config)
   {
-    extract($config, EXTR_SKIP);
+    $minutes = (!$config['expire_on_close']) ? $config['lifetime'] : 0;
 
-    $minutes = (!$expire_on_close) ? $lifetime : 0;
-
-    Cookie::put($cookie, $this->session['id'], $minutes, $path, $domain, $secure);
+    Cookie::put($config['cookie'], $this->session['id'], $minutes, $config['path'], $config['domain'], $config['secure']);
   }
 }

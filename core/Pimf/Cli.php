@@ -36,9 +36,9 @@ final class Cli
   /**
    * Prints out a list of CLI commands from the system,
    * which is defined at the controllers with the "CliAction()" suffix at the method-name.
-   * @param null|string $appClr Path to application controller repository
-   * @param null|string $coreClr Path to core controller repository
-   * @param null|string $root Path to home directory
+   * @param string $appClr Path to application controller repository
+   * @param string $coreClr Path to core controller repository
+   * @param string $root Path to home directory
    */
   public static function absorb($appClr = null, $coreClr = null, $root = null)
   {
@@ -89,9 +89,9 @@ final class Cli
   }
 
   /**
-   * @param null $appClr
-   * @param null $coreClr
-   * @param null $root
+   * @param string $appClr
+   * @param string $coreClr
+   * @param string $root
    *
    * @return array
    */

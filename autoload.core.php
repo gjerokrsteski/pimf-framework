@@ -83,6 +83,7 @@ spl_autoload_register(
         'Pimf\\Util\\IdentityMap'            => '/Pimf/Util/IdentityMap.php',
         'Pimf\\Util\\Json'                   => '/Pimf/Util/Json.php',
         'Pimf\\Util\\Ldap'                   => '/Pimf/Util/Ldap.php',
+        'Pimf\\Util\\Ldap\\User'             => '/Pimf/Util/Ldap/User.php',
         'Pimf\\Util\\LineByLine'             => '/Pimf/Util/LineByLine.php',
         'Pimf\\Util\\Message'                => '/Pimf/Util/Message.php',
         'Pimf\\Util\\Serializer'             => '/Pimf/Util/Serializer.php',
