@@ -52,7 +52,7 @@ class Cache
   /**
    * Get a cache storage instance.
    * @param string $storage
-   * @return CS\Storage
+   * @return CS\Apc|CS\Dba|CS\File|CS\Memcached|CS\Memory|CS\Pdo|CS\Redis|CS\WinCache
    */
   public static function storage($storage = 'memory')
   {
@@ -65,8 +65,10 @@ class Cache
 
   /**
    * Create a new cache storage instance.
+   *
    * @param $storage
-   * @return \Pimf\Cache\Storages\Storage
+   *
+   * @return CS\Apc|CS\Dba|CS\File|CS\Memcached|CS\Memory|CS\Pdo|CS\Redis|CS\WinCache
    * @throws \RuntimeException
    */
   protected static function factory($storage)
@@ -81,7 +83,7 @@ class Cache
         return new CS\File($conf['cache']['storage_path']);
 
       case 'pdo':
-        return new CS\Pdo(\Pimf\Pdo\Factory::get($conf['cache']['database']), $conf['cache']['key']);
+        return new CS\Pdo(Pdo\Factory::get($conf['cache']['database']), $conf['cache']['key']);
 
       case 'memcached':
         return new CS\Memcached(Memcached::connection(), $conf['cache']['key']);

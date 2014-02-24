@@ -195,7 +195,7 @@ class Ldap
    * @param $account
    * @param $basedn
    *
-   * @return null
+   * @return null|array
    */
   protected function getAccount($account, $basedn)
   {

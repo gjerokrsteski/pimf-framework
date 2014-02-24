@@ -25,14 +25,14 @@ use Pimf\Contracts\Arrayable;
  * Returns only protected and public properties of the given model-object. You have to extend it.
  *
  * Normally you will use ArrayObject and than method getArrayCopy() to turn Classes to Array, but
- * with ToArray you have the opportunity to easily intercept the setting of the values at the array.
+ * with AsArray you have the opportunity to easily intercept the setting of the values at the array.
  *
  * Sure if you need it - otherwise please prefers using ArrayObject - is much faster!
  *
  * @package Model
  * @author Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class ToArray implements Arrayable
+abstract class AsArray implements Arrayable
 {
   /**
    * Returns only protected and public properties of the given model-object.

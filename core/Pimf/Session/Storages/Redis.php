@@ -28,14 +28,14 @@ class Redis extends Storage
 {
   /**
    * The Redis cache storage instance.
-   * @var \Pimf\Redis
+   * @var \Pimf\Cache\Storages\Redis
    */
   protected $redis;
 
   /**
-   * @param \Pimf\Redis $redis
+   * @param \Pimf\Cache\Storages\Redis $redis
    */
-  public function __construct(\Pimf\Redis $redis)
+  public function __construct(\Pimf\Cache\Storages\Redis $redis)
   {
     $this->redis = $redis;
   }

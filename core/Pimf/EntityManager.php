@@ -64,7 +64,7 @@ class EntityManager extends Base
       );
     }
 
-    $model = new $entity($this->db);
+    $model = new $entity($this->pdo);
 
     $this->identityMap->set($entity, $model);
 
@@ -76,7 +76,7 @@ class EntityManager extends Base
    */
   public function beginTransaction()
   {
-    return $this->db->beginTransaction();
+    return $this->pdo->beginTransaction();
   }
 
   /**
@@ -84,7 +84,7 @@ class EntityManager extends Base
    */
   public function commitTransaction()
   {
-    return $this->db->commit();
+    return $this->pdo->commit();
   }
 
   /**
@@ -92,7 +92,7 @@ class EntityManager extends Base
    */
   public function rollbackTransaction()
   {
-    return $this->db->rollBack();
+    return $this->pdo->rollBack();
   }
 
   /**
@@ -109,6 +109,6 @@ class EntityManager extends Base
    */
   public function getPDO()
   {
-    return $this->db;
+    return $this->pdo;
   }
 }

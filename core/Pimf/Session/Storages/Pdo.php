@@ -30,14 +30,14 @@ class Pdo extends Storage implements Cleanable
   /**
    * @var \Pimf\Database
    */
-  protected $db;
+  protected $pdo;
 
   /**
    * @param \Pimf\Database $pdo
    */
   public function __construct(\Pimf\Database $pdo)
   {
-    $this->db = $pdo;
+    $this->pdo = $pdo;
   }
 
   /**
@@ -49,7 +49,7 @@ class Pdo extends Storage implements Cleanable
   public function load($id)
   {
     try {
-      $sth = $this->db->prepare(
+      $sth = $this->pdo->prepare(
         'SELECT * FROM sessions WHERE id = :id'
       );
 
@@ -79,11 +79,11 @@ class Pdo extends Storage implements Cleanable
   public function save($session, $config, $exists)
   {
     if ($exists) {
-      $sth = $this->db->prepare(
+      $sth = $this->pdo->prepare(
         "INSERT INTO sessions (id, last_activity, data) VALUES (:id, :last_activity, :data)"
       );
     } else {
-      $sth = $this->db->prepare(
+      $sth = $this->pdo->prepare(
         "UPDATE sessions SET last_activity = :last_activity, data = :data WHERE id = :id"
       );
     }
@@ -100,7 +100,7 @@ class Pdo extends Storage implements Cleanable
    */
   public function delete($id)
   {
-    $sth = $this->db->prepare(
+    $sth = $this->pdo->prepare(
       "DELETE FROM sessions WHERE id = :id"
     );
 
@@ -115,7 +115,7 @@ class Pdo extends Storage implements Cleanable
    */
   public function clean($expiration)
   {
-    $sth = $this->db->prepare(
+    $sth = $this->pdo->prepare(
       "DELETE FROM sessions WHERE last_activity < :expiration"
     );
 

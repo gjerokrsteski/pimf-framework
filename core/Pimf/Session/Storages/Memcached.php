@@ -28,14 +28,14 @@ class Memcached extends Storage
 {
   /**
    * The Memcache cache storage instance.
-   * @var \Pimf\Memcached
+   * @var \Pimf\Cache\Storages\Memcached
    */
   private $memcached;
 
   /**
-   * @param \Pimf\Memcached $memcached
+   * @param \Pimf\Cache\Storages\Memcached $memcached
    */
-  public function __construct(\Pimf\Memcached $memcached)
+  public function __construct(\Pimf\Cache\Storages\Memcached $memcached)
   {
     $this->memcached = $memcached;
   }

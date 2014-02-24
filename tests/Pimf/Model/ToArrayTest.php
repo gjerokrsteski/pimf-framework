@@ -3,7 +3,7 @@
 /**
  * Class Gustbook is a fixture
  */
-class Gustbook extends \Pimf\Model\ToArray
+class Gustbook extends \Pimf\Model\AsArray
 {
   protected $id = 1;
   private $used = true;

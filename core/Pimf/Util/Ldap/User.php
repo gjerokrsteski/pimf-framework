@@ -34,7 +34,7 @@ class User
   /**
    * @var string Distinguished Name
    */
-  protected $dn;
+  protected $dname;
 
   /**
    * @var string Exactly the same as CN.
@@ -62,16 +62,16 @@ class User
   protected $memberof;
 
   /**
-   * @param       $dn
+   * @param       $dname
    * @param       $firstname
    * @param       $lastname
    * @param array $memberof
    * @param       $name
    * @param       $objectguid
    */
-  public function __construct($dn, $firstname, $lastname, array $memberof, $name, $objectguid)
+  public function __construct($dname, $firstname, $lastname, array $memberof, $name, $objectguid)
   {
-    $this->dn         = ''.$dn;
+    $this->dname      = ''.$dname;
     $this->firstname  = ''.$firstname;
     $this->lastname   = ''.$lastname;
     $this->memberof   = (array)$memberof;
@@ -100,9 +100,9 @@ class User
    * @codeCoverageIgnore
    * @return string
    */
-  public function getDn()
+  public function getDname()
   {
-    return $this->dn;
+    return $this->dname;
   }
 
   /**

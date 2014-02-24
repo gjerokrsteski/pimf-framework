@@ -41,7 +41,7 @@ abstract class Base
   /**
    * @var \PDO The database resource.
    */
-  protected $db;
+  protected $pdo;
 
   /**
    * @var \Pimf\Util\IdentityMap
@@ -53,13 +53,13 @@ abstract class Base
    */
   public function __construct(\PDO $db)
   {
-    $this->db          = $db;
+    $this->pdo         = $db;
     $this->identityMap = new IdentityMap();
   }
 
   public function __destruct()
   {
-    unset($this->identityMap, $this->db);
+    unset($this->identityMap, $this->pdo);
   }
 
   /**

@@ -38,7 +38,7 @@ spl_autoload_register(
         'Pimf\\Event'                        => '/Pimf/Event.php',
         'Pimf\\Logger'                       => '/Pimf/Logger.php',
         'Pimf\\Memcached'                    => '/Pimf/Memcached.php',
-        'Pimf\\Model\\ToArray'               => '/Pimf/Model/ToArray.php',
+        'Pimf\\Model\\AsArray'               => '/Pimf/Model/AsArray.php',
         'Pimf\\Param'                        => '/Pimf/Param.php',
         'Pimf\\Database'                     => '/Pimf/Database.php',
         'Pimf\\Pdo\\Connector'               => '/Pimf/Pdo/Connector.php',

@@ -35,7 +35,7 @@ class Pdo extends Storage
   /**
    * @var \Pimf\Database
    */
-  protected $db;
+  protected $pdo;
 
   /**
    * Create a new database cache storage instance.
@@ -45,7 +45,7 @@ class Pdo extends Storage
    */
   public function __construct(\Pimf\Database $pdo, $key)
   {
-    $this->db  = $pdo;
+    $this->pdo = $pdo;
     $this->key = (string)$key;
   }
 
@@ -56,7 +56,7 @@ class Pdo extends Storage
    */
   protected function retrieve($key)
   {
-    $sth = $this->db->prepare(
+    $sth = $this->pdo->prepare(
       'SELECT * FROM pimf_cache WHERE key = :key'
     );
 
@@ -95,11 +95,11 @@ class Pdo extends Storage
     $expiration = $this->expiration($minutes);
 
     try {
-      $sth = $this->db->prepare(
+      $sth = $this->pdo->prepare(
         "INSERT INTO pimf_cache (key, value, expiration) VALUES (:key, :value, :expiration)"
       );
     } catch (\Exception $e) {
-      $sth = $this->db->prepare(
+      $sth = $this->pdo->prepare(
         "UPDATE pimf_cache SET value = :value, expiration = :expiration WHERE key = :key"
       );
     }
@@ -128,7 +128,7 @@ class Pdo extends Storage
    */
   public function forget($key)
   {
-    $sth = $this->db->prepare(
+    $sth = $this->pdo->prepare(
       "DELETE FROM pimf_cache WHERE key = :key"
     );
 
