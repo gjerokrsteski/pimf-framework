@@ -33,6 +33,7 @@ use Pimf\Session, Pimf\Cli, Pimf\Resolver, Pimf\Util\String;
 final class Application
 {
   const VERSION = '1.8.6';
+  const EXPECTS = 5.3;
 
   /**
    * Please bootstrap first, than run the application!
@@ -88,40 +89,27 @@ final class Application
   }
 
   /**
-   * Mechanism used to do some initial config before a Application runs.
-   *
-   * @param array $conf The array of configuration options.
-   * @param array $server Array of information such as headers, paths, and script locations.
-   *
-   * @return boolean
+   * @param array $conf
+   * @param array $server
    */
-  public static function bootstrap(array $conf, array $server = array())
+  private static function registerLocalEnvironment(array $conf, array $server)
   {
-    ini_set('default_charset', $conf['encoding']);
-    date_default_timezone_set($conf['timezone']);
+    Registry::set('conf', $conf);
+    Registry::set('env',new Environment($server));
+    Registry::set('logger', new Logger($conf['bootstrap']['local_temp_directory']));
 
-    // configure necessary things for the application.
-    $registry = new Registry();
-    $registry->conf   = $conf;
-    $registry->env  = new Environment($server);
-    $registry->logger = new Logger($conf['bootstrap']['local_temp_directory']);
-    $registry->logger->init();
+    Registry::get('logger')->init();
+  }
 
-    if (Sapi::isWeb()){
-      ob_start('mb_output_handler');
-    }
-
-    ini_set('display_errors', 'On');
-
-    // setup the error reporting.
+  /**
+   * @param array $conf
+   */
+  private static function setupErrorHandling(array $conf)
+  {
     if ($conf['environment'] == 'testing') {
-
       error_reporting(E_ALL | E_STRICT);
-      $dbConf = $conf['testing']['db'];
-
     } else {
 
-       // setup the error and exception handling.
       set_exception_handler(function($e){
         Error::exception($e);
       });
@@ -135,65 +123,105 @@ final class Application
       });
 
       error_reporting(-1);
-      $dbConf = $conf['production']['db'];
+    }
+  }
+
+  /**
+   * @param array $conf
+   */
+  private static function loadPdoDriver(array $conf)
+  {
+    $dbConf = $conf[$conf['environment']]['db'];
+
+    if(is_array($dbConf) && $conf['environment'] != 'testing') {
+      Registry::set('em', new EntityManager(Pdo\Factory::get($dbConf), $conf['app']['name']));
+    }
+  }
+
+  /**
+   * @param array $conf
+   * @param       $root
+   */
+  private static function loadRoutes(array $conf, $root)
+  {
+    if($conf['app']['routeable'] === true
+      && file_exists($routes = $root .'app/' . $conf['app']['name'] . '/routes.php')
+    ) {
+
+      Registry::set('router', new Router());
+
+      foreach((array)(include $routes) as $route) {
+
+        Registry::get('router')->map($route);
+
+      }
+    }
+  }
+
+  /**
+   * @param array $conf
+   * @param       $root
+   */
+  private static function loadListeners(array $conf, $root)
+  {
+    if(file_exists($events = $root .'app/' . $conf['app']['name'] . '/events.php')) {
+      include_once $events;
+    }
+  }
+
+  /**
+   * @param array $problems
+   * @param float $version
+   * @param bool  $die
+   *
+   * @return array|void
+   */
+  private static function reportIf(array $problems, $version, $die = true)
+  {
+    if (version_compare($version, self::EXPECTS) == -1) {
+      $problems[] = 'You have PHP '.$version.' and you need '.self::EXPECTS.' or higher!';
     }
 
-    // start checking the dependencies.
+    if (!empty($problems)) {
+      return ($die === true) ? die(implode(PHP_EOL.PHP_EOL, $problems)) : $problems;
+    }
+  }
+
+  /**
+   * Mechanism used to do some initial config before a Application runs.
+   *
+   * @param array $conf The array of configuration options.
+   * @param array $server Array of information such as headers, paths, and script locations.
+   *
+   * @return boolean
+   */
+  public static function bootstrap(array $conf, array $server = array())
+  {
     $problems = array();
-
-    // check php-version.
-    if (version_compare(PHP_VERSION, $conf['bootstrap']['expected']['php_version']) == -1) {
-      $problems[] = 'You have PHP '. PHP_VERSION
-                   .' and you need PHP '.$conf['bootstrap']['expected']['php_version'].' or higher!';
-    }
+    $root     = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
 
     try {
 
-      // load pdo driver
-      if(is_array($dbConf) && $conf['environment'] != 'testing') {
-        $registry->em = new EntityManager(\Pimf\Pdo\Factory::get($dbConf), $conf['app']['name']);
-      }
+      ini_set('default_charset', $conf['encoding']);
+      date_default_timezone_set($conf['timezone']);
 
-      $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
-
-      // load defined routes
-      if($conf['app']['routeable'] === true
-        && file_exists($routes = $root .'app/' . $conf['app']['name'] . '/routes.php')
-      ) {
-        $registry->router = new Router();
-          foreach((array)(include $routes) as $route) {
-            $registry->router->map($route);
-          }
-        }
-
-      // load defined event-listeners
-      if(file_exists($events = $root .'app/' . $conf['app']['name'] . '/events.php')) {
-        include_once $events;
-      }
+      self::registerLocalEnvironment($conf, $server);
+      self::setupErrorHandling($conf);
+      self::loadPdoDriver($conf);
+      self::loadRoutes($conf, $root);
+      self::loadListeners($conf, $root);
 
     } catch (\Exception $e) {
       $problems[] = $e->getMessage();
     }
 
-    if (!empty($problems)) {
-      die(implode(PHP_EOL.PHP_EOL, $problems));
-    }
+    self::reportIf($problems, PHP_VERSION);
   }
 
   /**
    * PIMF Application can not be cloned.
    */
   private function __clone() { }
-
-  /**
-   * PIMF Application can not be serialized.
-   */
-  private function __sleep() { }
-
-  /**
-   * PIMF Application can not be unserialized.
-   */
-  private function __wakeup() { }
 
   /**
    * Stopping the PHP process for PHP-FastCGI users to speed up some PHP queries.

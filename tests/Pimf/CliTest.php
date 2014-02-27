@@ -62,7 +62,6 @@ class CliTest extends PHPUnit_Framework_TestCase
 
     $this->assertInternalType('array', $classes);
     $this->assertNotEmpty($classes);
-    $this->assertCount(4, $classes);
   }
 
   /**
