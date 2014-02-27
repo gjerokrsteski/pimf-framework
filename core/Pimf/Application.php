@@ -1,26 +1,13 @@
 <?php
 /**
  * Pimf
- *
- * PHP Version 5
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
  * @copyright Copyright (c) Gjero Krsteski (http://krsteski.de)
  * @license http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
 
-use Pimf\Session, Pimf\Cli, Pimf\Resolver, Pimf\Util\String;
+use Pimf\Util\String as Str;
 
 /**
  * Provides a facility for applications which provides reusable resources,
@@ -34,6 +21,37 @@ final class Application
 {
   const VERSION = '1.8.6';
   const EXPECTS = 5.3;
+
+  /**
+   * Mechanism used to do some initial config before a Application runs.
+   *
+   * @param array $conf The array of configuration options.
+   * @param array $server Array of information such as headers, paths, and script locations.
+   *
+   * @return boolean
+   */
+  public static function bootstrap(array $conf, array $server = array())
+  {
+    $problems = array();
+    $root     = Str::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+
+    try {
+
+      ini_set('default_charset', $conf['encoding']);
+      date_default_timezone_set($conf['timezone']);
+
+      self::registerLocalEnvironment($conf, $server);
+      self::setupErrorHandling($conf);
+      self::loadPdoDriver($conf);
+      self::loadRoutes($conf, $root);
+      self::loadListeners($conf, $root);
+
+    } catch (\Exception $exception) {
+      $problems[] = $exception->getMessage();
+    }
+
+    self::reportIf($problems, PHP_VERSION);
+  }
 
   /**
    * Please bootstrap first, than run the application!
@@ -59,8 +77,8 @@ final class Application
     }
 
     $conf       = Registry::get('conf');
-    $root       = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
-    $prefix     = String::ensureTrailing('\\', $conf['app']['name']);
+    $root       = Str::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
+    $prefix     = Str::ensureTrailing('\\', $conf['app']['name']);
     $repository = $root . 'app/' . $conf['app']['name'] . '/Controller';
 
     if (isset($cli['controller']) && $cli['controller'] == 'core') {
@@ -185,37 +203,6 @@ final class Application
     if (!empty($problems)) {
       return ($die === true) ? die(implode(PHP_EOL.PHP_EOL, $problems)) : $problems;
     }
-  }
-
-  /**
-   * Mechanism used to do some initial config before a Application runs.
-   *
-   * @param array $conf The array of configuration options.
-   * @param array $server Array of information such as headers, paths, and script locations.
-   *
-   * @return boolean
-   */
-  public static function bootstrap(array $conf, array $server = array())
-  {
-    $problems = array();
-    $root     = String::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
-
-    try {
-
-      ini_set('default_charset', $conf['encoding']);
-      date_default_timezone_set($conf['timezone']);
-
-      self::registerLocalEnvironment($conf, $server);
-      self::setupErrorHandling($conf);
-      self::loadPdoDriver($conf);
-      self::loadRoutes($conf, $root);
-      self::loadListeners($conf, $root);
-
-    } catch (\Exception $e) {
-      $problems[] = $e->getMessage();
-    }
-
-    self::reportIf($problems, PHP_VERSION);
   }
 
   /**
