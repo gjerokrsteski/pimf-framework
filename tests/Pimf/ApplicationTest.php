@@ -119,8 +119,6 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
       self::invokeMethod($app, 'loadRoutes', array(array('app'=> array('name'=>'test-app', 'routeable'=>true)), $root))
 
     );
-
-    $this->assertInstanceOf('\\Pimf\\Router', \Pimf\Registry::get('router'));
   }
 
   public function testLoadingListeners()
@@ -129,11 +127,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
 
     $root = dirname(__FILE__).'/_fixture/';
 
-    $this->assertNull(
-
-      self::invokeMethod($app, 'loadListeners', array(array('app'=> array('name'=>'test-app')), $root))
-
-    );
+    self::invokeMethod($app, 'loadListeners', array(array('app'=> array('name'=>'test-app')), $root));
 
     $this->assertTrue(\Pimf\Event::listeners('test.loading.listeners'));
   }
