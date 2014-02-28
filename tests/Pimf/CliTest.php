@@ -60,6 +60,8 @@ class CliTest extends PHPUnit_Framework_TestCase
     $fixture_path = dirname(__FILE__) . '/_fixture';
     $classes = \Pimf\Cli::collect($fixture_path, $fixture_path, '');
 
+    print_r($classes);
+
     $this->assertInternalType('array', $classes);
     $this->assertNotEmpty($classes);
   }
