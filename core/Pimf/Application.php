@@ -20,7 +20,6 @@ use Pimf\Util\String as Str;
 final class Application
 {
   const VERSION = '1.8.6';
-  const EXPECTS = 5.3;
 
   /**
    * Mechanism used to do some initial config before a Application runs.
@@ -196,8 +195,8 @@ final class Application
    */
   private static function reportIf(array $problems, $version, $die = true)
   {
-    if (version_compare($version, self::EXPECTS) == -1) {
-      $problems[] = 'You have PHP '.$version.' and you need '.self::EXPECTS.' or higher!';
+    if (version_compare($version, 5.3) == -1) {
+      $problems[] = 'You have PHP '.$version.' and you need 5.3 or higher!';
     }
 
     if (!empty($problems)) {

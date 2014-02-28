@@ -144,7 +144,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
     $this->assertNotEmpty($res);
     $this->assertEquals(
 
-      'You have PHP '.$fake_php_version.' and you need '.\Pimf\Application::EXPECTS.' or higher!',
+      'You have PHP '.$fake_php_version.' and you need 5.3 or higher!',
 
       current($res)
 
