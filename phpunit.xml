@@ -41,7 +41,7 @@
              lowUpperBound="35"
              highLowerBound="70"
                 />
-        <log type="coverage-clover" target="./clover.xml" charset="UTF-8"/>
+
     </logging>
 
 </phpunit>

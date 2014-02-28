@@ -87,8 +87,8 @@ final class Cli
 
      if(!$root && !$coreClr && !$appClr) {
        // compute the PIMF framework path restriction.
-       $coreClr = str_replace('/', DS, BASE_PATH . '/pimf-framework/core/Pimf/Controller/');
-       $appClr  = str_replace('/', DS, BASE_PATH . '/app/' . $conf['app']['name'] . '/Controller/');
+       $coreClr = BASE_PATH . '/pimf-framework/core/Pimf/Controller/';
+       $appClr  = BASE_PATH . '/app/' . $conf['app']['name'] . '/Controller/';
      }
 
      foreach (array( $appClr, $coreClr) as $dir) {
