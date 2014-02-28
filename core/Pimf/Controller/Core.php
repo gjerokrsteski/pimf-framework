@@ -62,9 +62,6 @@ class Core extends Base
     echo Color::paint('Secure index.php' . PHP_EOL);
     chmod(BASE_PATH . 'index.php', 0644);
 
-    echo Color::paint('Secure config.core.php' . PHP_EOL);
-    chmod(BASE_PATH . 'pimf-framework/config.core.php', 0744);
-
     echo Color::paint('Secure autoload.core.php' . PHP_EOL);
     chmod(BASE_PATH . 'pimf-framework/autoload.core.php', 0644);
 
