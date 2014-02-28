@@ -50,9 +50,7 @@ class Twig extends View implements Reunitable
 
     $conf = Registry::get('conf');
 
-    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
-
-    require_once $root."Twig/lib/Twig/Autoloader.php";
+    require_once BASE_PATH . "Twig/lib/Twig/Autoloader.php";
 
     \Twig_Autoloader::register();
 

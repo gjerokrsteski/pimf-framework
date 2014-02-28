@@ -49,11 +49,9 @@ class Header extends Header\ContentType
 
     self::send($code, $status);
 
-    $conf = Registry::get('conf');
-    $root = dirname(dirname(dirname(dirname(__FILE__))));
-
-    $appTpl  = str_replace('/', DIRECTORY_SEPARATOR, $root.'/app/'.$conf['app']['name'].'/_error/'.$code.'.php');
-    $coreTpl = str_replace('/', DIRECTORY_SEPARATOR, $root.'/core/Pimf/_error/'.$code.'.php');
+    $conf    = Registry::get('conf');
+    $appTpl  = str_replace('/', DS, BASE_PATH .'app/'.$conf['app']['name'].'/_error/'.$code.'.php');
+    $coreTpl = str_replace('/', DS, BASE_PATH .'core/Pimf/_error/'.$code.'.php');
 
     if(file_exists($appTpl) && is_readable($appTpl)){
       include $appTpl; if ($exit) exit(1);

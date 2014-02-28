@@ -32,13 +32,12 @@ class Core extends Base
 
     $conf = Registry::get('conf');
     $app  = 'app/' . $conf['app']['name'] . '/';
-    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
 
     $assets = array(
-      $root . $app . '_session/',
-      $root . $app . '_cache/',
-      $root . $app . '_database/',
-      $root . $app . '_templates/',
+      BASE_PATH . $app . '_session/',
+      BASE_PATH . $app . '_cache/',
+      BASE_PATH . $app . '_database/',
+      BASE_PATH . $app . '_templates/',
     );
 
     echo Color::paint('Check app assets' . PHP_EOL);
@@ -55,19 +54,19 @@ class Core extends Base
     }
 
     echo Color::paint('Secure root directory' . PHP_EOL);
-    chmod($root, 0755);
+    chmod(BASE_PATH, 0755);
 
     echo Color::paint('Secure .htaccess' . PHP_EOL);
-    chmod($root . '.htaccess', 0644);
+    chmod(BASE_PATH . '.htaccess', 0644);
 
     echo Color::paint('Secure index.php' . PHP_EOL);
-    chmod($root . 'index.php', 0644);
+    chmod(BASE_PATH . 'index.php', 0644);
 
     echo Color::paint('Secure config.core.php' . PHP_EOL);
-    chmod($root . 'pimf-framework/config.core.php', 0744);
+    chmod(BASE_PATH . 'pimf-framework/config.core.php', 0744);
 
     echo Color::paint('Secure autoload.core.php' . PHP_EOL);
-    chmod($root . 'pimf-framework/autoload.core.php', 0644);
+    chmod(BASE_PATH . 'pimf-framework/autoload.core.php', 0644);
 
     echo Color::paint('Create logging files' . PHP_EOL);
     $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-logs.txt', "at+"); fclose($fp); chmod($file, 0777);
@@ -115,8 +114,7 @@ class Core extends Base
         break;
       }
 
-      $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
-      $file = str_replace('/', DIRECTORY_SEPARATOR, $root .'pimf-framework/core/Pimf/_database/'.$file);
+       $file = str_replace('/', DS, BASE_PATH .'pimf-framework/core/Pimf/_database/'.$file);
 
       return $pdo->exec(file_get_contents(new File($file))) or print_r($pdo->errorInfo(), true);
 

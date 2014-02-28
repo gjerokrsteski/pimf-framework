@@ -112,11 +112,11 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
 
     $app = new \Pimf\Application();
 
-    $root = dirname(__FILE__).'/_fixture/';
+    $routes = dirname(__FILE__) .'/_fixture/app/test-app/routes.php';
 
     $this->assertNull(
 
-      self::invokeMethod($app, 'loadRoutes', array(array('app'=> array('name'=>'test-app', 'routeable'=>true)), $root))
+      self::invokeMethod($app, 'loadRoutes', array(true, $routes))
 
     );
   }
@@ -125,9 +125,9 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
   {
     $app = new \Pimf\Application();
 
-    $root = dirname(__FILE__).'/_fixture/';
+    $events = dirname(__FILE__) .'/_fixture/app/test-app/events.php';
 
-    self::invokeMethod($app, 'loadListeners', array(array('app'=> array('name'=>'test-app')), $root));
+    self::invokeMethod($app, 'loadListeners', array($events));
 
     $this->assertTrue(\Pimf\Event::listeners('test.loading.listeners'));
   }

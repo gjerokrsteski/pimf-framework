@@ -32,7 +32,6 @@ final class Application
   public static function bootstrap(array $conf, array $server = array())
   {
     $problems = array();
-    $root     = Str::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
 
     try {
 
@@ -42,8 +41,8 @@ final class Application
       self::registerLocalEnvironment($conf, $server);
       self::setupErrorHandling($conf);
       self::loadPdoDriver($conf);
-      self::loadRoutes($conf, $root);
-      self::loadListeners($conf, $root);
+      self::loadRoutes($conf['app']['routeable'], BASE_PATH .'app/' . $conf['app']['name'] . '/routes.php');
+      self::loadListeners(BASE_PATH .'app/' . $conf['app']['name'] . '/events.php');
 
     } catch (\Exception $exception) {
       $problems[] = $exception->getMessage();
@@ -76,13 +75,12 @@ final class Application
     }
 
     $conf       = Registry::get('conf');
-    $root       = Str::ensureTrailing('/', dirname(dirname(dirname(dirname(__FILE__)))));
     $prefix     = Str::ensureTrailing('\\', $conf['app']['name']);
-    $repository = $root . 'app/' . $conf['app']['name'] . '/Controller';
+    $repository = BASE_PATH . 'app/' . $conf['app']['name'] . '/Controller';
 
     if (isset($cli['controller']) && $cli['controller'] == 'core') {
       $prefix     = 'Pimf\\';
-      $repository = $root.'pimf-framework/core/Pimf/Controller';
+      $repository = BASE_PATH . 'pimf-framework/core/Pimf/Controller';
     }
 
     $resolver = new Resolver(
@@ -156,14 +154,12 @@ final class Application
   }
 
   /**
-   * @param array $conf
-   * @param       $root
+   * @param boolean $routeable
+   * @param string $routes Path to routes definition file.
    */
-  private static function loadRoutes(array $conf, $root)
+  private static function loadRoutes($routeable, $routes)
   {
-    if($conf['app']['routeable'] === true
-      && file_exists($routes = $root .'app/' . $conf['app']['name'] . '/routes.php')
-    ) {
+    if($routeable === true && file_exists($routes)) {
 
       Registry::set('router', new Router());
 
@@ -176,14 +172,11 @@ final class Application
   }
 
   /**
-   * @param array $conf
-   * @param       $root
+   * @param string $events Path to event listeners
    */
-  private static function loadListeners(array $conf, $root)
+  private static function loadListeners($events)
   {
-    if(file_exists($events = $root .'app/' . $conf['app']['name'] . '/events.php')) {
-      include_once $events;
-    }
+    if (file_exists($events)) include_once $events;
   }
 
   /**

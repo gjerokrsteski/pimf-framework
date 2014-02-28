@@ -54,9 +54,7 @@ class Haanga extends View implements Reunitable
       $options['cache_dir'] = $this->path.'/haanga_cache';
     }
 
-    $root = String::ensureTrailing('/', dirname(dirname(dirname(dirname(dirname(__FILE__))))));
-
-    require_once $root."Haanga/lib/Haanga.php";
+    require_once BASE_PATH . "Haanga/lib/Haanga.php";
 
     \Haanga::configure($options);
   }
