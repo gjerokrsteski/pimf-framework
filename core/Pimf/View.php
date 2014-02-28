@@ -39,8 +39,9 @@ class View implements Renderable
    */
   public function __construct($template = 'default.phtml', array $data = array())
   {
+    $conf           = Registry::get('conf');
     $this->data     = new \ArrayObject($data, \ArrayObject::ARRAY_AS_PROPS);
-    $this->path     = BASE_PATH . 'app/' . by(Registry::get('conf'))['app']['name'] . '/_templates';
+    $this->path     = BASE_PATH . 'app/' . $conf['app']['name'] . '/_templates';
     $this->template = (string)$template;
   }
 
