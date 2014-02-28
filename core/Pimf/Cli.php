@@ -84,12 +84,13 @@ final class Cli
   {
     $classes = array();
     $conf    = Registry::get('conf');
+    $dis     = DIRECTORY_SEPARATOR;
 
      if(!$root && !$coreClr && !$appClr) {
        // compute the PIMF framework path restriction.
-       $root    = BASE_PATH;
-       $coreClr = $root . 'pimf-framework' . DS . 'core' . DS . 'Pimf' . DS . 'Controller' . DS;
-       $appClr  = $root . 'app' . DS . $conf['app']['name'] . DS . 'Controller' . DS;
+       $root    = dirname(dirname(dirname(dirname(__FILE__))));
+       $coreClr = str_replace('/', $dis, $root . '/pimf-framework/core/Pimf/Controller/');
+       $appClr  = str_replace('/', $dis, $root . '/app/' . $conf['app']['name'] . '/Controller/');
      }
 
      foreach (array( $appClr, $coreClr) as $dir) {
@@ -101,16 +102,16 @@ final class Cli
        );
 
        foreach (iterator_to_array($iterator, false) as $file) {
-         $file = str_replace('\\', '/', current($file));
-         $file = str_replace('/', DS, $file);
+         $file = str_replace("\\", '/', current($file));
+         $file = str_replace('/', $dis, $file);
          $name = str_replace(
            array(
-             $root . DS . 'pimf-framework' . DS . 'core' . DS,
-             $root . DS . 'app' . DS
+             $root . $dis . 'pimf-framework' . $dis . 'core' . $dis,
+             $root . $dis . 'app' . $dis
            ), '', $file
          );
 
-         $name      = str_replace(DS, '\\', $name);
+         $name      = str_replace($dis, '\\', $name);
          $name      = str_replace('.php', '', $name);
          $classes[] = '\\' . $name;
        }
