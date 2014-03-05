@@ -20,7 +20,7 @@ class Clean
    *
    * @param string $string The string.
    *
-   * @return string|boolean
+   * @return string
    */
   public static function aggressive($string)
   {
@@ -33,7 +33,7 @@ class Clean
    * @param string $string  String to check
    * @param string $charset Character set (default ISO-8859-1)
    *
-   * @return string|bool $value Sanitized string
+   * @return string $value Sanitized string
    */
   public static function xss($string, $charset = 'ISO-8859-1')
   {
@@ -117,4 +117,3 @@ class Clean
     return $string;
   }
 }
- 

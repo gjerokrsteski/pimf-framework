@@ -150,7 +150,7 @@ class Uploaded extends File
    * It is extracted from the request from which the file has been uploaded.
    * Then is should not be considered as a safe value.
    *
-   * @return string|null
+   * @return string
    */
   public function getClientOriginalName()
   {
@@ -163,7 +163,7 @@ class Uploaded extends File
    * It is extracted from the request from which the file has been uploaded.
    * Then is should not be considered as a safe value.
    *
-   * @return string|null
+   * @return string
    */
   public function getClientMimeType()
   {
@@ -176,7 +176,7 @@ class Uploaded extends File
    * It is extracted from the request from which the file has been uploaded.
    * Then is should not be considered as a safe value.
    *
-   * @return integer|null
+   * @return string|null
    */
   public function getClientSize()
   {

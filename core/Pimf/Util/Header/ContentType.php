@@ -60,9 +60,11 @@ abstract class ContentType extends ResponseStatus
     self::type('application/octet-stream');
   }
 
+  /**
+   * @param string $definition
+   */
   public static function type($definition)
   {
     header('Content-Type: ' . $definition, true);
   }
 }
- 

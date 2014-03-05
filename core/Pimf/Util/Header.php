@@ -8,7 +8,8 @@
 
 namespace Pimf\Util;
 
-use Pimf\Registry, Pimf\Sapi;
+use Pimf\Registry;
+use Pimf\Sapi;
 
 /**
  * Manages a raw HTTP header sending.

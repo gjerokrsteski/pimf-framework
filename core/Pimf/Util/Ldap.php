@@ -247,4 +247,3 @@ class Ldap
     return $this->fetch($entries[0]);
   }
 }
-

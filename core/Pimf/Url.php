@@ -115,7 +115,7 @@ class Url
    * @param null|bool $https
    * @param bool      $asset
    *
-   * @return mixed
+   * @return string
    */
   private static function format($https = null, $asset = false)
   {

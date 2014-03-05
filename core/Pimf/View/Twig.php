@@ -8,7 +8,10 @@
 
 namespace Pimf\View;
 
-use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\Util\String as String;
+use Pimf\Contracts\Reunitable;
+use Pimf\View;
+use Pimf\Registry;
+use Pimf\Util\Value;
 
 
 /**

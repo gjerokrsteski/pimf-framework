@@ -40,7 +40,7 @@ class Param
    * @param null   $defaultValue
    * @param bool   $filtered If you trust foreign input introduced to your PHP code - set to FALSE!
    *
-   * @return mixed|null
+   * @return string
    */
   public function get($index, $defaultValue = null, $filtered = true)
   {

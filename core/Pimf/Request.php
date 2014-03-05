@@ -131,4 +131,3 @@ class Request
       : stripslashes($rawData);
   }
 }
-

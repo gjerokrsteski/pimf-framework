@@ -8,7 +8,8 @@
 
 namespace Pimf;
 
-use Pimf\Util\String, Pimf\Cache\Storages as CS;
+use Pimf\Util\String;
+use Pimf\Cache\Storages as CS;
 
 /**
  * Cache usage
@@ -58,7 +59,7 @@ class Cache
   /**
    * Create a new cache storage instance.
    *
-   * @param $storage
+   * @param string $storage
    *
    * @return CS\Apc|CS\Dba|CS\File|CS\Memcached|CS\Memory|CS\Pdo|CS\Redis|CS\WinCache
    * @throws \RuntimeException

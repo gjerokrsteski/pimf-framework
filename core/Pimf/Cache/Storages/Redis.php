@@ -78,7 +78,7 @@ class Redis extends Storage
   /**
    * Write an item to the cache that lasts forever.
    *
-   * @param $key
+   * @param string $key
    * @param $value
    */
   public function forever($key, $value)

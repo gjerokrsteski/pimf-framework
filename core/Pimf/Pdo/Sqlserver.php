@@ -27,8 +27,8 @@ class Sqlserver extends Connector
    */
   public function connect(array $config)
   {
-    // This connection string format can also be used to connect 
-    // to Azure SQL Server databases. 
+    // This connection string format can also be used to connect
+    // to Azure SQL Server databases.
     $port = (isset($config['port'])) ? ',' . $config['port'] : '';
 
     //check for dblib for mac users connecting to mssql

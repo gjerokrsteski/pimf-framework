@@ -28,7 +28,7 @@ final class Application
    * @param array $conf   The array of configuration options.
    * @param array $server Array of information such as headers, paths, and script locations.
    *
-   * @return boolean
+   * @return boolean|null
    */
   public static function bootstrap(array $conf, array $server = array())
   {

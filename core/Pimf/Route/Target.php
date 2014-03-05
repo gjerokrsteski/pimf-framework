@@ -90,4 +90,3 @@ class Target
     return $this->params;
   }
 }
- 

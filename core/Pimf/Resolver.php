@@ -8,7 +8,8 @@
 
 namespace Pimf;
 
-use Pimf\Resolver\Exception as Bomb, Pimf\Util\String as Str;
+use Pimf\Resolver\Exception as Bomb;
+use Pimf\Util\String as Str;
 
 /**
  * Resolves the user requests to controller and action.

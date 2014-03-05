@@ -2,7 +2,7 @@
 /**
  * Short-cut for constructor method chaining.
  *
- * @param mixed $object
+ * @param DateTime $object
  * @return object|mixed
  */
 function by($object)
@@ -26,7 +26,7 @@ function value($value)
  * Checks if a scalar value is FALSE, without content or only full of whitespaces.
  * For non-scalar values will evaluate if value is empty().
  *
- * @param $value
+ * @param string $value
  * @return bool
  */
 function is_empty($value)

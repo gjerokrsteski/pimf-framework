@@ -8,7 +8,7 @@
 
 namespace Pimf\Session\Storages;
 
-use Pimf\Util\Crypter, Pimf\Cookie as Crumb;
+use Pimf\Cookie as Crumb;
 
 /**
  * @package Session_Storages

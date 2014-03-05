@@ -135,7 +135,7 @@ class Cookie
   /**
    * Delete a cookie.
    *
-   * @param        $name
+   * @param        string $name
    * @param string $path
    * @param null   $domain
    * @param bool   $secure

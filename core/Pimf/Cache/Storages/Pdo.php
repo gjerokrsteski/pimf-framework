@@ -121,7 +121,7 @@ class Pdo extends Storage
    *
    * @param string $key
    *
-   * @return bool|void
+   * @return boolean
    */
   public function forget($key)
   {

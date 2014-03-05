@@ -8,7 +8,8 @@
 
 namespace Pimf\Util\Validator;
 
-use Pimf\Param, Pimf\Util\Validator;
+use Pimf\Param;
+use Pimf\Util\Validator;
 
 /**
  * Validator Factory
@@ -65,4 +66,3 @@ abstract class Factory
     return $validator;
   }
 }
- 

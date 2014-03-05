@@ -135,7 +135,7 @@ class Logger
   }
 
   /**
-   * @param        $msg
+   * @param        string $msg
    * @param string $severity
    */
   protected function write($msg, $severity = 'DEBUG')
@@ -174,7 +174,7 @@ class Logger
    * Formats the error message in representable manner.
    *
    * @param $message
-   * @param $severity
+   * @param string $severity
    *
    * @return string
    */

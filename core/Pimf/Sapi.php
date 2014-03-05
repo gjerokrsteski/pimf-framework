@@ -75,4 +75,3 @@ abstract class Sapi
     return (boolean)(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN');
   }
 }
- 

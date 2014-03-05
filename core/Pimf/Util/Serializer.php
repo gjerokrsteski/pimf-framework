@@ -70,7 +70,7 @@ class Serializer
   }
 
   /**
-   * @param mixed $value Item value.
+   * @param \stdClass $value Item value.
    *
    * @throws \RuntimeException If error during serialize.
    * @return string

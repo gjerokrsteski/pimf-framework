@@ -95,7 +95,7 @@ class Redis
    *
    * @param string $name
    *
-   * @return mixed
+   * @return Redis
    * @throws \RuntimeException
    */
   public static function db($name = 'default')
@@ -134,7 +134,7 @@ class Redis
   /**
    * Parse and return the response from the Redis database.
    *
-   * @param $response
+   * @param string $response
    *
    * @return array|string
    * @throws \RuntimeException
@@ -197,7 +197,7 @@ class Redis
    *
    * More information regarding the Redis protocol: http://redis.io/topics/protocol
    *
-   * @param $method
+   * @param string $method
    * @param $parameters
    *
    * @return string

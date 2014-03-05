@@ -113,7 +113,7 @@ class Dba extends Storage
   }
 
   /**
-   * @param $key
+   * @param string $key
    *
    * @return bool|mixed|null
    */
@@ -181,7 +181,7 @@ class Dba extends Storage
    * @param $key
    * @param $value
    *
-   * @return int|void
+   * @return boolean
    */
   public function forever($key, $value)
   {
@@ -237,4 +237,3 @@ class Dba extends Storage
     return $this->file;
   }
 }
-

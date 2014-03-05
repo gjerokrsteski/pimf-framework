@@ -8,7 +8,10 @@
 
 namespace Pimf\View;
 
-use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\util\String as String;
+use Pimf\Contracts\Reunitable;
+use Pimf\View;
+use Pimf\Registry;
+use Pimf\Util\Value;
 
 /**
  * A view for HAANGA template engine that uses Django syntax - fast and secure template engine for PHP.

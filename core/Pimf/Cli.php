@@ -8,7 +8,8 @@
 
 namespace Pimf;
 
-use Pimf\Cli\Color, Pimf\Util\String;
+use Pimf\Cli\Color;
+use Pimf\Util\String;
 
 /**
  * A full featured package for managing command-line options and arguments,

@@ -16,7 +16,7 @@ namespace Pimf;
  *
  * <code>
  *    // register a callback for the "start" event
- *    Efs_Event::listen('start', function() {return 'Started!';});
+ *    Efs_Event::listen('start', function () {return 'Started!';});
  *
  *    // register an object instance callback for the given event
  *    Efs_Event::listen('event', array($object, 'method'));
@@ -112,7 +112,7 @@ class Event
    * Fire an event and return the first response.
    *
    * @param string $event
-   * @param array  $parameters
+   * @param \Exception[]  $parameters
    *
    * @return mixed
    */
@@ -140,7 +140,7 @@ class Event
   /**
    * Fire an event so that all listeners are called.
    *
-   * @param string|array $events
+   * @param string $events
    * @param array        $parameters
    * @param bool         $halt
    *

@@ -80,7 +80,7 @@ abstract class Storage
    *    $name = Cache::remember('name', 'Robin', 15);
    *
    *    // Use a closure for deferred execution
-   *    $count = Cache::remember('count', function() { return User::count(); }, 15);
+   *    $count = Cache::remember('count', function () { return User::count(); }, 15);
    * </code>
    *
    * @param string $key

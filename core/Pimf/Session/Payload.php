@@ -8,7 +8,10 @@
 
 namespace Pimf\Session;
 
-use Pimf\Registry, Pimf\Session, Pimf\Util\String, Pimf\Cookie;
+use Pimf\Registry;
+use Pimf\Session;
+use Pimf\Util\String;
+use Pimf\Cookie;
 
 /**
  * Using the session payload
@@ -72,7 +75,7 @@ class Payload
   /**
    * Load the session for the current request.
    *
-   * @param $id
+   * @param null|string $id
    */
   public function load($id)
   {
@@ -174,7 +177,7 @@ class Payload
    * Write an item to the session.
    *
    * @param $key
-   * @param $value
+   * @param string $value
    */
   public function put($key, $value)
   {

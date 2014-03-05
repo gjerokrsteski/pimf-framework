@@ -147,4 +147,3 @@ abstract class ResponseStatus
     self::send(503, 'Service Unavailable');
   }
 }
- 

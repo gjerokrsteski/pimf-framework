@@ -150,7 +150,7 @@ class Response
 
     if (self::$typed === 'asJSON') {
       $body = UtilJson::encode($data);
-    } else if ($data instanceof \Pimf\View) {
+    } elseif ($data instanceof \Pimf\View) {
       $body = $data->render();
     }
 
@@ -252,4 +252,3 @@ class Response
     }
   }
 }
- 

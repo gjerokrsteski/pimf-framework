@@ -237,7 +237,7 @@ class Validator
    * @param string $field
    * @param string $format Find formats here http://www.php.net/manual/en/function.date.php
    *
-   * @return boolean
+   * @return boolean|null
    */
   public function date($field, $format)
   {
@@ -270,7 +270,7 @@ class Validator
   /**
    * @param string $attribute
    *
-   * @return mixed|null
+   * @return string|null
    * @throws \OutOfBoundsException If attribute not at range
    */
   protected function get($attribute)

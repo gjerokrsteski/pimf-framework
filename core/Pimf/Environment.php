@@ -61,7 +61,7 @@ class Environment
   /**
    * @param $key
    *
-   * @return mixed|null
+   * @return string
    */
   public function __get($key)
   {

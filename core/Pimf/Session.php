@@ -8,7 +8,8 @@
 
 namespace Pimf;
 
-use Pimf\Session\Payload, Pimf\Session\Storages as Storage;
+use Pimf\Session\Payload;
+use Pimf\Session\Storages as Storage;
 
 /**
  * Using the session
@@ -82,9 +83,9 @@ class Session
   /**
    * Create a new session storage instance.
    *
-   * @param $storage
+   * @param string $storage
    *
-   * @return Storage\Apc|Storage\Cookie|Storage\Dba|Storage\File|Storage\Memcached|Storage\Memory|Storage\Pdo|Storage\Redis
+   * @return Storage\Storage
    * @throws \RuntimeException
    */
   public static function factory($storage)

@@ -95,6 +95,10 @@ class Core extends Base
     );
   }
 
+  /**
+   * @param string $type
+   * @param string $for
+   */
   protected function createTable($type, $for)
   {
     $type = trim($type);

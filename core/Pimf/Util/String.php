@@ -109,7 +109,7 @@ class String
    * @param string|array $needle   The needle.
    * @param string       $haystack The haystack.
    *
-   * @return mixed
+   * @return string
    */
   public static function deleteTrailing($needle, $haystack)
   {
@@ -130,7 +130,7 @@ class String
    * @param string|array $needle   The needle.
    * @param string       $haystack The haystack.
    *
-   * @return mixed
+   * @return string
    */
   public static function deleteLeading($needle, $haystack)
   {
@@ -167,7 +167,7 @@ class String
    *
    * @param string $string The string.
    *
-   * @return string|boolean
+   * @return string
    */
   public static function cleanAggressive($string)
   {
@@ -181,7 +181,7 @@ class String
    * @param string $string  String to check
    * @param string $charset Character set (default ISO-8859-1)
    *
-   * @return string|bool $value Sanitized string
+   * @return string $value Sanitized string
    */
   public static function cleanXss($string, $charset = 'ISO-8859-1')
   {
