@@ -21,7 +21,9 @@ class UtilCacheTest extends PHPUnit_Framework_TestCase
   {
     $path     = dirname(__FILE__) . '/_fixture/';
     $cache_id = 'my-data-cache-id.html';
+    $data     = 'some sample data here, as string, array or object!';
 
+    \Pimf\Util\Cache::put($path.$cache_id, $data, '+2 day');
     $cached = \Pimf\Util\Cache::retrieve($path.$cache_id);
 
     $this->assertNotNull($cached, 'it is not read');
