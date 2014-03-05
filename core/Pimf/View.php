@@ -35,13 +35,14 @@ class View implements Renderable
 
   /**
    * @param string $template
-   * @param array $data
+   * @param array  $data
+   * @param string $path Path to templates if you do not want to use PIMF framework restriction.
    */
-  public function __construct($template = 'default.phtml', array $data = array())
+  public function __construct($template = 'default.phtml', array $data = array(), $path = null)
   {
     $conf           = Registry::get('conf');
     $this->data     = new \ArrayObject($data, \ArrayObject::ARRAY_AS_PROPS);
-    $this->path     = BASE_PATH . 'app/' . $conf['app']['name'] . '/_templates';
+    $this->path     = (!$path) ? BASE_PATH . 'app/' . $conf['app']['name'] . '/_templates' : $path;
     $this->template = (string)$template;
   }
 
@@ -130,9 +131,8 @@ class View implements Renderable
   }
 
   /**
-   * @return string The Output of the template.
-   * @throws \RuntimeException If could not find template.
-   * @throws \Exception If previous thrown.
+   * @return string
+   * @throws \Exception
    */
   public function render()
   {
@@ -157,8 +157,6 @@ class View implements Renderable
 
   /**
    * Puts the template an the variables together.
-   * @throws \RuntimeException
-   * @return string
    */
   public function reunite()
   {

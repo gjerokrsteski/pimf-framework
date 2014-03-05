@@ -32,6 +32,7 @@ use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\U
  * @link http://twig.sensiolabs.org/documentation
  * @package View
  * @author Gjero Krsteski <gjero@krsteski.de>
+ * @codeCoverageIgnore
  */
 class Twig extends View implements Reunitable
 {

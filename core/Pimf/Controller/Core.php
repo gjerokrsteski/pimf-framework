@@ -12,6 +12,7 @@ use Pimf\Registry, Pimf\Util\String, Pimf\Cli\Color,
 /**
  * @package Controller
  * @author Gjero Krsteski <gjero@krsteski.de>
+ * @codeCoverageIgnore
  */
 class Core extends Base
 {

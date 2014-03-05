@@ -31,6 +31,7 @@ use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\u
  * @link http://haanga.org/documentation
  * @package View
  * @author Gjero Krsteski <gjero@krsteski.de>
+ * @codeCoverageIgnore
  */
 class Haanga extends View implements Reunitable
 {
