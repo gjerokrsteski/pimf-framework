@@ -1,11 +1,13 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
+
 use Pimf\Util\Header;
 
 /**
@@ -13,14 +15,15 @@ use Pimf\Util\Header;
  * Execution will stop after the exception_handler is called.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Error
 {
   /**
    * Handle an exception and display the exception report.
+   *
    * @param \Exception $exception
-   * @param boolean $exit
+   * @param boolean    $exit
    */
   public static function exception(\Exception $exception, $exit = true)
   {
@@ -31,13 +34,17 @@ class Error
     $conf = Registry::get('conf');
 
     if (isset($conf['error']['debug_info']) && $conf['error']['debug_info'] === true) {
-      echo static::format($exception); if ($exit) exit;
+      echo static::format($exception);
+      if ($exit) {
+        exit;
+      }
     }
 
     Header::clear();
 
-    if($exception instanceof \Pimf\Controller\Exception
-    || $exception instanceof \Pimf\Resolver\Exception) {
+    if ($exception instanceof \Pimf\Controller\Exception
+      || $exception instanceof \Pimf\Resolver\Exception
+    ) {
       Event::first('404', array($exception));
       Header::sendNotFound(null, $exit);
     } else {
@@ -51,20 +58,18 @@ class Error
    * a simple error message and display it.
    *
    * @param \Exception $exception
+   *
    * @return string
    */
   public static function format(\Exception $exception)
   {
     if (Sapi::isCli()) {
       return
-        "+++ Untreated Exception +++".PHP_EOL.
-        "Message: " . $exception->getMessage() .PHP_EOL.
-        "Location: " . $exception->getFile() . " on line " . $exception->getLine() .PHP_EOL.
-        "Stack Trace: " .PHP_EOL. $exception->getTraceAsString() .PHP_EOL;
+        "+++ Untreated Exception +++" . PHP_EOL . "Message: " . $exception->getMessage() . PHP_EOL . "Location: " . $exception->getFile()
+        . " on line " . $exception->getLine() . PHP_EOL . "Stack Trace: " . PHP_EOL . $exception->getTraceAsString() . PHP_EOL;
     }
 
-    return
-      "<html><h2>Untreated Exception</h2>
+    return "<html><h2>Untreated Exception</h2>
       <h3>Message:</h3>
       <pre>" . $exception->getMessage() . "</pre>
       <h3>Location:</h3>
@@ -75,10 +80,11 @@ class Error
 
   /**
    * Handle a native PHP error as an ErrorException.
-   * @param int $code
+   *
+   * @param int    $code
    * @param string $error
    * @param string $file
-   * @param int $line
+   * @param int    $line
    */
   public static function native($code, $error, $file, $line)
   {
@@ -114,6 +120,7 @@ class Error
 
   /**
    * Log an exception.
+   *
    * @param \Exception $exception
    */
   public static function log(\Exception $exception)
@@ -121,7 +128,7 @@ class Error
     $conf = Registry::get('conf');
 
     if (isset($conf['error']['log']) && $conf['error']['log'] === true) {
-      Registry::get('logger')->error($exception->getMessage() .' '. $exception->getTraceAsString());
+      Registry::get('logger')->error($exception->getMessage() . ' ' . $exception->getTraceAsString());
     }
   }
 }

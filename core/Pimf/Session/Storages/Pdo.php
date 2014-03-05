@@ -1,16 +1,18 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Session\Storages;
+
 use Pimf\Contracts\Cleanable;
 
 /**
  * @package Session_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Pdo extends Storage implements Cleanable
 {
@@ -30,7 +32,9 @@ class Pdo extends Storage implements Cleanable
   /**
    * Load a session from storage by a given ID.
    * If no session is found for the ID, null will be returned.
+   *
    * @param string $id
+   *
    * @return array|null
    */
   public function load($id)
@@ -46,11 +50,7 @@ class Pdo extends Storage implements Cleanable
       $session = $sth->fetchObject();
 
       if ($session instanceof \stdClass) {
-        return array(
-          'id'            => $session->id,
-          'last_activity' => $session->last_activity,
-          'data'          => unserialize($session->data)
-        );
+        return array('id' => $session->id, 'last_activity' => $session->last_activity, 'data' => unserialize($session->data));
       }
     } catch (\PDOException $pdoe) {
       return null;
@@ -59,9 +59,10 @@ class Pdo extends Storage implements Cleanable
 
   /**
    * Save a given session to storage.
+   *
    * @param array $session
    * @param array $config
-   * @param bool $exists
+   * @param bool  $exists
    */
   public function save($session, $config, $exists)
   {
@@ -83,6 +84,7 @@ class Pdo extends Storage implements Cleanable
 
   /**
    * Delete a session from storage by a given ID.
+   *
    * @param string $id
    */
   public function delete($id)
@@ -97,7 +99,9 @@ class Pdo extends Storage implements Cleanable
 
   /**
    * Delete all expired sessions from persistent storage.
+   *
    * @param int $expiration
+   *
    * @return mixed|void
    */
   public function clean($expiration)

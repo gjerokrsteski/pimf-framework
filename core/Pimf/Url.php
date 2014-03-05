@@ -1,10 +1,12 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 namespace Pimf;
+
 use Pimf\Util\String as Str;
 
 /**
@@ -19,18 +21,20 @@ use Pimf\Util\String as Str;
  * </code>
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Url
 {
   /**
    * The cached base URL.
+   *
    * @var string
    */
   public static $base;
 
   /**
    * Get the full URI including the query string.
+   *
    * @return string
    */
   public static function full()
@@ -40,6 +44,7 @@ class Url
 
   /**
    * Get the full URL for the current request.
+   *
    * @return string
    */
   public static function current()
@@ -71,7 +76,7 @@ class Url
     }
 
     $conf = Registry::get('conf');
-    $url = $conf['app']['url'];
+    $url  = $conf['app']['url'];
 
     if ($url !== '') {
       $base = $url;
@@ -85,9 +90,9 @@ class Url
   /**
    * Generate an application URL.
    *
-   * @param string $url
+   * @param string    $url
    * @param null|bool $https
-   * @param bool $asset
+   * @param bool      $asset
    *
    * @return string
    */
@@ -106,8 +111,9 @@ class Url
 
   /**
    * Computes the URl method
+   *
    * @param null|bool $https
-   * @param bool $asset
+   * @param bool      $asset
    *
    * @return mixed
    */
@@ -164,7 +170,7 @@ class Url
     $root = ($conf['app']['asset_url'] != '') ? $conf['app']['asset_url'] : false;
 
     // shoot us through a different server or third-party content delivery network.
-    if ($root){
+    if ($root) {
       return rtrim($root, '/') . '/' . ltrim($url, '/');
     }
 
@@ -208,15 +214,16 @@ class Url
   {
     // if your application should work with RFC 3986 URL-query strings
     $conf = Registry::get('conf');
-    if($conf['app']['routeable'] === false) {
+    if ($conf['app']['routeable'] === false) {
       list($controller, $action) = explode('/', $route);
       $params = array_merge(compact('controller', 'action'), $params);
-      return Str::ensureTrailing('/', self::format($https, $asset)).'?'.http_build_query($params, null, '&');
+
+      return Str::ensureTrailing('/', self::format($https, $asset)) . '?' . http_build_query($params, null, '&');
     }
 
     // otherwise PIMF will serve you cleaner URLs
     $slug = implode('/', $params);
-    if ($slug != '')  {
+    if ($slug != '') {
       $slug = '/' . $slug;
     }
 

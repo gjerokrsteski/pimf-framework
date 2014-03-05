@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -12,13 +12,15 @@ namespace Pimf\Util;
  * An XML util for converting XML to DOMDocument or SimpleXMLElement or to Array.
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Xml
 {
   /**
    * Convert anything DOMDocument|SimpleXMLElement|string to DOMDocument.
+   *
    * @param \DOMDocument|\SimpleXMLElement|string $xml String may be filename or xml string
+   *
    * @throws \InvalidArgumentException
    * @return \DOMDocument
    */
@@ -30,7 +32,7 @@ class Xml
 
     if ($xml instanceof \SimpleXMLElement) {
       $doc = new \DOMDocument();
-      $doc->loadXML(''.$xml->asXML());
+      $doc->loadXML('' . $xml->asXML());
 
       return $doc;
     }
@@ -39,8 +41,9 @@ class Xml
       $doc = new \DOMDocument();
 
       if (is_file($xml)) {
-          $doc->load($xml);
-          return $doc;
+        $doc->load($xml);
+
+        return $doc;
       }
 
       $doc->loadXML($xml);
@@ -50,14 +53,14 @@ class Xml
 
     $type = is_object($xml) ? get_class($xml) : gettype($xml);
 
-    throw new \InvalidArgumentException(
-      "Cannot convert instance of '$type' to DOMDocument"
-    );
+    throw new \InvalidArgumentException("Cannot convert instance of '$type' to DOMDocument");
   }
 
   /**
    * Convert anything DOMDocument|SimpleXMLElement|string to SimpleXMLElement.
+   *
    * @param \DOMDocument|\SimpleXMLElement|string $xml String may be filename or xml string
+   *
    * @throws \InvalidArgumentException
    * @return \SimpleXMLElement
    */
@@ -82,15 +85,15 @@ class Xml
 
     $type = is_object($xml) ? get_class($xml) : gettype($xml);
 
-    throw new \InvalidArgumentException(
-    	"Cannot convert instance of '$type' to DOMDocument"
-    );
+    throw new \InvalidArgumentException("Cannot convert instance of '$type' to DOMDocument");
   }
 
   /**
    * Convert SimpleXMLElement to multidimensional array.
+   *
    * @param \SimpleXMLElement $xml
-   * @param string $namespace The namespace that schould be used.
+   * @param string            $namespace The namespace that schould be used.
+   *
    * @throws \OutOfBoundsException If namespace not found in the xml.
    * @return array
    */
@@ -101,9 +104,7 @@ class Xml
       $namespaces = $xml->getNamespaces();
 
       if (false === isset($namespaces[$namespace])) {
-        throw new \OutOfBoundsException(
-          'namespace ['.$namespace.'] not found'
-        );
+        throw new \OutOfBoundsException('namespace [' . $namespace . '] not found');
       }
 
       $xml = $xml->children($namespaces[$namespace]);

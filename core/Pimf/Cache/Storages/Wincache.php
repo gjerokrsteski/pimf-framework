@@ -1,15 +1,16 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Cache\Storages;
 
 /**
  * @package Cache_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Wincache extends Storage
 {
@@ -30,7 +31,9 @@ class Wincache extends Storage
 
   /**
    * Retrieve an item from the cache storage.
+   *
    * @param string $key
+   *
    * @return mixed
    */
   protected function retrieve($key)
@@ -49,8 +52,9 @@ class Wincache extends Storage
    * </code>
    *
    * @param string $key
-   * @param mixed $value
-   * @param int $minutes
+   * @param mixed  $value
+   * @param int    $minutes
+   *
    * @return bool|void
    */
   public function put($key, $value, $minutes)
@@ -60,8 +64,10 @@ class Wincache extends Storage
 
   /**
    * Write an item to the cache that lasts forever.
+   *
    * @param $key
    * @param $value
+   *
    * @return bool|void
    */
   public function forever($key, $value)
@@ -71,7 +77,9 @@ class Wincache extends Storage
 
   /**
    * Delete an item from the cache.
+   *
    * @param string $key
+   *
    * @return bool|void
    */
   public function forget($key)

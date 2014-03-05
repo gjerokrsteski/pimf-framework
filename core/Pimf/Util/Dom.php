@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -12,14 +12,14 @@ namespace Pimf\Util;
  * A powerful tool for HTML or XML document manipulation and extraction of data.
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Dom extends \DOMDocument
 {
   /**
    * Retries a list of attributes-value which can live inside a HTML/XML-Element
    *
-   * @param string $tag A HTML/XML tag-name representation for the HTML/XML-Element
+   * @param string $tag       A HTML/XML tag-name representation for the HTML/XML-Element
    * @param string $attribute A attribute inside of the HTML/XML-Element
    *
    * @return array
@@ -29,8 +29,7 @@ class Dom extends \DOMDocument
     $values = array();
 
     // loop through each tag in the dom and add it to the array
-    foreach ($this->getElementsByTagName($tag) as $tag)
-    {
+    foreach ($this->getElementsByTagName($tag) as $tag) {
       /* @var $tag \DOMElement */
       $values[] = $tag->getAttribute($attribute);
     }
@@ -40,6 +39,7 @@ class Dom extends \DOMDocument
 
   /**
    * Grab all links in a page
+   *
    * @return array
    */
   public function getURLs()
@@ -49,6 +49,7 @@ class Dom extends \DOMDocument
 
   /**
    * Grab all URLs of an image
+   *
    * @return array
    */
   public function getImageURLs()

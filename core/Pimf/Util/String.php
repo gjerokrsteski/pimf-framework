@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -12,13 +12,15 @@ namespace Pimf\Util;
  * String
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class String
 {
   /**
    * Check value to find if it was serialized.
+   *
    * @param   mixed $string Value to check to see if was serialized
+   *
    * @return  bool
    */
   public static function isSerialized($string)
@@ -30,12 +32,13 @@ class String
    * Check for invalid UTF8 encoding and invalid byte .
    *
    * @param string $string Your string.
+   *
    * @return boolean
    */
   public static function checkUtf8Encoding($string)
   {
-    if (!mb_check_encoding($string, 'UTF-8')
-    or !$string == mb_convert_encoding(mb_convert_encoding($string, 'UTF-32', 'UTF-8'), 'UTF-8', 'UTF-32')
+    if (!mb_check_encoding($string, 'UTF-8') or
+      !$string == mb_convert_encoding(mb_convert_encoding($string, 'UTF-32', 'UTF-8'), 'UTF-8', 'UTF-32')
     ) {
       return false;
     }
@@ -51,7 +54,7 @@ class String
    * - ensureTrailing('/', 'http://www.example.com/') -> 'http://www.example.com/'
    * </code>
    *
-   * @param string $needle The needle.
+   * @param string $needle   The needle.
    * @param string $haystack The haystack.
    *
    * @return string
@@ -77,8 +80,9 @@ class String
    * - ensureLeading('#', '#1#2#3#4#5') -> '#1#2#3#4#5'
    * </code>
    *
-   * @param string $needle The needle.
+   * @param string $needle   The needle.
    * @param string $haystack The haystack
+   *
    * @return string
    */
   public static function ensureLeading($needle, $haystack)
@@ -102,8 +106,9 @@ class String
    * - deleteTrailing(array('|','5'), '|1|2|3|4|5|555') -> '|1|2|3|4'
    * </code>
    *
-   * @param string|array $needle The needle.
-   * @param string $haystack The haystack.
+   * @param string|array $needle   The needle.
+   * @param string       $haystack The haystack.
+   *
    * @return mixed
    */
   public static function deleteTrailing($needle, $haystack)
@@ -122,8 +127,9 @@ class String
    * - deleteTrailing(array('#', '1'), '##11#2#3#4#5') -> '2#3#4#5'
    * </code>
    *
-   * @param string|array $needle The needle.
-   * @param string $haystack The haystack.
+   * @param string|array $needle   The needle.
+   * @param string       $haystack The haystack.
+   *
    * @return mixed
    */
   public static function deleteLeading($needle, $haystack)
@@ -137,8 +143,9 @@ class String
   /**
    * Wrapper for preg_quote supporting strings and array of strings.
    *
-   * @param mixed $values The values.
+   * @param mixed       $values    The values.
    * @param null|string $delimiter (Optional) The delimiter.
+   *
    * @return string
    */
   public static function pregQuote($values, $delimiter = null)
@@ -159,6 +166,7 @@ class String
    * An aggressive cleaning - all tags and stuff inside will be removed.
    *
    * @param string $string The string.
+   *
    * @return string|boolean
    */
   public static function cleanAggressive($string)
@@ -169,8 +177,10 @@ class String
   /**
    * Cleans against XSS.
    * Info: use it on showing your request data.
-   * @param string $string String to check
+   *
+   * @param string $string  String to check
    * @param string $charset Character set (default ISO-8859-1)
+   *
    * @return string|bool $value Sanitized string
    */
   public static function cleanXss($string, $charset = 'ISO-8859-1')
@@ -180,6 +190,7 @@ class String
 
   /**
    * @param int $length
+   *
    * @return string
    */
   public static function random($length = 32)
@@ -192,8 +203,9 @@ class String
   /**
    * Determine if a given string contains a given sub-string.
    *
-   * @param string $haystack
+   * @param string       $haystack
    * @param string|array $needle
+   *
    * @return bool
    */
   public static function contains($haystack, $needle)
@@ -212,11 +224,12 @@ class String
    *
    * @param string $haystack
    * @param string $needle
+   *
    * @return bool
    */
   public static function startsWith($haystack, $needle)
   {
-  	return strpos($haystack, $needle) === 0;
+    return strpos($haystack, $needle) === 0;
   }
 
   /**
@@ -224,39 +237,41 @@ class String
    *
    * @param string $haystack
    * @param string $needle
+   *
    * @return bool
    */
   public static function endsWith($haystack, $needle)
   {
-  	return $needle == substr($haystack, strlen($haystack) - strlen($needle));
+    return $needle == substr($haystack, strlen($haystack) - strlen($needle));
   }
 
   /**
- 	 * Determine if a given string matches a given pattern.
+   * Determine if a given string matches a given pattern.
    *
    * Asterisks are translated into zero-or-more regular expression wildcards
    * to make it convenient to check if string such as "library/*".
    *
- 	 * @param  string  $pattern Pattern or wildcard
- 	 * @param  string  $value
+   * @param  string $pattern Pattern or wildcard
+   * @param  string $value
    *
    * @return bool
- 	 */
- 	public static function is($pattern, $value)
- 	{
- 		if ($pattern !== '/')	{
- 			$pattern = str_replace('*', '(.*)', $pattern).'\z';
- 		} else {
- 			$pattern = '^/$';
- 		}
+   */
+  public static function is($pattern, $value)
+  {
+    if ($pattern !== '/') {
+      $pattern = str_replace('*', '(.*)', $pattern) . '\z';
+    } else {
+      $pattern = '^/$';
+    }
 
- 		return (bool) preg_match('#'.$pattern.'#', $value);
- 	}
+    return (bool)preg_match('#' . $pattern . '#', $value);
+  }
 
   /**
    * Check if strange things happening.
    *
    * @param string $path
+   *
    * @return bool
    */
   public static function isEvilPath($path)

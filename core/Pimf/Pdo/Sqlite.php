@@ -3,7 +3,7 @@
  * Database
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Pdo;
@@ -12,12 +12,13 @@ namespace Pimf\Pdo;
  * Connection management to SQLite.
  *
  * @package Database
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Sqlite extends Connector
 {
   /**
    * @param array $config
+   *
    * @return \Pimf\Database
    */
   public function connect(array $config)

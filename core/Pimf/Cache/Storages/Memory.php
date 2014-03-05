@@ -3,26 +3,29 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Cache\Storages;
 
 /**
  * @package Cache_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Memory extends Storage
 {
   /**
    * The in-memory array of cached items.
+   *
    * @var array
    */
   public $storage = array();
 
   /**
    * Retrieve an item from the cache storage.
+   *
    * @param string $key
+   *
    * @return mixed|null
    */
   protected function retrieve($key)
@@ -43,8 +46,8 @@ class Memory extends Storage
    * </code>
    *
    * @param string $key
-   * @param mixed $value
-   * @param int $minutes
+   * @param mixed  $value
+   * @param int    $minutes
    */
   public function put($key, $value, $minutes)
   {
@@ -53,6 +56,7 @@ class Memory extends Storage
 
   /**
    * Write an item to the cache that lasts forever.
+   *
    * @param $key
    * @param $value
    */
@@ -63,6 +67,7 @@ class Memory extends Storage
 
   /**
    * Delete an item from the cache.
+   *
    * @param string $key
    */
   public function forget($key)

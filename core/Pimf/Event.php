@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
@@ -45,19 +46,22 @@ namespace Pimf;
  * </code>
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Event
 {
   /**
    * All registered events.
+   *
    * @var array
    */
   protected static $events = array();
 
   /**
    * Determine if an event has any registered listeners.
+   *
    * @param string $event
+   *
    * @return bool
    */
   public static function listeners($event)
@@ -67,8 +71,10 @@ class Event
 
   /**
    * Register a callback for a given event.
+   *
    * @param string $event
-   * @param mixed $callback
+   * @param mixed  $callback
+   *
    * @return void
    */
   public static function listen($event, $callback)
@@ -78,8 +84,10 @@ class Event
 
   /**
    * Override all callbacks for a given event with a new callback.
+   *
    * @param string $event
    * @param mixed  $callback
+   *
    * @return void
    */
   public static function override($event, $callback)
@@ -90,7 +98,9 @@ class Event
 
   /**
    * Clear all event listeners for a given event.
+   *
    * @param string $event
+   *
    * @return void
    */
   public static function clear($event)
@@ -100,21 +110,26 @@ class Event
 
   /**
    * Fire an event and return the first response.
+   *
    * @param string $event
-   * @param array $parameters
+   * @param array  $parameters
+   *
    * @return mixed
    */
   public static function first($event, $parameters = array())
   {
     $responses = static::fire($event, $parameters);
+
     return reset($responses);
   }
 
   /**
    * Fire an event and return the first response.
    * Execution will be halted after the first valid response is found.
+   *
    * @param string $event
-   * @param array $parameters
+   * @param array  $parameters
+   *
    * @return mixed
    */
   public static function until($event, $parameters = array())
@@ -124,9 +139,11 @@ class Event
 
   /**
    * Fire an event so that all listeners are called.
+   *
    * @param string|array $events
-   * @param array $parameters
-   * @param bool $halt
+   * @param array        $parameters
+   * @param bool         $halt
+   *
    * @return array|null
    */
   public static function fire($events, $parameters = array(), $halt = false)

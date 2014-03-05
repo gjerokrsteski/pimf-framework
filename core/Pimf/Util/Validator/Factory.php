@@ -3,11 +3,13 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util\Validator;
+
 use Pimf\Param, Pimf\Util\Validator;
+
 /**
  * Validator Factory
  *
@@ -34,12 +36,13 @@ abstract class Factory
    * </code>
    *
    * @param array|\Pimf\Param $attributes
-   * @param array $rules
+   * @param array             $rules
+   *
    * @return \Pimf\Util\Validator
    */
   public static function get($attributes, array $rules)
   {
-    if (! ($attributes instanceof Param)){
+    if (!($attributes instanceof Param)) {
       $attributes = new Param((array)$attributes);
     }
 
@@ -53,7 +56,7 @@ abstract class Factory
 
         $items      = explode('[', str_replace(']', '', $check));
         $method     = $items[0];
-        $parameters = array_merge(array( $key ), (isset($items[1]) ? explode(',', $items[1]) : array()));
+        $parameters = array_merge(array($key), (isset($items[1]) ? explode(',', $items[1]) : array()));
 
         call_user_func_array(array($validator, $method), $parameters);
       }

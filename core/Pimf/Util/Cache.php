@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -26,16 +26,17 @@ namespace Pimf\Util;
  * </code>
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Cache
 {
   /**
    * Writes temporary data to cache files.
    *
-   * @param string $path File path within /tmp to save the file - make sure it exists and is writeable.
-   * @param mixed $data The data to save to the temporary file.
-   * @param mixed $expires A valid strtotime string when the data expires.
+   * @param string $path    File path within /tmp to save the file - make sure it exists and is writeable.
+   * @param mixed  $data    The data to save to the temporary file.
+   * @param mixed  $expires A valid strtotime string when the data expires.
+   *
    * @return mixed The contents of the temporary file.
    */
   public static function put($path, $data = null, $expires = '+1 day')
@@ -47,6 +48,7 @@ class Cache
    * Reads temporary data to cache files.
    *
    * @param string $path File path within /tmp to save the file - make sure it exists and is writeable.
+   *
    * @return mixed The contents of the temporary file.
    */
   public static function retrieve($path)
@@ -56,7 +58,9 @@ class Cache
 
   /**
    * Delete the cached file.
+   *
    * @param $path
+   *
    * @return bool
    */
   public static function forget($path)
@@ -64,6 +68,7 @@ class Cache
     if (file_exists($path)) {
       @unlink($path);
       clearstatcache();
+
       return true;
     }
 
@@ -73,9 +78,10 @@ class Cache
   /**
    * Reads/writes temporary data to cache files.
    *
-   * @param string $path File path within /tmp to save the file - make sure it exists and is writeable.
-   * @param mixed $data The data to save to the temporary file.
-   * @param mixed $expires A valid strtotime string when the data expires.
+   * @param string $path    File path within /tmp to save the file - make sure it exists and is writeable.
+   * @param mixed  $data    The data to save to the temporary file.
+   * @param mixed  $expires A valid strtotime string when the data expires.
+   *
    * @return mixed The contents of the temporary file.
    */
   protected static function cache($path, $data = null, $expires = '+1 day')

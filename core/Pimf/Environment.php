@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 namespace Pimf;
 
@@ -10,29 +11,29 @@ namespace Pimf;
  * Server and execution environment information.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  *
- * @property string X_REQUESTED_WITH It is sent by the Ajax functions of most major Frameworks
- * @property string HTTP Is the application running under HTTP protocol?
- * @property string HTTPS Is the application running under HTTPS protocol?
- * @property string SERVER_PROTOCOL Name and revision of the information protocol via which the page was requested; i.e. 'HTTP/1.0';
- * @property string CONTENT_LENGTH The Content-Length
- * @property string HOST The name of the server host under which the current script is executing.
- * @property string SERVER_NAME The name of the server host under which the current script is executing.
- * @property string SERVER_PORT Get the port
- * @property string PHP_SELF Filename of the currently executing script.
- * @property string SCRIPT_NAME Get Script Name (physical path)
- * @property string PATH_INFO Get Path Info (virtual path)
- * @property string X_FORWARDED_FOR Do on your machine is behind the proxy than us it instead of REMOTE_ADDR
- * @property string CLIENT_IP Get the client ip address
- * @property string REMOTE_ADDR The IP address from which the user is viewing the current page.
- * @property string HTTP_REFERER Get Referer - it cannot really be trusted.
- * @property string USER_AGENT Contents of the User-Agent from the current request, if there is one.
- * @property string HTTP_USER_AGENT Contents of the User-Agent: header from the current request, if there is one.
- * @property string REQUEST_URI The URI which was given in order to access this page; for instance, '/index.html'.
- * @property string REQUEST_METHOD Which request method was used to access the page; i.e. 'GET', 'HEAD', 'POST', 'PUT'.
+ * @property string X_REQUESTED_WITH       It is sent by the Ajax functions of most major Frameworks
+ * @property string HTTP                   Is the application running under HTTP protocol?
+ * @property string HTTPS                  Is the application running under HTTPS protocol?
+ * @property string SERVER_PROTOCOL        Name and revision of the information protocol via which the page was requested; i.e. 'HTTP/1.0';
+ * @property string CONTENT_LENGTH         The Content-Length
+ * @property string HOST                   The name of the server host under which the current script is executing.
+ * @property string SERVER_NAME            The name of the server host under which the current script is executing.
+ * @property string SERVER_PORT            Get the port
+ * @property string PHP_SELF               Filename of the currently executing script.
+ * @property string SCRIPT_NAME            Get Script Name (physical path)
+ * @property string PATH_INFO              Get Path Info (virtual path)
+ * @property string X_FORWARDED_FOR        Do on your machine is behind the proxy than us it instead of REMOTE_ADDR
+ * @property string CLIENT_IP              Get the client ip address
+ * @property string REMOTE_ADDR            The IP address from which the user is viewing the current page.
+ * @property string HTTP_REFERER           Get Referer - it cannot really be trusted.
+ * @property string USER_AGENT             Contents of the User-Agent from the current request, if there is one.
+ * @property string HTTP_USER_AGENT        Contents of the User-Agent: header from the current request, if there is one.
+ * @property string REQUEST_URI            The URI which was given in order to access this page; for instance, '/index.html'.
+ * @property string REQUEST_METHOD         Which request method was used to access the page; i.e. 'GET', 'HEAD', 'POST', 'PUT'.
  * @property string HTTP_IF_MODIFIED_SINCE Get request header from Apache even on PHP running as a CGI
- * @property string HTTP_IF_NONE_MATCH Get request header from Apache even on PHP running as a CGI
+ * @property string HTTP_IF_NONE_MATCH     Get request header from Apache even on PHP running as a CGI
  */
 class Environment
 {
@@ -59,6 +60,7 @@ class Environment
 
   /**
    * @param $key
+   *
    * @return mixed|null
    */
   public function __get($key)
@@ -68,6 +70,7 @@ class Environment
 
   /**
    * Is this an AJAX request?
+   *
    * @return bool
    */
   public function isAjax()
@@ -77,15 +80,17 @@ class Environment
 
   /**
    * Is the application running under HTTP protocol?
+   *
    * @return bool
    */
   public function isHttp()
   {
-    return (bool) $this->HTTP;
+    return (bool)$this->HTTP;
   }
 
   /**
    * Is the application running under HTTPS protocol?
+   *
    * @return bool
    */
   public function isHttps()
@@ -95,6 +100,7 @@ class Environment
 
   /**
    * Get Host
+   *
    * @return string
    */
   public function getHost()
@@ -103,6 +109,7 @@ class Environment
 
       if (strpos($this->HOST, ':') !== false) {
         $hostParts = explode(':', $this->HOST);
+
         return $hostParts[0];
       }
 
@@ -114,15 +121,17 @@ class Environment
 
   /**
    * Get Host with Port
+   *
    * @return string
    */
   public function getHostWithPort()
   {
-    return ''.$this->getHost().':'.$this->SERVER_PORT;
+    return '' . $this->getHost() . ':' . $this->SERVER_PORT;
   }
 
   /**
    * Physical path + virtual path
+   *
    * @return string
    */
   public function getPath()
@@ -132,6 +141,7 @@ class Environment
 
   /**
    * Get remote IP
+   *
    * @return string
    */
   public function getIp()
@@ -153,6 +163,7 @@ class Environment
 
   /**
    * Get User Agent
+   *
    * @return string|null
    */
   public function getUserAgent()
@@ -170,18 +181,21 @@ class Environment
 
   /**
    * Gives you the current page URL
+   *
    * @return string
    */
   public function getUrl()
   {
-    $protocol = strpos(strtolower($this->PATH_INFO),'https') === false ? 'http' : 'https';
+    $protocol = strpos(strtolower($this->PATH_INFO), 'https') === false ? 'http' : 'https';
 
     return $protocol . '://' . $this->getHost();
   }
 
   /**
    * Try to get a request header.
+   *
    * @param string $header
+   *
    * @return array
    */
   public function getRequestHeader($header)
@@ -199,6 +213,7 @@ class Environment
 
   /**
    * Try to determine all request headers
+   *
    * @return array
    */
   public function getRequestHeaders()

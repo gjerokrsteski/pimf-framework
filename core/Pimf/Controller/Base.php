@@ -1,20 +1,21 @@
 <?php
 /**
  * Controller
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Controller;
-use \Pimf\Param,  \Pimf\Registry, \Pimf\Sapi,
-    \Pimf\Controller\Exception as Bomb, \Pimf\Request,
-    \Pimf\Util\Header, \Pimf\Url, \Pimf\Response;
+
+use \Pimf\Param, \Pimf\Registry, \Pimf\Sapi, \Pimf\Controller\Exception as Bomb, \Pimf\Request, \Pimf\Util\Header, \Pimf\Url,
+  \Pimf\Response;
 
 /**
  * Defines the general controller behaviour - you have to extend it.
  *
  * @package Controller
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 abstract class Base
 {
@@ -42,6 +43,7 @@ abstract class Base
 
   /**
    * Method to show the content.
+   *
    * @return mixed
    * @throws \Exception If not supported request method or bad controller
    */
@@ -52,24 +54,24 @@ abstract class Base
     if (Sapi::isCli() && $conf['environment'] == 'production') {
 
       $suffix = 'CliAction';
-      $action = $this->request->fromCli()->get('action') ?: 'index';
+      $action = $this->request->fromCli()->get('action') ? : 'index';
 
     } else {
 
       $requestMethod = ucfirst(Registry::get('env')->REQUEST_METHOD);
       $suffix        = 'Action';
 
-      if (!method_exists($this->request, $bag = 'from'.$requestMethod)) {
-        throw new Bomb("not supported request method=".$requestMethod);
+      if (!method_exists($this->request, $bag = 'from' . $requestMethod)) {
+        throw new Bomb("not supported request method=" . $requestMethod);
       }
 
-      $action = $this->request->{$bag}()->get('action') ?: 'index';
+      $action = $this->request->{$bag}()->get('action') ? : 'index';
 
-      if($conf['app']['routeable'] === true) {
+      if ($conf['app']['routeable'] === true) {
 
         $target = Registry::get('router')->find();
 
-        if($target instanceof \Pimf\Route\Target) {
+        if ($target instanceof \Pimf\Route\Target) {
 
           $action = $target->getAction();
 
@@ -87,9 +89,7 @@ abstract class Base
     }
 
     if (!method_exists($this, $action)) {
-      throw new Bomb(
-        "no action '{$action}' defined at controller ". get_class($this)
-      );
+      throw new Bomb("no action '{$action}' defined at controller " . get_class($this));
     }
 
     return call_user_func(array($this, $action));
@@ -98,7 +98,7 @@ abstract class Base
   /**
    * Prepares the response object to return an HTTP Redirect response to the client.
    *
-   * @param string $route The redirect destination like controller/action
+   * @param string  $route     The redirect destination like controller/action
    * @param boolean $permanent If permanent redirection or not.
    * @param boolean $exit
    */

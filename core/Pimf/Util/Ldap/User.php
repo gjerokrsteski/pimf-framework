@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util\Ldap;
@@ -12,7 +12,7 @@ namespace Pimf\Util\Ldap;
  * Lightweight LDAP user object.
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class User
 {
@@ -56,12 +56,12 @@ class User
    */
   public function __construct($dname, $firstname, $lastname, array $memberof, $name, $objectguid)
   {
-    $this->dname      = ''.$dname;
-    $this->firstname  = ''.$firstname;
-    $this->lastname   = ''.$lastname;
+    $this->dname      = '' . $dname;
+    $this->firstname  = '' . $firstname;
+    $this->lastname   = '' . $lastname;
     $this->memberof   = (array)$memberof;
-    $this->name       = ''.$name;
-    $this->objectguid = ''.$objectguid;
+    $this->name       = '' . $name;
+    $this->objectguid = '' . $objectguid;
   }
 
   /**
@@ -71,14 +71,8 @@ class User
    */
   public static function factory(array $user)
   {
-    return new self(
-      $user['dn'],
-      $user['givenname'][0],
-      $user['sn'][0],
-      isset($user['memberof']) ? $user['memberof'] : array( 'count' => 0 ),
-      $user['cn'][0],
-      $user['objectguid'][0]
-    );
+    return new self($user['dn'], $user['givenname'][0], $user['sn'][0], isset($user['memberof']) ? $user['memberof']
+        : array('count' => 0), $user['cn'][0], $user['objectguid'][0]);
   }
 
   /**

@@ -3,10 +3,11 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
+
 use Pimf\Registry;
 
 /**
@@ -38,9 +39,9 @@ use Pimf\Registry;
  *
  * </code>
  *
- * @link http://www.php.net/manual/en/intro.ldap.php
+ * @link    http://www.php.net/manual/en/intro.ldap.php
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Ldap
 {
@@ -52,9 +53,7 @@ class Ldap
   public function __construct()
   {
     if (!function_exists('ldap_connect')) {
-      throw new \RuntimeException(
-        'LDAP-auth requires the php-ldap extension to be installed'
-      );
+      throw new \RuntimeException('LDAP-auth requires the php-ldap extension to be installed');
     }
   }
 
@@ -84,6 +83,7 @@ class Ldap
 
   /**
    * Attempt to log a user into the application.
+   *
    * @param $username
    * @param $password
    *
@@ -119,9 +119,7 @@ class Ldap
 
     // connect to the controller
     if (!$this->conn = ldap_connect("ldap://{$config['host']}.{$config['domain']}")) {
-      throw new \RuntimeException(
-        "could not connect to LDAP host {$config['host']}.{$config['domain']}"
-      );
+      throw new \RuntimeException("could not connect to LDAP host {$config['host']}.{$config['domain']}");
     }
 
     // required for Windows AD
@@ -130,9 +128,7 @@ class Ldap
 
     // try to authenticate
     if (!@ldap_bind($this->conn, "{$user}@{$config['domain']}", $password)) {
-      throw new \RuntimeException(
-        'could not bind to AD: ' . "{$user}@{$config['domain']}"
-      );
+      throw new \RuntimeException('could not bind to AD: ' . "{$user}@{$config['domain']}");
     }
   }
 
@@ -185,8 +181,7 @@ class Ldap
   protected function getAccount($account, $basedn)
   {
     $result = ldap_search(
-      $this->conn, $basedn, "(samaccountname={$account})",
-      array('dn', 'givenname', 'sn', 'cn', 'memberof', 'objectguid')
+      $this->conn, $basedn, "(samaccountname={$account})", array('dn', 'givenname', 'sn', 'cn', 'memberof', 'objectguid')
     );
 
     if (!$result) {
@@ -203,6 +198,7 @@ class Ldap
   /**
    * Checks group membership of the user, searching
    * in the specified group and its children (recursively)
+   *
    * @param $userDN
    * @param $groupDN
    *

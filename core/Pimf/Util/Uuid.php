@@ -3,10 +3,11 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
+
 use Pimf\Registry;
 
 /**
@@ -20,22 +21,24 @@ use Pimf\Registry;
  * </pre>
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
- * @see http://www.ietf.org/rfc/rfc4122.txt
+ * @author  Gjero Krsteski <gjero@krsteski.de>
+ * @see     http://www.ietf.org/rfc/rfc4122.txt
  */
 final class Uuid
 {
   /**
    * 32-bit integer that identifies this host.
+   *
    * @var integer
    */
   private static $node = null;
 
   /**
    * Process identifier.
+   *
    * @var integer
    */
-  private static $pid  = null;
+  private static $pid = null;
 
   /**
    * Returns a 32-bit integer that identifies this host.
@@ -52,21 +55,21 @@ final class Uuid
     $hostname = Registry::get('env')->getHost();
 
     if ($host === null && true === function_exists('gethostname')) {
-        $hostname = gethostname();
-        $host       = gethostbyname($hostname);
+      $hostname = gethostname();
+      $host     = gethostbyname($hostname);
     }
 
     if ($host === null && true === function_exists('php_uname')) {
-        $hostname = php_uname('n');
-        $host     = gethostbyname($hostname);
+      $hostname = php_uname('n');
+      $host     = gethostbyname($hostname);
     }
 
     if ($host === null && $hostname !== null) {
-        $host = crc32($hostname);
+      $host = crc32($hostname);
     }
 
     if ($host === null) {
-        $host = '127.0.0.1';
+      $host = '127.0.0.1';
     }
 
     return ip2long($host);
@@ -104,11 +107,11 @@ final class Uuid
   public static function generate()
   {
     if (self::$node === null) {
-        self::$node = self::getNodeId();
+      self::$node = self::getNodeId();
     }
 
     if (self::$pid === null) {
-        self::$pid = self::getLockId();
+      self::$pid = self::getLockId();
     }
 
     list($time_mid, $time_lo) = explode(' ', microtime());
@@ -123,17 +126,15 @@ final class Uuid
     $clock_seq_low = mt_rand(0, 0xff);
 
     /* type is pseudo-random */
-    $clock_seq_high  = mt_rand(0, 0x3f);
+    $clock_seq_high = mt_rand(0, 0x3f);
     $clock_seq_high |= 0x80;
 
     $node_low = self::$pid;
     $node     = self::$node;
 
     return sprintf(
-        '%08x-%04x-%04x-%02x%02x-%04x%08x',
-        $time_low, $time_mid & 0xffff, $time_and_version,
-        $clock_seq_high, $clock_seq_low,
-        $node_low, $node
+      '%08x-%04x-%04x-%02x%02x-%04x%08x', $time_low, $time_mid & 0xffff, $time_and_version, $clock_seq_high, $clock_seq_low, $node_low,
+      $node
     );
   }
 }

@@ -1,11 +1,13 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Session;
+
 use Pimf\Registry, Pimf\Session, Pimf\Util\String, Pimf\Cookie;
 
 /**
@@ -34,24 +36,27 @@ use Pimf\Registry, Pimf\Session, Pimf\Util\String, Pimf\Cookie;
  * </code>
  *
  * @package Session
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Payload
 {
   /**
    * The session array that is stored by the storage.
+   *
    * @var array
    */
   public $session;
 
   /**
    * The session storage used to retrieve and store the session payload.
+   *
    * @var \Pimf\Session\Storages\Storage
    */
   public $storage;
 
   /**
    * Indicates if the session already exists in storage.
+   *
    * @var bool
    */
   public $exists = true;
@@ -66,6 +71,7 @@ class Payload
 
   /**
    * Load the session for the current request.
+   *
    * @param $id
    */
   public function load($id)
@@ -76,7 +82,7 @@ class Payload
 
     // If the session doesn't exist or is invalid.
     if (is_null($this->session) or static::expired($this->session)) {
-      $this->exists = false;
+      $this->exists  = false;
       $this->session = $this->storage->fresh();
     }
 
@@ -89,14 +95,16 @@ class Payload
 
   /**
    * Determine if the session payload instance is valid.
+   *
    * @param array $session
+   *
    * @return bool
    */
   protected static function expired($session)
   {
     $conf = Registry::get('conf');
 
-    if(array_key_exists('last_activity', $session)){
+    if (array_key_exists('last_activity', $session)) {
       return (time() - $session['last_activity']) > ($conf['session']['lifetime'] * 60);
     }
 
@@ -105,7 +113,9 @@ class Payload
 
   /**
    * Determine if the session or flash data contains an item.
+   *
    * @param string $key
+   *
    * @return bool
    */
   public function has($key)
@@ -115,8 +125,10 @@ class Payload
 
   /**
    * Get an item from the session.
+   *
    * @param string $key
-   * @param null $default
+   * @param null   $default
+   *
    * @return mixed|null
    */
   public function get($key, $default = null)
@@ -145,7 +157,7 @@ class Payload
    * Checks if key is in session.
    *
    * @param string $key
-   * @param array $session
+   * @param array  $session
    *
    * @return mixed|null
    */
@@ -160,6 +172,7 @@ class Payload
 
   /**
    * Write an item to the session.
+   *
    * @param $key
    * @param $value
    */
@@ -170,6 +183,7 @@ class Payload
 
   /**
    * Write an item to the session flash data.
+   *
    * @param $key
    * @param $value
    */
@@ -180,18 +194,19 @@ class Payload
 
   /**
    * Keep all of the session flash data from expiring after the request.
+   *
    * @return void
    */
   public function reflash()
   {
     $this->session['data'][':new:'] = array_merge(
-      $this->session['data'][':new:'],
-      $this->session['data'][':old:']
+      $this->session['data'][':new:'], $this->session['data'][':old:']
     );
   }
 
   /**
    * Keep a session flash item from expiring at the end of the request.
+   *
    * @param $keys
    */
   public function keep($keys)
@@ -203,6 +218,7 @@ class Payload
 
   /**
    * Remove an item from the session data.
+   *
    * @param $key
    */
   public function forget($key)
@@ -215,11 +231,7 @@ class Payload
    */
   public function flush()
   {
-    $this->session['data'] = array(
-      Session::CSRF => $this->token(),
-      ':new:'       => array(),
-      ':old:'       => array()
-    );
+    $this->session['data'] = array(Session::CSRF => $this->token(), ':new:' => array(), ':old:' => array());
   }
 
   /**
@@ -233,6 +245,7 @@ class Payload
 
   /**
    * Get the CSRF token that is stored in the session data.
+   *
    * @return string
    */
   public function token()
@@ -242,6 +255,7 @@ class Payload
 
   /**
    * Get the last activity for the session.
+   *
    * @return int
    */
   public function activity()
@@ -252,6 +266,7 @@ class Payload
   /**
    * Store the session payload in storage.
    * This method will be called automatically at the end of the request.
+   *
    * @return void
    */
   public function save()
@@ -261,7 +276,7 @@ class Payload
     // age it that should expire at the end of the user's next request.
     $this->age();
 
-    $conf = Registry::get('conf');
+    $conf        = Registry::get('conf');
     $sessionConf = $conf['session'];
 
     // save data into the specialized storage.
@@ -281,6 +296,7 @@ class Payload
 
   /**
    * Clean up expired sessions.
+   *
    * @return void
    */
   public function clean()
@@ -293,6 +309,7 @@ class Payload
 
   /**
    * Age the session flash data.
+   *
    * @return void
    */
   protected function age()
@@ -303,7 +320,9 @@ class Payload
 
   /**
    * Send the session ID cookie to the browser.
-   * @param  array  $config
+   *
+   * @param  array $config
+   *
    * @return void
    */
   protected function cookie($config)

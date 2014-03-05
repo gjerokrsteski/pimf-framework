@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -27,7 +27,7 @@ namespace Pimf\Util;
  * </code>
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class LineByLine
 {
@@ -35,11 +35,12 @@ class LineByLine
 
   /**
    * @param string|array|\Closure $callback
+   *
    * @throws \RuntimeException If no callable callback given.
    */
   public function __construct($callback)
   {
-    if(!is_callable($callback)){
+    if (!is_callable($callback)) {
       throw new \RuntimeException('no callable given');
     }
 
@@ -47,15 +48,16 @@ class LineByLine
   }
 
   /**
-   * @param string $file Filename or stream
-   * @param bool $feedback Should callback responses be collected.
-   * @param bool $binary Is binary file.
+   * @param string $file     Filename or stream
+   * @param bool   $feedback Should callback responses be collected.
+   * @param bool   $binary   Is binary file.
+   *
    * @return array List of collected responses.
    * @throws \RuntimeException If can not create file handle.
    */
   public function read($file, $feedback = false, $binary = false)
   {
-    if(!is_resource($handle = fopen($file, ($binary === true ? 'rb':'r')))){
+    if (!is_resource($handle = fopen($file, ($binary === true ? 'rb' : 'r')))) {
       throw new \RuntimeException('can not read handle');
     }
 
@@ -64,8 +66,7 @@ class LineByLine
     while (!feof($handle)) {
 
       $response = call_user_func_array(
-        $this->callback,
-        array( fgets($handle, 4096) )
+        $this->callback, array(fgets($handle, 4096))
       );
 
       if ($feedback === true) {

@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c) 2010-2013 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -30,37 +30,42 @@ namespace Pimf\Util;
  * </code>
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Uploaded extends File
 {
   /**
    * Whether the test mode is activated.
    * Local files are used in test mode hence the code should not enforce HTTP uploads.
+   *
    * @var bool
    */
   private $test = false;
 
   /**
    * The original name of the uploaded file.
+   *
    * @var string
    */
   private $name;
 
   /**
    * The mime type provided by the uploader.
+   *
    * @var string
    */
   private $mime;
 
   /**
    * The file size provided by the uploader.
+   *
    * @var string
    */
   private $size;
 
   /**
    * The UPLOAD_ERR_XXX constant provided by the uploader.
+   *
    * @var integer
    */
   private $error;
@@ -80,27 +85,25 @@ class Uploaded extends File
    *   );
    * </code>
    *
-   * @param string $path The full temporary path to the file
-   * @param string $name The original file name
-   * @param string|null $mime The type of the file as provided by PHP
-   * @param string|null $size The file size
-   * @param int|null $error The error constant of the upload (one of PHP's UPLOAD_ERR_XXX constants)
-   * @param bool $test Whether the test mode is active
+   * @param string      $path  The full temporary path to the file
+   * @param string      $name  The original file name
+   * @param string|null $mime  The type of the file as provided by PHP
+   * @param string|null $size  The file size
+   * @param int|null    $error The error constant of the upload (one of PHP's UPLOAD_ERR_XXX constants)
+   * @param bool        $test  Whether the test mode is active
    *
    * @throws \RuntimeException If file_uploads is disabled
    */
   public function __construct($path, $name, $mime = null, $size = null, $error = null, $test = false)
   {
     if (!ini_get('file_uploads')) {
-      throw new \RuntimeException(
-        'Unable to create file because "file_uploads" is disabled in your php.ini'
-      );
+      throw new \RuntimeException('Unable to create file because "file_uploads" is disabled in your php.ini');
     }
 
     $this->name  = $this->getName($name);
-    $this->mime  = $mime ?: 'application/octet-stream';
+    $this->mime  = $mime ? : 'application/octet-stream';
     $this->size  = $size;
-    $this->error = $error ?: UPLOAD_ERR_OK;
+    $this->error = $error ? : UPLOAD_ERR_OK;
     $this->test  = (bool)$test;
 
     parent::__construct($path, UPLOAD_ERR_OK === $this->error);
@@ -115,7 +118,8 @@ class Uploaded extends File
    * </code>
    *
    * @param mixed $file A $_FILES multi-dimensional array of uploaded file information.
-   * @param bool $test Whether the test mode is active for essayer unit-testing.
+   * @param bool  $test Whether the test mode is active for essayer unit-testing.
+   *
    * @return null|Uploaded
    */
   public static function factory(array $file, $test = false)
@@ -206,7 +210,8 @@ class Uploaded extends File
    * Moves the file to a new location.
    *
    * @param string $dir
-   * @param null $name
+   * @param null   $name
+   *
    * @return \Pimf\Util\File
    * @throws \RuntimeException If the file has not been uploaded via Http or can not move the file.
    */
@@ -224,9 +229,7 @@ class Uploaded extends File
 
         if (!@move_uploaded_file($this->getPathname(), $target)) {
           $error = error_get_last();
-          throw new \RuntimeException(
-            "Could not move the file {$this->getPathname()} to $target ({$error['message']})"
-          );
+          throw new \RuntimeException("Could not move the file {$this->getPathname()} to $target ({$error['message']})");
         }
 
         @chmod($target, 0666 & ~umask());
@@ -240,6 +243,7 @@ class Uploaded extends File
 
   /**
    * Returns the maximum size of an uploaded file in bytes as configured in php.ini
+   *
    * @return int
    */
   public static function getMaxFilesize()
@@ -275,6 +279,7 @@ class Uploaded extends File
    * This method fixes the array to look like the "normal" $_FILES array.
    *
    * @param array $data
+   *
    * @return array
    */
   protected static function heal($data)
@@ -298,13 +303,8 @@ class Uploaded extends File
 
     foreach (array_keys($data['name']) as $key) {
       $files[$key] = static::heal(
-        array(
-          'error'    => $data['error'][$key],
-          'name'     => $data['name'][$key],
-          'type'     => $data['type'][$key],
-          'tmp_name' => $data['tmp_name'][$key],
-          'size'     => $data['size'][$key]
-        )
+        array('error'    => $data['error'][$key], 'name' => $data['name'][$key], 'type' => $data['type'][$key],
+              'tmp_name' => $data['tmp_name'][$key], 'size' => $data['size'][$key])
       );
     }
 

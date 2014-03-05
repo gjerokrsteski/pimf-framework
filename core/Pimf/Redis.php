@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
@@ -26,7 +27,7 @@ namespace Pimf;
  * </code>
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  *
  * @method expire($key, $seconds)
  * @method set($key, $value)
@@ -40,44 +41,50 @@ class Redis
 {
   /**
    * The address for the Redis host.
+   *
    * @var string
    */
   protected $host;
 
   /**
    * The port on which Redis can be accessed on the host.
+   *
    * @var int
    */
   protected $port;
 
   /**
    * The database number the connection selects on load.
+   *
    * @var int
    */
   protected $database;
 
   /**
    * The connection to the Redis database.
+   *
    * @var resource
    */
   protected $connection;
 
   /**
    * The active Redis database instances.
+   *
    * @var array
    */
   protected static $databases = array();
 
   /**
    * Create a new Redis connection instance.
+   *
    * @param string $host
-   * @param int $port
-   * @param int $database
+   * @param int    $port
+   * @param int    $database
    */
   public function __construct($host, $port, $database = 0)
   {
-    $this->host     = $host;
-    $this->port     = $port;
+    $this->host = $host;
+    $this->port = $port;
     $this->database = $database;
   }
 
@@ -87,6 +94,7 @@ class Redis
    * The given name should correspond to a Redis database in the configuration file.
    *
    * @param string $name
+   *
    * @return mixed
    * @throws \RuntimeException
    */
@@ -99,11 +107,8 @@ class Redis
         throw new \RuntimeException("Redis database [$name] is not defined.");
       }
 
-      static::$databases[$name] = new static(
-        $conf['cache']['server']['host'],
-        $conf['cache']['server']['port'],
-        $conf['cache']['server']['database']
-      );
+      static::$databases[$name]
+        = new static($conf['cache']['server']['host'], $conf['cache']['server']['port'], $conf['cache']['server']['database']);
     }
 
     return static::$databases[$name];
@@ -111,8 +116,10 @@ class Redis
 
   /**
    * Execute a command against the Redis database.
+   *
    * @param string $method
-   * @param array $parameters
+   * @param array  $parameters
+   *
    * @return mixed
    */
   public function run($method, $parameters)
@@ -126,7 +133,9 @@ class Redis
 
   /**
    * Parse and return the response from the Redis database.
+   *
    * @param $response
+   *
    * @return array|string
    * @throws \RuntimeException
    */
@@ -153,6 +162,7 @@ class Redis
 
   /**
    * Establish the connection to the Redis database.
+   *
    * @return resource
    * @throws \RuntimeException
    */
@@ -189,15 +199,14 @@ class Redis
    *
    * @param $method
    * @param $parameters
+   *
    * @return string
    */
   protected function command($method, $parameters)
   {
     $CRLF = "\r\n";
 
-    $command = '*' . (count($parameters) + 1) . $CRLF
-                  . '$' . strlen($method) . $CRLF
-                  . strtoupper($method) . $CRLF;
+    $command = '*' . (count($parameters) + 1) . $CRLF . '$' . strlen($method) . $CRLF . strtoupper($method) . $CRLF;
 
     foreach ($parameters as $parameter) {
       $command .= '$' . strlen($parameter) . $CRLF . $parameter . $CRLF;
@@ -208,7 +217,9 @@ class Redis
 
   /**
    * Parse and handle an inline response from the Redis database.
+   *
    * @param $response
+   *
    * @return string
    */
   protected function inline($response)
@@ -218,7 +229,9 @@ class Redis
 
   /**
    * Parse and handle a bulk response from the Redis database.
+   *
    * @param string $head
+   *
    * @return string
    */
   protected function bulk($head)
@@ -248,7 +261,9 @@ class Redis
 
   /**
    * Parse and handle a multi-bulk reply from the Redis database.
+   *
    * @param string $head
+   *
    * @return array
    */
   protected function multibulk($head)

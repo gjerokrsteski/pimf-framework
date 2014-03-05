@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -32,7 +32,7 @@ namespace Pimf\Util;
  * </code>
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Message
 {
@@ -52,12 +52,12 @@ class Message
   protected $delimiter = '%';
 
   /**
-   * @param string $message The message or the resource.
-   * @param array $bindings (Optional) A List of tokes whitch should be bind.
+   * @param string $message  The message or the resource.
+   * @param array  $bindings (Optional) A List of tokes whitch should be bind.
    */
   public function __construct($message, array $bindings = array())
   {
-    $this->message = $message;
+    $this->message  = $message;
     $this->bindings = $bindings;
   }
 
@@ -71,21 +71,25 @@ class Message
 
   /**
    * @param string $message The message.
+   *
    * @return Message
    */
   public function setMessage($message)
   {
     $this->message = $message;
+
     return $this;
   }
 
   /**
    * @param string $char The character for the prexied delimitation of the tokens.
+   *
    * @return Message
    */
   public function setDelimiter($char)
   {
     $this->delimiter = $char;
+
     return $this;
   }
 
@@ -94,11 +98,13 @@ class Message
    *
    * @param string $token The token.
    * @param string $value The value for replacement.
+   *
    * @return Message
    */
   public function bind($token, $value)
   {
     $this->bindings[$token] = $value;
+
     return $this;
   }
 
@@ -109,7 +115,7 @@ class Message
    */
   public function __toString()
   {
-    return (string) $this->format();
+    return (string)$this->format();
   }
 
   /**

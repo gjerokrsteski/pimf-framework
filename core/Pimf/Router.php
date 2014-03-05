@@ -1,11 +1,13 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
+
 use Pimf\Route\Target;
 
 /**
@@ -15,7 +17,7 @@ use Pimf\Route\Target;
  * finding routes that match the current HTTP request, and creating URLs for a named route.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Router
 {
@@ -27,10 +29,7 @@ class Router
   public function __construct()
   {
     //it is a pimf-framework restriction.
-    $this
-      ->map(new Route('/:controller'))
-      ->map(new Route('/:controller/:action'))
-      ->map(new Route('/:controller/:action/:id'));
+    $this->map(new Route('/:controller'))->map(new Route('/:controller/:action'))->map(new Route('/:controller/:action/:id'));
   }
 
   /**
@@ -41,6 +40,7 @@ class Router
   public function map(Route $route)
   {
     $this->routes[$route->getRule()] = $route;
+
     return $this;
   }
 
@@ -57,7 +57,7 @@ class Router
 
     unset($params['controller']);
 
-    if(isset($params['action'])){
+    if (isset($params['action'])) {
       $target->setAction($params['action']);
       unset($params['action']);
     }
@@ -74,8 +74,7 @@ class Router
   {
     // check custom routes first
     // than framework's restriction routes.
-    foreach (array_reverse($this->routes) as $route)
-    {
+    foreach (array_reverse($this->routes) as $route) {
       if ($route->matches() === true) {
         return $this->target($route);
       }

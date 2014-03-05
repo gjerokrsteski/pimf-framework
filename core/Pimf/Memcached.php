@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
@@ -32,15 +33,15 @@ namespace Pimf;
  *    // Get the Memcache connection and place an item in the cache
  *    Memcached::connection()->set('name', 'Robin');
  *
- *		// Get an item from the Memcache instance
- *		$name = Memcached::get('name');
+ *    // Get an item from the Memcache instance
+ *    $name = Memcached::get('name');
  *
- *		// Store data on the Memcache server
- *		Memcached::set('name', 'Robin');
+ *    // Store data on the Memcache server
+ *    Memcached::set('name', 'Robin');
  * </code>
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  *
  * @method get($key)
  * @method put($key, $value, $expiration)
@@ -48,10 +49,10 @@ namespace Pimf;
  */
 class Memcached
 {
-	/**
-	 * @var \Memcached
-	 */
-	protected static $connection;
+  /**
+   * @var \Memcached
+   */
+  protected static $connection;
 
   /**
    * @return \Memcached

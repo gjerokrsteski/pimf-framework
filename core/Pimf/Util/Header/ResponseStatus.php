@@ -3,27 +3,28 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 namespace Pimf\Util\Header;
+
 use Pimf\Registry;
 
 /**
  * Manages a raw HTTP header ResponseStatus sending.
  *
  * @package Util_Header
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 abstract class ResponseStatus
 {
   /**
-   * @param int $code HTTP response code
-   * @param string $status The header string which will be used to figure out the HTTP status code to send.
-   * @param bool $replace Whether the header should replace a previous similar header.
+   * @param int    $code    HTTP response code
+   * @param string $status  The header string which will be used to figure out the HTTP status code to send.
+   * @param bool   $replace Whether the header should replace a previous similar header.
    */
   public static function send($code, $status, $replace = true)
   {
-    header(''.Registry::get('env')->SERVER_PROTOCOL.' ' . $code . ' ' . $status, $replace, $code);
+    header('' . Registry::get('env')->SERVER_PROTOCOL . ' ' . $code . ' ' . $status, $replace, $code);
   }
 
   public static function sendXFrameDeny()

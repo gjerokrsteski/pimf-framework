@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
@@ -25,7 +26,7 @@ namespace Pimf;
  * with the values of the corresponding HTTP request URI segments.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Route
 {
@@ -41,32 +42,36 @@ class Route
 
   /**
    * The route pattern (e.g. "/controller/:action/:id")
+   *
    * @var string
    */
   private $rule;
 
   /**
    * Array of URL parameter names
+   *
    * @var array
    */
   protected $names = array();
 
   /**
    * Array of URL parameter names with + at the end
+   *
    * @var array
    */
   protected $namesPath = array();
 
   /**
    * Conditions for this route's URL parameters
+   *
    * @var array
    */
   private $conditions;
 
   /**
    * @param string $rule
-   * @param array $target
-   * @param array $conditions
+   * @param array  $target
+   * @param array  $conditions
    */
   public function __construct($rule, array $target = array(), array $conditions = array())
   {
@@ -75,9 +80,7 @@ class Route
 
     //convert URL params into regex patterns, construct a regex for this route, init params
     $regex = preg_replace_callback(
-      '#:([\w]+)\+?#',
-      array($this, 'computeUrlRegex'),
-      str_replace(')', ')?', (string)$rule)
+      '#:([\w]+)\+?#', array($this, 'computeUrlRegex'), str_replace(')', ')?', (string)$rule)
     );
 
     if (substr($rule, -1) === '/') {
@@ -88,10 +91,11 @@ class Route
     $params = array();
     if (!preg_match('#^' . $regex . '$#', self::computeUri(), $params)) {
       $this->matched = false;
+
       return;
     }
 
-    foreach ($this->names as $name){
+    foreach ($this->names as $name) {
       if (isset($params[$name])) {
         if (isset($this->namesPath[$name])) {
           $this->params[$name] = explode('/', urldecode($params[$name]));
@@ -137,7 +141,7 @@ class Route
     $uri = Registry::get('env')->REQUEST_URI;
     $pos = strpos($uri, '?');
 
-    if ($pos !== false){
+    if ($pos !== false) {
       $uri = substr($uri, 0, $pos);
     }
 

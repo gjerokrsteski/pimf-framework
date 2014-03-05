@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
@@ -11,7 +12,7 @@ namespace Pimf;
  * Request Manager - for controlled access to the global state of the world.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Request
 {
@@ -51,6 +52,7 @@ class Request
 
   /**
    * HTTP GET variables.
+   *
    * @return Param
    */
   public function fromGet()
@@ -60,6 +62,7 @@ class Request
 
   /**
    * CLI arguments passed to script.
+   *
    * @return Param
    */
   public function fromCli()
@@ -69,6 +72,7 @@ class Request
 
   /**
    * HTTP POST variables.
+   *
    * @return Param
    */
   public function fromPost()
@@ -78,6 +82,7 @@ class Request
 
   /**
    * HTTP Cookies.
+   *
    * @return Param
    */
   public function fromCookie()
@@ -87,8 +92,10 @@ class Request
 
   /**
    * Strip slashes from string or array
+   *
    * @param      $rawData
    * @param null $overrideStripSlashes
+   *
    * @return array|string
    */
   public static function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
@@ -108,6 +115,7 @@ class Request
    * Strip slashes from string or array
    *
    * @param $rawData
+   *
    * @return array|string
    */
   public static function stripSlashes($rawData)
@@ -115,10 +123,10 @@ class Request
     return is_array($rawData)
 
       ? array_map(
-          function($value){
-            return \Pimf\Request::stripSlashes($value);
-          }, $rawData
-        )
+        function ($value) {
+          return \Pimf\Request::stripSlashes($value);
+        }, $rawData
+      )
 
       : stripslashes($rawData);
   }

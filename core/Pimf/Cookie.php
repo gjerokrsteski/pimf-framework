@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
@@ -29,18 +30,20 @@ namespace Pimf;
  * </code>
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Cookie
 {
   /**
    * How long is forever (in minutes)?
+   *
    * @var int
    */
   const FOREVER = 2628000;
 
   /**
    * The cookies that have been set.
+   *
    * @var array
    */
   public static $jar = array();
@@ -48,7 +51,8 @@ class Cookie
   /**
    * Determine if a cookie exists.
    *
-   * @param  string  $name
+   * @param  string $name
+   *
    * @return bool
    */
   public static function has($name)
@@ -58,8 +62,10 @@ class Cookie
 
   /**
    * Get the value of a cookie.
-   * @param $name
+   *
+   * @param      $name
    * @param null $default
+   *
    * @return null|string
    */
   public static function get($name, $default = null)
@@ -79,12 +85,14 @@ class Cookie
 
   /**
    * Set the value of a cookie.
-   * @param $name
-   * @param $value
-   * @param int $expiration
+   *
+   * @param        $name
+   * @param        $value
+   * @param int    $expiration
    * @param string $path
-   * @param null $domain
-   * @param bool $secure
+   * @param null   $domain
+   * @param bool   $secure
+   *
    * @return bool
    * @throws \RuntimeException
    */
@@ -110,11 +118,13 @@ class Cookie
 
   /**
    * Set a "permanent" cookie. The cookie will last for one year.
-   * @param $name
-   * @param $value
+   *
+   * @param        $name
+   * @param        $value
    * @param string $path
-   * @param null $domain
-   * @param bool $secure
+   * @param null   $domain
+   * @param bool   $secure
+   *
    * @return bool
    */
   public static function forever($name, $value, $path = '/', $domain = null, $secure = false)
@@ -125,10 +135,11 @@ class Cookie
   /**
    * Delete a cookie.
    *
-   * @param $name
+   * @param        $name
    * @param string $path
-   * @param null $domain
-   * @param bool $secure
+   * @param null   $domain
+   * @param bool   $secure
+   *
    * @return bool
    */
   public static function forget($name, $path = '/', $domain = null, $secure = false)
@@ -140,11 +151,13 @@ class Cookie
    * Hash the given cookie value.
    *
    * @param string $value
+   *
    * @return string
    */
   public static function hash($value)
   {
     $conf = Registry::get('conf');
+
     return hash_hmac('sha1', $value, $conf['app']['key']);
   }
 
@@ -152,6 +165,7 @@ class Cookie
    * Parse a hash fingerprinted cookie value.
    *
    * @param string $value
+   *
    * @return string
    */
   protected static function parse($value)

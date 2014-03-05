@@ -1,11 +1,13 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
+
 use Pimf\Util\String, Pimf\Cache\Storages as CS;
 
 /**
@@ -26,19 +28,22 @@ use Pimf\Util\String, Pimf\Cache\Storages as CS;
  * </code>
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Cache
 {
   /**
    * All of the active cache storages.
+   *
    * @var \Pimf\Cache\Storages\Storage[]
    */
   public static $storages = array();
 
   /**
    * Get a cache storage instance.
+   *
    * @param string $storage
+   *
    * @return CS\Apc|CS\Dba|CS\File|CS\Memcached|CS\Memory|CS\Pdo|CS\Redis|CS\WinCache
    */
   public static function storage($storage = 'memory')
@@ -85,9 +90,7 @@ class Cache
         return new CS\WinCache($conf['cache']['key']);
 
       case 'dba':
-        return new CS\Dba(
-          String::ensureTrailing('/', $conf['cache']['storage_path']) . $conf['cache']['key']
-        );
+        return new CS\Dba(String::ensureTrailing('/', $conf['cache']['storage_path']) . $conf['cache']['key']);
 
       default:
         throw new \RuntimeException("Cache storage {$storage} is not supported.");
@@ -96,17 +99,16 @@ class Cache
 
   /**
    * Magic Method for calling the methods on the default cache storage.
+   *
    * @param $method
    * @param $parameters
+   *
    * @return mixed
    */
   public static function __callStatic($method, $parameters)
   {
     return call_user_func_array(
-      array(
-        static::storage(),
-        $method
-      ), $parameters
+      array(static::storage(), $method), $parameters
     );
   }
 }

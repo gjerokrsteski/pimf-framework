@@ -3,10 +3,11 @@
  * View
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\View;
+
 use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\Util\String as String;
 
 
@@ -29,9 +30,9 @@ use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\U
  *
  * </code>
  *
- * @link http://twig.sensiolabs.org/documentation
+ * @link    http://twig.sensiolabs.org/documentation
  * @package View
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  * @codeCoverageIgnore
  */
 class Twig extends View implements Reunitable
@@ -55,20 +56,15 @@ class Twig extends View implements Reunitable
 
     \Twig_Autoloader::register();
 
-    $options = array(
-      'debug'       => Value::ensureBoolean($conf['view']['twig']['debug']),
-      'auto_reload' => Value::ensureBoolean($conf['view']['twig']['auto_reload']),
-    );
+    $options = array('debug'       => Value::ensureBoolean($conf['view']['twig']['debug']),
+                     'auto_reload' => Value::ensureBoolean($conf['view']['twig']['auto_reload']),);
 
-    if($conf['view']['twig']['cache'] === true){
-      $options['cache'] = $this->path.'/twig_cache';
+    if ($conf['view']['twig']['cache'] === true) {
+      $options['cache'] = $this->path . '/twig_cache';
     }
 
     // define the Twig environment.
-    $this->twig = new \Twig_Environment(
-      new \Twig_Loader_Filesystem(array($this->path)),
-      $options
-    );
+    $this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem(array($this->path)), $options);
   }
 
   /**
@@ -81,13 +77,13 @@ class Twig extends View implements Reunitable
 
   /**
    * Puts the template an the variables together.
+   *
    * @return string|void
    */
   public function reunite()
   {
     return $this->twig->render(
-      $this->template,
-      $this->data->getArrayCopy()
+      $this->template, $this->data->getArrayCopy()
     );
   }
 }

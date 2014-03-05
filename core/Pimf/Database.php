@@ -1,33 +1,35 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
 
 /**
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Database extends \PDO
 {
   /**
    * The current transaction level.
+   *
    * @var int
    */
   protected $transLevel = 0;
 
   /**
    * Check database drivers that support savepoints.
+   *
    * @return bool
    */
   public function nestable()
   {
     return in_array(
-      $this->getAttribute(\PDO::ATTR_DRIVER_NAME),
-      array("pgsql", "mysql")
+      $this->getAttribute(\PDO::ATTR_DRIVER_NAME), array("pgsql", "mysql")
     );
   }
 
@@ -66,9 +68,7 @@ class Database extends \PDO
   public function rollBack()
   {
     if ($this->transLevel == 0) {
-      throw new \PDOException(
-        'trying to rollback without a transaction-start', 25000
-      );
+      throw new \PDOException('trying to rollback without a transaction-start', 25000);
     }
 
     $this->transLevel--;

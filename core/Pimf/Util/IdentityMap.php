@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -14,7 +14,7 @@ namespace Pimf\Util;
  * same object data from the database.
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class IdentityMap
 {
@@ -36,7 +36,7 @@ class IdentityMap
 
   /**
    * @param integer $id
-   * @param mixed $object
+   * @param mixed   $object
    */
   public function set($id, $object)
   {
@@ -46,15 +46,14 @@ class IdentityMap
 
   /**
    * @param mixed $object
+   *
    * @throws \OutOfBoundsException
    * @return integer
    */
   public function getId($object)
   {
     if (false === $this->hasObject($object)) {
-      throw new \OutOfBoundsException(
-        'no object='.get_class($object).' at the identity-map'
-      );
+      throw new \OutOfBoundsException('no object=' . get_class($object) . ' at the identity-map');
     }
 
     return $this->objectToId[$object];
@@ -62,6 +61,7 @@ class IdentityMap
 
   /**
    * @param integer $id
+   *
    * @return boolean
    */
   public function hasId($id)
@@ -71,6 +71,7 @@ class IdentityMap
 
   /**
    * @param mixed $object
+   *
    * @return boolean
    */
   public function hasObject($object)
@@ -80,15 +81,14 @@ class IdentityMap
 
   /**
    * @param integer $id
+   *
    * @throws \OutOfBoundsException
    * @return object
    */
   public function getObject($id)
   {
     if (false === $this->hasId($id)) {
-      throw new \OutOfBoundsException(
-        'no id='.$id.' at the identity-map'
-      );
+      throw new \OutOfBoundsException('no id=' . $id . ' at the identity-map');
     }
 
     return $this->idToObject[$id];

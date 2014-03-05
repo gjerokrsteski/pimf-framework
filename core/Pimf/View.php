@@ -1,18 +1,20 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
+
 use Pimf\Contracts\Renderable, Pimf\Util\String, Pimf\Util\File, Pimf\Contracts\Arrayable;
 
 /**
  * A simply view for sending and rendering data.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class View implements Renderable
 {
@@ -23,12 +25,14 @@ class View implements Renderable
 
   /**
    * Contains the variables that are to be embedded in the template.
+   *
    * @var \ArrayObject
    */
   protected $data;
 
   /**
    * Path to templates - is framework restriction.
+   *
    * @var string
    */
   protected $path;
@@ -48,18 +52,21 @@ class View implements Renderable
 
   /**
    * @param string $template
+   *
    * @return View
    */
   public function produce($template)
   {
-    $view = clone $this;
+    $view           = clone $this;
     $view->template = (string)$template;
+
     return $view;
   }
 
   /**
-   * @param string $template
+   * @param string          $template
    * @param array|Arrayable $model
+   *
    * @return mixed
    */
   public function partial($template, $model = array())
@@ -71,7 +78,8 @@ class View implements Renderable
 
   /**
    * @param string $template
-   * @param array $model
+   * @param array  $model
+   *
    * @return string
    */
   public function loop($template, array $model = array())
@@ -87,30 +95,38 @@ class View implements Renderable
 
   /**
    * Assigns a variable to a specific key for the template.
-   * @param string $key The key.
-   * @param mixed $value The Value.
+   *
+   * @param string $key   The key.
+   * @param mixed  $value The Value.
+   *
    * @return View
    */
   public function assign($key, $value)
   {
     $this->data[$key] = $value;
+
     return $this;
   }
 
   /**
    * Exchange all variables.
+   *
    * @param $model
+   *
    * @return View
    */
   public function pump(array $model)
   {
     $this->data->exchangeArray($model);
+
     return $this;
   }
 
   /**
    * Is utilized for reading data from inaccessible properties.
+   *
    * @param string $name
+   *
    * @return mixed|null
    */
   public function __get($name)
@@ -121,10 +137,7 @@ class View implements Renderable
 
     $trace = debug_backtrace();
     trigger_error(
-      'undefined property "'.$name
-      .'" at file '. $trace[0]['file']
-      . ' line ' . $trace[0]['line'],
-      E_USER_WARNING
+      'undefined property "' . $name . '" at file ' . $trace[0]['file'] . ' line ' . $trace[0]['line'], E_USER_WARNING
     );
 
     return null;
@@ -165,6 +178,7 @@ class View implements Renderable
 
   /**
    * Act when the view is treated like a string
+   *
    * @return string
    */
   public function __toString()

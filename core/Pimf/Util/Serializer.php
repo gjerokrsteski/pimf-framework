@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -14,8 +14,8 @@ namespace Pimf\Util;
  * Now we can put objects, strings, integers or arrays. Even instances of SimpleXMLElement can be put too!
  *
  * @package Util
- * @link https://bugs.php.net/bug.php?id=39736
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @link    https://bugs.php.net/bug.php?id=39736
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Serializer
 {
@@ -23,6 +23,7 @@ class Serializer
    * Serialize things.
    *
    * @param mixed $object Item you want - string, array, integer, object
+   *
    * @return string Containing a byte-stream representation.
    */
   public static function serialize($object)
@@ -50,6 +51,7 @@ class Serializer
    * Unserialize things.
    *
    * @param string $object Serialized object.
+   *
    * @return mixed
    */
   public static function unserialize($object)
@@ -69,14 +71,13 @@ class Serializer
 
   /**
    * @param mixed $value Item value.
+   *
    * @throws \RuntimeException If error during serialize.
    * @return string
    */
   public static function serializeNative($value)
   {
-    $ret = (extension_loaded('igbinary') && function_exists('igbinary_serialize'))
-    	  ? @igbinary_serialize($value)
-    	  : @serialize($value);
+    $ret = (extension_loaded('igbinary') && function_exists('igbinary_serialize')) ? @igbinary_serialize($value) : @serialize($value);
 
     if ($ret === false) {
       $err = error_get_last();
@@ -88,14 +89,17 @@ class Serializer
 
   /**
    * @param string $serialized The serialized item-string.
+   *
    * @throws \RuntimeException If error during unserialize.
    * @return mixed
    */
   public static function unserializeNative($serialized)
   {
     $ret = (extension_loaded('igbinary') && function_exists('igbinary_unserialize'))
-          ? @igbinary_unserialize($serialized)
-          : @unserialize($serialized);
+      ? @igbinary_unserialize($serialized)
+      : @unserialize(
+        $serialized
+      );
 
     if ($ret === false) {
       $err = error_get_last();
@@ -107,15 +111,17 @@ class Serializer
 
   /**
    * @param mixed $item Item
+   *
    * @return \stdClass
    */
   private static function mask($item)
   {
-    return (object) $item;
+    return (object)$item;
   }
 
   /**
    * @param mixed $item Item
+   *
    * @return array
    */
   private static function unmask($item)
@@ -124,6 +130,6 @@ class Serializer
       return $item->scalar;
     }
 
-    return (array) $item;
+    return (array)$item;
   }
 }

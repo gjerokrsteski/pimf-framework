@@ -1,16 +1,18 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Session\Storages;
+
 use Pimf\Util\String;
 
 /**
  * @package Session_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 abstract class Storage
 {
@@ -19,6 +21,7 @@ abstract class Storage
    * If no session is found for the id, null will be returned.
    *
    * @param string $id
+   *
    * @return array|null
    */
   abstract public function load($id);
@@ -28,7 +31,8 @@ abstract class Storage
    *
    * @param array $session
    * @param array $config
-   * @param bool $exists
+   * @param bool  $exists
+   *
    * @return void
    */
   abstract public function save($session, $config, $exists);
@@ -37,6 +41,7 @@ abstract class Storage
    * Delete a session from storage by a given ID.
    *
    * @param string $id
+   *
    * @return void
    */
   abstract public function delete($id);
@@ -48,13 +53,7 @@ abstract class Storage
    */
   public function fresh()
   {
-    return array(
-      'id'   => $this->id(),
-      'data' => array(
-        ':new:' => array(),
-        ':old:' => array(),
-      )
-    );
+    return array('id' => $this->id(), 'data' => array(':new:' => array(), ':old:' => array(),));
   }
 
   /**

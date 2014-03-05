@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Cache\Storages;
@@ -16,12 +17,13 @@ namespace Pimf\Cache\Storages;
  * </code>
  *
  * @package Cache_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Redis extends Storage
 {
   /**
    * The Redis database instance.
+   *
    * @var \Pimf\Redis
    */
   protected $redis;
@@ -36,7 +38,9 @@ class Redis extends Storage
 
   /**
    * Determine if an item exists in the cache.
+   *
    * @param string $key
+   *
    * @return bool
    */
   public function has($key)
@@ -46,7 +50,9 @@ class Redis extends Storage
 
   /**
    * Retrieve an item from the cache storage.
+   *
    * @param string $key
+   *
    * @return mixed
    */
   protected function retrieve($key)
@@ -58,9 +64,10 @@ class Redis extends Storage
 
   /**
    * Write an item to the cache for a given number of minutes.
+   *
    * @param string $key
-   * @param mixed $value
-   * @param int $minutes
+   * @param mixed  $value
+   * @param int    $minutes
    */
   public function put($key, $value, $minutes)
   {
@@ -70,6 +77,7 @@ class Redis extends Storage
 
   /**
    * Write an item to the cache that lasts forever.
+   *
    * @param $key
    * @param $value
    */
@@ -80,6 +88,7 @@ class Redis extends Storage
 
   /**
    * Delete an item from the cache.
+   *
    * @param string $key
    */
   public function forget($key)

@@ -1,15 +1,16 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
 
 /**
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Param
 {
@@ -38,13 +39,14 @@ class Param
    * @param string $index
    * @param null   $defaultValue
    * @param bool   $filtered If you trust foreign input introduced to your PHP code - set to FALSE!
+   *
    * @return mixed|null
    */
   public function get($index, $defaultValue = null, $filtered = true)
   {
-    if($this->data->offsetExists($index)) {
+    if ($this->data->offsetExists($index)) {
 
-      if($filtered === true) {
+      if ($filtered === true) {
         // pretty high-level filtering here...
         return self::filter($this->data->offsetGet($index));
       }
@@ -57,7 +59,9 @@ class Param
 
   /**
    * Never ever (ever) trust foreign input introduced to your PHP code!
+   *
    * @param array|string $rawData
+   *
    * @return array|bool|string
    */
   public static function filter($rawData)
@@ -65,10 +69,10 @@ class Param
     return is_array($rawData)
 
       ? array_map(
-          function($value){
-            return \Pimf\Util\String\Clean::xss($value);
-          }, $rawData
-        )
+        function ($value) {
+          return \Pimf\Util\String\Clean::xss($value);
+        }, $rawData
+      )
 
       : \Pimf\Util\String\Clean::xss($rawData);
   }

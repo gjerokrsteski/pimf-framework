@@ -1,11 +1,13 @@
 <?php
 /**
  * DataMapper
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\DataMapper;
+
 use Pimf\Util\IdentityMap;
 
 /**
@@ -16,7 +18,7 @@ use Pimf\Util\IdentityMap;
  * You have to use it if you want to persist data.
  *
  * @package DataMapper
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  *
  * @method insert($entity)
  * @method update($entity)
@@ -51,9 +53,11 @@ abstract class Base
 
   /**
    * Makes a given model-property accessible.
+   *
    * @param object $model
-   * @param int $value
+   * @param int    $value
    * @param string $property
+   *
    * @return mixed
    */
   public function reflect($model, $value, $property = 'id')

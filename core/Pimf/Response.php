@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 namespace Pimf;
 
@@ -13,24 +14,27 @@ use \Pimf\Util\Header, Pimf\Util\Json as UtilJson;
  * Use this class to build and the current HTTP response before it is returned to the client.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Response
 {
   /**
    * The request method send by the client-browser.
+   *
    * @var string
    */
   protected $method = null;
 
   /**
    * If the response attempts to send any cached headers.
+   *
    * @var bool
    */
   protected static $cached = false;
 
   /**
    * Type of the data will be send to the client-browser.
+   *
    * @var string
    */
   protected static $typed = null;
@@ -45,7 +49,7 @@ class Response
     $this->method = '' . strtoupper($requestMethod);
 
     // it is PIMF framework restriction
-    if(!in_array($this->method, array('POST', 'GET', null))) {
+    if (!in_array($this->method, array('POST', 'GET', null))) {
       throw new \RuntimeException('unsupported request-method given');
     }
 
@@ -57,6 +61,7 @@ class Response
     $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::contentTypeJson();
+
     return $this;
   }
 
@@ -65,6 +70,7 @@ class Response
     $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::contentTypeTextHTML();
+
     return $this;
   }
 
@@ -73,6 +79,7 @@ class Response
     $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::contentTypePdf();
+
     return $this;
   }
 
@@ -81,6 +88,7 @@ class Response
     $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::contentTypeCsv();
+
     return $this;
   }
 
@@ -89,6 +97,7 @@ class Response
     $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::contentTypeTextPlain();
+
     return $this;
   }
 
@@ -97,6 +106,7 @@ class Response
     $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::contentTypeZip();
+
     return $this;
   }
 
@@ -105,6 +115,7 @@ class Response
     $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::contentTypeXZip();
+
     return $this;
   }
 
@@ -113,6 +124,7 @@ class Response
     $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::contentTypeMSWord();
+
     return $this;
   }
 
@@ -136,13 +148,16 @@ class Response
   {
     $body = $data;
 
-    if(self::$typed === 'asJSON') {
-      $body =  UtilJson::encode($data);
-    } else if($data instanceof \Pimf\View) {
+    if (self::$typed === 'asJSON') {
+      $body = UtilJson::encode($data);
+    } else if ($data instanceof \Pimf\View) {
       $body = $data->render();
     }
 
-    echo '' . $body; if ($exit) exit(0);
+    echo '' . $body;
+    if ($exit) {
+      exit(0);
+    }
   }
 
 
@@ -160,6 +175,7 @@ class Response
     self::preventMultipleCaching();
     self::$cached = true;
     Header::cacheBrowser($seconds);
+
     return $this;
   }
 
@@ -173,6 +189,7 @@ class Response
     self::preventMultipleCaching();
     self::$cached = true;
     Header::cacheNone();
+
     return $this;
   }
 
@@ -188,6 +205,7 @@ class Response
     self::preventMultipleCaching();
     self::$cached = true;
     Header::cacheNoValidate($seconds);
+
     return $this;
   }
 
@@ -203,6 +221,7 @@ class Response
     self::preventMultipleCaching();
     self::$cached = true;
     Header::exitIfNotModifiedSince($last_modified);
+
     return $this;
   }
 
@@ -211,7 +230,7 @@ class Response
    */
   private function preventMultipleTypes()
   {
-    if(!is_empty(self::$typed)) {
+    if (!is_empty(self::$typed)) {
       Header::clear();
       throw new \RuntimeException('only one HTTP content-type can be sent!');
     }
@@ -222,14 +241,12 @@ class Response
    */
   private function preventMultipleCaching()
   {
-    if($this->method != 'GET') {
+    if ($this->method != 'GET') {
       Header::clear();
-      throw new \RuntimeException(
-        'HTTP cache headers can only take effect if request was sent via GET method!'
-      );
+      throw new \RuntimeException('HTTP cache headers can only take effect if request was sent via GET method!');
     }
 
-    if(self::$cached === true) {
+    if (self::$cached === true) {
       Header::clear();
       throw new \RuntimeException('only one HTTP cache-control can be sent!');
     }

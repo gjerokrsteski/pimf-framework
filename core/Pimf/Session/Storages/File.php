@@ -1,21 +1,24 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Session\Storages;
+
 use Pimf\Contracts\Cleanable;
 
 /**
  * @package Session_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class File extends Storage implements Cleanable
 {
   /**
    * The path to which the session files should be written.
+   *
    * @var string
    */
   private $path;
@@ -30,7 +33,9 @@ class File extends Storage implements Cleanable
 
   /**
    * Load a session from storage by a given ID.
+   *
    * @param string $id
+   *
    * @return array|mixed
    */
   public function load($id)
@@ -42,9 +47,10 @@ class File extends Storage implements Cleanable
 
   /**
    * Save a given session to storage.
+   *
    * @param array $session
    * @param array $config
-   * @param bool $exists
+   * @param bool  $exists
    */
   public function save($session, $config, $exists)
   {
@@ -63,7 +69,9 @@ class File extends Storage implements Cleanable
 
   /**
    * Delete all expired sessions from persistent storage.
+   *
    * @param int $expiration
+   *
    * @return mixed|void
    */
   public function clean($expiration)

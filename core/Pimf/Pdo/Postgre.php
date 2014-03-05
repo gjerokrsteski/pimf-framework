@@ -3,7 +3,7 @@
  * Database
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Pdo;
@@ -12,19 +12,17 @@ namespace Pimf\Pdo;
  * Connection management to PostgreSQL
  *
  * @package Database
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Postgre extends Connector
 {
-  protected $options = array(
-    \PDO::ATTR_CASE              => \PDO::CASE_LOWER,
-    \PDO::ATTR_ERRMODE           => \PDO::ERRMODE_EXCEPTION,
-    \PDO::ATTR_ORACLE_NULLS      => \PDO::NULL_NATURAL,
-    \PDO::ATTR_STRINGIFY_FETCHES => false,
-  );
+  protected $options
+    = array(\PDO::ATTR_CASE         => \PDO::CASE_LOWER, \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
+            \PDO::ATTR_ORACLE_NULLS => \PDO::NULL_NATURAL, \PDO::ATTR_STRINGIFY_FETCHES => false,);
 
   /**
    * @param array $config
+   *
    * @return \Pimf\Database
    */
   public function connect(array $config)

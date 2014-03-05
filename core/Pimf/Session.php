@@ -1,11 +1,13 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
+
 use Pimf\Session\Payload, Pimf\Session\Storages as Storage;
 
 /**
@@ -31,7 +33,7 @@ use Pimf\Session\Payload, Pimf\Session\Storages as Storage;
  * </code>
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  *
  * @method static save()
  */
@@ -39,18 +41,21 @@ class Session
 {
   /**
    * The session singleton instance for the request.
+   *
    * @var Payload
    */
   public static $instance;
 
   /**
    * The string name of the CSRF token stored in the session.
+   *
    * @var string
    */
   const CSRF = 'csrf_token';
 
   /**
    * Create the session payload and load the session.
+   *
    * @return void
    */
   public static function load()
@@ -64,7 +69,9 @@ class Session
 
   /**
    * Create the session payload instance for the request.
+   *
    * @param string $storage
+   *
    * @return void
    */
   public static function start($storage)
@@ -116,6 +123,7 @@ class Session
 
   /**
    * Retrieve the active session payload instance for the request.
+   *
    * @return Payload
    * @throws \RuntimeException
    */
@@ -140,6 +148,7 @@ class Session
 
   /**
    * Magic Method for calling the methods on the session singleton instance.
+   *
    * @param $method
    * @param $parameters
    *
@@ -148,10 +157,7 @@ class Session
   public static function __callStatic($method, $parameters)
   {
     return call_user_func_array(
-      array(
-        static::instance(),
-        $method
-      ), $parameters
+      array(static::instance(), $method), $parameters
     );
   }
 }

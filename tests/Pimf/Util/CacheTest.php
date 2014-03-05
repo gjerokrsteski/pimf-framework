@@ -1,4 +1,5 @@
 <?php
+
 class UtilCacheTest extends PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
@@ -12,7 +13,7 @@ class UtilCacheTest extends PHPUnit_Framework_TestCase
     $path     = dirname(__FILE__) . '/_fixture/';
     $cache_id = 'my-data-cache-id.html';
 
-    $cached = \Pimf\Util\Cache::put($path.$cache_id, $data, '+2 day');
+    $cached = \Pimf\Util\Cache::put($path . $cache_id, $data, '+2 day');
 
     $this->assertNotNull($cached, 'it is not cached');
   }
@@ -22,7 +23,7 @@ class UtilCacheTest extends PHPUnit_Framework_TestCase
     $path     = dirname(__FILE__) . '/_fixture/';
     $cache_id = 'bad-bad-data-cache-id.html';
 
-    $cached = \Pimf\Util\Cache::forget($path.$cache_id);
+    $cached = \Pimf\Util\Cache::forget($path . $cache_id);
 
     $this->assertFalse($cached, 'it is not deleted');
   }

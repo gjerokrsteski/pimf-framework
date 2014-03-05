@@ -3,25 +3,27 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Cache\Storages;
 
 /**
  * @package Cache_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Apc extends Storage
 {
   /**
    * The cache key from the cache configuration file.
+   *
    * @var string
    */
   protected $key;
 
   /**
    * Create a new APC cache storage instance.
+   *
    * @param string $key
    */
   public function __construct($key)
@@ -31,7 +33,9 @@ class Apc extends Storage
 
   /**
    * Retrieve an item from the cache storage.
+   *
    * @param string $key
+   *
    * @return mixed
    */
   protected function retrieve($key)
@@ -50,8 +54,9 @@ class Apc extends Storage
    * </code>
    *
    * @param string $key
-   * @param mixed $value
-   * @param int $minutes
+   * @param mixed  $value
+   * @param int    $minutes
+   *
    * @return bool|void
    */
   public function put($key, $value, $minutes)
@@ -62,8 +67,9 @@ class Apc extends Storage
   /**
    * Write an item to the cache that lasts forever.
    *
-   * @param  string  $key
-   * @param  mixed   $value
+   * @param  string $key
+   * @param  mixed  $value
+   *
    * @return bool
    */
   public function forever($key, $value)
@@ -74,7 +80,8 @@ class Apc extends Storage
   /**
    * Delete an item from the cache.
    *
-   * @param  string  $key
+   * @param  string $key
+   *
    * @return void
    */
   public function forget($key)

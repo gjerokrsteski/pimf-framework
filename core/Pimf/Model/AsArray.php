@@ -1,11 +1,13 @@
 <?php
 /**
  * Model
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Model;
+
 use Pimf\Contracts\Arrayable;
 
 /**
@@ -17,7 +19,7 @@ use Pimf\Contracts\Arrayable;
  * Sure if you need it - otherwise please prefers using ArrayObject - is much faster!
  *
  * @package Model
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 abstract class AsArray implements Arrayable
 {
@@ -37,6 +39,7 @@ abstract class AsArray implements Arrayable
    * For another properties-mapping, please override this method.
    *
    * @param array $properties
+   *
    * @return array
    */
   protected function map(array $properties)

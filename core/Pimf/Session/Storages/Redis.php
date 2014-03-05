@@ -1,20 +1,22 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Session\Storages;
 
 /**
  * @package Session_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Redis extends Storage
 {
   /**
    * The Redis cache storage instance.
+   *
    * @var \Pimf\Cache\Storages\Redis
    */
   protected $redis;
@@ -29,7 +31,9 @@ class Redis extends Storage
 
   /**
    * Load a session from storage by a given ID.
+   *
    * @param string $id
+   *
    * @return array|mixed|null
    */
   public function load($id)
@@ -39,9 +43,10 @@ class Redis extends Storage
 
   /**
    * Save a given session to storage.
+   *
    * @param array $session
    * @param array $config
-   * @param bool $exists
+   * @param bool  $exists
    */
   public function save($session, $config, $exists)
   {

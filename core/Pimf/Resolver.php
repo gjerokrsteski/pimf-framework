@@ -1,18 +1,20 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
+
 use Pimf\Resolver\Exception as Bomb, Pimf\Util\String as Str;
 
 /**
  * Resolves the user requests to controller and action.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Resolver
 {
@@ -49,11 +51,11 @@ class Resolver
 
     $controllerName = $request->fromGet()->get('controller');
 
-    if($conf['app']['routeable'] === true) {
+    if ($conf['app']['routeable'] === true) {
 
       $target = Registry::get('router')->find();
 
-      if($target instanceof \Pimf\Route\Target) {
+      if ($target instanceof \Pimf\Route\Target) {
         $controllerName = $target->getController();
       }
     }
@@ -63,7 +65,7 @@ class Resolver
     }
 
     if (!$controllerName) {
-      $controllerName =  $conf['app']['default_controller'];
+      $controllerName = $conf['app']['default_controller'];
     }
 
     $this->repositoryPath  = $repositoryPath;
@@ -73,18 +75,14 @@ class Resolver
     $basepath   = $this->repositoryPath . '/';
     $controller = ucfirst($controllerName);
 
-    if(Str::isEvilPath($basepath.$controller)) {
-      throw new Bomb(
-        'directory traversal attack is not funny!'
-      );
+    if (Str::isEvilPath($basepath . $controller)) {
+      throw new Bomb('directory traversal attack is not funny!');
     }
 
-    $this->controllerPath = $basepath . $controller. '.php';
+    $this->controllerPath = $basepath . $controller . '.php';
 
     if (!file_exists($this->controllerPath)) {
-      throw new Bomb(
-        'no controller found at the repository path; ' . $this->controllerPath
-      );
+      throw new Bomb('no controller found at the repository path; ' . $this->controllerPath);
     }
   }
 
@@ -99,9 +97,7 @@ class Resolver
     $controller = str_replace('.php', '', $name);
 
     if (!class_exists($controller)) {
-      throw new Bomb(
-        'can not load class "'.$controller.'" from the repository'
-      );
+      throw new Bomb('can not load class "' . $controller . '" from the repository');
     }
 
     return new $controller($this->request, new Response(Registry::get('env')->REQUEST_METHOD));

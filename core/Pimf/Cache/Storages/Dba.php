@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Cache\Storages;
@@ -18,7 +18,7 @@ namespace Pimf\Cache\Storages;
  * space of your disk.
  *
  * @package Cache_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Dba extends Storage
 {
@@ -38,9 +38,9 @@ class Dba extends Storage
   protected $file;
 
   /**
-   * @param string $file the cache-file.
+   * @param string  $file    the cache-file.
    *
-   * @param string $handler the dba handler.
+   * @param string  $handler the dba handler.
    *
    * You have to install one of this handlers before use.
    *
@@ -55,7 +55,7 @@ class Dba extends Storage
    * of the libraries required by the other handlers,
    * and when you cannot use bundled cdb handler.
    *
-   * @param string $mode For read/write access, database creation if it doesn't currently exist.
+   * @param string  $mode    For read/write access, database creation if it doesn't currently exist.
    *
    * @param boolean $persistently
    *
@@ -64,20 +64,14 @@ class Dba extends Storage
   public function __construct($file, $handler = 'flatfile', $mode = 'c', $persistently = true)
   {
     if (false === extension_loaded('dba')) {
-      throw new \RuntimeException(
-        'The DBA extension is required for this wrapper, but the extension is not loaded'
-      );
+      throw new \RuntimeException('The DBA extension is required for this wrapper, but the extension is not loaded');
     }
 
     if (false === in_array($handler, dba_handlers(false))) {
-      throw new \RuntimeException(
-        'The ' . $handler . ' handler is required for the DBA extension, but the handler is not installed'
-      );
+      throw new \RuntimeException('The ' . $handler . ' handler is required for the DBA extension, but the handler is not installed');
     }
 
-    $this->dba = (true === $persistently)
-      ? dba_popen($file, $mode, $handler)
-      : dba_open($file, $mode, $handler);
+    $this->dba = (true === $persistently) ? dba_popen($file, $mode, $handler) : dba_open($file, $mode, $handler);
 
     $this->file    = $file;
     $this->handler = $handler;
@@ -85,6 +79,7 @@ class Dba extends Storage
 
   /**
    * Closes an open dba resource
+   *
    * @return void
    */
   public function __destruct()
@@ -97,8 +92,9 @@ class Dba extends Storage
 
   /**
    * @param string $key
-   * @param mixed $value
-   * @param int $minutes
+   * @param mixed  $value
+   * @param int    $minutes
+   *
    * @return bool
    */
   public function put($key, $value, $minutes)
@@ -118,6 +114,7 @@ class Dba extends Storage
 
   /**
    * @param $key
+   *
    * @return bool|mixed|null
    */
   public function get($key)
@@ -126,6 +123,7 @@ class Dba extends Storage
 
     if (false === $res) {
       $this->forget($key);
+
       return false;
     }
 
@@ -134,6 +132,7 @@ class Dba extends Storage
 
   /**
    * @param string $key
+   *
    * @return bool|mixed
    */
   protected function retrieve($key)
@@ -154,6 +153,7 @@ class Dba extends Storage
 
   /**
    * @param string $key
+   *
    * @return boolean
    */
   public function forget($key)
@@ -167,6 +167,7 @@ class Dba extends Storage
 
   /**
    * @param string $key
+   *
    * @return boolean
    */
   public function has($key)
@@ -176,8 +177,10 @@ class Dba extends Storage
 
   /**
    * Write an item to the cache for five years.
+   *
    * @param $key
    * @param $value
+   *
    * @return int|void
    */
   public function forever($key, $value)
@@ -187,6 +190,7 @@ class Dba extends Storage
 
   /**
    * Cleans and optimizes the cache from all expired entries.
+   *
    * @return bool
    */
   public function clean()
@@ -204,6 +208,7 @@ class Dba extends Storage
 
   /**
    * Flush the whole storage.
+   *
    * @return bool
    */
   public function flush()

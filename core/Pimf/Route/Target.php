@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Route;
@@ -14,24 +15,27 @@ namespace Pimf\Route;
  * and exported on the Pimf request-resolver and controller.
  *
  * @package Route
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Target
 {
   /**
    * Controller name as it appears in url
+   *
    * @var string
    */
   protected $controller;
 
   /**
    * Controller action name as it appears in url
+   *
    * @var string
    */
   protected $action = 'index';
 
   /**
    * List of additional params at teh URL.
+   *
    * @var array
    */
   protected $params = array();
@@ -70,6 +74,7 @@ class Target
 
   /**
    * Controller-name as it appears in url.
+   *
    * @return string
    */
   public function getController()

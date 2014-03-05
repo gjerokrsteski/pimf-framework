@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
@@ -11,7 +12,7 @@ namespace Pimf;
  * Logger with common logging options into a file.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Logger
 {
@@ -42,7 +43,7 @@ class Logger
 
   /**
    * @param string $localeStorageDir Use better the local TMP dir or dir with mod 777.
-   * @param bool $trailingSeparator
+   * @param bool   $trailingSeparator
    */
   public function __construct($localeStorageDir, $trailingSeparator = true)
   {
@@ -55,9 +56,10 @@ class Logger
    */
   public function init()
   {
-    if(is_resource($this->errorHandle)
+    if (is_resource($this->errorHandle)
       && is_resource($this->handle)
-      && is_resource($this->warnHandle)) {
+      && is_resource($this->warnHandle)
+    ) {
       return;
     }
 
@@ -80,6 +82,7 @@ class Logger
 
   /**
    * @param string $msg
+   *
    * @return Logger
    */
   public function debug($msg)
@@ -93,6 +96,7 @@ class Logger
 
   /**
    * @param string $msg
+   *
    * @return Logger
    */
   public function warn($msg)
@@ -106,6 +110,7 @@ class Logger
 
   /**
    * @param string $msg
+   *
    * @return Logger
    */
   public function error($msg)
@@ -117,6 +122,7 @@ class Logger
 
   /**
    * @param string $msg
+   *
    * @return Logger
    */
   public function info($msg)
@@ -129,7 +135,7 @@ class Logger
   }
 
   /**
-   * @param $msg
+   * @param        $msg
    * @param string $severity
    */
   protected function write($msg, $severity = 'DEBUG')
@@ -142,8 +148,7 @@ class Logger
     } // if severity is ERROR then write to error file
     else if ($severity == 'ERROR') {
       fwrite($this->errorHandle, $msg);
-    }
-    else {
+    } else {
       fwrite($this->handle, $msg);
     }
   }
@@ -152,7 +157,8 @@ class Logger
   {
     if (is_resource($this->handle)
       && is_resource($this->warnHandle)
-      && is_resource($this->errorHandle)) {
+      && is_resource($this->errorHandle)
+    ) {
 
       if (fclose($this->handle) === false) {
         // Failure to close the log file
@@ -166,8 +172,10 @@ class Logger
 
   /**
    * Formats the error message in representable manner.
+   *
    * @param $message
    * @param $severity
+   *
    * @return string
    */
   private function format($message, $severity)
@@ -176,7 +184,7 @@ class Logger
     $remoteIP = $registry->env->getIp();
     $script   = $registry->env->PHP_SELF;
 
-    $msg = date("m-d-Y") . " " . date("G:i:s") . " ".$remoteIP;
+    $msg = date("m-d-Y") . " " . date("G:i:s") . " " . $remoteIP;
 
     $IPLength       = strlen($remoteIP);
     $numWhitespaces = 15 - $IPLength;
@@ -204,6 +212,7 @@ class Logger
 
   /**
    * @param string $varname
+   *
    * @return bool
    */
   protected function iniGetBool($varname)

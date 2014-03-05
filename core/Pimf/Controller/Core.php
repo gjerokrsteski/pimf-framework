@@ -1,17 +1,18 @@
 <?php
 /**
  * Controller
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Controller;
-use Pimf\Registry, Pimf\Util\String, Pimf\Cli\Color,
-    Pimf\Cli\Io, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
+
+use Pimf\Registry, Pimf\Util\String, Pimf\Cli\Color, Pimf\Cli\Io, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
 
 /**
  * @package Controller
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  * @codeCoverageIgnore
  */
 class Core extends Base
@@ -34,12 +35,8 @@ class Core extends Base
     $conf = Registry::get('conf');
     $app  = 'app/' . $conf['app']['name'] . '/';
 
-    $assets = array(
-      BASE_PATH . $app . '_session/',
-      BASE_PATH . $app . '_cache/',
-      BASE_PATH . $app . '_database/',
-      BASE_PATH . $app . '_templates/',
-    );
+    $assets = array(BASE_PATH . $app . '_session/', BASE_PATH . $app . '_cache/', BASE_PATH . $app . '_database/',
+                    BASE_PATH . $app . '_templates/',);
 
     echo Color::paint('Check app assets' . PHP_EOL);
 
@@ -67,9 +64,15 @@ class Core extends Base
     chmod(BASE_PATH . 'pimf-framework/autoload.core.php', 0644);
 
     echo Color::paint('Create logging files' . PHP_EOL);
-    $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-logs.txt', "at+"); fclose($fp); chmod($file, 0777);
-    $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-warnings.txt', "at+"); fclose($fp); chmod($file, 0777);
-    $fp = fopen($file = $conf['bootstrap']['local_temp_directory'].'pimf-errors.txt', "at+"); fclose($fp); chmod($file, 0777);
+    $fp = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-logs.txt', "at+");
+    fclose($fp);
+    chmod($file, 0777);
+    $fp = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-warnings.txt', "at+");
+    fclose($fp);
+    chmod($file, 0777);
+    $fp = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-errors.txt', "at+");
+    fclose($fp);
+    chmod($file, 0777);
 
     clearstatcache();
   }
@@ -101,18 +104,18 @@ class Core extends Base
 
       $conf = Registry::get('conf');
 
-      switch ($for){
+      switch ($for) {
         case 'cache':
-          $pdo = Factory::get($conf['cache']['database']);
-          $file = 'create-cache-table-'.$type.'.sql';
-        break;
+          $pdo  = Factory::get($conf['cache']['database']);
+          $file = 'create-cache-table-' . $type . '.sql';
+          break;
         case 'session':
-          $pdo = Factory::get($conf['session']['database']);
-          $file = 'create-session-table-'.$type.'.sql';
-        break;
+          $pdo  = Factory::get($conf['session']['database']);
+          $file = 'create-session-table-' . $type . '.sql';
+          break;
       }
 
-       $file = str_replace('/', DS, BASE_PATH .'pimf-framework/core/Pimf/_database/'.$file);
+      $file = str_replace('/', DS, BASE_PATH . 'pimf-framework/core/Pimf/_database/' . $file);
 
       return $pdo->exec(file_get_contents(new File($file))) or print_r($pdo->errorInfo(), true);
 

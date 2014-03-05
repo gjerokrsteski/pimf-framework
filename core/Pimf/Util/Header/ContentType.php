@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 namespace Pimf\Util\Header;
 
@@ -11,7 +11,7 @@ namespace Pimf\Util\Header;
  * Manages a raw HTTP header ContentType sending.
  *
  * @package Util_Header
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 abstract class ContentType extends ResponseStatus
 {
@@ -62,7 +62,7 @@ abstract class ContentType extends ResponseStatus
 
   public static function type($definition)
   {
-    header('Content-Type: '.$definition, true);
+    header('Content-Type: ' . $definition, true);
   }
 }
  

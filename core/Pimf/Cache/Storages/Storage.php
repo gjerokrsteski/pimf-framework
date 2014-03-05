@@ -1,21 +1,24 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Cache\Storages;
 
 /**
  * @package Cache_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 abstract class Storage
 {
   /**
    * Determine if an item exists in the cache.
+   *
    * @param $key
+   *
    * @return bool
    */
   public function has($key)
@@ -34,8 +37,9 @@ abstract class Storage
    *    $name = Cache::get('name', 'Robin');
    * </code>
    *
-   * @param $key
+   * @param      $key
    * @param null $default
+   *
    * @return mixed|null
    */
   public function get($key, $default = null)
@@ -45,7 +49,9 @@ abstract class Storage
 
   /**
    * Retrieve an item from the cache storage.
+   *
    * @param string $key
+   *
    * @return mixed
    */
   abstract protected function retrieve($key);
@@ -59,8 +65,9 @@ abstract class Storage
    * </code>
    *
    * @param string $key
-   * @param mixed $value
-   * @param int $minutes
+   * @param mixed  $value
+   * @param int    $minutes
+   *
    * @return void
    */
   abstract public function put($key, $value, $minutes);
@@ -77,15 +84,17 @@ abstract class Storage
    * </code>
    *
    * @param string $key
-   * @param mixed $default
-   * @param int $minutes
+   * @param mixed  $default
+   * @param int    $minutes
    * @param string $function
+   *
    * @return mixed
    */
   public function remember($key, $default, $minutes, $function = 'put')
   {
-    if (!is_null($item = $this->get($key, null)))
+    if (!is_null($item = $this->get($key, null))) {
       return $item;
+    }
 
     $this->$function($key, $default, $minutes);
 
@@ -96,7 +105,8 @@ abstract class Storage
    * Get an item from the cache, or cache the default value forever.
    *
    * @param string $key
-   * @param mixed $default
+   * @param mixed  $default
+   *
    * @return mixed
    */
   public function sear($key, $default)
@@ -108,6 +118,7 @@ abstract class Storage
    * Delete an item from the cache.
    *
    * @param string $key
+   *
    * @return void
    */
   abstract public function forget($key);
@@ -116,6 +127,7 @@ abstract class Storage
    * Get the expiration time as a UNIX timestamp.
    *
    * @param int $minutes
+   *
    * @return int
    */
   protected function expiration($minutes)

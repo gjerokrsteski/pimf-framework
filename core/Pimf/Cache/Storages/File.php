@@ -3,14 +3,14 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Cache\Storages;
 
 /**
  * @package Cache_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class File extends Storage
 {
@@ -31,6 +31,7 @@ class File extends Storage
 
   /**
    * @param string $key
+   *
    * @return bool|mixed|null
    */
   protected function retrieve($key)
@@ -56,8 +57,9 @@ class File extends Storage
    * </code>
    *
    * @param string $key
-   * @param mixed $value
-   * @param int $minutes
+   * @param mixed  $value
+   * @param int    $minutes
+   *
    * @return int|void
    */
   public function put($key, $value, $minutes)
@@ -73,8 +75,10 @@ class File extends Storage
 
   /**
    * Write an item to the cache for five years.
+   *
    * @param $key
    * @param $value
+   *
    * @return int|void
    */
   public function forever($key, $value)
@@ -84,7 +88,9 @@ class File extends Storage
 
   /**
    * Delete an item from the cache.
+   *
    * @param string $key
+   *
    * @return bool|void
    */
   public function forget($key)

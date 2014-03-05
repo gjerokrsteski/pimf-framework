@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c) 2010-2013 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
@@ -13,14 +13,16 @@ namespace Pimf\Util;
  * information for an individual file.
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class File extends \SplFileInfo
 {
   /**
    * Constructs a new file from the given path.
-   * @param string $path The path to the file
+   *
+   * @param string  $path  The path to the file
    * @param boolean $check Whether to check the path or not
+   *
    * @throws \OutOfRangeException If the given path is not a file
    */
   public function __construct($path, $check = true)
@@ -35,6 +37,7 @@ class File extends \SplFileInfo
   /**
    * Returns the extension of the file.
    * SplFileInfo::getExtension() is not available before PHP 5.3.6
+   *
    * @return string
    */
   public function getExtension()
@@ -44,8 +47,10 @@ class File extends \SplFileInfo
 
   /**
    * Moves the file to a new location.
-   * @param string $dir The destination folder
+   *
+   * @param string $dir  The destination folder
    * @param string $name The new file name
+   *
    * @return File A File object representing the new file
    * @throws \RuntimeException if the target file could not be created
    */
@@ -55,9 +60,7 @@ class File extends \SplFileInfo
 
     if (!@rename($this->getPathname(), $target)) {
       $error = error_get_last();
-      throw new \RuntimeException(
-        "Could not move the file {$this->getPathname()} to $target ({$error['message']})"
-      );
+      throw new \RuntimeException("Could not move the file {$this->getPathname()} to $target ({$error['message']})");
     }
 
     @chmod($target, 0666 & ~umask());
@@ -66,8 +69,9 @@ class File extends \SplFileInfo
   }
 
   /**
-   * @param string $dir The destination folder
+   * @param string      $dir The destination folder
    * @param null|string $name
+   *
    * @return File
    * @throws \RuntimeException
    */
@@ -83,16 +87,14 @@ class File extends \SplFileInfo
       throw new \RuntimeException("Unable to write in the $dir directory");
     }
 
-    return new self(
-      $dir . DIRECTORY_SEPARATOR .
-        (null === $name ? $this->getBasename() : $this->getName($name)),
-      false
-    );
+    return new self($dir . DIRECTORY_SEPARATOR . (null === $name ? $this->getBasename() : $this->getName($name)), false);
   }
 
   /**
    * Returns locale independent base name of the given path.
+   *
    * @param string $name The new file name
+   *
    * @return string
    */
   protected function getName($name)

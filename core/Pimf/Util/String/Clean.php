@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 namespace Pimf\Util\String;
 
@@ -11,7 +11,7 @@ namespace Pimf\Util\String;
  * String
  *
  * @package Util_String
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Clean
 {
@@ -19,17 +19,20 @@ class Clean
    * An aggressive cleaning - all tags and stuff inside will be removed.
    *
    * @param string $string The string.
+   *
    * @return string|boolean
    */
   public static function aggressive($string)
   {
-    return (string) preg_replace("/<.*?>/", "", (string)$string);
+    return (string)preg_replace("/<.*?>/", "", (string)$string);
   }
 
   /**
    * Cleans against XSS.
-   * @param string $string String to check
+   *
+   * @param string $string  String to check
    * @param string $charset Character set (default ISO-8859-1)
+   *
    * @return string|bool $value Sanitized string
    */
   public static function xss($string, $charset = 'ISO-8859-1')
@@ -59,7 +62,7 @@ class Clean
     $string = preg_replace("#\t+#", " ", $string);
 
     // Makes PHP tags safe
-    $string = str_replace(array('<?php', '<?PHP', '<?', '?>'),  array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;'), $string);
+    $string = str_replace(array('<?php', '<?PHP', '<?', '?>'), array('&lt;?php', '&lt;?PHP', '&lt;?', '?&gt;'), $string);
 
     // Compact any exploded words
     $words = array('javascript', 'vbscript', 'script', 'applet', 'alert', 'document', 'write', 'cookie', 'window');
@@ -76,29 +79,36 @@ class Clean
     }
 
     // Remove disallowed Javascript in links or img tags
-    $string = preg_replace("#<a.+?href=.*?(alert\(|alert&\#40;|javascript\:|window\.|document\.|\.cookie|<script|<xss).*?\>.*?</a>#si", "", $string);
-    $string = preg_replace("#<img.+?src=.*?(alert\(|alert&\#40;|javascript\:|window\.|document\.|\.cookie|<script|<xss).*?\>#si", "", $string);
+    $string = preg_replace(
+      "#<a.+?href=.*?(alert\(|alert&\#40;|javascript\:|window\.|document\.|\.cookie|<script|<xss).*?\>.*?</a>#si", "", $string
+    );
+    $string = preg_replace(
+      "#<img.+?src=.*?(alert\(|alert&\#40;|javascript\:|window\.|document\.|\.cookie|<script|<xss).*?\>#si", "", $string
+    );
     $string = preg_replace("#<(script|xss).*?\>#si", "", $string);
 
     // Remove JavaScript Event Handlers
     $string = preg_replace(
-      '#(<[^>]+.*?)(onblur|onchange|onclick|onfocus|onload|onmouseover|onmouseup|'.
-      'onmousedown|onselect|onsubmit|onunload|onkeypress|onkeydown|onkeyup|onresize)[^>]*>#iU', "\\1>", $string);
+      '#(<[^>]+.*?)(onblur|onchange|onclick|onfocus|onload|onmouseover|onmouseup|'
+      . 'onmousedown|onselect|onsubmit|onunload|onkeypress|onkeydown|onkeyup|onresize)[^>]*>#iU', "\\1>", $string
+    );
 
     // Sanitize naughty HTML elements
-    $string = preg_replace('#<(/*\s*)(alert|applet|basefont|base|behavior|bgsound|'.
-      'blink|body|embed|expression|form|frameset|frame|head|html|ilayer|iframe|input'.
-      '|layer|link|meta|object|plaintext|style|script|textarea|title|xml|xss)([^>]*)>#is', "&lt;\\1\\2\\3&gt;", $string);
+    $string = preg_replace(
+      '#<(/*\s*)(alert|applet|basefont|base|behavior|bgsound|'
+      . 'blink|body|embed|expression|form|frameset|frame|head|html|ilayer|iframe|input'
+      . '|layer|link|meta|object|plaintext|style|script|textarea|title|xml|xss)([^>]*)>#is', "&lt;\\1\\2\\3&gt;", $string
+    );
 
     // Sanitize naughty scripting elements
-    $string = preg_replace('#(alert|cmd|passthru|eval|exec|system|fopen|fsockopen|'.
-      'file|file_get_contents|readfile|unlink)(\s*)\((.*?)\)#si', "\\1\\2&#40;\\3&#41;", $string);
+    $string = preg_replace(
+      '#(alert|cmd|passthru|eval|exec|system|fopen|fsockopen|' . 'file|file_get_contents|readfile|unlink)(\s*)\((.*?)\)#si',
+      "\\1\\2&#40;\\3&#41;", $string
+    );
 
     // Final clean up
-    $bad = array(
-      'document.cookie' => '', 'document.write' => '', 'window.location' => '', "javascript\s*:" => '',
-      "Redirect\s+302" => '', '<!--' => '&lt;!--', '-->' => '--&gt;'
-    );
+    $bad = array('document.cookie' => '', 'document.write' => '', 'window.location' => '', "javascript\s*:" => '', "Redirect\s+302" => '',
+                 '<!--'            => '&lt;!--', '-->' => '--&gt;');
 
     foreach ($bad as $key => $val) {
       $string = preg_replace("#" . $key . "#i", $val, $string);

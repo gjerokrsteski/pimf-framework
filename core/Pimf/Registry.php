@@ -1,8 +1,9 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf;
@@ -22,24 +23,26 @@ namespace Pimf;
  * </code>
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  *
  * @property EntityManager $em
- * @property Logger $logger
- * @property Environment $env
- * @property array $conf
- * @property router $router
+ * @property Logger        $logger
+ * @property Environment   $env
+ * @property array         $conf
+ * @property router        $router
  */
 class Registry
 {
   /**
    * The temporary storage for the accumulator.
+   *
    * @var \ArrayObject
    */
   protected static $battery;
 
   /**
    * Re-initialises the data.
+   *
    * @return void
    */
   protected static function init()
@@ -51,7 +54,7 @@ class Registry
 
   /**
    * @param mixed $namespace The namespace or identifier.
-   * @param mixed $value The value.
+   * @param mixed $value     The value.
    */
   public function __set($namespace, $value)
   {
@@ -60,7 +63,8 @@ class Registry
 
   /**
    * @param mixed $namespace The namespace or identifier.
-   * @param mixed $value The value.
+   * @param mixed $value     The value.
+   *
    * @throws \LogicException If key should be overwritten.
    */
   public static function set($namespace, $value)
@@ -68,9 +72,7 @@ class Registry
     self::init();
 
     if (is_resource($value)) {
-      throw new \LogicException(
-        'storing resources in a registry is not permitted!'
-      );
+      throw new \LogicException('storing resources in a registry is not permitted!');
     }
 
     self::$battery->offsetSet($namespace, $value);
@@ -78,6 +80,7 @@ class Registry
 
   /**
    * @param mixed $namespace The namespace or identifier.
+   *
    * @return mixed
    */
   public function __get($namespace)
@@ -87,14 +90,15 @@ class Registry
 
   /**
    * @param string|integer $namespace The namespace or identifier.
-   * @param mixed $defaultValue
+   * @param mixed          $defaultValue
+   *
    * @return mixed|null
    */
   public static function get($namespace, $defaultValue = null)
   {
     self::init();
 
-    if(self::$battery->offsetExists($namespace)) {
+    if (self::$battery->offsetExists($namespace)) {
       return self::$battery->offsetGet($namespace);
     }
 

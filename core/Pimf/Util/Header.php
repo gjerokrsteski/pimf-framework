@@ -3,17 +3,18 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
+
 use Pimf\Registry, Pimf\Sapi;
 
 /**
  * Manages a raw HTTP header sending.
  *
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Header extends Header\ContentType
 {
@@ -28,40 +29,52 @@ class Header extends Header\ContentType
   }
 
   /**
-   * @param string $url
+   * @param string  $url
    * @param boolean $exit
    */
   public static function toLocation($url, $exit = true)
   {
-    header('Location: '.$url); if ($exit) exit(1);
+    header('Location: ' . $url);
+    if ($exit) {
+      exit(1);
+    }
   }
 
   /**
-   * @param int $code
-   * @param string $status
+   * @param int     $code
+   * @param string  $status
    * @param boolean $exit
    */
   protected static function view($code, $status, $exit = true)
   {
-    if(Sapi::isCli()) {
-      echo $status . PHP_EOL; if ($exit) exit;
+    if (Sapi::isCli()) {
+      echo $status . PHP_EOL;
+      if ($exit) {
+        exit;
+      }
     }
 
     self::send($code, $status);
 
     $conf    = Registry::get('conf');
-    $appTpl  = str_replace('/', DS, BASE_PATH .'app/'.$conf['app']['name'].'/_error/'.$code.'.php');
-    $coreTpl = str_replace('/', DS, BASE_PATH .'core/Pimf/_error/'.$code.'.php');
+    $appTpl  = str_replace('/', DS, BASE_PATH . 'app/' . $conf['app']['name'] . '/_error/' . $code . '.php');
+    $coreTpl = str_replace('/', DS, BASE_PATH . 'core/Pimf/_error/' . $code . '.php');
 
-    if(file_exists($appTpl) && is_readable($appTpl)){
-      include $appTpl; if ($exit) exit(1);
+    if (file_exists($appTpl) && is_readable($appTpl)) {
+      include $appTpl;
+      if ($exit) {
+        exit(1);
+      }
     }
 
-    include $coreTpl; if ($exit) exit(1);
+    include $coreTpl;
+    if ($exit) {
+      exit(1);
+    }
   }
 
   /**
-   * @param string $msg
+   * @param string  $msg
    * @param boolean $exit
    */
   public static function sendInternalServerError($msg = '', $exit = true)
@@ -70,7 +83,7 @@ class Header extends Header\ContentType
   }
 
   /**
-   * @param string $msg
+   * @param string  $msg
    * @param boolean $exit
    */
   public static function sendNotFound($msg = '', $exit = true)
@@ -80,6 +93,7 @@ class Header extends Header\ContentType
 
   /**
    * Handles setting pages that are always to be revalidated for freshness by any cache.
+   *
    * @param int $last_modified Timestamp in seconds
    */
   public static function exitIfNotModifiedSince($last_modified)
@@ -96,8 +110,10 @@ class Header extends Header\ContentType
 
   /**
    * Actual HTTP caching validation.
-   * @param int $mtime In seconds
+   *
+   * @param int    $mtime In seconds
    * @param string $etag
+   *
    * @return bool
    */
   public static function isModified($mtime, $etag = '')
@@ -111,6 +127,7 @@ class Header extends Header\ContentType
 
   /**
    * If you want to allow a page to be cached by shared proxies for one minute.
+   *
    * @param int $seconds Interval in seconds
    */
   public static function cacheNoValidate($seconds = 60)

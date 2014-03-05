@@ -3,20 +3,22 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Util;
 
 /**
  * @package Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Json
 {
   /**
    * Returns the JSON representation of a value.
+   *
    * @param mixed $data
+   *
    * @return string
    */
   public static function encode($data)
@@ -30,8 +32,10 @@ class Json
 
   /**
    * Decodes a JSON string.
-   * @param string $jsonString
+   *
+   * @param string  $jsonString
    * @param boolean $assoc If should be converted into associative array/s.
+   *
    * @return mixed
    */
   public static function decode($jsonString, $assoc = false)
@@ -45,6 +49,7 @@ class Json
 
   /**
    * @param int $status
+   *
    * @throws \RuntimeException
    */
   protected static function handleError($status)

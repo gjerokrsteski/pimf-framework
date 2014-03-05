@@ -1,20 +1,22 @@
 <?php
 /**
  * Pimf
+ *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\Cache\Storages;
 
 /**
  * @package Cache_Storages
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
 class Pdo extends Storage
 {
   /**
    * The cache key from the cache configuration file.
+   *
    * @var string
    */
   protected $key;
@@ -28,7 +30,7 @@ class Pdo extends Storage
    * Create a new database cache storage instance.
    *
    * @param \Pimf\Database $pdo
-   * @param string $key
+   * @param string         $key
    */
   public function __construct(\Pimf\Database $pdo, $key)
   {
@@ -38,7 +40,9 @@ class Pdo extends Storage
 
   /**
    * Retrieve an item from the cache storage.
+   *
    * @param string $key
+   *
    * @return mixed|void
    */
   protected function retrieve($key)
@@ -70,9 +74,10 @@ class Pdo extends Storage
    *    Cache::put('name', 'Robin', 15);
    * </code>
    *
-   * @param  string  $key
-   * @param  mixed   $value
-   * @param  int     $minutes
+   * @param  string $key
+   * @param  mixed  $value
+   * @param  int    $minutes
+   *
    * @return bool
    */
   public function put($key, $value, $minutes)
@@ -94,13 +99,16 @@ class Pdo extends Storage
     $sth->bindValue(':key', $key);
     $sth->bindValue(':value', $value);
     $sth->bindValue(':expiration', $expiration);
+
     return $sth->execute();
   }
 
   /**
    * Write an item to the cache for five years.
+   *
    * @param $key
    * @param $value
+   *
    * @return bool
    */
   public function forever($key, $value)
@@ -110,7 +118,9 @@ class Pdo extends Storage
 
   /**
    * Delete an item from the cache.
+   *
    * @param string $key
+   *
    * @return bool|void
    */
   public function forget($key)
@@ -120,6 +130,7 @@ class Pdo extends Storage
     );
 
     $sth->bindValue(':key', $this->key . $key);
+
     return $sth->execute();
   }
 }

@@ -3,10 +3,11 @@
  * View
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
 namespace Pimf\View;
+
 use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\util\String as String;
 
 /**
@@ -28,9 +29,9 @@ use Pimf\Contracts\Reunitable, Pimf\View, Pimf\Registry, Pimf\Util\Value, Pimf\u
  *
  * </code>
  *
- * @link http://haanga.org/documentation
+ * @link    http://haanga.org/documentation
  * @package View
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  * @codeCoverageIgnore
  */
 class Haanga extends View implements Reunitable
@@ -45,14 +46,11 @@ class Haanga extends View implements Reunitable
 
     $conf = Registry::get('conf');
 
-    $options = array(
-      'debug'        => Value::ensureBoolean($conf['view']['haanga']['debug']),
-      'template_dir' => $this->path,
-      'autoload'     => Value::ensureBoolean($conf['view']['haanga']['auto_reload']),
-    );
+    $options = array('debug'    => Value::ensureBoolean($conf['view']['haanga']['debug']), 'template_dir' => $this->path,
+                     'autoload' => Value::ensureBoolean($conf['view']['haanga']['auto_reload']),);
 
-    if($conf['view']['haanga']['cache'] === true){
-      $options['cache_dir'] = $this->path.'/haanga_cache';
+    if ($conf['view']['haanga']['cache'] === true) {
+      $options['cache_dir'] = $this->path . '/haanga_cache';
     }
 
     require_once BASE_PATH . "Haanga/lib/Haanga.php";
@@ -62,13 +60,13 @@ class Haanga extends View implements Reunitable
 
   /**
    * Puts the template an the variables together.
+   *
    * @return NULL|string|void
    */
   public function reunite()
   {
     return \Haanga::Load(
-      $this->template,
-      $this->data->getArrayCopy()
+      $this->template, $this->data->getArrayCopy()
     );
   }
 }
