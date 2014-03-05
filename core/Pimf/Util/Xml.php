@@ -25,7 +25,6 @@ class Xml
   public static function toDOMDocument($xml)
   {
     if ($xml instanceof \DOMDocument) {
-      // parameter is DOMDocument
       return $xml;
     }
 
@@ -40,13 +39,10 @@ class Xml
       $doc = new \DOMDocument();
 
       if (is_file($xml)) {
-          // parameter is file name
           $doc->load($xml);
-
           return $doc;
       }
 
-      // parameter is xml string
       $doc->loadXML($xml);
 
       return $doc;
@@ -68,7 +64,6 @@ class Xml
   public static function toSimpleXMLElement($xml)
   {
     if ($xml instanceof \SimpleXMLElement) {
-      // parameter is DOMDocument
       return $xml;
     }
 
@@ -79,11 +74,9 @@ class Xml
     if (is_string($xml)) {
 
       if (is_file($xml)) {
-        // parameter is file name
         return simplexml_load_file($xml);
       }
 
-      // parameter is xml string
       return simplexml_load_string($xml);
     }
 

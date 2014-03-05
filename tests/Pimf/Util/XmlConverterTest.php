@@ -87,4 +87,32 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     \Pimf\Util\Xml::toDOMDocument(new stdClass());
   }
+
+  public function testIfIsSimpleXMLElementOntoDOMDocument()
+  {
+    $data = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
+
+    $this->assertInstanceOf('\\DOMDocument', \Pimf\Util\Xml::toDOMDocument(new \SimpleXMLElement($data)));
+  }
+
+  public function testIfIsDOMDocumentOntoDOMDocument()
+  {
+    $this->assertInstanceOf('\\DOMDocument', \Pimf\Util\Xml::toDOMDocument(new \DOMDocument()));
+  }
+
+  public function testIfIsSimpleXMLElementToSimpleXMLElement()
+  {
+    $data = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
+
+    $this->assertInstanceOf('\\SimpleXMLElement', \Pimf\Util\Xml::toSimpleXMLElement(new \SimpleXMLElement($data)));
+  }
+
+  public function testIfIsDOMDocumentToSimpleXMLElement()
+  {
+    $data = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
+    $doc = new \DOMDocument();
+    $doc->loadXML($data);
+
+    $this->assertInstanceOf('\\SimpleXMLElement', \Pimf\Util\Xml::toSimpleXMLElement($doc));
+  }
 }
