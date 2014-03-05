@@ -31,8 +31,9 @@ class UtilCacheTest extends PHPUnit_Framework_TestCase
   public function testDeletingData()
   {
     $path     = dirname(__FILE__) . '/_fixture/';
-    $cache_id = 'my-data-cache-id.html';
+    $cache_id = 'delete-me-cache-id.html';
 
+    \Pimf\Util\Cache::put($path.$cache_id, 'test', '+2 day');
     $cached = \Pimf\Util\Cache::forget($path.$cache_id);
 
     $this->assertTrue($cached, 'it is not deleted');
