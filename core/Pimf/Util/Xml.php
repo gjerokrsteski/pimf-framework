@@ -30,7 +30,7 @@ class Xml
 
     if ($xml instanceof \SimpleXMLElement) {
       $doc = new \DOMDocument();
-      $doc->load(''.$xml->asXML());
+      $doc->loadXML(''.$xml->asXML());
 
       return $doc;
     }
