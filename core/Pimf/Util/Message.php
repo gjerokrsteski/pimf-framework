@@ -57,7 +57,7 @@ class Message
    */
   public function __construct($message, array $bindings = array())
   {
-    $this->message  = $message;
+    $this->setMessage($message);
     $this->bindings = $bindings;
   }
 
@@ -115,7 +115,7 @@ class Message
    */
   public function __toString()
   {
-    return (string)$this->format();
+    return (string) $this->format();
   }
 
   /**
@@ -125,7 +125,7 @@ class Message
    */
   public function format()
   {
-    if (!$this->message) {
+    if ($this->getMessage() == '' || !$this->getMessage()) {
       return '';
     }
 

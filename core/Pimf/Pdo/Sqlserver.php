@@ -16,9 +16,12 @@ namespace Pimf\Pdo;
  */
 class Sqlserver extends Connector
 {
-  protected $options
-    = array(\PDO::ATTR_CASE         => \PDO::CASE_LOWER, \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
-            \PDO::ATTR_ORACLE_NULLS => \PDO::NULL_NATURAL, \PDO::ATTR_STRINGIFY_FETCHES => false,);
+  protected $options = array(
+      \PDO::ATTR_CASE              => \PDO::CASE_LOWER,
+      \PDO::ATTR_ERRMODE           => \PDO::ERRMODE_EXCEPTION,
+      \PDO::ATTR_ORACLE_NULLS      => \PDO::NULL_NATURAL,
+      \PDO::ATTR_STRINGIFY_FETCHES => false,
+    );
 
   /**
    * @param array $config

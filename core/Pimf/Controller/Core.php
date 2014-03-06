@@ -64,14 +64,14 @@ class Core extends Base
     chmod(BASE_PATH . 'pimf-framework/autoload.core.php', 0644);
 
     echo Color::paint('Create logging files' . PHP_EOL);
-    $fp = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-logs.txt', "at+");
-    fclose($fp);
+    $handle = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-logs.txt', "at+");
+    fclose($handle);
     chmod($file, 0777);
-    $fp = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-warnings.txt', "at+");
-    fclose($fp);
+    $handle = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-warnings.txt', "at+");
+    fclose($handle);
     chmod($file, 0777);
-    $fp = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-errors.txt', "at+");
-    fclose($fp);
+    $handle = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-errors.txt', "at+");
+    fclose($handle);
     chmod($file, 0777);
 
     clearstatcache();
@@ -96,8 +96,11 @@ class Core extends Base
   }
 
   /**
-   * @param string $type
-   * @param string $for
+   * @param $type
+   * @param $for
+   *
+   * @return bool
+   * @throws \DomainException
    */
   protected function createTable($type, $for)
   {

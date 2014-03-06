@@ -47,17 +47,17 @@ class Io
   public static function read($prompt, $validation = "/.*/")
   {
     $value = '';
-    static $fp;
+    static $handle;
 
-    if (!$fp) {
-      $fp = fopen("php://stdin", "r");
+    if (!$handle) {
+      $handle = fopen("php://stdin", "r");
     }
 
     while (true) {
 
       echo Color::paint("Please enter a " . $prompt . ":\n");
 
-      $value = fgets($fp, 1024);
+      $value = fgets($handle, 1024);
       $value = substr($value, 0, -1);
 
       if (strlen($value) > 0 && preg_match($validation, $value)) {

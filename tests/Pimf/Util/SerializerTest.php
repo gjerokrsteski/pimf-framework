@@ -122,4 +122,20 @@ class SerializerTest extends PHPUnit_Framework_TestCase
 
     $this->assertEquals(gettype($stdClass), gettype($unserializedData));
   }
+
+  public function testSimpleXMLElement()
+  {
+    $xml = new \SimpleXMLElement('<example><test/></example>');
+    $serializedData   = \Pimf\Util\Serializer::serialize($xml);
+    $unserializedData = \Pimf\Util\Serializer::unserialize($serializedData);
+    $this->assertEquals(gettype($xml), gettype($unserializedData));
+  }
+
+  /**
+   * @expectedException \RuntimeException
+   */
+  public function testBombingExceptionOnUnserialize()
+  {
+    \Pimf\Util\Serializer::unserialize(null);
+  }
 }

@@ -8,6 +8,13 @@ class MessageFormaterTest extends PHPUnit_Framework_TestCase
     new \Pimf\Util\Message('Some message here');
   }
 
+  public function testCreatingANewInstanceIfMessageIsEmpty()
+  {
+    $msg = new \Pimf\Util\Message('');
+
+    $this->assertEquals('', $msg->format());
+  }
+
   public function testCreatingANewInstanceWithBindingParamsToTheMessage()
   {
     $message = new \Pimf\Util\Message(

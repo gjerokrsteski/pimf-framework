@@ -105,12 +105,4 @@ class Identifier
   {
     return self::$delimiter;
   }
-
-  /**
-   * Mainly used for unit tests.
-   */
-  public function clear()
-  {
-    self::$delimiter = '_';
-  }
 }

@@ -126,8 +126,8 @@ final class Application
     } else {
 
       set_exception_handler(
-        function ($e) {
-          Error::exception($e);
+        function ($exception) {
+          Error::exception($exception);
         }
       );
 

@@ -66,4 +66,5 @@ class IdentifierTest extends PHPUnit_Framework_TestCase
 
     $this->assertEquals('1/23/123/zz/top/some/class/name', $output);
   }
+
 }

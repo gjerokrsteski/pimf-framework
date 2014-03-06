@@ -79,10 +79,7 @@ class Serializer
   {
     $ret = (extension_loaded('igbinary') && function_exists('igbinary_serialize')) ? @igbinary_serialize($value) : @serialize($value);
 
-    if ($ret === false) {
-      $err = error_get_last();
-      throw new \RuntimeException($err['message']);
-    }
+    self::bombIf($ret);
 
     return $ret;
   }
@@ -101,10 +98,7 @@ class Serializer
         $serialized
       );
 
-    if ($ret === false) {
-      $err = error_get_last();
-      throw new \RuntimeException($err['message']);
-    }
+    self::bombIf($ret);
 
     return $ret;
   }
@@ -131,5 +125,18 @@ class Serializer
     }
 
     return (array)$item;
+  }
+
+  /**
+   * @param boolean $valid
+   *
+   * @throws \RuntimeException
+   */
+  private static function bombIf($valid)
+  {
+    if ($valid === false) {
+      $err = error_get_last();
+      throw new \RuntimeException($err['message']);
+    }
   }
 }
