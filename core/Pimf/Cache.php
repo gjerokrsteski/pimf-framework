@@ -85,7 +85,7 @@ class Cache
         return new CS\Memory();
 
       case 'redis':
-        return new CS\Redis(Redis::db());
+        return new CS\Redis(Redis::database());
 
       case 'wincache':
         return new CS\WinCache($conf['cache']['key']);

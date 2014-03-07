@@ -24,11 +24,11 @@ class Memory extends Storage
   /**
    * Load a session from storage by a given ID.
    *
-   * @param string $id
+   * @param string $key
    *
    * @return array
    */
-  public function load($id)
+  public function load($key)
   {
     return $this->session;
   }
@@ -48,9 +48,9 @@ class Memory extends Storage
   /**
    * Delete a session from storage by a given ID.
    *
-   * @param string $id
+   * @param string $key
    */
-  public function delete($id)
+  public function delete($key)
   {
     //...
   }

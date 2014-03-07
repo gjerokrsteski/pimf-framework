@@ -2,8 +2,8 @@
 /**
  * Short-cut for constructor method chaining.
  *
- * @param DateTime $object
- * @return object|mixed
+ * @param object $object
+ * @return object
  */
 function by($object)
 {

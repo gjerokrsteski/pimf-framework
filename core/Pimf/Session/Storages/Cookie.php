@@ -26,11 +26,11 @@ class Cookie extends Storage
   /**
    * Load a session from storage by a given ID.
    *
-   * @param  string $id
+   * @param  string $key
    *
    * @return array
    */
-  public function load($id)
+  public function load($key)
   {
     if (Crumb::has(static::payload)) {
       return unserialize(base64_decode(Crumb::get(static::payload)));
@@ -50,9 +50,9 @@ class Cookie extends Storage
   }
 
   /**
-   * @param string $id
+   * @param string $key
    */
-  public function delete($id)
+  public function delete($key)
   {
     Crumb::forget(static::payload);
   }

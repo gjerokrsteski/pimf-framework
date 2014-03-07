@@ -32,13 +32,13 @@ class Dba extends Storage implements Cleanable
   /**
    * Load a session from storage by a given ID.
    *
-   * @param string $id
+   * @param string $key
    *
    * @return array|mixed
    */
-  public function load($id)
+  public function load($key)
   {
-    return $this->dba->get($id);
+    return $this->dba->get($key);
   }
 
   /**
@@ -54,11 +54,11 @@ class Dba extends Storage implements Cleanable
   }
 
   /**
-   * @param string $id
+   * @param string $key
    */
-  public function delete($id)
+  public function delete($key)
   {
-    $this->dba->forget($id);
+    $this->dba->forget($key);
   }
 
   /**

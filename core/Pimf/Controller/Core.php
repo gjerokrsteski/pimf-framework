@@ -96,8 +96,8 @@ class Core extends Base
   }
 
   /**
-   * @param $type
-   * @param $for
+   * @param string $type
+   * @param string $for
    *
    * @return bool
    * @throws \DomainException

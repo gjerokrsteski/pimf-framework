@@ -32,13 +32,13 @@ class Redis extends Storage
   /**
    * Load a session from storage by a given ID.
    *
-   * @param string $id
+   * @param string $key
    *
    * @return array|mixed|null
    */
-  public function load($id)
+  public function load($key)
   {
-    return $this->redis->get($id);
+    return $this->redis->get($key);
   }
 
   /**
@@ -54,10 +54,10 @@ class Redis extends Storage
   }
 
   /**
-   * @param string $id
+   * @param string $key
    */
-  public function delete($id)
+  public function delete($key)
   {
-    $this->redis->forget($id);
+    $this->redis->forget($key);
   }
 }

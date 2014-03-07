@@ -34,13 +34,13 @@ class File extends Storage implements Cleanable
   /**
    * Load a session from storage by a given ID.
    *
-   * @param string $id
+   * @param string $key
    *
    * @return array|mixed
    */
-  public function load($id)
+  public function load($key)
   {
-    if (file_exists($path = $this->path . $id)) {
+    if (file_exists($path = $this->path . $key)) {
       return unserialize(file_get_contents($path));
     }
   }
@@ -58,12 +58,12 @@ class File extends Storage implements Cleanable
   }
 
   /**
-   * @param string $id
+   * @param string $key
    */
-  public function delete($id)
+  public function delete($key)
   {
-    if (file_exists($this->path . $id)) {
-      @unlink($this->path . $id);
+    if (file_exists($this->path . $key)) {
+      @unlink($this->path . $key);
     }
   }
 

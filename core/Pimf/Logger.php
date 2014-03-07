@@ -63,12 +63,8 @@ class Logger
       return;
     }
 
-    if (!is_dir($this->storageDir)) {
-      mkdir($this->storageDir, 0777);
-    }
-
     if (true === $this->separator) {
-      $this->storageDir = rtrim(realpath($this->storageDir), '\\/') . DIRECTORY_SEPARATOR;
+      $this->storageDir = rtrim(realpath($this->storageDir), '\\/') . DS;
     }
 
     $this->handle      = fopen($this->storageDir . "pimf-logs.txt", "at+");
@@ -173,7 +169,7 @@ class Logger
   /**
    * Formats the error message in representable manner.
    *
-   * @param $message
+   * @param string $message
    * @param string $severity
    *
    * @return string

@@ -32,13 +32,13 @@ class Memcached extends Storage
   /**
    * Load a session from storage by a given ID.
    *
-   * @param string $id
+   * @param string $key
    *
    * @return array|mixed|null
    */
-  public function load($id)
+  public function load($key)
   {
-    return $this->memcached->get($id);
+    return $this->memcached->get($key);
   }
 
   /**
@@ -54,10 +54,10 @@ class Memcached extends Storage
   }
 
   /**
-   * @param string $id
+   * @param string $key
    */
-  public function delete($id)
+  public function delete($key)
   {
-    $this->memcached->forget($id);
+    $this->memcached->forget($key);
   }
 }

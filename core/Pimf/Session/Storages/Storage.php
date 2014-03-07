@@ -20,11 +20,11 @@ abstract class Storage
    * Load a session from storage by a given ID.
    * If no session is found for the id, null will be returned.
    *
-   * @param string $id
+   * @param string $key
    *
    * @return array|null
    */
-  abstract public function load($id);
+  abstract public function load($key);
 
   /**
    * Save a given session to storage.
@@ -40,11 +40,11 @@ abstract class Storage
   /**
    * Delete a session from storage by a given ID.
    *
-   * @param string $id
+   * @param string $key
    *
    * @return void
    */
-  abstract public function delete($id);
+  abstract public function delete($key);
 
   /**
    * Create a fresh session array with a unique ID.
@@ -70,9 +70,9 @@ abstract class Storage
 
     // we'll find an random ID here.
     do {
-      $session = $this->load($id = String::random(40));
+      $session = $this->load($key = String::random(40));
     } while ($session !== null);
 
-    return $id;
+    return $key;
   }
 }

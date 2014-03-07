@@ -33,18 +33,18 @@ class Pdo extends Storage implements Cleanable
    * Load a session from storage by a given ID.
    * If no session is found for the ID, null will be returned.
    *
-   * @param string $id
+   * @param string $key
    *
    * @return array|null
    */
-  public function load($id)
+  public function load($key)
   {
     try {
       $sth = $this->pdo->prepare(
         'SELECT * FROM sessions WHERE id = :id'
       );
 
-      $sth->bindValue(':id', $id, \PDO::PARAM_INT);
+      $sth->bindValue(':id', $key, \PDO::PARAM_INT);
       $sth->execute();
 
       $session = $sth->fetchObject();
@@ -85,15 +85,15 @@ class Pdo extends Storage implements Cleanable
   /**
    * Delete a session from storage by a given ID.
    *
-   * @param string $id
+   * @param string $key
    */
-  public function delete($id)
+  public function delete($key)
   {
     $sth = $this->pdo->prepare(
       "DELETE FROM sessions WHERE id = :id"
     );
 
-    $sth->bindValue(':id', $id, \PDO::PARAM_INT);
+    $sth->bindValue(':id', $key, \PDO::PARAM_INT);
     $sth->execute();
   }
 

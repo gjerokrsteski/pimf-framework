@@ -175,7 +175,7 @@ class View implements Renderable
    */
   public function reunite()
   {
-    include new File(str_replace('/', DIRECTORY_SEPARATOR, $this->path . '/' . $this->template));
+    include new File(str_replace('/', DS, $this->path . '/' . $this->template));
   }
 
   /**

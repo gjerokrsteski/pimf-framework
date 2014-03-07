@@ -25,12 +25,12 @@ class EntityManager extends Base
   protected $prefix;
 
   /**
-   * @param \PDO   $db
+   * @param \PDO   $pdo
    * @param string $prefix The data-mappers repository name.
    */
-  public function __construct(\PDO $db, $prefix = '\Pimf')
+  public function __construct(\PDO $pdo, $prefix = '\Pimf')
   {
-    parent::__construct($db);
+    parent::__construct($pdo);
     $this->prefix = $prefix . '\DataMapper\\';
   }
 

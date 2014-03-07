@@ -75,12 +75,12 @@ class Payload
   /**
    * Load the session for the current request.
    *
-   * @param null|string $id
+   * @param null|string $key
    */
-  public function load($id)
+  public function load($key)
   {
-    if ($id !== null) {
-      $this->session = $this->storage->load($id);
+    if ($key !== null) {
+      $this->session = $this->storage->load($key);
     }
 
     // If the session doesn't exist or is invalid.

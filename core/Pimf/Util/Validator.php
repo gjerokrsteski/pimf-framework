@@ -245,9 +245,7 @@ class Validator
 
     try {
 
-      if ($fieldValue === by(new \DateTime($fieldValue))->format($format)) {
-        return true;
-      }
+      return $fieldValue === by(new \DateTime($fieldValue))->format($format);
 
     } catch (\Exception $exception) {
       return $this->error($field, __FUNCTION__);
@@ -270,7 +268,7 @@ class Validator
   /**
    * @param string $attribute
    *
-   * @return string|null
+   * @return string
    * @throws \OutOfBoundsException If attribute not at range
    */
   protected function get($attribute)

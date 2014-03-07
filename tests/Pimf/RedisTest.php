@@ -53,7 +53,7 @@ class RedisTest extends PHPUnit_Framework_TestCase
 
      '\\Pimf\\Redis',
 
-     \Pimf\Redis::db()
+     \Pimf\Redis::database()
    );
 
   }
@@ -69,7 +69,7 @@ class RedisTest extends PHPUnit_Framework_TestCase
       )
     );
 
-    \Pimf\Redis::db('default2');
+    \Pimf\Redis::database('default2');
   }
 
   public function testGetReturnsNullWhenNotFound()

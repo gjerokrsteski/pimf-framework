@@ -31,13 +31,13 @@ class Apc extends Storage
   /**
    * Load a session from storage by a given ID.
    *
-   * @param string $id
+   * @param string $key
    *
    * @return array|mixed|null
    */
-  public function load($id)
+  public function load($key)
   {
-    return $this->apc->get($id);
+    return $this->apc->get($key);
   }
 
   /**
@@ -51,11 +51,11 @@ class Apc extends Storage
   }
 
   /**
-   * @param string $id
+   * @param string $key
    */
-  public function delete($id)
+  public function delete($key)
   {
-    $this->apc->forget($id);
+    $this->apc->forget($key);
   }
 
 }

@@ -98,7 +98,7 @@ class Redis
    * @return Redis
    * @throws \RuntimeException
    */
-  public static function db($name = 'default')
+  public static function database($name = 'default')
   {
     if (!isset(static::$databases[$name])) {
       $conf = Registry::get('conf');
@@ -218,7 +218,7 @@ class Redis
   /**
    * Parse and handle an inline response from the Redis database.
    *
-   * @param $response
+   * @param string $response
    *
    * @return string
    */
@@ -285,8 +285,8 @@ class Redis
   /**
    * Dynamically make calls to the Redis database.
    *
-   * @param $method
-   * @param $parameters
+   * @param string $method
+   * @param array $parameters
    *
    * @return mixed
    */
@@ -305,7 +305,7 @@ class Redis
    */
   public static function __callStatic($method, $parameters)
   {
-    return static::db()->run($method, $parameters);
+    return static::database()->run($method, $parameters);
   }
 
   /**

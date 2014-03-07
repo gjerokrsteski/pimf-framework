@@ -23,7 +23,7 @@ use Pimf\Util\IdentityMap;
  * @method insert($entity)
  * @method update($entity)
  * @method delete($entity)
- * @method find($id)
+ * @method find($key)
  */
 abstract class Base
 {
@@ -38,11 +38,11 @@ abstract class Base
   protected $identityMap;
 
   /**
-   * @param \PDO $db
+   * @param \PDO $pdo
    */
-  public function __construct(\PDO $db)
+  public function __construct(\PDO $pdo)
   {
-    $this->pdo         = $db;
+    $this->pdo         = $pdo;
     $this->identityMap = new IdentityMap();
   }
 

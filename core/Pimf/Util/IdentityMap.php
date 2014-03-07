@@ -35,13 +35,13 @@ class IdentityMap
   }
 
   /**
-   * @param integer $id
+   * @param integer $key
    * @param mixed   $object
    */
-  public function set($id, $object)
+  public function set($key, $object)
   {
-    $this->idToObject[$id]     = $object;
-    $this->objectToId[$object] = $id;
+    $this->idToObject[$key]    = $object;
+    $this->objectToId[$object] = $key;
   }
 
   /**
@@ -60,13 +60,13 @@ class IdentityMap
   }
 
   /**
-   * @param integer $id
+   * @param integer $key
    *
    * @return boolean
    */
-  public function hasId($id)
+  public function hasId($key)
   {
-    return isset($this->idToObject[$id]);
+    return isset($this->idToObject[$key]);
   }
 
   /**
@@ -80,17 +80,17 @@ class IdentityMap
   }
 
   /**
-   * @param integer $id
+   * @param integer $key
    *
    * @throws \OutOfBoundsException
    * @return object
    */
-  public function getObject($id)
+  public function getObject($key)
   {
-    if (false === $this->hasId($id)) {
-      throw new \OutOfBoundsException('no id=' . $id . ' at the identity-map');
+    if (false === $this->hasId($key)) {
+      throw new \OutOfBoundsException('no id=' . $key . ' at the identity-map');
     }
 
-    return $this->idToObject[$id];
+    return $this->idToObject[$key];
   }
 }

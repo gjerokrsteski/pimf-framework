@@ -87,7 +87,7 @@ class File extends \SplFileInfo
       throw new \RuntimeException("Unable to write in the $dir directory");
     }
 
-    return new self($dir . DIRECTORY_SEPARATOR . (null === $name ? $this->getBasename() : $this->getName($name)), false);
+    return new self($dir . DS . (null === $name ? $this->getBasename() : $this->getName($name)), false);
   }
 
   /**
