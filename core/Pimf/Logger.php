@@ -63,6 +63,10 @@ class Logger
       return;
     }
 
+    if (!is_dir($this->storageDir)) {
+      mkdir($this->storageDir, 0777);
+    }
+
     if (true === $this->separator) {
       $this->storageDir = rtrim(realpath($this->storageDir), '\\/') . DS;
     }
