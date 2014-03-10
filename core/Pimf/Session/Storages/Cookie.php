@@ -21,7 +21,7 @@ class Cookie extends Storage
    *
    * @var string
    */
-  const payload = 'session_payload';
+  const PAYLOAD = 'session_payload';
 
   /**
    * Load a session from storage by a given ID.
@@ -32,8 +32,8 @@ class Cookie extends Storage
    */
   public function load($key)
   {
-    if (Crumb::has(static::payload)) {
-      return unserialize(base64_decode(Crumb::get(static::payload)));
+    if (Crumb::has(static::PAYLOAD)) {
+      return unserialize(base64_decode(Crumb::get(static::PAYLOAD)));
     }
   }
 
@@ -46,7 +46,7 @@ class Cookie extends Storage
    */
   public function save($session, $config, $exists)
   {
-    Crumb::put(static::payload, base64_encode(serialize($session)), $config['lifetime'], $config['path'], $config['domain']);
+    Crumb::put(static::PAYLOAD, base64_encode(serialize($session)), $config['lifetime'], $config['path'], $config['domain']);
   }
 
   /**
@@ -54,6 +54,6 @@ class Cookie extends Storage
    */
   public function delete($key)
   {
-    Crumb::forget(static::payload);
+    Crumb::forget(static::PAYLOAD);
   }
 }

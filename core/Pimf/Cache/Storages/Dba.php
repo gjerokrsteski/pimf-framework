@@ -114,10 +114,11 @@ class Dba extends Storage
 
   /**
    * @param string $key
+   * @param null $default
    *
    * @return bool|mixed|null
    */
-  public function get($key)
+  public function get($key, $default = null)
   {
     $res = $this->retrieve($key);
 
