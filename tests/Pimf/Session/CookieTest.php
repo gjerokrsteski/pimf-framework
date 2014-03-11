@@ -22,25 +22,6 @@ class SessionCookieTest extends PHPUnit_Framework_TestCase
     $this->assertNull( $storage->load('some-bad-id') );
   }
 
-  public function testSavingTheSession()
-    {
-      $session['id'] = 'cool-secret-id';
-      $config['lifetime'] = 60;
-      $config['path'] = '/nfs/opst/';
-      $config['domain'] = 'www.pimf-framework.de';
-
-      $storage = new \Pimf\Session\Storages\Cookie();
-
-      $this->assertNull( $storage->save($session, $config, 60) );
-    }
-
-    public function testDeleteKeyThatIsNotAtTheSession()
-    {
-      $storage = new \Pimf\Session\Storages\Cookie();
-
-      $this->assertNull( $storage->delete('some-bad-key') );
-    }
-
   public function testRefreshing()
   {
     $storage = new \Pimf\Session\Storages\Cookie();
