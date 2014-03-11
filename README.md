@@ -5,6 +5,8 @@ Have you ever wished a PHP framework that perfectly adapts to your projects need
 [![Build Status](https://travis-ci.org/gjerokrsteski/pimf-framework.png?branch=master)](https://travis-ci.org/gjerokrsteski/pimf-framework) 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/badges/quality-score.png?s=6455d019460628327434d85520bd13c4d03a2673)](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/)
 
+> **Note:** This repository contains the core code of the PIMF framework. If you want to build an application using PIMF, please use on of the quick starting bundle below.
+
 PIMF Philosophy
 ---------------
 A good and robust business-logic is better that fat and complex framework. Most of the PHP framewroks are bigger than your problem. At all you need less than 20% of the functionality of the framework to solve you problem. Therefore we belive that the “right” 20% of the effort is the 80% of the results - and that is PIMF.
