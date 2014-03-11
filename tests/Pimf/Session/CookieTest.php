@@ -6,9 +6,7 @@ class SessionCookieTest extends PHPUnit_Framework_TestCase
     \Pimf\Request::$cookieData = new \Pimf\Param();
   }
 
-
   # start testing
-
 
   public function testCreatingNewInstance()
   {
@@ -32,4 +30,3 @@ class SessionCookieTest extends PHPUnit_Framework_TestCase
     $this->assertNotEquals($session1, $session2);
   }
 }
- 
