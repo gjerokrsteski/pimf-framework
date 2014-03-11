@@ -18,6 +18,7 @@ spl_autoload_register(
         'Pimf\\Cache\\Storages\\Redis'       => '/Pimf/Cache/Storages/Redis.php',
         'Pimf\\Cache\\Storages\\Storage'     => '/Pimf/Cache/Storages/Storage.php',
         'Pimf\\Cache\\Storages\\Wincache'    => '/Pimf/Cache/Storages/Wincache.php',
+        'Pimf\\Cache\\Storages\\Pdo'         => '/Pimf/Cache/Storages/Pdo.php',
         'Pimf\\Cli'                          => '/Pimf/Cli.php',
         'Pimf\\Cli\\Color'                   => '/Pimf/Cli/Color.php',
         'Pimf\\Cli\\Io'                      => '/Pimf/Cli/Io.php',

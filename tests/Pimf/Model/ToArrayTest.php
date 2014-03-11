@@ -15,11 +15,13 @@ class ToArrayTest extends PHPUnit_Framework_TestCase
 {
   public function testThatReturnsOnlyProtectedAndPublicPropertiesOfTheGivenModelObject()
   {
+    $guestbook = new Gustbook();
+
     $this->assertEquals(
 
       array('id' => 1, 'title' => 'test-title', 'message' => 'cool-guestbook'),
 
-      by(new Gustbook())->toArray()
+      $guestbook->toArray()
 
     );
   }

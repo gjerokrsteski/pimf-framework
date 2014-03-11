@@ -22,13 +22,21 @@ class Apc extends Storage
   protected $key;
 
   /**
+   * Is APCu is supported.
+   *
+   * @var bool
+   */
+  protected $apcu = false;
+
+  /**
    * Create a new APC cache storage instance.
    *
    * @param string $key
    */
   public function __construct($key)
   {
-    $this->key = (string)$key;
+    $this->key  = (string)$key;
+    $this->apcu = function_exists('apcu_fetch');
   }
 
   /**
@@ -40,9 +48,7 @@ class Apc extends Storage
    */
   protected function retrieve($key)
   {
-    if (($cache = apc_fetch($this->key . $key)) !== false) {
-      return $cache;
-    }
+    return $this->apcu ? apcu_fetch($this->key . $key) : apc_fetch($this->key . $key);
   }
 
   /**
@@ -57,11 +63,14 @@ class Apc extends Storage
    * @param mixed  $value
    * @param int    $minutes
    *
-   * @return bool|void
+   * @return bool
    */
   public function put($key, $value, $minutes)
   {
-    return apc_store('' . $this->key . $key, $value, (int)$minutes * 60);
+    return $this->apcu
+      ? apcu_store('' . $this->key . $key, $value, (int)$minutes * 60)
+      : apc_store('' . $this->key . $key, $value, (int)$minutes * 60
+      );
   }
 
   /**
@@ -80,12 +89,22 @@ class Apc extends Storage
   /**
    * Delete an item from the cache.
    *
-   * @param  string $key
+   * @param string $key
    *
-   * @return void
+   * @return bool
    */
   public function forget($key)
   {
-    apc_delete($this->key . $key);
+    return $this->apcu ? apcu_delete($key) : apc_delete($key);
+  }
+
+  /**
+   * Remove all items from the cache.
+   *
+   * @return void
+   */
+  public function flush()
+  {
+    $this->apcu ? apcu_clear_cache() : apc_clear_cache('user');
   }
 }

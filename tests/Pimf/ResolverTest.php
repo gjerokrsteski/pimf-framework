@@ -108,8 +108,9 @@ class ResolverTest extends PHPUnit_Framework_TestCase
       )
     );
 
+    $router = new \Pimf\Router();
     \Pimf\Registry::set('router',
-      by(new \Pimf\Router())->map(new \Pimf\Route('index/save'))
+      $router->map(new \Pimf\Route('index/save'))
     );
 
     $resolver = new \Pimf\Resolver(
@@ -216,8 +217,9 @@ class ResolverTest extends PHPUnit_Framework_TestCase
       )
     );
 
+    $router = new \Pimf\Router();
     \Pimf\Registry::set('router',
-      by(new \Pimf\Router())->map(new \Pimf\Route('index/save'))
+      $router->map(new \Pimf\Route('index/save'))
     );
 
     # the test assertion

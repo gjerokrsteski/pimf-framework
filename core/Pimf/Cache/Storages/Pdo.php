@@ -30,7 +30,7 @@ class Pdo extends Storage
    * Create a new database cache storage instance.
    *
    * @param \Pimf\Database $pdo
-   * @param string         $key
+   * @param string $key
    */
   public function __construct(\Pimf\Database $pdo, $key)
   {

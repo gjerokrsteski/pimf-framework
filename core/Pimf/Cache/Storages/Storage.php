@@ -119,7 +119,7 @@ abstract class Storage
    *
    * @param string $key
    *
-   * @return void
+   * @return boolean
    */
   abstract public function forget($key);
 

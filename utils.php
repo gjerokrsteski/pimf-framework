@@ -1,16 +1,5 @@
 <?php
 /**
- * Short-cut for constructor method chaining.
- *
- * @param object $object
- * @return object
- */
-function by($object)
-{
-  return $object;
-}
-
-/**
  * Return the value of the given item.
  * If the given item is a Closure the result of the Closure will be returned.
  *
