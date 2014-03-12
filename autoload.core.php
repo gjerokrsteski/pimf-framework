@@ -91,6 +91,7 @@ spl_autoload_register(
         'Pimf\\Util\\String'                 => '/Pimf/Util/String.php',
         'Pimf\\Util\\String\\Clean'          => '/Pimf/Util/String/Clean.php',
         'Pimf\\Util\\Uploaded'               => '/Pimf/Util/Uploaded.php',
+        'Pimf\\Util\\Uploaded\\Factory'      => '/Pimf/Util/Uploaded/Factory.php',
         'Pimf\\Util\\Uuid'                   => '/Pimf/Util/Uuid.php',
         'Pimf\\Util\\Validator'              => '/Pimf/Util/Validator.php',
         'Pimf\\Util\\Validator\\Factory'     => '/Pimf/Util/Validator/Factory.php',

@@ -77,10 +77,8 @@ class File extends \SplFileInfo
    */
   protected function getTargetFile($dir, $name = null)
   {
-    if (!is_dir($dir)) {
-      if (false === @mkdir($dir, 0777, true)) {
+    if (!is_dir($dir) || false === @mkdir($dir, 0777, true)) {
         throw new \RuntimeException("The destination folder $dir");
-      }
     }
 
     if (!is_writable($dir)) {

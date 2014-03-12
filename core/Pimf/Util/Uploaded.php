@@ -18,11 +18,6 @@ namespace Pimf\Util;
  *     $_FILES['tmp_name'], $_FILES['name'], $_FILES['type'], $_FILES['size'], $_FILES['error']
  *   );
  *
- *   // ... OR ..
- *
- *   // Create an instance using the factory method for more security.
- *   $upload = Uploaded::factory($_FILES);
- *
  *   if ($upload instanceof Uploaded) {
  *     $upload->move('path/to/your/images/dir', $upload->getClientOriginalName());
  *   }
@@ -71,11 +66,6 @@ class Uploaded extends File
   private $error;
 
   /**
-   * @var array
-   */
-  private static $fileKeys = array('error', 'name', 'size', 'tmp_name', 'type');
-
-  /**
    * Accepts the information of the uploaded file as provided by the PHP global $_FILES.
    *
    * <code>
@@ -107,41 +97,6 @@ class Uploaded extends File
     $this->test  = (bool)$test;
 
     parent::__construct($path, UPLOAD_ERR_OK === $this->error);
-  }
-
-  /**
-   * Factory for save instance creation.
-   *
-   * <code>
-   *   // Create an instance using the factory method.
-   *   $file = Uploaded::factory($_FILES);
-   * </code>
-   *
-   * @param mixed $file A $_FILES multi-dimensional array of uploaded file information.
-   * @param bool  $test Whether the test mode is active for essayer unit-testing.
-   *
-   * @return null|Uploaded
-   */
-  public static function factory(array $file, $test = false)
-  {
-    $file = static::heal($file);
-
-    if (is_array($file) && isset($file['name']) && empty($file['name']) === false) {
-
-      $keys = array_keys($file);
-      sort($keys);
-
-      if ($keys == self::$fileKeys) {
-
-        if (UPLOAD_ERR_NO_FILE == $file['error']) {
-          return null;
-        }
-
-        return new self($file['tmp_name'], $file['name'], $file['type'], $file['size'], $file['error'], $test);
-      }
-    }
-
-    return null;
   }
 
   /**
@@ -254,60 +209,12 @@ class Uploaded extends File
       return PHP_INT_MAX;
     }
 
-    switch (strtolower(substr($max, -1))) {
-      case 'g':
-        $max *= 1024;
-        break;
-      case 'm':
-        $max *= 1024;
-        break;
-      case 'k':
-        $max *= 1024;
-        break;
+    $unit = strtolower(substr($max, -1));
+
+    if (in_array($unit, array('g', 'm', 'k'), true)) {
+      $max *= 1024;
     }
 
     return (integer)$max;
-  }
-
-  /**
-   * Heals a malformed PHP $_FILES array.
-   *
-   * PHP has a bug that the format of the $_FILES array differs, depending on
-   * whether the uploaded file fields had normal field names or array-like
-   * field names ("normal" vs. "parent[child]").
-   *
-   * This method fixes the array to look like the "normal" $_FILES array.
-   *
-   * @param array $data
-   *
-   * @return array
-   */
-  protected static function heal($data)
-  {
-    if (!is_array($data)) {
-      return $data;
-    }
-
-    $keys = array_keys($data);
-    sort($keys);
-
-    if (self::$fileKeys != $keys || !isset($data['name']) || !is_array($data['name'])) {
-      return $data;
-    }
-
-    $files = $data;
-
-    foreach (self::$fileKeys as $k) {
-      unset($files[$k]);
-    }
-
-    foreach (array_keys($data['name']) as $key) {
-      $files[$key] = static::heal(
-        array('error'    => $data['error'][$key], 'name' => $data['name'][$key], 'type' => $data['type'][$key],
-              'tmp_name' => $data['tmp_name'][$key], 'size' => $data['size'][$key])
-      );
-    }
-
-    return $files;
   }
 }
