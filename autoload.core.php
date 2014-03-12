@@ -21,7 +21,7 @@ spl_autoload_register(
         'Pimf\\Cache\\Storages\\Pdo'         => '/Pimf/Cache/Storages/Pdo.php',
         'Pimf\\Cli'                          => '/Pimf/Cli.php',
         'Pimf\\Cli\\Color'                   => '/Pimf/Cli/Color.php',
-        'Pimf\\Cli\\Io'                      => '/Pimf/Cli/Io.php',
+        'Pimf\\Cli\\Std'                      => '/Pimf/Cli/Std.php',
         'Pimf\\Contracts\\Arrayable'         => '/Pimf/Contracts/Arrayable.php',
         'Pimf\\Contracts\\Cleanable'         => '/Pimf/Contracts/Cleanable.php',
         'Pimf\\Contracts\\Jsonable'          => '/Pimf/Contracts/Jsonable.php',

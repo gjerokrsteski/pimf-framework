@@ -8,7 +8,7 @@
 
 namespace Pimf\Controller;
 
-use Pimf\Registry, Pimf\Util\String, Pimf\Cli\Color, Pimf\Cli\Io, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
+use Pimf\Registry, Pimf\Util\String, Pimf\Cli\Color, Pimf\Cli\Std, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
 
 /**
  * @package Controller
@@ -79,7 +79,8 @@ class Core extends Base
 
   public function create_session_tableCliAction()
   {
-    $type = Io::read('database type [mysql|sqlite]', '(mysql|sqlite)');
+    $std = new Std();
+    $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
 
     var_dump(
       $this->createTable($type, 'session')
@@ -88,7 +89,8 @@ class Core extends Base
 
   public function create_cache_tableCliAction()
   {
-    $type = Io::read('database type [mysql|sqlite]', '(mysql|sqlite)');
+    $std = new Std();
+    $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
 
     var_dump(
       $this->createTable($type, 'cache')
