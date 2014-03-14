@@ -14,7 +14,8 @@ class CliStdTest extends PHPUnit_Framework_TestCase
     // no std-in here... sorry!
 
     $this->assertFalse($std->value());
-    $this->assertTrue($std->valid('(mysql|sqlite)', 'which database type do you like mysql or sqlite?'));
+    $this->assertTrue($std->valid('(mysql|sqlite)', 'mysql'));
+    $this->assertFalse($std->valid('(mysql|sqlite)', 'non-matching'));
   }
 }
  

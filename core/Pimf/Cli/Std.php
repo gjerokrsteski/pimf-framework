@@ -16,8 +16,6 @@ namespace Pimf\Cli;
  */
 class Std
 {
-  const READ = 'php://stdin';
-
   /**
    * @var resource
    */
@@ -26,7 +24,7 @@ class Std
   /**
    * @param string $stream
    */
-  public function __construct($stream = self::READ)
+  public function __construct($stream = 'php://stdin')
   {
     $this->handle = fopen($stream, 'r');
   }
