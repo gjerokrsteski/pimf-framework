@@ -36,4 +36,35 @@ class JsonTest extends PHPUnit_Framework_TestCase
   {
     \Pimf\Util\Json::decode("{'title': 'my second title'}");
   }
+
+  public static function invokeMethod(&$object, $methodName, array $parameters = array())
+  {
+    $reflection = new \ReflectionClass(get_class($object));
+    $method     = $reflection->getMethod($methodName);
+    $method->setAccessible(true);
+
+    return $method->invokeArgs($object, $parameters);
+  }
+
+  public static function lastErrors()
+  {
+    return array(
+     array(JSON_ERROR_DEPTH),
+     array(JSON_ERROR_CTRL_CHAR),
+     array(JSON_ERROR_STATE_MISMATCH),
+     array(JSON_ERROR_SYNTAX),
+     array(5),
+    );
+  }
+
+  /**
+   * @dataProvider lastErrors
+   * @expectedException \RuntimeException
+   */
+  public static function testErrorStatusHandling($last_error)
+  {
+    $json = new \Pimf\Util\Json();
+
+    self::invokeMethod($json, 'handleError', array($last_error));
+  }
 }

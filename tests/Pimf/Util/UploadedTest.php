@@ -16,6 +16,7 @@ class UtilUploadedTest extends PHPUnit_Framework_TestCase
     $this->assertEquals(0, $uploaded->getError());
     $this->assertTrue($uploaded->isValid());
     $this->assertTrue($uploaded->getMaxFilesize() > 1);
+    $this->assertFalse($uploaded->getClientSize() > 1);
   }
 }
  

@@ -76,7 +76,7 @@ class Std
 
     while (true) {
 
-      echo Color::paint("Please enter a " . $prompt . ":\n");
+      echo "Please enter a " . $prompt . ":\n";
 
       $value = $this->value();
 
@@ -84,7 +84,7 @@ class Std
         break;
       }
 
-      echo Color::paint("Value format for " . $prompt . " is invalid!\n", 'red');
+      echo "[ Value format for " . $prompt . " is invalid! ]\n";
     }
 
     return $value;

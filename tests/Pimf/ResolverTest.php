@@ -3,8 +3,10 @@ class ResolverTest extends PHPUnit_Framework_TestCase
 {
   ## prepare the environment
 
-  public static function setUpBeforeClass()
+  public function setUp()
   {
+    parent::setUp();
+
     require_once dirname(__FILE__) . '/_fixture/Index.php';
 
     $_GET    = array(
@@ -41,6 +43,29 @@ class ResolverTest extends PHPUnit_Framework_TestCase
   {
     $resolver = new \Pimf\Resolver(
       new \Pimf\Request($_GET),
+      dirname(__FILE__).'/_fixture/',
+      'Fixture\\'
+    );
+
+    $this->assertInstanceOf('\Pimf\Controller\Base', $resolver->process());
+  }
+
+  public function testIfNoActionGiven()
+  {
+    \Pimf\Registry::set('conf',
+       array(
+         'app' => array(
+           'name' => 'test-app-name',
+           'key' => 'secret-key-here',
+           'default_controller' => 'index',
+           'routeable' => false,
+         ),
+         'environment' => 'production'
+       )
+     );
+
+    $resolver = new \Pimf\Resolver(
+      new \Pimf\Request(array()),
       dirname(__FILE__).'/_fixture/',
       'Fixture\\'
     );

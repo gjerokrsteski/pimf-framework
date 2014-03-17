@@ -1,0 +1,32 @@
+<?php
+
+class UtilHeaderTest extends PHPUnit_Framework_TestCase
+{
+  /**
+   * @runInSeparateProcess
+   */
+  public function testCacheNone()
+  {
+    Pimf\Util\Header::cacheNone();
+
+    $headers = xdebug_get_headers();
+
+    $this->assertContains('Expires: 0', $headers);
+    $this->assertContains('Pragma: no-cache', $headers);
+    $this->assertContains('Cache-Control: no-cache,no-store,max-age=0,s-maxage=0,must-revalidate', $headers);
+  }
+
+  /**
+   * @runInSeparateProcess
+   */
+  public function testCacheNoValidate()
+  {
+    Pimf\Util\Header::cacheNoValidate(60);
+
+    $headers = xdebug_get_headers();
+
+    $this->assertContains('Cache-Control: public,max-age=60', $headers);
+  }
+
+}
+ 
