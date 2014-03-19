@@ -18,6 +18,14 @@ class ViewTest extends PHPUnit_Framework_TestCase
     new \Pimf\View();
   }
 
+  public function testWhenViewIsTreatedLikeAString()
+  {
+    $view = new \Pimf\View('default.phtml', array(), dirname(__FILE__) .'/_fixture/app/test-app/_templates/');
+    $view->assign('age', 123);
+
+    $this->assertStringStartsWith('123', ''.$view);
+  }
+
   public function testProducing()
   {
     $view = new \Pimf\View();
@@ -55,7 +63,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException PHPUnit_Framework_Error_Warning
+   * @expectedException \OutOfBoundsException
    */
   public function testIfRenderingUndefinedProperty()
   {
