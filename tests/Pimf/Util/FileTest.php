@@ -3,7 +3,7 @@ class UtilFileTest extends PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {
-    new \Pimf\Util\File(__FILE__);
+    new \Pimf\Util\File(__FILE__, false);
   }
 
   /**
@@ -21,14 +21,34 @@ class UtilFileTest extends PHPUnit_Framework_TestCase
     $this->assertEquals('php', $file->getExtension());
   }
 
+  public function testToMove()
+  {
+
+    $dest = dirname(__FILE__) . DS .'_fixture' . DS;
+
+    @touch($dest.'fixture.for.util.file.testing');
+
+    $file = new \Pimf\Util\File($dest.'fixture.for.util.file.testing');
+
+    $this->assertInstanceOf(
+
+      '\\Pimf\\Util\\File',
+
+      $file->move($dest, $dest .'fixture.for.util.file.testing.COPY')
+
+    );
+
+    @unlink($dest .'fixture.for.util.file.testing.COPY');
+  }
+
   /**
    * @expectedException \RuntimeException
    */
-  public function testIfRenamingIntoSameName()
+  public function testIfNoDirectory()
   {
-    $file = new \Pimf\Util\File(__FILE__);
+    $file = new \Pimf\Util\File(null, false);
 
-    $file->move(dirname(__FILE__), $file->getFilename());
+    $file->move('//path/to/bad/directory/');
   }
 }
  
