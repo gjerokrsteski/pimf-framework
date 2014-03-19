@@ -63,7 +63,9 @@ class CacheFileTest extends PHPUnit_Framework_TestCase
 
   public function testSmokeTestingToPutAndRetrieveAndForget()
   {
-    $cache = new \Pimf\Cache\Storages\File(dirname(dirname(__FILE__)) . '/_drafts/');
+    @touch(dirname(__FILE__) . '/_drafts/a.cool.key.here');
+
+    $cache = new \Pimf\Cache\Storages\File(dirname(__FILE__) . '/_drafts/');
 
     $this->assertNull( $cache->put('a.cool.key.here', 'cool data', 0)  );
 
