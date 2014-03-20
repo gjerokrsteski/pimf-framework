@@ -34,8 +34,6 @@
 
     <logging>
 
-        <log type="coverage-clover" target="coverage.clover"/>
-
         <log type="coverage-html"
              target="./coverage/"
              charset="UTF-8"
