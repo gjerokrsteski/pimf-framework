@@ -53,7 +53,7 @@ do
   log=$dir/go-parallel.log
   args="`replace "$ARGS" log-junit $dir/go-parallel.junit` $dir"
   echo "Starting command: phpunit $args"
-  ((phpunit --configuration phpunit.xml --coverage-clover=coverage.clover -d go-parallel-pid=${PID} $args || touch $dir/go-parallel.fail) &> $log; echo "Command ended: phpunit $args"; grep -v "go-parallel-pid=" $log;) &
+  ((phpunit -d go-parallel-pid=${PID} $args || touch $dir/go-parallel.fail) &> $log; echo "Command ended: phpunit $args"; grep -v "go-parallel-pid=" $log;) &
 done
 
 while [ `child_processes` -gt 1 ] # report progress when some phpunit execution is still running
