@@ -12,7 +12,7 @@ class PdoSqliteTest extends PHPUnit_Framework_TestCase
     try{
 
       $configuration = array(
-        'database' => 'test.db',
+        'database' => dirname(__FILE__) . '/_drafts/test.db',
 
       );
 
