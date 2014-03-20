@@ -63,28 +63,21 @@ class CacheFileTest extends PHPUnit_Framework_TestCase
 
   public function testSmokeTestingToPutAndRetrieveAndForget()
   {
-    $handle = fopen($file = dirname(__FILE__) . '/_drafts/a.cool.key.here', "w+");
-    @fclose($handle); @chmod($file, 0777); @touch($file);
+    $key = uniqid('a.cool.key.here.');
+    @touch(dirname(__FILE__) . '/_drafts/'.$key);
 
     $cache = new \Pimf\Cache\Storages\File(dirname(__FILE__) . '/_drafts/');
 
-    $this->assertNull( $cache->put('a.cool.key.here', 'cool data', 0)  );
+    $this->assertNull( $cache->put($key, 'cool data', 0)  );
+    $this->assertNull( $cache->put($key, 'cool data', '')  );
+    $this->assertNull( $cache->put($key, 'cool data', null)  );
+    $this->assertNotNull( $cache->put($key, 'cool data', 1)  );
 
-    $this->assertNull( $cache->put('a.cool.key.here', 'cool data', '')  );
-    $this->assertNull( $cache->put('a.cool.key.here', 'cool data', null)  );
-
-    $this->assertNotNull( $cache->put('a.cool.key.here', 'cool data', 1)  );
-
-    $this->assertEquals( 'cool data', $cache->get('a.cool.key.here')  );
-
+    $this->assertEquals( 'cool data', $cache->get($key)  );
     $this->assertNull( $cache->get('a.bad.bad.key.here')  );
 
-    $this->assertTrue( $cache->forget('a.cool.key.here') );
-
+    $this->assertTrue( $cache->forget($key) );
     $this->assertFalse( $cache->forget('a.bad.bad.key.here') );
-
-    $handle = fopen($file = dirname(__FILE__) . '/_drafts/a.cool.key.here', "w+");
-    @fclose($handle); @chmod($file, 0777); @touch($file);
   }
 }
  
