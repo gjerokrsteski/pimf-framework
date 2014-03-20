@@ -7,7 +7,7 @@ class CliStdTest extends PHPUnit_Framework_TestCase
     new \Pimf\Cli\Std('php://memory');
   }
 
-  public function testReading()
+  public function testValidatingInput()
   {
     $std = new \Pimf\Cli\Std('php://memory');
 
@@ -16,6 +16,32 @@ class CliStdTest extends PHPUnit_Framework_TestCase
     $this->assertFalse($std->value());
     $this->assertTrue($std->valid('(mysql|sqlite)', 'mysql'));
     $this->assertFalse($std->valid('(mysql|sqlite)', 'non-matching'));
+  }
+
+  /**
+   * @runInSeparateProcess
+   * @outputBuffering enabled
+   */
+  public function testReadingAndPositiveValidation()
+  {
+    $std = $this->getMockBuilder('\Pimf\Cli\Std')
+      ->enableOriginalConstructor()
+      ->setConstructorArgs(array('php://memory'))
+      ->setMethods(array('value'))
+      ->getMock();
+
+    $std->expects($this->any())
+                 ->method('value')
+                 ->will($this->returnValue('sqlite'));
+
+
+    $this->assertEquals(
+
+      'sqlite',
+
+      $std->read('Which PDO driver do you desire?', '(mysql|sqlite)')
+
+    );
   }
 }
  

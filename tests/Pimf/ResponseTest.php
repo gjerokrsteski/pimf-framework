@@ -3,7 +3,9 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {
-    new \Pimf\Response('POST');
+    $response = new \Pimf\Response('POST');
+
+    $this->assertEquals('POST', $response->getMethod());
   }
 
   /**
@@ -96,6 +98,81 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     $response->asTEXT()->cacheBrowser(60)->send('Barry is cached at the browser', false);
 
     $this->expectOutputString('Barry is cached at the browser');
+  }
+
+  /**
+   * @runInSeparateProcess
+   */
+  public function testSendPdfFile()
+  {
+    $server['USER_AGENT'] = 'Chrome/24.0.1312.57';
+    $env = new \Pimf\Environment($server);
+    \Pimf\Registry::set('env', $env);
+
+    # start testing
+
+    $response = new \Pimf\Response('GET');
+    $response->asPDF()->sendStream(new \SplTempFileObject(-1), 'fake.pdf', false);
+  }
+
+  /**
+   * @runInSeparateProcess
+   */
+  public function testSendCsvFile()
+  {
+    $server['USER_AGENT'] = 'Chrome/24.0.1312.57';
+    $env = new \Pimf\Environment($server);
+    \Pimf\Registry::set('env', $env);
+
+    # start testing
+
+    $response = new \Pimf\Response('GET');
+    $response->asCSV()->sendStream(new \SplTempFileObject(-1), 'fake.csv', false);
+  }
+
+  /**
+   * @runInSeparateProcess
+   */
+  public function testSendZipFile()
+  {
+    $server['USER_AGENT'] = 'MSIE 5.5 blahh blahhh';
+    $env = new \Pimf\Environment($server);
+    \Pimf\Registry::set('env', $env);
+
+    # start testing
+
+    $response = new \Pimf\Response('GET');
+    $response->asZIP()->sendStream(new \SplTempFileObject(-1), 'fake.zip', false);
+  }
+
+  /**
+   * @runInSeparateProcess
+   */
+  public function testSendXZipFile()
+  {
+    $server['USER_AGENT'] = 'Chrome/24.0.1312.57';
+    $env = new \Pimf\Environment($server);
+    \Pimf\Registry::set('env', $env);
+
+    # start testing
+
+    $response = new \Pimf\Response('GET');
+    $response->asXZIP()->sendStream(new \SplTempFileObject(-1), 'fake.zip', false);
+  }
+
+  /**
+   * @runInSeparateProcess
+   */
+  public function testSendMswordFile()
+  {
+    $server['USER_AGENT'] = 'Chrome/24.0.1312.57';
+    $env = new \Pimf\Environment($server);
+    \Pimf\Registry::set('env', $env);
+
+    # start testing
+
+    $response = new \Pimf\Response('GET');
+    $response->asMSWord()->sendStream(new \SplTempFileObject(-1), 'fake.doc', false);
   }
 }
  
