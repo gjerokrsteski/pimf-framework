@@ -195,5 +195,47 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
     $this->expectOutputString('i-am-rendered');
   }
+
+  /**
+   * @runInSeparateProcess
+   * @outputBuffering enabled
+   */
+  public function testSendingWithNoCaching()
+  {
+    $response = new \Pimf\Response('GET');
+    $response->asTEXT()->cacheNone()->send('Barry is not cached at the browser!', false);
+
+    $this->expectOutputString('Barry is not cached at the browser!');
+  }
+
+  /**
+   * @runInSeparateProcess
+   * @outputBuffering enabled
+   */
+  public function testSendingWithNotValidatedCachingForOneSecond()
+  {
+    $response = new \Pimf\Response('GET');
+    $response->asTEXT()->cacheNoValidate(1)->send('Barry is not cached at the browser!', false);
+
+    $this->expectOutputString('Barry is not cached at the browser!');
+  }
+
+  /**
+   * @runInSeparateProcess
+   * @outputBuffering enabled
+   */
+  public function testSendingWithCachingAndIfNotModifiedSinceOneSecond()
+  {
+    $server['HTTP_IF_MODIFIED_SINCE'] = gmdate('D, d M Y H:i:s', time()) . ' GMT';
+    $env = new \Pimf\Environment($server);
+    \Pimf\Registry::set('env', $env);
+
+    # start testing
+
+    $response = new \Pimf\Response('GET');
+    $response->asTEXT()->exitIfNotModifiedSince(1)->send('Barry is not cached at the browser!', false);
+
+    $this->expectOutputString('Barry is not cached at the browser!');
+  }
 }
  

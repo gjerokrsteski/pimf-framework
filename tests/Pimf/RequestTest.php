@@ -39,16 +39,16 @@ class RequestTest extends PHPUnit_Framework_TestCase
   {
     $request = new \Pimf\Request(array(), $_POST);
 
-    $this->assertNotNull( $request->fromGet()->get('firstname') );
-    $this->assertEquals( 'gatter', $request->fromGet()->get('firstname') );
+    $this->assertNotNull( $request->fromPost()->get('firstname') );
+    $this->assertEquals( 'gatter', $request->fromPost()->get('firstname') );
   }
 
   public function tesCookieData()
   {
     $request = new \Pimf\Request(array(), array(), $_COOKIE);
 
-    $this->assertNotNull( $request->fromGet()->get('date') );
-    $this->assertEquals( '01-01-2017', $request->fromGet()->get('date') );
+    $this->assertNotNull( $request->fromCookie()->get('date') );
+    $this->assertEquals( '01-01-2017', $request->fromCookie()->get('date') );
   }
 
   public function testStripSlashesIfMagicQuotes()

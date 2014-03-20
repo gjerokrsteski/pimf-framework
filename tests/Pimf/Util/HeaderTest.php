@@ -6,7 +6,7 @@ class UtilHeaderTest extends PHPUnit_Framework_TestCase
   {
     parent::setUp();
 
-    $server['SERVER_PROTOCOL'] = 'HTTP/1.0';
+    $server['SERVER_PROTOCOL'] = 'HTTP/1.1';
     \Pimf\Registry::set('env', new \Pimf\Environment($server));
   }
 
@@ -40,6 +40,13 @@ class UtilHeaderTest extends PHPUnit_Framework_TestCase
     $this->assertContains('Cache-Control: public,max-age=60', $headers);
   }
 
+  /**
+   * @runInSeparateProcess
+   */
+  public function testNotModified()
+  {
+    Pimf\Util\Header::sendNotModified();
+  }
 
   /**
    * @runInSeparateProcess

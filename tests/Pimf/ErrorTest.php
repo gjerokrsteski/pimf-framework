@@ -54,5 +54,36 @@ class ErrorTest extends PHPUnit_Framework_TestCase
 
     );
   }
+
+  /**
+   * @runInSeparateProcess
+   * @outputBuffering enabled
+   */
+  public function testHappyPath()
+  {
+    \Pimf\Registry::set('conf',
+      array(
+        'app' => array(
+          'name' => 'test-app-name',
+          'key' => 'secret-key-here',
+          'default_controller' => 'index',
+          'routeable' => false,
+          'url' => 'http://localhost',
+          'index' => 'index'
+        ),
+        'environment' => 'testing'
+      )
+    );
+
+    $server['SERVER_PROTOCOL'] = 'HTTP/1.1';
+    \Pimf\Registry::set('env', new \Pimf\Environment($server));
+
+    $exception = $this->getMockBuilder('\Exception')
+      ->disableOriginalConstructor()
+      ->setMethods(array('getMessage', 'getFile', 'getLine', 'getTraceAsString'))
+      ->getMock();
+
+    \Pimf\Error::exception($exception, false);
+  }
 }
  

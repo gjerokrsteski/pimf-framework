@@ -82,4 +82,36 @@ class EventTest extends PHPUnit_Framework_TestCase
 
  		$this->assertEquals('Berry', $responses[0]);
  	}
+
+  public function testFireFirstOneEver()
+  {
+    \Pimf\Event::listen('test.event', function() { return 111; });
+    \Pimf\Event::listen('test.event', function() { return 2; });
+    \Pimf\Event::listen('test.event', function() { return 3; });
+
+ 		$responses = \Pimf\Event::first('test.event');
+
+    $this->assertEquals(111, $responses);
+  }
+
+  public function testFireUntil()
+  {
+    \Pimf\Event::listen('test.event', function() { return 1; });
+    \Pimf\Event::listen('test.event.special', function() { return 2; });
+    \Pimf\Event::listen('test.event', function() { return 3; });
+
+ 		$responses = \Pimf\Event::until('test.event.special');
+
+    $this->assertEquals(2, $responses);
+  }
+
+  public function testOverride()
+  {
+    \Pimf\Event::listen('test.event.special', function() { return 2; });
+    \Pimf\Event::override('test.event.special', function() { return 666; });
+
+ 		$responses = \Pimf\Event::first('test.event.special');
+
+    $this->assertEquals(666, $responses);
+  }
 }
