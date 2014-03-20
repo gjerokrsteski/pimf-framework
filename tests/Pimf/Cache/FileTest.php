@@ -63,7 +63,7 @@ class CacheFileTest extends PHPUnit_Framework_TestCase
 
   public function testSmokeTestingToPutAndRetrieveAndForget()
   {
-    $handle = fopen($file = dirname(__FILE__) . '/_drafts/a.cool.key.here', "at+");
+    $handle = fopen($file = dirname(__FILE__) . '/_drafts/a.cool.key.here', "w+");
     @fclose($handle); @chmod($file, 0777); @touch($file);
 
     $cache = new \Pimf\Cache\Storages\File(dirname(__FILE__) . '/_drafts/');
@@ -82,6 +82,9 @@ class CacheFileTest extends PHPUnit_Framework_TestCase
     $this->assertTrue( $cache->forget('a.cool.key.here') );
 
     $this->assertFalse( $cache->forget('a.bad.bad.key.here') );
+
+    $handle = fopen($file = dirname(__FILE__) . '/_drafts/a.cool.key.here', "w+");
+    @fclose($handle); @chmod($file, 0777); @touch($file);
   }
 }
  

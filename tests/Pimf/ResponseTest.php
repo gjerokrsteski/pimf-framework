@@ -174,5 +174,25 @@ class ResponseTest extends PHPUnit_Framework_TestCase
     $response = new \Pimf\Response('GET');
     $response->asMSWord()->sendStream(new \SplTempFileObject(-1), 'fake.doc', false);
   }
+
+  /**
+   * @outputBuffering enabled
+   */
+  public function testSendingAView()
+  {
+    $view = $this->getMockBuilder('\Pimf\View')
+      ->disableOriginalConstructor()
+      ->setMethods(array('render'))
+      ->getMock();
+
+    $view->expects($this->any())
+                 ->method('render')
+                 ->will($this->returnValue('i-am-rendered'));
+
+    $response = new \Pimf\Response('GET');
+    $response->asTEXT()->send($view, false);
+
+    $this->expectOutputString('i-am-rendered');
+  }
 }
  
