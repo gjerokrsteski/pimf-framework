@@ -1,0 +1,66 @@
+#!/bin/bash
+# Parallel wrapper to phpunit
+# This bash script will split the execution into several phpunit commands (one command per directory containing tests). 
+# INFO: only leaf directories will be separated
+# Gjero Krsteski <gjero@krsteski.de>
+
+
+PID=$$
+ROOT="${@: -1}" # last argument
+test -d "$ROOT" || ! echo "usage: go-parallel [switches] <directory>" || exit 1
+ARGS="${@:1:$(($#-1))}" # remove last argument
+
+# find the leaf directories containing the test files
+function test_directories {
+  find $ROOT -type d -exec `dirname $0`/find-leaf-directories {} \; -print -prune
+}
+
+function replace {
+  echo "$1 " | sed "s|--$2[ ][ ]*[^ ][^ ]*|--$2 $3|"
+}
+
+# get all child processes
+function child_processes {
+  ps -o ppid= | sed 's| *||' | grep ^${PID}$ | wc -l
+}
+
+function count {
+  grep -o "$1" <<< "$progress" | wc -l | sed 's| *||'
+}
+
+# print test summary for a single process
+function print_summary {
+  progress=`find $ROOT -name go-parallel.log -exec cat {} \; -exec echo \; | grep "^[\.FESI][\.FESI]*$"`
+  progress=$progress`find $ROOT -name go-parallel.log -exec cat {} \; -exec echo \; | grep "^[\.FESI][\.FESI]* " | sed 's| .*||'`
+  echo "Success: `count '\.'` Fail: `count F` Error: `count E` Skip: `count S` Incomplete: `count I`"
+}
+
+# merge all test results in a single junit file
+function write_combined_junit_file {
+  mkdir -p `dirname $1`
+  echo "<testsuites>" > $1
+  find $ROOT -name go-parallel.junit -exec cat {} \; | grep -v "^<?xml" | grep -v testsuites >> $1
+  echo "</testsuites>" >> $1
+}
+
+trap "ps -o pid= -o command= | grep \"go-parallel-pid=${PID} \" | grep -v grep | awk '{print \$1}' | xargs kill -TERM 2> /dev/null" EXIT
+
+echo "Running parallel wrapper for phpunit"
+junit_file=`echo "$ARGS" | grep "\-\-log-junit " | sed 's|.*--log-junit [ ]*||' | sed 's| .*||'`
+find $ROOT -name go-parallel.* -exec rm {} \; # remove old log files
+for dir in `test_directories`
+do
+  log=$dir/go-parallel.log
+  args="`replace "$ARGS" log-junit $dir/go-parallel.junit` $dir"
+  echo "Starting command: phpunit $args"
+  ((phpunit -d go-parallel-pid=${PID} $args || touch $dir/go-parallel.fail) &> $log; echo "Command ended: phpunit $args"; grep -v "go-parallel-pid=" $log;) &
+done
+
+while [ `child_processes` -gt 1 ] # report progress when some phpunit execution is still running
+do
+  sleep 2
+  print_summary
+done
+
+test -z "$junit_file" || write_combined_junit_file $junit_file
+test -z "`find $ROOT -name go-parallel.fail`"

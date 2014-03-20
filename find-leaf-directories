@@ -1,0 +1,5 @@
+#!/bin/bash
+# find the leaf directories containing the test files
+# Gjero Krsteski <gjero@krsteski.de>
+
+find $1 -maxdepth 1 -name "*Test.php" -o -name "*.php" | grep -q .
