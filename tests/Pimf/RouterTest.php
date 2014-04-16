@@ -17,7 +17,7 @@ class RouterTest extends PHPUnit_Framework_TestCase
 
   public function testFindingRouteTargetByUnsuitableCondition()
   {
-    self::mockUri('/users/show/to log firs name here/');
+    self::mockUri('/users/show/to log first name here/');
 
     $route = new \Pimf\Route('/users/show/:first-name', array(), array('first-name' => '[a-zA-Z]{3,}'));
     $router = new \Pimf\Router();
