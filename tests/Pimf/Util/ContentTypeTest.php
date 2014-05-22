@@ -15,36 +15,6 @@ class UtilContentTypeTest extends PHPUnit_Framework_TestCase
   /**
    * @runInSeparateProcess
    */
-  public function testAsCSV()
-  {
-    Pimf\Util\Header\ContentType::asCSV();
-
-    $this->assertContains('text/csv', xdebug_get_headers());
-  }
-
-  /**
-   * @runInSeparateProcess
-   */
-  public function testAsTextPlain()
-  {
-    Pimf\Util\Header\ContentType::asTextPlain();
-
-    $this->assertContains('text/plain', xdebug_get_headers());
-  }
-
-  /**
-   * @runInSeparateProcess
-   */
-  public function testAsTextHTML()
-  {
-    Pimf\Util\Header\ContentType::asTextHTML();
-
-    $this->assertContains('text/html', xdebug_get_headers());
-  }
-
-  /**
-   * @runInSeparateProcess
-   */
   public function testAsZip()
   {
     Pimf\Util\Header\ContentType::asZIP();
