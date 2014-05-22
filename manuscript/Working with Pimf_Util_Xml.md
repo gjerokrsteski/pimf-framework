@@ -1,3 +1,5 @@
+# Working with Pimf\Util\Xml
+
 An XML util for converting XML to DOMDocument or SimpleXMLElement or to Array.
 
 Convert string to SimpleXml instance

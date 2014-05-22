@@ -1,3 +1,5 @@
+# Working with Pimf\Util\IdentityMap
+
 The identity map pattern is a database access design pattern used to improve performance by providing a context-specific, in-memory
 cache to prevent duplicate retrieval of the same object data from the database.
 

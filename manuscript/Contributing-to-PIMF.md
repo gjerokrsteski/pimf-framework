@@ -1,3 +1,5 @@
+# Contributing to PIMF
+
 This tutorial explains the basics of contributing to a project on GitHub via the command-line. The workflow can apply to most projects on GitHub, but in this case, we will be focused on the PIMF project. This tutorial is applicable to OSX, Linux and Windows. This tutorial assumes you have installed Git and you have created a GitHub account. If you haven’t already, look at the PIMF on GitHub documentation in order to familiarize yourself with PIMF’s repositories and branches.
 
 ## Forking PIMF

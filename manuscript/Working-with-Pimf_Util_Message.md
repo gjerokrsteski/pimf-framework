@@ -1,3 +1,5 @@
+# Working with Pimf\Util\Message
+
 Pimf\Util\Message is responsible for general message formatting, used for message flashing or in combination with your translator.
 
 **Common usage**

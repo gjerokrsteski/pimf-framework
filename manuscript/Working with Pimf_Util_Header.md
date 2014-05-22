@@ -1,3 +1,5 @@
+# Working with Pimf\Util\Header
+
 The Pimf\Util\Header class is a container of static methods for HTTP headers. The Headers container will statically load Header objects
 as to reduce the overhead of header specific parsing. There are several implementations for the various types of Headers that one
 might encounter during the typical HTTP request.
