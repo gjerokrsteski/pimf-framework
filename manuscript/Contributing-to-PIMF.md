@@ -85,4 +85,3 @@ Then, pull down the latest changes from PIMF’s repository:
     git pull origin develop
 
 Now you are ready to create a new branch and start coding again!
-

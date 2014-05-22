@@ -20,8 +20,6 @@
 8c. Cache configuration.md
 8d. Cache usage.md
 8e.-Error-handling-&-Custom-404-and-500-pages.md
-Contributing-to-PIMF.md
-Repositories-&-Branches.md
 Working with Pimf_Util_Header.md
 Working with Pimf_Util_Identifier.md
 Working with Pimf_Util_IdentityMap.md
@@ -31,3 +29,5 @@ Working with Pimf_Util_Uuid.md
 Working with Pimf_Util_Xml.md
 Working-with-Pimf_Util_Message.md
 Working-with-Pimf_Util_Validator.md
+Contributing-to-PIMF.md
+Repositories-&-Branches.md
