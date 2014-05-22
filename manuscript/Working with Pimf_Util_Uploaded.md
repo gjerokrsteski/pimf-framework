@@ -6,7 +6,8 @@ Create a file instance.
 
 ```php
   $uploaded = new Pimf\Util\Uploaded(
-    $_FILES['tmp_name'], $_FILES['name'], $_FILES['type'], $_FILES['size'], $_FILES['error']
+    $_FILES['tmp_name'], $_FILES['name'],
+    $_FILES['type'], $_FILES['size'], $_FILES['error']
   );
 ```
 
@@ -21,11 +22,13 @@ Let Pimf\Util\Uploaded work for you.
 ```php
   if ($uploaded instanceof Pimf\Util\Uploaded) {
 
-    if(in_array($upload->getClientMimeType(), array('image/gif', 'image/png', 'image/jpg'))) {
+    if(in_array($upload->getClientMimeType(), array('image/gif', 'image/jpg'))) {
 
       try {
 
-        $uploaded->move('path/to/your/images/dir', $upload->getClientOriginalName());
+        $uploaded->move(
+        'path/to/your/images/dir', $upload->getClientOriginalName()
+        );
 
       } catch (RuntimeException $e) {
         //error!!!
