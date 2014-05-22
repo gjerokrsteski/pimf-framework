@@ -19,7 +19,7 @@ class UtilContentTypeTest extends PHPUnit_Framework_TestCase
   {
     Pimf\Util\Header\ContentType::asCSV();
 
-    $this->assertContains('Content-Type: text/csv', xdebug_get_headers());
+    $this->assertContains('text/csv', xdebug_get_headers());
   }
 
   /**
@@ -29,7 +29,7 @@ class UtilContentTypeTest extends PHPUnit_Framework_TestCase
   {
     Pimf\Util\Header\ContentType::asTextPlain();
 
-    $this->assertContains('Content-Type: text/plain', xdebug_get_headers());
+    $this->assertContains('text/plain', xdebug_get_headers());
   }
 
   /**
@@ -39,7 +39,7 @@ class UtilContentTypeTest extends PHPUnit_Framework_TestCase
   {
     Pimf\Util\Header\ContentType::asTextHTML();
 
-    $this->assertContains('Content-Type: text/html', xdebug_get_headers());
+    $this->assertContains('text/html', xdebug_get_headers());
   }
 
   /**
