@@ -1,4 +1,4 @@
-# Working with Pimf\Util\Validator
+# Working with Pimf-Util-Validator
 
 Almost every interactive web application needs to validate data. For instance, a registration form probably requires
 the password to be confirmed. Maybe the e-mail address must be unique. Validations allow you to ensure that only valid

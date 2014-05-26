@@ -1,4 +1,4 @@
-# Working with Pimf\Util\IdentityMap
+# Working with Pimf-Util-IdentityMap
 
 The identity map pattern is a database access design pattern used to improve performance by providing a context-specific, in-memory
 cache to prevent duplicate retrieval of the same object data from the database.
@@ -24,4 +24,4 @@ if (true === $identityMap->hasObject($blogEntry)) {
 }
 ```
 
-Please find more here: https://github.com/gjerokrsteski/php-identity-map
+Please find more here: [github.com/gjerokrsteski/php-identity-map](https://github.com/gjerokrsteski/php-identity-map)

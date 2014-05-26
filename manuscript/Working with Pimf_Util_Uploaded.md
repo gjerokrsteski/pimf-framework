@@ -1,4 +1,4 @@
-# Working with Pimf\Util\Uploaded files
+# Working with Pimf-Util-Uploaded files
 
 Gives a methods to act in a secure way with a file/s uploaded through a form.
 
