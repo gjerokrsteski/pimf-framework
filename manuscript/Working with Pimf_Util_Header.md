@@ -22,7 +22,7 @@ Pimf\Util\Header::contentTypeJson();
 die(Pimf\Util\Json::encode(array('name'=>'Rob')));
 ```
 
-## Send file
+## Send file to browser
 
 Sends file as header through any firewall and browser - IE6, IE7, IE8, IE9, FF3.6, FF11, Safari, Chrome, Opera.
 
@@ -39,13 +39,13 @@ $url = 'https://github.com/gjerokrsteski/pimf/wiki':
 Pimf\Util\Header::toLocation($url);
 ```
 
-## Send a 500er internal server error
+## Send a internal server error - 500 page
 
 ```php
 Pimf\Util\Header::sendInternalServerError($msg = 'Whoops, we have problem!')
 ```
 
-## Send a 404er page not found
+## Send a page not found - 404 page
 
 ```php
 Pimf\Util\Header::sendNotFound($msg = 'Sorry, page not found!')
