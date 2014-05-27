@@ -22,12 +22,15 @@ Let Pimf\Util\Uploaded work for you.
 ```php
   if ($uploaded instanceof Pimf\Util\Uploaded) {
 
-    if(in_array($upload->getClientMimeType(), array('image/gif', 'image/jpg'))) {
+    if(in_array(
+        $upload->getClientMimeType(),
+        array('image/gif', 'image/jpg'))
+    ) {
 
       try {
 
         $uploaded->move(
-        'path/to/your/images/dir', $upload->getClientOriginalName()
+          'path/to/your/images/dir', $upload->getClientOriginalName()
         );
 
       } catch (RuntimeException $e) {
