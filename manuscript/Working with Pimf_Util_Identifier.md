@@ -6,7 +6,9 @@ constructor method. Integer and string but not array and objects are allowed.
 Common usage
 
 ```php
-$identifier = new class Pimf\Util\Identifier(1, '23', 123, 'ZZ-TOP', 'Some_Class_name');
+$identifier = new class Pimf\Util\Identifier(
+ 1, '23', 123, 'ZZ-TOP', 'Some_Class_name'
+);
 
 print $identifier; // --> '1_23_123_zz_top_some_class_name'
 ```

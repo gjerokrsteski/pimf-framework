@@ -6,11 +6,11 @@ also known as GUIDs (Globally Unique IDentifier). A UUID is 128 bits long, and r
 Generating a UUID
 
 ```php
-$uuid = Pimf\Util\Uuid::generate();
+ $uuid = Pimf\Util\Uuid::generate();
 ```
 
 Yes, it is not the same UUID as generated before :-)
 
 ```php
-Pimf\Util\Uuid::generate() !== Pimf\Util\Uuid::generate()
+ Pimf\Util\Uuid::generate() !== Pimf\Util\Uuid::generate()
 ```
