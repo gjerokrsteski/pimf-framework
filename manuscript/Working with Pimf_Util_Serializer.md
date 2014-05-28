@@ -8,11 +8,11 @@ representation, igbinary stores php data structures in compact binary form.
 Serialize
 
 ```php
-$serializedItem = Pimf\Util\Serializer::serialize($item);
+$serializedItem = \Pimf\Util\Serializer::serialize($item);
 ```
 
 Unserialize
 
 ```php
-$unserializedItem = Pimf\Util\Serializer::unserialize($serializedItem);
+$item = \Pimf\Util\Serializer::unserialize($serializedItem);
 ```

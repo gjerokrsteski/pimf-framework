@@ -25,6 +25,8 @@ Working with Pimf_Util_Header.md
 Working with Pimf_Util_Identifier.md
 Working with Pimf_Util_IdentityMap.md
 Working with Pimf_Util_Serializer.md
+Working with Pimf_Util_Json.md
+Working with Pimf_Util_File.md
 Working with Pimf_Util_Uploaded.md
 Working with Pimf_Util_Uuid.md
 Working with Pimf_Util_Xml.md
