@@ -20,6 +20,7 @@
 8c. Cache configuration.md
 8d. Cache usage.md
 8e.-Error-handling-&-Custom-404-and-500-pages.md
+Happy Util Libraries.md
 Working with Pimf_Util_Header.md
 Working with Pimf_Util_Identifier.md
 Working with Pimf_Util_IdentityMap.md
