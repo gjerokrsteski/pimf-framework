@@ -83,6 +83,7 @@ spl_autoload_register(
         'Pimf\\Util\\Serializer'             => '/Pimf/Util/Serializer.php',
         'Pimf\\Util\\String'                 => '/Pimf/Util/String.php',
         'Pimf\\Util\\String\\Clean'          => '/Pimf/Util/String/Clean.php',
+        'Pimf\\Util\\String\\Sanitize'       => '/Pimf/Util/String/Sanitize.php',
         'Pimf\\Util\\Uploaded'               => '/Pimf/Util/Uploaded.php',
         'Pimf\\Util\\Uploaded\\Factory'      => '/Pimf/Util/Uploaded/Factory.php',
         'Pimf\\Util\\Uuid'                   => '/Pimf/Util/Uuid.php',
