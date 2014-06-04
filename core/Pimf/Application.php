@@ -40,10 +40,10 @@ final class Application
       date_default_timezone_set($conf['timezone']);
 
       self::registerLocalEnvironment($conf, $server);
+      self::loadListeners(BASE_PATH . 'app/' . $conf['app']['name'] . '/events.php');
       self::setupErrorHandling($conf);
       self::loadPdoDriver($conf);
       self::loadRoutes($conf['app']['routeable'], BASE_PATH . 'app/' . $conf['app']['name'] . '/routes.php');
-      self::loadListeners(BASE_PATH . 'app/' . $conf['app']['name'] . '/events.php');
 
     } catch (\Exception $exception) {
       $problems[] = $exception->getMessage();
