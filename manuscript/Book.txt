@@ -1,5 +1,7 @@
 1.-Welcome-to-PIMF.md
 2.-Feature-overview.md
+Server Requirements.md
+Pretty URLs.md
 3.-Installation-&-Configuration.md
 3a.-Autoloading.md
 4.-Database-connection-configuration.md
