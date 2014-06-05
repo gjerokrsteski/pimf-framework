@@ -42,10 +42,10 @@ class Crypt
      */
     public function encrypt($plaintext)
     {
-        $iv         = mcrypt_create_iv($this->ivsize, MCRYPT_RAND);
-        $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $this->key, $plaintext, MCRYPT_MODE_CBC, $iv);
+        $vector     = mcrypt_create_iv($this->ivsize, MCRYPT_RAND);
+        $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $this->key, $plaintext, MCRYPT_MODE_CBC, $vector);
 
-        return base64_encode($iv . $ciphertext);
+        return base64_encode($vector . $ciphertext);
     }
 
     /**
