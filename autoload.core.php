@@ -71,6 +71,7 @@ spl_autoload_register(
         'Pimf\\Session\\Storages\\Pdo'       => '/Pimf/Session/Storages/Pdo.php',
         'Pimf\\Uri'                          => '/Pimf/Uri.php',
         'Pimf\\Url'                          => '/Pimf/Url.php',
+        'Pimf\\Util\\Crypt'                  => '/Pimf/Util/Crypt.php',
         'Pimf\\Util\\Dom'                    => '/Pimf/Util/Dom.php',
         'Pimf\\Util\\File'                   => '/Pimf/Util/File.php',
         'Pimf\\Util\\Header'                 => '/Pimf/Util/Header.php',
