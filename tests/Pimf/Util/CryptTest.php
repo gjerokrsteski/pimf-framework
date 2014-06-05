@@ -50,9 +50,9 @@ class CryptTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * @expectedException \UnexpectedValueException
+     * @expectedException \PHPUnit_Framework_Error_Warning
      */
-    public function testExpectingExceptionIfDecryptGetsNotHisOwnCipherTextBase64()
+    public function testExpectingErrorWarningIfDecryptGetsNotHisOwnCipherTextBase64()
     {
         $cryper = new \Pimf\Util\Crypt();
         $cryper->decrypt(base64_encode('comes not from mr. crypt'));

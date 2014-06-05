@@ -43,9 +43,7 @@ class Crypt
     public function encrypt($plaintext)
     {
         $iv         = mcrypt_create_iv($this->ivsize, MCRYPT_RAND);
-        $ciphertext = @mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $this->key, $plaintext, MCRYPT_MODE_CBC, $iv);
-
-        self::bombIfErrorOccurred();
+        $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $this->key, $plaintext, MCRYPT_MODE_CBC, $iv);
 
         return base64_encode($iv . $ciphertext);
     }
@@ -60,21 +58,8 @@ class Crypt
         $ciphertext = base64_decode($ciphertext);
         $ivdec      = substr($ciphertext, 0, $this->ivsize);
         $ciphertext = substr($ciphertext, $this->ivsize);
-        $plaintext  = @mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $this->key, $ciphertext, MCRYPT_MODE_CBC, $ivdec);
-
-        self::bombIfErrorOccurred();
+        $plaintext  = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $this->key, $ciphertext, MCRYPT_MODE_CBC, $ivdec);
 
         return rtrim($plaintext, "\0\4");
-    }
-
-    /**
-     * @throws \UnexpectedValueException
-     */
-    private static function bombIfErrorOccurred()
-    {
-        $err = error_get_last();
-        if ($err !== null) {
-            throw new \UnexpectedValueException($err['message']);
-        }
     }
 }
