@@ -78,11 +78,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     $server['SERVER_PROTOCOL'] = 'HTTP/1.1';
     \Pimf\Registry::set('env', new \Pimf\Environment($server));
 
-    $exception = $this->getMockBuilder('\Exception')
-      ->disableOriginalConstructor()
-      ->setMethods(array('getMessage', 'getFile', 'getLine', 'getTraceAsString'))
-      ->getMock();
-
+    $exception = new \Exception('boom');
     \Pimf\Error::exception($exception, false);
   }
 }
