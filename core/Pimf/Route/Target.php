@@ -49,7 +49,7 @@ class Target
   }
 
   /**
-   * @param mixed $action
+   * @param sting $action
    */
   public function setAction($action)
   {

@@ -86,9 +86,7 @@ class Core extends Base
     $std  = new Std();
     $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
 
-    var_dump(
-      $this->createTable($type, 'session')
-    );
+    echo 'success='.(int)$this->createTable($type, 'session')."\n";
   }
 
   public function create_cache_tableCliAction()
@@ -96,9 +94,7 @@ class Core extends Base
     $std  = new Std();
     $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
 
-    var_dump(
-      $this->createTable($type, 'cache')
-    );
+    echo 'success='.(int)$this->createTable($type, 'cache')."\n";
   }
 
   /**

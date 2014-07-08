@@ -29,9 +29,9 @@ class Dom extends \DOMDocument
     $values = array();
 
     // loop through each tag in the dom and add it to the array
-    foreach ($this->getElementsByTagName($tag) as $tag) {
-      /* @var $tag \DOMElement */
-      $values[] = $tag->getAttribute($attribute);
+    foreach ($this->getElementsByTagName($tag) as $element) {
+      /* @var $element \DOMElement */
+      $values[] = $element->getAttribute($attribute);
     }
 
     return $values;

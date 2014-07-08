@@ -63,12 +63,12 @@ class Database extends \PDO
 
   /**
    * @return bool|void
-   * @throws \PDOException
+   * @throws \LogicException
    */
   public function rollBack()
   {
     if ($this->transLevel == 0) {
-      throw new \PDOException('trying to rollback without a transaction-start', 25000);
+      throw new \LogicException('trying to rollback without a transaction-start', 25000);
     }
 
     $this->transLevel--;

@@ -37,7 +37,7 @@ class DatabaseTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \PDOException
+   * @expectedException \LogicException
    */
   public function testRollBackTransactionWithoutTransactionStart()
   {

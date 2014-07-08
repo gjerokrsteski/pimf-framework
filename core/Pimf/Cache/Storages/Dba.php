@@ -28,7 +28,7 @@ class Dba extends Storage
   protected $dba;
 
   /**
-   * @var resource
+   * @var string
    */
   protected $handler;
 
