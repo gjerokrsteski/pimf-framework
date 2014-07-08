@@ -49,7 +49,7 @@ class Target
   }
 
   /**
-   * @param sting $action
+   * @param string $action
    */
   public function setAction($action)
   {
