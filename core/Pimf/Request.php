@@ -2,95 +2,142 @@
 /**
  * Pimf
  *
- * PHP Version 5
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
+namespace Pimf;
 
 /**
  * Request Manager - for controlled access to the global state of the world.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Request
+class Request
 {
   /**
-   * @var Pimf_Param
+   * @var Param
    */
-  private $postData;
+  public static $postData;
 
   /**
-   * @var Pimf_Param
+   * @var Param
    */
-  private $getData;
+  public static $getData;
 
   /**
-   * @var Pimf_Param
+   * @var Param
    */
-  private $cookieData;
+  public static $cookieData;
+
+  /**
+   * @var Param
+   */
+  public static $cliData;
+
+  /**
+   * @var Util\Uploaded
+   */
+  public static $filesData;
+
+  /**
+   * @var string
+   */
+  protected $content;
+
+  /**
+   * @var Param
+   */
+  public static $restData;
 
   /**
    * @param array $getData
    * @param array $postData
    * @param array $cookieData
+   * @param array $cliData
+   * @param array $filesData
    */
-  public function __construct(array $getData, array $postData = array(), array $cookieData = array())
+  public function __construct(
+    array $getData,
+    array $postData = array (),
+    array $cookieData = array (),
+    array $cliData = array (),
+    array $filesData = array ()
+  ) {
+
+    static::$getData    = new Param((array)self::stripSlashesIfMagicQuotes($getData));
+    static::$postData   = new Param((array)self::stripSlashesIfMagicQuotes($postData));
+    static::$cookieData = new Param($cookieData);
+    static::$cliData    = new Param((array)self::stripSlashesIfMagicQuotes($cliData));
+    static::$filesData  = Util\Uploaded\Factory::get($filesData);
+  }
+
+  /**
+   * @param Environment $env
+   */
+  public function fetchRestData(Environment $env)
   {
-    $this->getData    = new Pimf_Param($this->stripSlashesIfMagicQuotes($getData));
-    $this->postData   = new Pimf_Param($this->stripSlashesIfMagicQuotes($postData));
-    $this->cookieData = new Pimf_Param($cookieData);
+    if (0 === strpos($env->getRequestHeader('CONTENT_TYPE'), 'application/x-www-form-urlencoded')
+      && in_array(strtoupper($env->getData()->get('REQUEST_METHOD', 'GET')), array('PUT', 'DELETE', 'PATCH'))
+    ) {
+      $data = array();
+      parse_str($this->getContent(), $data);
+      static::$restData = new Param($data);
+    }
   }
 
   /**
    * HTTP GET variables.
-   * @return Pimf_Param
+   *
+   * @return Param
    */
   public function fromGet()
   {
-    return $this->getData;
+    return static::$getData;
+  }
+
+  /**
+   * CLI arguments passed to script.
+   *
+   * @return Param
+   */
+  public function fromCli()
+  {
+    return static::$cliData;
   }
 
   /**
    * HTTP POST variables.
-   * @return Pimf_Param
+   *
+   * @return Param
    */
   public function fromPost()
   {
-    return $this->postData;
+    return static::$postData;
   }
 
   /**
    * HTTP Cookies.
-   * @return Pimf_Param
+   *
+   * @return Param
    */
   public function fromCookie()
   {
-    return $this->cookieData;
+    return static::$cookieData;
   }
 
   /**
    * Strip slashes from string or array
-   * @param $rawData
+   *
+   * @param      $rawData
    * @param null $overrideStripSlashes
+   *
    * @return array|string
    */
-  public function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
+  public static function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
   {
     $hasMagicQuotes = function_exists('get_magic_quotes_gpc') ? get_magic_quotes_gpc() : false;
-
-    $strip = !$overrideStripSlashes ? $hasMagicQuotes : $overrideStripSlashes;
+    $strip          = !$overrideStripSlashes ? $hasMagicQuotes : $overrideStripSlashes;
 
     if ($strip) {
       return self::stripSlashes($rawData);
@@ -101,19 +148,44 @@ class Pimf_Request
 
   /**
    * Strip slashes from string or array
-   * @static
+   *
    * @param $rawData
+   *
    * @return array|string
    */
-  protected static function stripSlashes($rawData)
+  public static function stripSlashes($rawData)
   {
-    return is_array($rawData) ? array_map(
-      array(
-        'self',
-        'stripSlashes'
-      ), $rawData
-    ) : stripslashes($rawData);
+    return is_array($rawData)
+      ? array_map(
+        function ($value) {
+          return \Pimf\Request::stripSlashes($value);
+        },
+        $rawData
+      )
+      : stripslashes($rawData);
   }
 
-}
+  /**
+   * @param bool $asResource
+   *
+   * @return resource|string
+   * @throws \LogicException
+   */
+  public function getContent($asResource = false)
+  {
+    if (false === $this->content || (true === $asResource && null !== $this->content)) {
+      throw new \LogicException('can only be called once when using the resource return type');
+    }
 
+    if (true === $asResource) {
+      $this->content = false;
+      return fopen('php://input', 'rb');
+    }
+
+    if (null === $this->content) {
+      $this->content = file_get_contents('php://input');
+    }
+
+    return $this->content;
+  }
+}

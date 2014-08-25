@@ -2,127 +2,88 @@
 /**
  * Pimf
  *
- * PHP Version 5
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
+
+namespace Pimf;
 
 /**
  * Logger with common logging options into a file.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Logger
+class Logger
 {
   /**
    * @var resource
    */
-  private $fileHandle;
+  private $handle;
 
   /**
    * @var resource
    */
-  private $warningFileHandle;
+  private $warnHandle;
 
   /**
    * @var resource
    */
-  private $errorFileHandle;
+  private $errorHandle;
 
   /**
    * @var string
    */
-  private $logFileName;
-
-  /**
-   * @var string
-   */
-  private $localeStorageDir;
+  private $storageDir;
 
   /**
    * @var bool
    */
-  private $trailingSeparator;
+  private $separator;
 
   /**
    * @param string $localeStorageDir Use better the local TMP dir or dir with mod 777.
-   * @param null|string $logFileName
-   * @param bool $trailingSeparator
+   * @param bool   $trailingSeparator
    */
-  public function __construct($localeStorageDir, $logFileName = '', $trailingSeparator = true)
+  public function __construct($localeStorageDir, $trailingSeparator = true)
   {
-    $this->localeStorageDir  = (string)$localeStorageDir;
-    $this->logFileName       = (string)$logFileName;
-    $this->trailingSeparator = (bool)$trailingSeparator;
+    $this->storageDir = (string)$localeStorageDir;
+    $this->separator  = (bool)$trailingSeparator;
   }
 
   /**
-   * @throws RuntimeException If something went wrong on creating the log dir and file.
+   * @throws \RuntimeException If something went wrong on creating the log dir and file.
    */
   public function init()
   {
-    if(is_resource($this->errorFileHandle)
-      && is_resource($this->fileHandle)
-      && is_resource($this->warningFileHandle)) {
+    if (is_resource($this->errorHandle)
+      && is_resource($this->handle)
+      && is_resource($this->warnHandle)
+    ) {
       return;
     }
 
-    if (!$this->logFileName ) {
-      $this->logFileName = 'pimf-logs.txt';
+    if (!is_dir($this->storageDir)) {
+      mkdir($this->storageDir, 0777);
     }
 
-    if (!file_exists($this->localeStorageDir)) {
-      mkdir($this->localeStorageDir, 0777);
+    if (true === $this->separator) {
+      $this->storageDir = rtrim(realpath($this->storageDir), '\\/') . DS;
     }
 
-    if (false === is_dir($this->localeStorageDir)) {
-      throw new RuntimeException('log_dir must be a directory ' . $this->localeStorageDir);
-    }
+    $this->handle      = fopen($this->storageDir . "pimf-logs.txt", "at+");
+    $this->warnHandle  = fopen($this->storageDir . "pimf-warnings.txt", "at+");
+    $this->errorHandle = fopen($this->storageDir . "pimf-errors.txt", "at+");
 
-    if (false === is_writable($this->localeStorageDir)) {
-      throw new RuntimeException('log_dir is not writable ' . $this->localeStorageDir);
-    }
-
-    if (true === $this->trailingSeparator) {
-      $this->localeStorageDir = rtrim(realpath($this->localeStorageDir), '\\/') . DIRECTORY_SEPARATOR;
-    }
-
-    $this->fileHandle = fopen($this->localeStorageDir . $this->logFileName, "at+");
-
-    if ($this->fileHandle === false) {
-      throw new RuntimeException("failed to obtain a handle to log file '" . $this->localeStorageDir . $this->logFileName  . "'");
-    }
-
-    $warningLogFile          = $this->localeStorageDir . "pimf-warnings.txt";
-    $this->warningFileHandle = fopen($warningLogFile, "at+");
-
-    if ($this->warningFileHandle === false) {
-      throw new RuntimeException("failed to obtain a handle to warning log file '" . $warningLogFile . "'");
-    }
-
-    $errorLogFile          = $this->localeStorageDir . "pimf-errors.txt";
-    $this->errorFileHandle = fopen($errorLogFile, "at+");
-
-    if ($this->errorFileHandle === false) {
-      throw new RuntimeException("failed to obtain a handle to error log file '" . $errorLogFile . "'");
+    if (!$this->errorHandle || !$this->handle || !$this->warnHandle) {
+      throw new \RuntimeException("failed to obtain a handle to logger file");
     }
   }
 
   /**
    * @param string $msg
-   * @return Pimf_Logger
+   *
+   * @return Logger
    */
   public function debug($msg)
   {
@@ -135,7 +96,8 @@ class Pimf_Logger
 
   /**
    * @param string $msg
-   * @return Pimf_Logger
+   *
+   * @return Logger
    */
   public function warn($msg)
   {
@@ -148,7 +110,8 @@ class Pimf_Logger
 
   /**
    * @param string $msg
-   * @return Pimf_Logger
+   *
+   * @return Logger
    */
   public function error($msg)
   {
@@ -159,7 +122,8 @@ class Pimf_Logger
 
   /**
    * @param string $msg
-   * @return Pimf_Logger
+   *
+   * @return Logger
    */
   public function info($msg)
   {
@@ -171,64 +135,58 @@ class Pimf_Logger
   }
 
   /**
-   * @param $textMessage
-   * @param string $severityLevel
-   * @throws RuntimeException
+   * @param        string $msg
+   * @param string $severity
    */
-  protected function write($textMessage, $severityLevel = 'DEBUG')
+  protected function write($msg, $severity = 'DEBUG')
   {
-    $textMessage = $this->formatMessage($textMessage, $severityLevel);
+    $msg = $this->format($msg, $severity);
 
     // if severity is WARNING then write to warning file
-    if ($severityLevel == 'WARNING') {
-      if ($this->warningFileHandle !== false) {
-        fwrite($this->warningFileHandle, $textMessage);
-      }
+    if ($severity == 'WARNING') {
+      fwrite($this->warnHandle, $msg);
     } // if severity is ERROR then write to error file
-    else if ($severityLevel == 'ERROR') {
-      if ($this->errorFileHandle !== false) {
-        fwrite($this->errorFileHandle, $textMessage);
-      }
-    } else if ($this->fileHandle !== false) {
-      if (fwrite($this->fileHandle, $textMessage) === false) {
-        throw new RuntimeException("There was an error writing to log file.");
-      }
+    else if ($severity == 'ERROR') {
+      fwrite($this->errorHandle, $msg);
+    } else {
+      fwrite($this->handle, $msg);
     }
   }
 
   public function __destruct()
   {
-    if (is_resource($this->fileHandle)
-      && is_resource($this->warningFileHandle)
-      && is_resource($this->errorFileHandle)) {
+    if (is_resource($this->handle)
+      && is_resource($this->warnHandle)
+      && is_resource($this->errorHandle)
+    ) {
 
-      if (fclose($this->fileHandle) === false) {
+      if (fclose($this->handle) === false) {
         // Failure to close the log file
-        $this->write("Logger failed to close the handle to the log file", 'ERROR_SEVERITY');
+        $this->error('Logger failed to close the handle to the log file');
       }
 
-      fclose($this->warningFileHandle);
-      fclose($this->errorFileHandle);
+      fclose($this->warnHandle);
+      fclose($this->errorHandle);
     }
   }
 
   /**
    * Formats the error message in representable manner.
-   * @param $message
-   * @param $severity
+   *
+   * @param string $message
+   * @param string $severity
+   *
    * @return string
    */
-  private function formatMessage($message, $severity)
+  private function format($message, $severity)
   {
-    $registry = new Pimf_Registry();
+    $registry = new Registry();
+    $remoteIP = $registry->env->getIp();
+    $script   = $registry->env->PHP_SELF;
 
-    $REMOTEADDR = $registry->env->getIp();
-    $PHPSELF    = $registry->env->getSelf();
+    $msg = date("m-d-Y") . " " . date("G:i:s") . " " . $remoteIP;
 
-    $msg = date("m-d-y") . " " . date("G:i:s") . " ";
-    $msg .= $registry->env->getIp();
-
-    $IPLength       = strlen($REMOTEADDR);
+    $IPLength       = strlen($remoteIP);
     $numWhitespaces = 15 - $IPLength;
 
     for ($i = 0; $i < $numWhitespaces; $i++) {
@@ -237,12 +195,12 @@ class Pimf_Logger
 
     $msg .= " " . $severity . ": ";
 
-    //get the file name
-    $lastSlashIndex = strrpos($PHPSELF, "/");
-    $fileName       = $PHPSELF;
+    // get the file name
+    $lastSlashIndex = strrpos($script, "/");
+    $fileName       = $script;
 
     if ($lastSlashIndex !== false) {
-      $fileName = substr($PHPSELF, $lastSlashIndex + 1);
+      $fileName = substr($script, $lastSlashIndex + 1);
     }
 
     $msg .= $fileName . "\t";
@@ -254,6 +212,7 @@ class Pimf_Logger
 
   /**
    * @param string $varname
+   *
    * @return bool
    */
   protected function iniGetBool($varname)

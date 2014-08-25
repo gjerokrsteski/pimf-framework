@@ -2,151 +2,163 @@
 /**
  * Pimf
  *
- * PHP Version 5
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
+
+namespace Pimf;
+
+use Pimf\Session\Payload;
+use Pimf\Session\Storages as Storage;
 
 /**
- * Session Manager: delivers methods for save session handling.
+ * Using the session
+ *
+ * <code>
+ *
+ *    // Retrieve the session instance and get an item
+ *    Session::instance()->get('name');
+ *
+ *    // Retrieve the session instance and place an item in the session
+ *    Session::instance()->put('name', 'Robin');
+ *
+ *    // Retrieve a value from the session
+ *    $value = Session::get('name');
+ *
+ *    // Write a value to the session storage
+ *    $value = Session::put('name', 'Robin');
+ *
+ *    // Equivalent statement using the "instance" method
+ *    $value = Session::instance()->put('name', 'Robin');
+ *
+ * </code>
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
+ *
+ * @method static save()
  */
-class Pimf_Session
+class Session
 {
   /**
-   * @var object Instance of session class
+   * The session singleton instance for the request.
+   *
+   * @var Payload
    */
-  protected static $instance;
+  public static $instance;
 
   /**
-   * Get an instance of session class
-   * @return object Instance of session class
+   * The string name of the CSRF token stored in the session.
+   *
+   * @var string
    */
-  public static function getInstance()
-  {
-    if (self::$instance === null) {
-      self::$instance = new self();
-    }
+  const CSRF = 'csrf_token';
 
-    return self::$instance;
+  /**
+   * Create the session payload and load the session.
+   *
+   * @return void
+   */
+  public static function load()
+  {
+    $conf = Registry::get('conf');
+
+    static::start($conf['session']['storage']);
+
+    static::$instance->load(Cookie::get($conf['session']['cookie']));
   }
 
   /**
-   * Constructor - start session
+   * Create the session payload instance for the request.
+   *
+   * @param string $storage
+   *
+   * @return void
    */
-  protected function __construct()
+  public static function start($storage)
   {
-    session_start();
-    if (isset($_SESSION['_sesMgmt']) === false) {
-      $_SESSION['_sesMgmt'] = array();
+    static::$instance = new Payload(static::factory($storage));
+  }
+
+  /**
+   * Create a new session storage instance.
+   *
+   * @param string $storage
+   *
+   * @return Storage\Storage
+   * @throws \RuntimeException
+   */
+  public static function factory($storage)
+  {
+    $conf = Registry::get('conf');
+
+    switch ($storage) {
+      case 'apc':
+        return new Storage\Apc(Cache::storage('apc'));
+
+      case 'cookie':
+        return new Storage\Cookie();
+
+      case 'file':
+        return new Storage\File($conf['session']['storage_path']);
+
+      case 'pdo':
+        return new Storage\Pdo(Pdo\Factory::get($conf['session']['database']));
+
+      case 'memcached':
+        return new Storage\Memcached(Cache::storage('memcached'));
+
+      case 'memory':
+        return new Storage\Memory();
+
+      case 'redis':
+        return new Storage\Redis(Cache::storage('redis'));
+
+      case 'dba':
+        return new Storage\Dba(Cache::storage('dba'));
+
+      default:
+        throw new \RuntimeException("Session storage [$storage] is not supported.");
     }
   }
 
   /**
-   * Clone - prevent additional instances of the class
+   * Retrieve the active session payload instance for the request.
+   *
+   * @return Payload
+   * @throws \RuntimeException
    */
-  private function __clone() { }
-
-  /**
-   * Magic Method to set a session variable
-   * @param  string  $key   Registry array key
-   * @param  string  $value Value of session key
-   * @throws LogicException If stored value is a resource.
-   * @return mixed   TRUE on success otherwise FALSE
-   */
-  public function __set($key, $value)
+  public static function instance()
   {
-    if (is_resource($value)) {
-      throw new LogicException(
-        'storing resources in a SESSION is permitted!'
-      );
+    if (static::started()) {
+      return static::$instance;
     }
 
-    if (isset($_SESSION['_sesMgmt'][$key]) === false) {
-      $_SESSION['_sesMgmt'][$key] = $value;
-      return true;
-    }
-
-    return false;
+    throw new \RuntimeException("A storage must be set before using the session.");
   }
 
   /**
-   * Magic Method to get a session variable
-   * @param  string  $key   Registry array key
-   * @return bool    TRUE on success otherwise NULL
-   */
-  public function &__get($key)
-  {
-    if (isset($_SESSION['_sesMgmt'][$key])) {
-      return $_SESSION['_sesMgmt'][$key];
-    }
-
-    return null;
-  }
-
-  /**
-   * Unset a session variable
-   * @param  string  $key   Registry array key
-   * @return bool    TRUE on success otherwise FALSE
-   */
-  public function __unset($key)
-  {
-    if (isset($_SESSION['_sesMgmt'][$key])) {
-      unset($_SESSION['_sesMgmt'][$key]);
-      return true;
-    }
-    return false;
-  }
-
-  /**
-   * @param mixed $key
+   * Determine if session handling has been started for the request.
+   *
    * @return bool
    */
-  public function __isset($key)
+  public static function started()
   {
-    return isset($_SESSION[$key]);
+    return (static::$instance !== null);
   }
 
   /**
-   * @return bool
+   * Magic Method for calling the methods on the session singleton instance.
+   *
+   * @param $method
+   * @param $parameters
+   *
+   * @return mixed
    */
-  public function destroy()
+  public static function __callStatic($method, $parameters)
   {
-    $sessionState = session_destroy();
-    session_write_close();
-    unset($_SESSION);
-
-    return $sessionState;
-  }
-
-  /**
-   * Reset/delete old session and regenerate id.
-   */
-  public function reset()
-  {
-    session_regenerate_id(true);
-    $_SESSION['_sesMgmt'] = array();
-  }
-
-  /**
-   * Get the current session id.
-   * @return string
-   */
-  public function getId()
-  {
-    return session_id();
+    return call_user_func_array(
+      array(static::instance(), $method), $parameters
+    );
   }
 }

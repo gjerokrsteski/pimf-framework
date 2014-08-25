@@ -4,9 +4,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   public function testConvertStringToSimpleXmlInstance()
   {
     $string = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
-
-    $xml       = new Pimf_Util_Xml();
-    $simpleXml = $xml->toSimpleXMLElement($string);
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($string);
 
     $this->assertInstanceOf('SimpleXMLElement', $simpleXml);
   }
@@ -15,8 +13,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp.xml';
 
-    $xml       = new Pimf_Util_Xml();
-    $simpleXml = $xml->toSimpleXMLElement($file);
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($file);
 
     $this->assertInstanceOf('SimpleXMLElement', $simpleXml);
   }
@@ -25,8 +22,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $string = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
 
-    $xml = new Pimf_Util_Xml();
-    $dom = $xml->toDOMDocument($string);
+    $dom = \Pimf\Util\Xml::toDOMDocument($string);
 
     $this->assertInstanceOf('DOMDocument', $dom);
   }
@@ -35,8 +31,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp.xml';
 
-    $xml = new Pimf_Util_Xml();
-    $dom = $xml->toDOMDocument($file);
+    $dom = \Pimf\Util\Xml::toDOMDocument($file);
 
     $this->assertInstanceOf('DOMDocument', $dom);
   }
@@ -45,9 +40,8 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp.xml';
 
-    $utilXml   = new Pimf_Util_Xml();
-    $simpleXml = $utilXml->toSimpleXMLElement($file);
-    $result    = $utilXml->toArray($simpleXml);
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($file);
+    $result    = \Pimf\Util\Xml::toArray($simpleXml);
 
     $this->assertInternalType('array', $result);
     $this->assertNotEmpty($result);
@@ -59,9 +53,8 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp-with-namespace.xml';
 
-    $utilXml   = new Pimf_Util_Xml();
-    $simpleXml = $utilXml->toSimpleXMLElement($file);
-    $result    = $utilXml->toArray($simpleXml, 'pimf');
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($file);
+    $result    = \Pimf\Util\Xml::toArray($simpleXml, 'pimf');
 
     $this->assertNotEmpty($result);
     $this->assertArrayHasKey('MediaElementGroup', $result);
@@ -75,9 +68,8 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
   {
     $file = dirname(__FILE__).'/_fixture/samp-with-namespace.xml';
 
-    $utilXml   = new Pimf_Util_Xml();
-    $simpleXml = $utilXml->toSimpleXMLElement($file);
-    $utilXml->toArray($simpleXml, 'some-bad-namespace');
+    $simpleXml = \Pimf\Util\Xml::toSimpleXMLElement($file);
+    \Pimf\Util\Xml::toArray($simpleXml, 'some-bad-namespace');
   }
 
   /**
@@ -85,8 +77,7 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
    */
   public function testConvertToSimpleXmlThrowingException()
   {
-    $utilXml   = new Pimf_Util_Xml();
-    $utilXml->toSimpleXMLElement(new stdClass());
+    \Pimf\Util\Xml::toSimpleXMLElement(new stdClass());
   }
 
   /**
@@ -94,7 +85,34 @@ class XmlConverterTest extends PHPUnit_Framework_TestCase
    */
   public function testConvertToDOMDocThrowingException()
   {
-    $utilXml   = new Pimf_Util_Xml();
-    $utilXml->toDOMDocument(new stdClass());
+    \Pimf\Util\Xml::toDOMDocument(new stdClass());
+  }
+
+  public function testIfIsSimpleXMLElementOntoDOMDocument()
+  {
+    $data = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
+
+    $this->assertInstanceOf('\\DOMDocument', \Pimf\Util\Xml::toDOMDocument(new \SimpleXMLElement($data)));
+  }
+
+  public function testIfIsDOMDocumentOntoDOMDocument()
+  {
+    $this->assertInstanceOf('\\DOMDocument', \Pimf\Util\Xml::toDOMDocument(new \DOMDocument()));
+  }
+
+  public function testIfIsSimpleXMLElementToSimpleXMLElement()
+  {
+    $data = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
+
+    $this->assertInstanceOf('\\SimpleXMLElement', \Pimf\Util\Xml::toSimpleXMLElement(new \SimpleXMLElement($data)));
+  }
+
+  public function testIfIsDOMDocumentToSimpleXMLElement()
+  {
+    $data = file_get_contents(dirname(__FILE__).'/_fixture/samp.xml');
+    $doc = new \DOMDocument();
+    $doc->loadXML($data);
+
+    $this->assertInstanceOf('\\SimpleXMLElement', \Pimf\Util\Xml::toSimpleXMLElement($doc));
   }
 }

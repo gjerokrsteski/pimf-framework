@@ -25,7 +25,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
    */
   public function objectsProvider()
   {
-    $stdClass        = new stdClass();
+    $stdClass        = new \stdClass();
     $stdClass->title = 'Zweiundvierz';
     $stdClass->from  = 'Joe';
     $stdClass->to    = 'Jane';
@@ -33,7 +33,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
 
     return array(
       array( $stdClass ),
-      array( new TestAccumulatorClass() ),
+      array( new \TestAccumulatorClass() ),
       array( 'i am a string' ),
       array( '123456789' ),
       array(
@@ -43,7 +43,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
           '3',
           '4' => '5',
           '6' => '7',
-          'item1' => new TestAccumulatorClass(),
+          'item1' => new \TestAccumulatorClass(),
           'item2' => $stdClass,
         )
       )
@@ -56,7 +56,7 @@ class SerializerTest extends PHPUnit_Framework_TestCase
    */
   public function testSerializingSomeObjects($object)
   {
-    Pimf_Util_Serializer::serialize($object);
+    \Pimf\Util\Serializer::serialize($object);
   }
 
   /**
@@ -65,8 +65,8 @@ class SerializerTest extends PHPUnit_Framework_TestCase
    */
   public function testUnserializingSomeObjectsAndCompareEachother($item)
   {
-    $serializedItem   = Pimf_Util_Serializer::serialize($item);
-    $unserializedItem = Pimf_Util_Serializer::unserialize($serializedItem);
+    $serializedItem   = \Pimf\Util\Serializer::serialize($item);
+    $unserializedItem = \Pimf\Util\Serializer::unserialize($serializedItem);
 
     $this->assertEquals(gettype($item), gettype($unserializedItem));
   }
@@ -74,10 +74,10 @@ class SerializerTest extends PHPUnit_Framework_TestCase
   public function testHandlingWithBigBigClassObject()
   {
     $bigData = array_fill(0, 100, array_fill(1, 6, new TestAccumulatorClass()));
-    $testObject = new TestAccumulatorClass($bigData);
+    $testObject = new \TestAccumulatorClass($bigData);
 
-    $serializedData   = Pimf_Util_Serializer::serialize($testObject);
-    $unserializedData = Pimf_Util_Serializer::unserialize($serializedData);
+    $serializedData   = \Pimf\Util\Serializer::serialize($testObject);
+    $unserializedData = \Pimf\Util\Serializer::unserialize($serializedData);
 
     $this->assertEquals(gettype($testObject), gettype($unserializedData));
     $this->assertObjectHasAttribute('baterry', $unserializedData);
@@ -89,15 +89,15 @@ class SerializerTest extends PHPUnit_Framework_TestCase
   {
     $bigData = array_fill(0, 100, array_fill(1, 6, 'banana'));
 
-    $serializedData   = Pimf_Util_Serializer::serialize($bigData);
-    $unserializedData = Pimf_Util_Serializer::unserialize($serializedData);
+    $serializedData   = \Pimf\Util\Serializer::serialize($bigData);
+    $unserializedData = \Pimf\Util\Serializer::unserialize($serializedData);
 
     $this->assertEquals(gettype($bigData), gettype($unserializedData));
   }
 
   public function testHandlingWithBigBigArrayOfObjectsData()
   {
-    $stdClass        = new stdClass();
+    $stdClass        = new \stdClass();
     $stdClass->title = 'Zweiundvierzig';
     $stdClass->from  = 'Joe';
     $stdClass->to    = 'Jane';
@@ -105,21 +105,37 @@ class SerializerTest extends PHPUnit_Framework_TestCase
 
     $bigData = array_fill(0, 100, array_fill(1, 4, $stdClass));
 
-    $serializedData   = Pimf_Util_Serializer::serialize($bigData);
-    $unserializedData = Pimf_Util_Serializer::unserialize($serializedData);
+    $serializedData   = \Pimf\Util\Serializer::serialize($bigData);
+    $unserializedData = \Pimf\Util\Serializer::unserialize($serializedData);
 
     $this->assertEquals(gettype($bigData), gettype($unserializedData));
   }
 
   public function testHandlingWithBigBigObjectOfArraysData()
   {
-    $stdClass        = new stdClass();
+    $stdClass        = new \stdClass();
     $bigData         = array_fill(0, 500, array_fill(1, 4, 'std trash'));
     $stdClass->array = $bigData;
 
-    $serializedData   = Pimf_Util_Serializer::serialize($stdClass);
-    $unserializedData = Pimf_Util_Serializer::unserialize($serializedData);
+    $serializedData   = \Pimf\Util\Serializer::serialize($stdClass);
+    $unserializedData = \Pimf\Util\Serializer::unserialize($serializedData);
 
     $this->assertEquals(gettype($stdClass), gettype($unserializedData));
+  }
+
+  public function testSimpleXMLElement()
+  {
+    $xml = new \SimpleXMLElement('<example><test/></example>');
+    $serializedData   = \Pimf\Util\Serializer::serialize($xml);
+    $unserializedData = \Pimf\Util\Serializer::unserialize($serializedData);
+    $this->assertEquals(gettype($xml), gettype($unserializedData));
+  }
+
+  /**
+   * @expectedException \RuntimeException
+   */
+  public function testBombingExceptionOnUnserialize()
+  {
+    \Pimf\Util\Serializer::unserialize(null);
   }
 }

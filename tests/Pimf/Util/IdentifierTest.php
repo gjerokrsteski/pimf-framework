@@ -6,7 +6,7 @@ class IdentifierTest extends PHPUnit_Framework_TestCase
    */
   public function CreatingNewInstance()
   {
-    new Pimf_Util_Identifier(1, '23');
+    new \Pimf\Util\Identifier(1, '23');
   }
 
   /**
@@ -15,7 +15,7 @@ class IdentifierTest extends PHPUnit_Framework_TestCase
    */
   public function CreatingNewInstanceThrowingExceptionIfNoIdentifiersReceived()
   {
-    new Pimf_Util_Identifier();
+    new \Pimf\Util\Identifier();
   }
 
   /**
@@ -23,7 +23,7 @@ class IdentifierTest extends PHPUnit_Framework_TestCase
    */
   public function CreatingNewInstanceWithMixedArgs()
   {
-    $identifier = new Pimf_Util_Identifier(1, '23', 123, 'hohoho');
+    $identifier = new \Pimf\Util\Identifier(1, '23', 123, 'hohoho');
 
           ob_start();
           print $identifier;
@@ -38,7 +38,7 @@ class IdentifierTest extends PHPUnit_Framework_TestCase
    */
   public function CreatingNewInstanceWithMixedArgsAndSpecialdelimiter()
   {
-    $identifier = new Pimf_Util_Identifier(1, '23', 123, 'hohoho');
+    $identifier = new \Pimf\Util\Identifier(1, '23', 123, 'hohoho');
 
     $identifier->setDelimiter('/');
 
@@ -55,7 +55,7 @@ class IdentifierTest extends PHPUnit_Framework_TestCase
    */
   public function CreatingNewInstanceWithMixedArgsAndSpecialDelimiterInFoxusOfSlaging()
   {
-    $identifier = new Pimf_Util_Identifier(1, '23', 123, 'ZZ-TOP', 'Some_Class_name');
+    $identifier = new \Pimf\Util\Identifier(1, '23', 123, 'ZZ-TOP', 'Some_Class_name');
 
     $identifier->setDelimiter('/');
 
@@ -66,4 +66,5 @@ class IdentifierTest extends PHPUnit_Framework_TestCase
 
     $this->assertEquals('1/23/123/zz/top/some/class/name', $output);
   }
+
 }

@@ -2,120 +2,186 @@
 /**
  * Pimf
  *
- * PHP Version 5
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
+
+namespace Pimf;
+
+use Pimf\Contracts\Renderable;
+use Pimf\Util\File;
+use Pimf\Contracts\Arrayable;
 
 /**
  * A simply view for sending and rendering data.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_View
+class View implements Renderable
 {
   /**
-   * Path to the templates.
-   * @var string
+   * @var string Name of the template.
    */
-  private $path = '_templates';
-
-  /**
-   * @var string Name of the template, in which case the default template.
-   */
-  private $template = 'default';
+  protected $template;
 
   /**
    * Contains the variables that are to be embedded in the template.
-   * @var array
+   *
+   * @var \ArrayObject
    */
-  private $data;
+  protected $data;
 
-  public function __construct()
+  /**
+   * Path to templates - is framework restriction.
+   *
+   * @var string
+   */
+  protected $path;
+
+  /**
+   * @param string $template
+   * @param array  $data
+   * @param string $path Path to templates if you do not want to use PIMF framework restriction.
+   */
+  public function __construct($template = 'default.phtml', array $data = array(), $path = null)
   {
-    $registry   = new Pimf_Registry();
-    $this->data = new ArrayObject(array(), ArrayObject::ARRAY_AS_PROPS);
+    $conf           = Registry::get('conf');
+    $this->data     = new \ArrayObject($data, \ArrayObject::ARRAY_AS_PROPS);
+    $this->path     = (!$path) ? BASE_PATH . 'app/' . $conf['app']['name'] . '/_templates' : $path;
+    $this->template = (string)$template;
+  }
 
-    $this->setPath(
-      dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . $registry->conf['app']['name']
-    );
+  /**
+   * @param string $template
+   *
+   * @return View
+   */
+  public function produce($template)
+  {
+    $view           = clone $this;
+    $view->template = (string)$template;
+
+    return $view;
+  }
+
+  /**
+   * @param string          $template
+   * @param array|Arrayable $model
+   *
+   * @return string
+   */
+  public function partial($template, $model = array())
+  {
+    $model = ($model instanceof Arrayable) ? $model->toArray() : $model;
+
+    return $this->produce($template)->pump($model)->render();
+  }
+
+  /**
+   * @param string $template
+   * @param array  $model
+   *
+   * @return string
+   */
+  public function loop($template, array $model = array())
+  {
+    $out = '';
+
+    foreach ($model as $row) {
+      $out .= $this->partial($template, $row);
+    }
+
+    return $out;
   }
 
   /**
    * Assigns a variable to a specific key for the template.
-   * @param string $key The key.
-   * @param mixed $value The Value.
+   *
+   * @param string $key   The key.
+   * @param mixed  $value The Value.
+   *
+   * @return View
    */
   public function assign($key, $value)
   {
     $this->data[$key] = $value;
+
+    return $this;
   }
 
   /**
-   * @param string $templateName Name of the template.
+   * Exchange all variables.
+   *
+   * @param $model
+   *
+   * @return View
    */
-  public function setTemplate($templateName = 'default')
+  public function pump(array $model)
   {
-    $this->template = (string)$templateName;
+    $this->data->exchangeArray($model);
+
+    return $this;
   }
 
   /**
-   * @param string $templatesDir
-   */
-  protected function setPath($templatesDir)
-  {
-    $this->path = (string)$templatesDir . DIRECTORY_SEPARATOR . $this->path;
-  }
-
-  /**
-   * Is utilized for reading data from inaccessible properties.
    * @param string $name
-   * @return mixed|null
+   *
+   * @return mixed
+   * @throws \OutOfBoundsException If undefined property at the template.
    */
   public function __get($name)
   {
-    if (array_key_exists($name, $this->data)) {
-      return $this->data[$name];
+    if ($this->data->offsetExists($name)) {
+      return $this->data->offsetGet($name);
     }
 
     $trace = debug_backtrace();
-    trigger_error(
-      'undefined property for the view: ' . $name . ' at ' . $trace[0]['file'] . ' line ' . $trace[0]['line'], E_USER_NOTICE
+    throw new \OutOfBoundsException(
+      'undefined property "' . $name . '" at file ' . $trace[0]['file'] . ' line ' . $trace[0]['line']
     );
-
-    return null;
   }
 
   /**
-   * @return string The Output of the template.
-   * @throws RuntimeException If could not find template.
+   * @return string
+   * @throws \Exception
    */
-  public function loadTemplate()
+  public function render()
   {
-    $file = $this->path . DIRECTORY_SEPARATOR . $this->template . '.phtml';
+    $level = ob_get_level();
+    ob_start();
 
-    if (file_exists($file)) {
+    try {
 
-      ob_start();
-      include $file;
-      $output = ob_get_contents();
-      ob_end_clean();
+      echo $this->reunite();
 
-      return $output;
+    } catch (\Exception $exception) {
+
+      while (ob_get_level() > $level) {
+        ob_end_clean();
+      }
+
+      throw $exception;
     }
 
-    throw new RuntimeException('could not find template: ' . $file);
+    return ob_get_clean();
+  }
+
+  /**
+   * Puts the template an the variables together.
+   */
+  public function reunite()
+  {
+    include new File(str_replace('/', DS, $this->path . '/' . $this->template));
+  }
+
+  /**
+   * Act when the view is treated like a string
+   *
+   * @return string
+   */
+  public function __toString()
+  {
+    return $this->render();
   }
 }

@@ -1,31 +1,18 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
- * PHP Version 5
- *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
+
+namespace Pimf\Util;
 
 /**
  * Responsible for general message formatting, used for message flashing or with combination with the translator.
  *
  * <code>
- * $message = new Pimf_Util_Message(
+ * $message = new Message(
  *   'Hello %your_name my name is %my_name! '
  *    .'I am %my_age, how old are you? I like %object!'
  * );
@@ -44,10 +31,10 @@
  * .. output will be = "Hello Ben my name is Matt! I am 21, how old are you? I like food!"
  * </code>
  *
- * @package Pimf_Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @package Util
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Message
+class Message
 {
   /**
    * @var string The message.
@@ -65,12 +52,12 @@ class Pimf_Util_Message
   protected $delimiter = '%';
 
   /**
-   * @param string $message The message or the resource.
-   * @param array $bindings (Optional) A List of tokes whitch should be bind.
+   * @param string $message  The message or the resource.
+   * @param array  $bindings (Optional) A List of tokes whitch should be bind.
    */
   public function __construct($message, array $bindings = array())
   {
-    $this->message = $message;
+    $this->setMessage($message);
     $this->bindings = $bindings;
   }
 
@@ -84,21 +71,25 @@ class Pimf_Util_Message
 
   /**
    * @param string $message The message.
-   * @return Pimf_Util_Message
+   *
+   * @return Message
    */
   public function setMessage($message)
   {
     $this->message = $message;
+
     return $this;
   }
 
   /**
    * @param string $char The character for the prexied delimitation of the tokens.
-   * @return Pimf_Util_Message
+   *
+   * @return Message
    */
   public function setDelimiter($char)
   {
     $this->delimiter = $char;
+
     return $this;
   }
 
@@ -107,11 +98,13 @@ class Pimf_Util_Message
    *
    * @param string $token The token.
    * @param string $value The value for replacement.
-   * @return Pimf_Util_Message
+   *
+   * @return Message
    */
   public function bind($token, $value)
   {
     $this->bindings[$token] = $value;
+
     return $this;
   }
 
@@ -132,7 +125,7 @@ class Pimf_Util_Message
    */
   public function format()
   {
-    if (!$this->message) {
+    if ($this->getMessage() == '' || !$this->getMessage()) {
       return '';
     }
 

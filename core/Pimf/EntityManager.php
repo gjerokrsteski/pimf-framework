@@ -2,30 +2,22 @@
 /**
  * Pimf
  *
- * PHP Version 5
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
+
+namespace Pimf;
+
+use Pimf\DataMapper\Base;
 
 /**
  * Based on PDO it is a general manager for data persistence and object relational mapping.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  *
  */
-class Pimf_EntityManager extends Pimf_DataMapper_Abstract
+class EntityManager extends Base
 {
   /**
    * @var string The namespace name of data-mappers repository.
@@ -33,19 +25,20 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
   protected $prefix;
 
   /**
-   * @param Pimf_Pdo $db
+   * @param \PDO   $pdo
    * @param string $prefix The data-mappers repository name.
    */
-  public function __construct(Pimf_Pdo $db, $prefix = 'Pimf')
+  public function __construct(\PDO $pdo, $prefix = '\Pimf')
   {
-    parent::__construct($db);
-    $this->prefix = $prefix . '_DataMapper_';
+    parent::__construct($pdo);
+    $this->prefix = $prefix . '\DataMapper\\';
   }
 
   /**
    * @param string $entity The name of the data-mapper class.
-   * @return Pimf_DataMapper_Abstract
-   * @throws BadMethodCallException If no entity fount at the repository.
+   *
+   * @return Base
+   * @throws \BadMethodCallException If no entity fount at the repository.
    */
   public function load($entity)
   {
@@ -56,12 +49,10 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
     }
 
     if (!class_exists($entity)) {
-      throw new BadMethodCallException(
-        'entity "'.$entity.'" found at the data-mapper repository'
-      );
+      throw new \BadMethodCallException('entity "' . $entity . '" not found at the data-mapper repository');
     }
 
-    $model = new $entity($this->db);
+    $model = new $entity($this->pdo);
 
     $this->identityMap->set($entity, $model);
 
@@ -73,7 +64,7 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
    */
   public function beginTransaction()
   {
-    return $this->db->beginTransaction();
+    return $this->pdo->beginTransaction();
   }
 
   /**
@@ -81,7 +72,7 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
    */
   public function commitTransaction()
   {
-    return $this->db->commit();
+    return $this->pdo->commit();
   }
 
   /**
@@ -89,12 +80,13 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
    */
   public function rollbackTransaction()
   {
-    return $this->db->rollBack();
+    return $this->pdo->rollBack();
   }
 
   /**
    * @param string $entity
-   * @return Pimf_DataMapper_Abstract
+   *
+   * @return Base
    */
   public function __get($entity)
   {
@@ -102,10 +94,10 @@ class Pimf_EntityManager extends Pimf_DataMapper_Abstract
   }
 
   /**
-   * @return PDO
+   * @return Database
    */
   public function getPDO()
   {
-    return $this->db;
+    return $this->pdo;
   }
 }

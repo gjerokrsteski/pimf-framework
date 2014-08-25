@@ -27,3 +27,5 @@ nbproject
 intermediate
 publish
 .idea
+_coverage
+coverage

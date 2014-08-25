@@ -10,39 +10,14 @@ class StringTest extends PHPUnit_Framework_TestCase
     $this->testString = file_get_contents(dirname(__FILE__).'/_fixture/samp-string.html');
   }
 
-  public function testIfStringIsUtf8()
+  public function testCheckEncoding()
   {
-    $res = Pimf_Util_String::isUTF8($this->testString);
-
-    $this->assertTrue($res);
-
-    $res = Pimf_Util_String::isUTF8($this->testString, true);
-
-    $this->assertTrue($res);
-  }
-
-  public function testCheckUtf8Encoding()
-  {
-    $res = Pimf_Util_String::checkUtf8Encoding($this->testString);
-
-    $this->assertTrue($res);
-  }
-
-  public function testTruncatePreservingTags()
-  {
-    $res = Pimf_Util_String::truncatePreservingTags(
-      $this->testString, 100, ' ...'
-    );
-
-    $this->assertEquals(
-      file_get_contents(dirname(__FILE__).'/_fixture/expected-after-truncate-preserving-tags.html'),
-      $res
-    );
+    $this->assertTrue(\Pimf\Util\String::checkUtf8Encoding($this->testString));
   }
 
   public function testCleanAggressive()
   {
-    $res = Pimf_Util_String::cleanAggressive($this->testString);
+    $res = \Pimf\Util\String::cleanAggressive($this->testString);
 
     $this->assertEquals(
       file_get_contents(dirname(__FILE__).'/_fixture/expects-clean-aggressive.html'),
@@ -50,51 +25,54 @@ class StringTest extends PHPUnit_Framework_TestCase
     );
   }
 
-  public function testCleanSmart()
+  public function testCleanXss()
   {
-    $res = Pimf_Util_String::cleanSmart($this->testString);
+    $res = \Pimf\Util\String::cleanXss($this->testString);
 
-    $this->assertEquals(' Mit Hilfe von samp-string.html', $res);
+    $this->assertEquals(
+      file_get_contents(dirname(__FILE__).'/_fixture/expects-clean-xss.html'),
+      str_replace(array(' ', PHP_EOL), '', $res)
+    );
   }
 
   public function testEnsureTrailing()
   {
-    $res = Pimf_Util_String::ensureTrailing('/', 'http://www.example.com');
+    $res = \Pimf\Util\String::ensureTrailing('/', 'http://www.example.com');
     $this->assertStringEndsWith('/', $res);
 
-    $res = Pimf_Util_String::ensureTrailing('/', 'http://www.example.com/');
+    $res = \Pimf\Util\String::ensureTrailing('/', 'http://www.example.com/');
     $this->assertStringEndsWith('/', $res);
     $this->assertStringEndsNotWith('//', $res);
 
-    $res = Pimf_Util_String::ensureTrailing('/', '//uc/receipt/');
+    $res = \Pimf\Util\String::ensureTrailing('/', '//uc/receipt/');
     $this->assertStringEndsWith('/', $res);
     $this->assertStringEndsNotWith('//', $res);
   }
 
   public function testEnsureLeading()
   {
-    $res = Pimf_Util_String::ensureLeading('#', '1#2#3#4#5');
+    $res = \Pimf\Util\String::ensureLeading('#', '1#2#3#4#5');
     $this->assertStringStartsWith('#1', $res);
 
-    $res = Pimf_Util_String::ensureLeading('#', '#1#2#3#4#5');
+    $res = \Pimf\Util\String::ensureLeading('#', '#1#2#3#4#5');
     $this->assertStringStartsWith('#1', $res);
   }
 
   public function testDeleteLeading()
   {
-    $res = Pimf_Util_String::deleteLeading('#', '#1#2#3#4#5');
+    $res = \Pimf\Util\String::deleteLeading('#', '#1#2#3#4#5');
     $this->assertStringStartsWith('1#', $res); // -> 1#2#3#4#5
 
-    $res = Pimf_Util_String::deleteLeading(array('#', '1'), '##111#2#3#4#5');
+    $res = \Pimf\Util\String::deleteLeading(array('#', '1'), '##111#2#3#4#5');
     $this->assertStringStartsWith('2#', $res); // -> 2#3#4#5
   }
 
   public function testDeleteTrailing()
   {
-    $res = Pimf_Util_String::deleteTrailing('|', '|1|2|3|4|5|');
+    $res = \Pimf\Util\String::deleteTrailing('|', '|1|2|3|4|5|');
     $this->assertStringEndsWith('|5', $res); // -> |1|2|3|4|5
 
-    $res = Pimf_Util_String::deleteTrailing(array('|','5'), '|1|2|3|4|5|555');
+    $res = \Pimf\Util\String::deleteTrailing(array('|','5'), '|1|2|3|4|5|555');
     $this->assertStringEndsWith('|4', $res); // -> |1|2|3|4
   }
 
@@ -114,21 +92,81 @@ class StringTest extends PHPUnit_Framework_TestCase
   {
     $this->assertTrue(
 
-      Pimf_Util_String::isSerialized($data),
+      \Pimf\Util\String::isSerialized($data),
 
       'problem on asserting that '.print_r($data,true). ' is serialized'
 
     );
   }
 
-  public function testSlagStringFromSpecialChars()
+  public static function providerOfEvilPaths()
   {
-    $this->assertEquals(
-
-      '_1_2_3_These_words_are_quoted',
-
-      Pimf_Util_String::slagSpecialChars('\"[1,2,3,<>#?==(/%/$§"!]{These,words,are,quoted}\"# "')
-
+    return array(
+      array('http://www.example.com/index.foo?item=../../../Config.sys'),
+      array("http://www.example.com/index.foo?item=../../../Windows/System32/cmd.exe?/C+dir+C:\\"),
+      array('/foo/bar/../controller.php'),
+      array('http://www.example.com/%2e%2e%2f'),
+      array('http://www.example.com/%2e%2e%5Ccontroller.php'),
+      array('/foo/bar/controller.php?action=../00%'),
+      array('http://localhost/?controller=../%00'),
+      array('http://localhost/?controller=some bad controller name'),
+      array('http://localhost/?controller=some%20bad%20controller%20name'),
     );
+  }
+
+  /**
+   * @dataProvider providerOfEvilPaths
+   */
+  public function testIsEvilPathContainsBadCombinations($path)
+  {
+    $this->assertTrue(\Pimf\Util\String::isEvilPath($path));
+  }
+
+  public function testIsEvilPathContainsNoBadCombinations()
+  {
+    $this->assertFalse(\Pimf\Util\String::isEvilPath('/foo/bar/controller.php'));
+  }
+
+  public function testStartsWith()
+  {
+    $this->assertTrue(\Pimf\Util\String::startsWith('//www.krsteski.de', '//'));
+  }
+
+  public function testEndsWith()
+  {
+    $this->assertTrue(\Pimf\Util\String::endsWith('//www.krsteski.de?index.php', '?index.php'));
+  }
+
+  public function testIsPattern()
+  {
+    $this->assertTrue(\Pimf\Util\String::is('user/profile', 'user/profile'));
+  }
+
+  public function testIsWildcard()
+  {
+    $this->assertTrue(\Pimf\Util\String::is('user/*', 'user/profile/update'));
+  }
+
+  public function testIsNotEmptyString()
+  {
+    $this->assertFalse(\Pimf\Util\String::is('/', 'home'));
+  }
+
+  public function testRandom()
+  {
+    $res = \Pimf\Util\String::random();
+
+    $this->assertInternalType('string', $res);
+    $this->assertEquals(32, strlen($res));
+  }
+
+  public function testContains()
+  {
+    $this->assertTrue(\Pimf\Util\String::contains('user/save', array('user', 'save', 'user/')));
+  }
+
+  public function testNotContains()
+  {
+    $this->assertFalse(\Pimf\Util\String::contains('user/save', 'hugo'));
   }
 }

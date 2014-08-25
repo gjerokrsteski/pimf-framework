@@ -1,35 +1,24 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
- * PHP Version 5
- *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
- * @package Pimf_Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @package Util
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_Json
+class Json
 {
   /**
    * Returns the JSON representation of a value.
+   *
    * @param mixed $data
+   *
    * @return string
    */
   public static function encode($data)
@@ -43,12 +32,15 @@ class Pimf_Util_Json
 
   /**
    * Decodes a JSON string.
-   * @param string $jsonString
+   *
+   * @param string  $jsonString
+   * @param boolean $assoc If should be converted into associative array/s.
+   *
    * @return mixed
    */
-  public static function decode($jsonString)
+  public static function decode($jsonString, $assoc = false)
   {
-    $json = json_decode($jsonString);
+    $json = json_decode($jsonString, $assoc);
 
     self::handleError(json_last_error());
 
@@ -57,7 +49,8 @@ class Pimf_Util_Json
 
   /**
    * @param int $status
-   * @throws RuntimeException
+   *
+   * @throws \RuntimeException
    */
   protected static function handleError($status)
   {
@@ -82,7 +75,7 @@ class Pimf_Util_Json
     }
 
     if ($msg !== '') {
-      throw new RuntimeException($msg);
+      throw new \RuntimeException($msg);
     }
   }
 }

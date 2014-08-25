@@ -1,5 +1,5 @@
 <?php
-class Pimf_RequestTest extends PHPUnit_Framework_TestCase
+class RequestTest extends PHPUnit_Framework_TestCase
 {
   public static function setUpBeforeClass()
   {
@@ -19,41 +19,41 @@ class Pimf_RequestTest extends PHPUnit_Framework_TestCase
 
   public function testCreatingNewInstance()
   {
-    new Pimf_Request($_GET);
+    new \Pimf\Request($_GET);
   }
 
   public function testCreatingFullNewInstance()
   {
-    new Pimf_Request($_GET, $_POST, $_COOKIE);
+    new \Pimf\Request($_GET, $_POST, $_COOKIE);
   }
 
   public function tesGetData()
   {
-    $request = new Pimf_Request($_GET);
+    $request = new \Pimf\Request($_GET);
 
-    $this->assertNotNull( $request->fromGet()->getParam('controller') );
-    $this->assertEquals( 'index', $request->fromGet()->getParam('controller') );
+    $this->assertNotNull( $request->fromGet()->get('controller') );
+    $this->assertEquals( 'index', $request->fromGet()->get('controller') );
   }
 
   public function tesPostData()
   {
-    $request = new Pimf_Request(array(), $_POST);
+    $request = new \Pimf\Request(array(), $_POST);
 
-    $this->assertNotNull( $request->fromGet()->getParam('firstname') );
-    $this->assertEquals( 'gatter', $request->fromGet()->getParam('firstname') );
+    $this->assertNotNull( $request->fromPost()->get('firstname') );
+    $this->assertEquals( 'gatter', $request->fromPost()->get('firstname') );
   }
 
   public function tesCookieData()
   {
-    $request = new Pimf_Request(array(), array(), $_COOKIE);
+    $request = new \Pimf\Request(array(), array(), $_COOKIE);
 
-    $this->assertNotNull( $request->fromGet()->getParam('date') );
-    $this->assertEquals( '01-01-2017', $request->fromGet()->getParam('date') );
+    $this->assertNotNull( $request->fromCookie()->get('date') );
+    $this->assertEquals( '01-01-2017', $request->fromCookie()->get('date') );
   }
 
   public function testStripSlashesIfMagicQuotes()
   {
-    $request = new Pimf_Request(array(), array(), array());
+    $request = new \Pimf\Request(array(), array(), array());
 
     $res = $request->stripSlashesIfMagicQuotes($_GET, true);
 

@@ -1,85 +1,77 @@
 <?php
 /**
- * Pimf_Util
+ * Util
  *
- * PHP Version 5
- *
- * A comprehensive collection of PHP utility classes and functions
- * that developers find themselves using regularly when writing web applications.
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
 
+namespace Pimf\Util;
+
 /**
- * @package Pimf_Util
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * The identity map pattern is a database access design pattern used to improve performance
+ * by providing a context-specific, in-memory cache to prevent duplicate retrieval of the
+ * same object data from the database.
+ *
+ * @package Util
+ * @author  Gjero Krsteski <gjero@krsteski.de>
  */
-class Pimf_Util_IdentityMap
+class IdentityMap
 {
   /**
-   * @var ArrayObject
+   * @var \ArrayObject
    */
   protected $idToObject;
 
   /**
-   * @var SplObjectStorage
+   * @var \SplObjectStorage
    */
   protected $objectToId;
 
   public function __construct()
   {
-    $this->objectToId = new SplObjectStorage();
-    $this->idToObject = new ArrayObject();
+    $this->objectToId = new \SplObjectStorage();
+    $this->idToObject = new \ArrayObject();
   }
 
   /**
-   * @param integer $id
-   * @param mixed $object
+   * @param integer $key
+   * @param mixed   $object
    */
-  public function set($id, $object)
+  public function set($key, $object)
   {
-    $this->idToObject[$id]     = $object;
-    $this->objectToId[$object] = $id;
+    $this->idToObject[$key]    = $object;
+    $this->objectToId[$object] = $key;
   }
 
   /**
    * @param mixed $object
-   * @throws OutOfBoundsException
+   *
+   * @throws \OutOfBoundsException
    * @return integer
    */
   public function getId($object)
   {
     if (false === $this->hasObject($object)) {
-      throw new OutOfBoundsException(
-        'no object='.get_class($object).' at the identity-map'
-      );
+      throw new \OutOfBoundsException('no object=' . get_class($object) . ' at the identity-map');
     }
 
     return $this->objectToId[$object];
   }
 
   /**
-   * @param integer $id
+   * @param integer $key
+   *
    * @return boolean
    */
-  public function hasId($id)
+  public function hasId($key)
   {
-    return isset($this->idToObject[$id]);
+    return isset($this->idToObject[$key]);
   }
 
   /**
    * @param mixed $object
+   *
    * @return boolean
    */
   public function hasObject($object)
@@ -88,18 +80,17 @@ class Pimf_Util_IdentityMap
   }
 
   /**
-   * @param integer $id
-   * @throws OutOfBoundsException
+   * @param integer $key
+   *
+   * @throws \OutOfBoundsException
    * @return object
    */
-  public function getObject($id)
+  public function getObject($key)
   {
-    if (false === $this->hasId($id)) {
-      throw new OutOfBoundsException(
-        'no id='.$id.' at the identity-map'
-      );
+    if (false === $this->hasId($key)) {
+      throw new \OutOfBoundsException('no id=' . $key . ' at the identity-map');
     }
 
-    return $this->idToObject[$id];
+    return $this->idToObject[$key];
   }
 }

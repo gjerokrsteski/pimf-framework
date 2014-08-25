@@ -2,32 +2,44 @@
 /**
  * Pimf
  *
- * PHP Version 5
- *
- * LICENSE
- *
- * This source file is subject to the new BSD license that is bundled
- * with this package in the file LICENSE.
- * It is also available through the world-wide-web at this URL:
- * http://krsteski.de/new-bsd-license/
- * If you did not receive a copy of the license and are unable to
- * obtain it through the world-wide-web, please send an email
- * to gjero@krsteski.de so we can send you a copy immediately.
- *
- * @copyright Copyright (c) 2010-2011 Gjero Krsteski (http://krsteski.de)
- * @license http://krsteski.de/new-bsd-license New BSD License
+ * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
+ * @license   http://krsteski.de/new-bsd-license New BSD License
  */
+namespace Pimf;
 
 /**
  * Server and execution environment information.
  *
  * @package Pimf
- * @author Gjero Krsteski <gjero@krsteski.de>
+ * @author  Gjero Krsteski <gjero@krsteski.de>
+ *
+ * @property string X_REQUESTED_WITH       It is sent by the Ajax functions of most major Frameworks
+ * @property string HTTP                   Is the application running under HTTP protocol?
+ * @property string HTTPS                  Is the application running under HTTPS protocol?
+ * @property string SERVER_PROTOCOL        Name and revision of the information protocol via which the page was requested; i.e. 'HTTP/1.0';
+ * @property string CONTENT_LENGTH         The Content-Length
+ * @property string CONTENT_TYPE           The Content-Type
+ * @property string HOST                   The name of the server host under which the current script is executing.
+ * @property string SERVER_NAME            The name of the server host under which the current script is executing.
+ * @property string SERVER_PORT            Get the port
+ * @property string PHP_SELF               Filename of the currently executing script.
+ * @property string SCRIPT_NAME            Get Script Name (physical path)
+ * @property string PATH_INFO              Get Path Info (virtual path)
+ * @property string X_FORWARDED_FOR        Do on your machine is behind the proxy than us it instead of REMOTE_ADDR
+ * @property string CLIENT_IP              Get the client ip address
+ * @property string REMOTE_ADDR            The IP address from which the user is viewing the current page.
+ * @property string HTTP_REFERER           Get Referer - it cannot really be trusted.
+ * @property string USER_AGENT             Contents of the User-Agent from the current request, if there is one.
+ * @property string HTTP_USER_AGENT        Contents of the User-Agent: header from the current request, if there is one.
+ * @property string REQUEST_URI            The URI which was given in order to access this page; for instance, '/index.html'.
+ * @property string REQUEST_METHOD         Which request method was used to access the page; i.e. 'GET', 'HEAD', 'POST', 'PUT'.
+ * @property string HTTP_IF_MODIFIED_SINCE Get request header from Apache even on PHP running as a CGI
+ * @property string HTTP_IF_NONE_MATCH     Get request header from Apache even on PHP running as a CGI
  */
-class Pimf_Environment
+class Environment
 {
   /**
-   * @var Pimf_Param
+   * @var Param
    */
   private $envData;
 
@@ -36,11 +48,11 @@ class Pimf_Environment
    */
   public function __construct(array $envData)
   {
-    $this->envData = new Pimf_Param($envData);
+    $this->envData = new Param($envData);
   }
 
   /**
-   * @return Pimf_Param
+   * @return Param
    */
   public function getData()
   {
@@ -48,197 +60,149 @@ class Pimf_Environment
   }
 
   /**
+   * @param $key
+   *
+   * @return string
+   */
+  public function __get($key)
+  {
+    return $this->envData->get($key);
+  }
+
+  /**
    * Is this an AJAX request?
+   *
    * @return bool
    */
   public function isAjax()
   {
-    return $this->envData->getParam('X_REQUESTED_WITH') === 'XMLHttpRequest';
+    return $this->X_REQUESTED_WITH === 'XMLHttpRequest';
   }
 
   /**
    * Is the application running under HTTP protocol?
+   *
    * @return bool
    */
   public function isHttp()
   {
-    return (bool) $this->envData->getParam('HTTP');
+    return (bool)$this->HTTP;
   }
 
   /**
    * Is the application running under HTTPS protocol?
+   *
    * @return bool
    */
   public function isHttps()
   {
-    return $this->envData->getParam('HTTPS') === 'on';
-  }
-
-  /**
-   * Name and revision of the information protocol
-   * via which the page was requested; i.e. 'HTTP/1.0';
-   * @return mixed|null
-   */
-  public function getProtocolInfo()
-  {
-    return $this->envData->getParam('SERVER_PROTOCOL');
-  }
-
-  /**
-   * Get Content-Length
-   * @return int
-   */
-  public function getContentLength()
-  {
-    return (int) $this->envData->getParam('CONTENT_LENGTH');
+    return $this->HTTPS === 'on';
   }
 
   /**
    * Get Host
+   *
    * @return string
    */
   public function getHost()
   {
-    if ($this->envData->getParam('HOST')) {
+    if ($this->HOST) {
 
-      if (strpos($this->envData->getParam('HOST'), ':') !== false) {
-        $hostParts = explode(':', $this->envData->getParam('HOST'));
+      if (strpos($this->HOST, ':') !== false) {
+        $hostParts = explode(':', $this->HOST);
+
         return $hostParts[0];
       }
 
-      return $this->envData->getParam('HOST');
+      return $this->HOST;
     }
 
-    return $this->envData->getParam('SERVER_NAME');
+    return $this->SERVER_NAME;
   }
 
   /**
    * Get Host with Port
+   *
    * @return string
    */
   public function getHostWithPort()
   {
-    return sprintf('%s:%s', $this->getHost(), $this->getPort());
+    return '' . $this->getHost() . ':' . $this->SERVER_PORT;
   }
 
   /**
-   * Get Port
-   * @return int
-   */
-  public function getPort()
-  {
-    return (int) $this->envData->getParam('SERVER_PORT');
-  }
-
-  /**
-   * Filename of the currently executing script.
-   * @return string|null
-   */
-  public function getSelf()
-  {
-    return $this->envData->getParam('PHP_SELF');
-  }
-
-  /**
-   * Get Script Name (physical path).
-   * @return string
-   */
-  public function getScriptName()
-  {
-    return $this->envData->getParam('SCRIPT_NAME');
-  }
-
-  /**
-   * Get Path (physical path + virtual path)
+   * Physical path + virtual path
+   *
    * @return string
    */
   public function getPath()
   {
-    return $this->getScriptName() . $this->getPathInfo();
-  }
-
-  /**
-   * Get Path Info (virtual path)
-   * @return string
-   */
-  public function getPathInfo()
-  {
-    return $this->envData->getParam('PATH_INFO');
+    return $this->SCRIPT_NAME . $this->PATH_INFO;
   }
 
   /**
    * Get remote IP
+   *
    * @return string
    */
   public function getIp()
   {
-    if ($this->envData->getParam('X_FORWARDED_FOR')) {
-      return $this->envData->getParam('X_FORWARDED_FOR');
+    if ($this->X_FORWARDED_FOR) {
+      return $this->X_FORWARDED_FOR;
     }
 
-    if ($this->envData->getParam('CLIENT_IP')) {
-      return $this->envData->getParam('CLIENT_IP');
+    if ($this->CLIENT_IP) {
+      return $this->CLIENT_IP;
     }
 
-    if ($this->envData->getParam('SERVER_NAME')) {
-      return gethostbyname($this->envData->getParam('SERVER_NAME'));
+    if ($this->SERVER_NAME) {
+      return gethostbyname($this->SERVER_NAME);
     }
 
-    return $this->envData->getParam('REMOTE_ADDR');
-  }
-
-  /**
-   * Get Referer - it cannot really be trusted.
-   * @return string|null
-   */
-  public function getReferer()
-  {
-    return $this->envData->getParam('HTTP_REFERER');
+    return $this->REMOTE_ADDR;
   }
 
   /**
    * Get User Agent
+   *
    * @return string|null
    */
   public function getUserAgent()
   {
-    if ($this->envData->getParam('USER_AGENT')) {
-      return $this->envData->getParam('USER_AGENT');
+    if ($this->USER_AGENT) {
+      return $this->USER_AGENT;
     }
 
-    if ($this->envData->getParam('HTTP_USER_AGENT')) {
-      return $this->envData->getParam('HTTP_USER_AGENT');
+    if ($this->HTTP_USER_AGENT) {
+      return $this->HTTP_USER_AGENT;
     }
 
     return null;
   }
 
   /**
-   * @return mixed|null
+   * Gives you the current page URL
+   *
+   * @return string
    */
-  public function getServerName()
+  public function getUrl()
   {
-    return $this->envData->getParam('SERVER_NAME');
-  }
+    $protocol = strpos(strtolower($this->PATH_INFO), 'https') === false ? 'http' : 'https';
 
-  /**
-   * The REQUEST_URI
-   * @return mixed|null
-   */
-  public function getUri()
-  {
-    return $this->envData->getParam('REQUEST_URI');
+    return $protocol . '://' . $this->getHost();
   }
 
   /**
    * Try to get a request header.
+   *
    * @param string $header
+   *
    * @return array
    */
   public function getRequestHeader($header)
   {
     $header = str_replace('-', '_', strtoupper($header));
-    $value  = $this->envData->getParam('HTTP_' . $header);
+    $value  = $this->{'HTTP_' . $header};
 
     if (!$value) {
       $headers = $this->getRequestHeaders();
@@ -253,69 +217,16 @@ class Pimf_Environment
    *
    * @return array
    */
-  protected function getRequestHeaders()
+  public function getRequestHeaders()
   {
     $headers = array();
 
-    if (function_exists('apache_request_headers')) {
-      $tmpHeaders = apache_request_headers();
-
-      foreach ($tmpHeaders as $key => $value) {
-        $headers[str_replace('-', '_', strtoupper($key))] = $value;
-      }
-    } else {
-      foreach ($this->envData as $key => $value) {
-        if ('HTTP_' === substr($key, 0, 5)) {
-          $headers[substr($key, 5)] = $value;
-        }
+    foreach ($this->envData->getAll() as $key => $value) {
+      if ('HTTP_' === substr($key, 0, 5)) {
+        $headers[substr($key, 5)] = $value;
       }
     }
 
     return $headers;
-  }
-
-  /**
-   * Are we in a web environment?
-   * @return boolean
-   */
-  public static function isWeb()
-  {
-    return self::isApache() || self::isIIS() || self::isCgi();
-  }
-
-  /**
-   * Are we in a cli environment?
-   * @return boolean
-   */
-  public static function isCli()
-  {
-    return PHP_SAPI === 'cli';
-  }
-
-  /**
-   * Are we in a cgi environment?
-   * @return boolean
-   */
-  public static function isCgi()
-  {
-    return PHP_SAPI === 'cgi-fcgi' || PHP_SAPI === 'cgi';
-  }
-
-  /**
-   * Are we served through Apache[2]?
-   * @return boolean
-   */
-  public static function isApache()
-  {
-    return PHP_SAPI === 'apache2handler' || PHP_SAPI === 'apachehandler';
-  }
-
-  /**
-   * Are we served through IIS?
-   * @return boolean
-   */
-  public static function isIIS()
-  {
-    return PHP_SAPI == 'isapi';
   }
 }
