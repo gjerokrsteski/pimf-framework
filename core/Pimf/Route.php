@@ -141,9 +141,11 @@ class Route
     $uri = Registry::get('env')->REQUEST_URI;
     $pos = strpos($uri, '?');
 
-    $config=\Pimf\Registry::get('conf');
-	$base_uri=empty($config['app']['url'])?parse_url(""): parse_url(  $config['app']['url']  );
-	$base_path=isset($base_uri['path'])?$base_uri['path']:"";
+    $app=\Pimf\Registry::get('conf'); $app=$app['app'];
+    $app_url=empty($app['url'])?"":$app['url'];
+	$base_uri=parse_url(  $app_url  );
+ 	$base_path=isset($base_uri['path'])?$base_uri['path']:"";
+
 	if(strlen( $base_path )>0) {
 		// if $base_path exists
 		if(strpos($uri,$base_path)==0) $uri=substr($uri,strlen($base_path));

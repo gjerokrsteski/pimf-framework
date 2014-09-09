@@ -4,6 +4,8 @@ class RouteTest extends PHPUnit_Framework_TestCase
   protected static function mockUri($fake)
   {
     \Pimf\Registry::set('env', new \Pimf\Environment(array('REQUEST_URI'=>$fake)));
+	$url='http://localhost/pimf';
+	\Pimf\Registry::set('conf', array(	'app' => array(	'routeable' => true,	'url' => $url,	'index' => 'index.php' ) ));
   }
 
 
@@ -23,7 +25,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
    */
   public function testMainPageWillCallController()
   {
-    self::mockUri('/');
+    self::mockUri('/pimf/');
 
     $route = new \Pimf\Route('/', array('controller' => 'home'));
 
@@ -40,7 +42,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
    */
   public function testWillCallControllerProfileWithDynamicMethod()
   {
-    self::mockUri('/profile/show');
+    self::mockUri('/pimf/profile/show');
 
     $route = new \Pimf\Route('/profile/:action', array('controller' => 'profile'));
 
@@ -57,7 +59,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
    */
   public function testDefineFiltersForUrlParameters()
   {
-    self::mockUri('/users/174');
+    self::mockUri('/pimf/users/174');
 
     $route = new \Pimf\Route('/users/:id', array('controller' => 'users'), array('id' => '[\d]{1,8}'));
 
@@ -71,7 +73,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
   public function testDefineFiltersForUrlParametersWithNoMatchingIdValue()
   {
-    self::mockUri('/users/berry');
+    self::mockUri('/pimf/users/berry');
 
     $route = new \Pimf\Route('/users/:first-name', array(), array('first-name' => '[a-zA-Z]{3,}'));
 
@@ -80,7 +82,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
   public function testGetParamsIfRouteMatches()
   {
-    self::mockUri('/pimf/rocks/123');
+    self::mockUri('/pimf/pimf/rocks/123');
 
     $route = new \Pimf\Route('/:controller/:action/:id');
 
@@ -94,7 +96,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
   public function testGetParamsIfRouteAndTargetMatches()
   {
-    self::mockUri('/users/123');
+    self::mockUri('/pimf/users/123');
 
     $route = new \Pimf\Route('/users/:id', array('controller' => 'users'));
 
@@ -108,7 +110,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
   public function testDirectRuleMapping()
   {
-    self::mockUri('/login');
+    self::mockUri('/pimf/login');
 
     $route = new \Pimf\Route('/login', array('controller' => 'auth', 'action' => 'login'));
 
@@ -122,7 +124,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
   public function testByCondition()
   {
-    self::mockUri('/users/show/Boby');
+    self::mockUri('/pimf/users/show/Boby');
 
     $route = new \Pimf\Route('/users/show/:firstname', array(), array('firstname' => '\w+'));
 
