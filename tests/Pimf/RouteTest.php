@@ -23,6 +23,16 @@ class RouteTest extends PHPUnit_Framework_TestCase
   }
 
   /**
+   * @throws \RuntimeException
+   */
+  public function testRequestUriDoesNotMatchSiteBaseUrl()
+  {
+    self::mockUri('/not-pimf-sub-dir/rocks/');
+
+    new \Pimf\Route('/foo');
+  }
+
+  /**
    * @testdox Main page will call controller "Home"
    */
   public function testMainPageWillCallController()

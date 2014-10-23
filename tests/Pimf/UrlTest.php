@@ -14,6 +14,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
   {
     $env = array('HTTPS' => $switch, 'SCRIPT_NAME' => __FILE__, 'HOST' => 'http://localhost',
                  'SERVER_PROTOCOL' => 'HTTP/1.0');
+
     \Pimf\Registry::set('env', new \Pimf\Environment($env));
   }
 
@@ -170,5 +171,10 @@ class UrlTest extends PHPUnit_Framework_TestCase
   {
     self::fakeConf('index.php', false, true, '', 'http://web.com/css/');
     $this->assertEquals('http://web.com/css/some.css', \Pimf\Url::to_asset('http://web.com/css/some.css'));
+  }
+
+  public function testValidNewNotation()
+  {
+    $this->assertTrue(\Pimf\Url::valid('//web.com'));
   }
 }
