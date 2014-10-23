@@ -141,7 +141,7 @@ class Route
   {
     $uri       = Registry::get('env')->REQUEST_URI;
     $pos       = strpos($uri, '?');
-    $app       = \Pimf\Registry::get('conf');
+    $app       = Registry::get('conf');
     $app_url   = empty($app['app']['url']) ? "" : $app['app']['url'];
     $base_uri  = parse_url($app_url);
     $base_path = isset($base_uri['path']) ? $base_uri['path'] : "";
@@ -156,7 +156,7 @@ class Route
     }
 
     if ($pos !== false) {
-      $uri = substr($uri, 0, $pos);
+      return substr($uri, 0, $pos);
     }
 
     return $uri;
