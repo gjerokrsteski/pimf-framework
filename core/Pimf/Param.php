@@ -40,7 +40,7 @@ class Param
    * @param null|string $defaultValue
    * @param bool   $filtered If you trust foreign input introduced to your PHP code - set to FALSE!
    *
-   * @return string
+   * @return mixed
    */
   public function get($index, $defaultValue = null, $filtered = true)
   {
@@ -60,9 +60,9 @@ class Param
   /**
    * Never ever (ever) trust foreign input introduced to your PHP code!
    *
-   * @param array|string $rawData
+   * @param mixed $rawData
    *
-   * @return array|bool|string
+   * @return mixed
    */
   public static function filter($rawData)
   {
