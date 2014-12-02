@@ -85,7 +85,7 @@ class Dba extends Storage
   public function __destruct()
   {
     if ($this->dba) {
-      @dba_close($this->dba);
+      dba_close($this->dba);
       $this->dba = null;
     }
   }
