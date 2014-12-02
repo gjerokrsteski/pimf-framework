@@ -63,7 +63,7 @@ class File extends Storage implements Cleanable
   public function delete($key)
   {
     if (file_exists($this->path . $key)) {
-      @unlink($this->path . $key);
+      unlink($this->path . $key);
     }
   }
 

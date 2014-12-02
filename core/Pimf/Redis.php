@@ -172,11 +172,7 @@ class Redis
       return $this->connection;
     }
 
-    $this->connection = @fsockopen($this->host, $this->port, $error, $message);
-
-    if ($this->connection === false) {
-      throw new \RuntimeException("Error making Redis connection: {$error} - {$message}");
-    }
+    $this->connection = fsockopen($this->host, $this->port, $error, $message);
 
     $this->select($this->database);
 

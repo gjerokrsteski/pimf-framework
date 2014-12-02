@@ -220,7 +220,7 @@ class Dba extends Storage
       // and reopen on next use.
       $this->__destruct();
 
-      @unlink($this->file);
+      unlink($this->file);
 
       clearstatcache();
 

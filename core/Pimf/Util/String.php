@@ -25,7 +25,7 @@ class String
    */
   public static function isSerialized($string)
   {
-    return (@unserialize($string) !== false || $string == 'b:0;');
+    return (unserialize($string) !== false || $string == 'b:0;');
   }
 
   /**

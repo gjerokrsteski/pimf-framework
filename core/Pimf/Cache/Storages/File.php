@@ -97,7 +97,7 @@ class File extends Storage
   {
     if (file_exists($this->path . $key)) {
 
-      @unlink($this->path . $key);
+      unlink($this->path . $key);
 
       clearstatcache();
 
