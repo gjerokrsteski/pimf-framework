@@ -135,14 +135,29 @@ class Route
 
   /**
    * @return string
+   * @throws \RuntimeException If does not match site base url
    */
   private function computeUri()
   {
-    $uri = Registry::get('env')->REQUEST_URI;
-    $pos = strpos($uri, '?');
+    $uri       = Registry::get('env')->REQUEST_URI;
+    $pos       = strpos($uri, '?');
+    $app       = Registry::get('conf');
+    $app       = $app['app'];
+    $app_url   = empty($app['url']) ? "" : $app['url'];
+    $base_uri  = parse_url($app_url);
+    $base_path = isset($base_uri['path']) ? $base_uri['path'] : "";
+
+    if (strlen($base_path) > 0) {
+      // if $base_path exists
+      if (strpos($uri, $base_path) == 0) {
+        $uri = substr($uri, strlen($base_path));
+      } else {
+        throw \RuntimeException('request uri does not match site base url');
+      }
+    }
 
     if ($pos !== false) {
-      $uri = substr($uri, 0, $pos);
+      return substr($uri, 0, $pos);
     }
 
     return $uri;
