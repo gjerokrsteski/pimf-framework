@@ -10,7 +10,7 @@ namespace Pimf;
  */
 function value($value)
 {
-  return (is_callable($value) and !is_string($value)) ? call_user_func($value) : $value;
+  return (is_callable($value) && !is_string($value)) ? call_user_func($value) : $value;
 }
 
 /**
