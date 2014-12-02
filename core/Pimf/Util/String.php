@@ -37,7 +37,7 @@ class String
    */
   public static function checkUtf8Encoding($string)
   {
-    if (!mb_check_encoding($string, 'UTF-8') or
+    if (!mb_check_encoding($string, 'UTF-8') ||
       !$string == mb_convert_encoding(mb_convert_encoding($string, 'UTF-32', 'UTF-8'), 'UTF-8', 'UTF-32')
     ) {
       return false;

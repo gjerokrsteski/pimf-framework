@@ -116,7 +116,8 @@ class Sanitize
     $words = array ('javascript', 'vbscript', 'script', 'applet', 'alert', 'document', 'write', 'cookie', 'window');
     foreach ($words as $word) {
       $temp = '';
-      for ($i = 0; $i < strlen($word); $i++) {
+      $len = strlen($word);
+      for ($i = 0; $i < $len; $i++) {
         $temp .= substr($word, $i, 1) . "\s*";
       }
       $temp   = substr($temp, 0, -3);
@@ -213,4 +214,4 @@ class Sanitize
     }
     return $string;
   }
-} 
+}

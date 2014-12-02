@@ -54,7 +54,7 @@ final class Cli
           echo 'controller: ' . strtolower(end($controller)) . '' . PHP_EOL;
 
           array_map(
-            function ($method) {
+            function (\ReflectionMethod $method) {
               if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
                 echo PHP_EOL . ' action: ' . $command . ' ' . PHP_EOL;
               }

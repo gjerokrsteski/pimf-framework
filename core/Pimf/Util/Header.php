@@ -24,7 +24,7 @@ class Header extends Header\ContentType
    */
   public static function clear()
   {
-    if (!headers_sent() && error_get_last() == null) {
+    if (!headers_sent() && error_get_last() === null) {
       header_remove();
     }
   }
