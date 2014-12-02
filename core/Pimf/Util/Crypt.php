@@ -3,11 +3,13 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 namespace Pimf\Util;
 
 /**
+ * Can be used to store data you need to decrypt later, like the contents of cookies.
+ * It should never be used to store passwords. Instead you should use the one way hashing methods.
  *
  * @package Util
  * @link    https://bugs.php.net/bug.php?id=39736

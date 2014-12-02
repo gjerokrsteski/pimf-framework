@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 namespace Pimf;
 
@@ -18,6 +18,7 @@ namespace Pimf;
  * @property string HTTPS                  Is the application running under HTTPS protocol?
  * @property string SERVER_PROTOCOL        Name and revision of the information protocol via which the page was requested; i.e. 'HTTP/1.0';
  * @property string CONTENT_LENGTH         The Content-Length
+ * @property string CONTENT_TYPE           The Content-Type
  * @property string HOST                   The name of the server host under which the current script is executing.
  * @property string SERVER_NAME            The name of the server host under which the current script is executing.
  * @property string SERVER_PORT            Get the port

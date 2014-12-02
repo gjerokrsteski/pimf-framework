@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c) Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf;
@@ -54,18 +54,17 @@ final class Application
 
   /**
    * Please bootstrap first, than run the application!
-   *
    * Run a application, let application accept a request, route the request,
    * dispatch to controller/action, render response and return response to client finally.
    *
-   * @param array $get    Array of variables passed to the current script via the URL parameters.
-   * @param array $post   Array of variables passed to the current script via the HTTP POST method.
+   * @param array $get Array of variables passed to the current script via the URL parameters.
+   * @param array $post Array of variables passed to the current script via the HTTP POST method.
    * @param array $cookie Array of variables passed to the current script via HTTP Cookies.
+   * @param array $files An associative array FILES of items uploaded to the current script via the HTTP POST method.
    *
-   * @throws \LogicException If application not bootstrapped.
    * @return void
    */
-  public static function run(array $get, array $post, array $cookie)
+  public static function run(array $get, array $post, array $cookie, array $files)
   {
     $cli = array();
     if (Sapi::isCli()) {
@@ -85,7 +84,7 @@ final class Application
       $repository = BASE_PATH . 'pimf-framework/core/Pimf/Controller';
     }
 
-    $resolver = new Resolver(new Request($get, $post, $cookie, $cli), $repository, $prefix);
+    $resolver = new Resolver(new Request($get, $post, $cookie, $cli, $files), $repository, $prefix);
 
     $sessionized = (Sapi::isWeb() && $conf['session']['storage'] !== '');
 
