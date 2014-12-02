@@ -1,7 +1,7 @@
 {
     "name": "gjerokrsteski/pimf-framework",
     "description": "Micro framework for PHP that emphasises minimalism and simplicity",
-    "version": "1.8.*",
+    "version": "1.8.6",
     "license": "BSD",
     "homepage": "http://pimf-framework.de",
     "minimum-stability": "stable",
