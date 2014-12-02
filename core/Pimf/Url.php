@@ -147,7 +147,7 @@ class Url
    *
    * @return string
    */
-  public static function as_https($url = '')
+  public static function asHttps($url = '')
   {
     return static::to($url, true);
   }
@@ -160,7 +160,7 @@ class Url
    *
    * @return string
    */
-  public static function to_asset($url, $https = null)
+  public static function toAsset($url, $https = null)
   {
     if (static::valid($url) || static::valid('http:' . $url)) {
       return $url;

@@ -81,10 +81,10 @@ class UrlTest extends PHPUnit_Framework_TestCase
   public function testToAssetGeneratesURLWithoutFrontControllerInURL()
   {
     self::fakeConf('');
-    $this->assertEquals(self::$testapp_url . '/image.jpg', \Pimf\Url::to_asset('image.jpg'), '#1');
-    $this->assertEquals(self::$testapp_ssl_url . '/image.jpg', \Pimf\Url::to_asset('image.jpg', true), '#2');
+    $this->assertEquals(self::$testapp_url . '/image.jpg', \Pimf\Url::toAsset('image.jpg'), '#1');
+    $this->assertEquals(self::$testapp_ssl_url . '/image.jpg', \Pimf\Url::toAsset('image.jpg', true), '#2');
     self::fakeHttps('on');
-    $this->assertEquals(self::$testapp_ssl_url . '/image.jpg', \Pimf\Url::to_asset('image.jpg'));
+    $this->assertEquals(self::$testapp_ssl_url . '/image.jpg', \Pimf\Url::toAsset('image.jpg'));
   }
 
   public function testComputingCleanerURLs()
@@ -153,24 +153,24 @@ class UrlTest extends PHPUnit_Framework_TestCase
   public function testUrlAsHttps()
   {
     self::fakeConf('', true);
-    $this->assertEquals(self::$testapp_ssl_url . '/user/profile', \Pimf\Url::as_https('user/profile'));
+    $this->assertEquals(self::$testapp_ssl_url . '/user/profile', \Pimf\Url::asHttps('user/profile'));
   }
 
   public function testGenerateApplicationUrlAssetByExternalUrl()
   {
-    $this->assertEquals('http://web.com/some.css', \Pimf\Url::to_asset('http://web.com/some.css'));
+    $this->assertEquals('http://web.com/some.css', \Pimf\Url::toAsset('http://web.com/some.css'));
   }
 
   public function testShootUsThroughDifferentServerOrThird_partyContentDeliveryNetwork()
   {
     self::fakeConf('', false, true, '', 'http://web.com/css/');
-    $this->assertEquals('http://web.com/css/some.css', \Pimf\Url::to_asset('http://web.com/css/some.css'));
+    $this->assertEquals('http://web.com/css/some.css', \Pimf\Url::toAsset('http://web.com/css/some.css'));
   }
 
   public function testThatWeDoNotNeedToComeThroughTheFrontController()
   {
     self::fakeConf('index.php', false, true, '', 'http://web.com/css/');
-    $this->assertEquals('http://web.com/css/some.css', \Pimf\Url::to_asset('http://web.com/css/some.css'));
+    $this->assertEquals('http://web.com/css/some.css', \Pimf\Url::toAsset('http://web.com/css/some.css'));
   }
 
   public function testValidNewNotation()

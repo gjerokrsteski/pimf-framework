@@ -77,11 +77,9 @@ class Serializer
    */
   public static function serializeNative($value)
   {
-    $ret = (extension_loaded('igbinary') && function_exists('igbinary_serialize')) ? @igbinary_serialize($value) : @serialize($value);
-
-    self::bombIf($ret);
-
-    return $ret;
+    return (extension_loaded('igbinary') && function_exists('igbinary_serialize'))
+      ? igbinary_serialize($value)
+      : serialize($value);
   }
 
   /**
@@ -92,15 +90,9 @@ class Serializer
    */
   public static function unserializeNative($serialized)
   {
-    $ret = (extension_loaded('igbinary') && function_exists('igbinary_unserialize'))
-      ? @igbinary_unserialize($serialized)
-      : @unserialize(
-        $serialized
-      );
-
-    self::bombIf($ret);
-
-    return $ret;
+    return (extension_loaded('igbinary') && function_exists('igbinary_unserialize'))
+      ? igbinary_unserialize($serialized)
+      : unserialize($serialized);
   }
 
   /**
@@ -120,23 +112,10 @@ class Serializer
    */
   private static function unmask($item)
   {
-    if (isset($item->scalar)) {
+    if (is_object($item) && property_exists($item, 'scalar')) {
       return $item->scalar;
     }
 
     return (array)$item;
-  }
-
-  /**
-   * @param boolean $valid
-   *
-   * @throws \RuntimeException
-   */
-  private static function bombIf($valid)
-  {
-    if ($valid === false) {
-      $err = error_get_last();
-      throw new \RuntimeException($err['message']);
-    }
   }
 }

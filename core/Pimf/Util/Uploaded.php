@@ -182,12 +182,9 @@ class Uploaded extends File
 
         $target = $this->getTargetFile($dir, $name);
 
-        if (!@move_uploaded_file($this->getPathname(), $target)) {
-          $error = error_get_last();
-          throw new \RuntimeException("Could not move the file {$this->getPathname()} to $target ({$error['message']})");
-        }
+        move_uploaded_file($this->getPathname(), $target);
 
-        @chmod($target, 0666 & ~umask());
+        chmod($target, 0666 & ~umask());
 
         return $target;
       }

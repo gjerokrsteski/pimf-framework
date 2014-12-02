@@ -81,7 +81,7 @@ class Core extends Base
     clearstatcache();
   }
 
-  public function create_session_tableCliAction()
+  public function createSessionTableCliAction()
   {
     $std  = new Std();
     $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
@@ -89,7 +89,7 @@ class Core extends Base
     echo 'success='.(int)$this->createTable($type, 'session')."\n";
   }
 
-  public function create_cache_tableCliAction()
+  public function createCacheTableCliAction()
   {
     $std  = new Std();
     $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');

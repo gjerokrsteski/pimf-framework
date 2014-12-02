@@ -58,12 +58,9 @@ class File extends \SplFileInfo
   {
     $target = $this->getTargetFile($dir, $name);
 
-    if (!@rename($this->getPathname(), $target)) {
-      $error = error_get_last();
-      throw new \RuntimeException("Could not move the file {$this->getPathname()} to $target ({$error['message']})");
-    }
+    rename($this->getPathname(), $target);
 
-    @chmod($target, 0666 & ~umask());
+    chmod($target, 0666 & ~umask());
 
     return $target;
   }
