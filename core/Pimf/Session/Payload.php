@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf\Session;
@@ -84,7 +84,7 @@ class Payload
     }
 
     // If the session doesn't exist or is invalid.
-    if (is_null($this->session) or static::expired($this->session)) {
+    if (is_null($this->session) || static::expired($this->session)) {
       $this->exists  = false;
       $this->session = $this->storage->fresh();
     }
@@ -166,7 +166,7 @@ class Payload
    */
   protected function isIn($key, array $session)
   {
-    if (array_key_exists($key, $session) and $session[$key] !== null) {
+    if (array_key_exists($key, $session) && $session[$key] !== null) {
       return $session[$key];
     }
 

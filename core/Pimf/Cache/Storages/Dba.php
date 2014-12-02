@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf\Cache\Storages;

@@ -79,6 +79,7 @@ class ErrorTest extends PHPUnit_Framework_TestCase
     \Pimf\Registry::set('env', new \Pimf\Environment($server));
 
     $exception = new \Exception('boom');
+
     \Pimf\Error::exception($exception, false);
   }
 }

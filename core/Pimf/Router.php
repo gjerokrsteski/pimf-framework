@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf;
@@ -29,7 +29,9 @@ class Router
   public function __construct()
   {
     //it is a pimf-framework restriction.
-    $this->map(new Route('/:controller'))->map(new Route('/:controller/:action'))->map(new Route('/:controller/:action/:id'));
+    $this->map(new Route('/:controller'))
+         ->map(new Route('/:controller/:action'))
+         ->map(new Route('/:controller/:action/:id'));
   }
 
   /**

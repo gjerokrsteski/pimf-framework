@@ -21,7 +21,7 @@
 </p>
 
 <p>
-  Perhaps you would like to go to our <a href="<?php echo $home = url('/') ?>"><?php echo $home ?></a>
+  Perhaps you would like to go to our <a href="<?php echo $home = Pimf\url('/') ?>"><?php echo $home ?></a>
 </p>
 
 </body>

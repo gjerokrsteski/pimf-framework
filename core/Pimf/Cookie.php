@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf;
@@ -107,7 +107,7 @@ class Cookie
     // If we are attempting to send a secure cookie over the insecure HTTP.
     $conf = Registry::get('conf');
 
-    if ($secure === true and $conf['ssl'] === false) {
+    if ($secure === true && $conf['ssl'] === false) {
       throw new \RuntimeException("Attempting to set secure cookie over HTTP!");
     }
 

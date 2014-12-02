@@ -3,7 +3,7 @@
  * Util
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 namespace Pimf\Util\String;
 
@@ -67,7 +67,10 @@ class Sanitize
     $matches = array();
 
     if (preg_match_all("/<(.+?)>/si", $string, $matches)) {
-      for ($i = 0; $i < count($matches['0']); $i++) {
+
+      $count = count($matches['0']);
+
+      for ($i = 0; $i < $count; $i++) {
         $string = str_replace(
           $matches['1'][$i],
           html_entity_decode($matches['1'][$i], ENT_COMPAT, $charset),

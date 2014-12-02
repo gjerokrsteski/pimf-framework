@@ -3,7 +3,7 @@
  * Database
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf\Pdo;
@@ -35,7 +35,7 @@ class Sqlserver extends Connector
     $port = (isset($config['port'])) ? ',' . $config['port'] : '';
 
     //check for dblib for mac users connecting to mssql
-    if (isset($config['dsn_type']) && !empty($config['dsn_type']) and $config['dsn_type'] == 'dblib') {
+    if (isset($config['dsn_type']) && !empty($config['dsn_type']) && $config['dsn_type'] == 'dblib') {
       $dsn = "dblib:host={$config['host']}{$port};dbname={$config['database']}";
     } else {
       $dsn = "sqlsrv:Server={$config['host']}{$port};Database={$config['database']}";

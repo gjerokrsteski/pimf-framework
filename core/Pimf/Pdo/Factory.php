@@ -3,7 +3,7 @@
  * Database
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf\Pdo;
@@ -25,7 +25,7 @@ class Factory
    */
   public static function get(array $config)
   {
-    if (!isset($config['driver']) or !$config['driver']) {
+    if (!isset($config['driver']) || !$config['driver']) {
       throw new \RuntimeException('no driver specified');
     }
 
@@ -35,7 +35,7 @@ class Factory
       throw new \UnexpectedValueException('PDO driver "' . $driver . '" not supported by PIMF');
     }
 
-    if (!extension_loaded('pdo') or !extension_loaded('pdo_' . $driver)) {
+    if (!extension_loaded('pdo') || !extension_loaded('pdo_' . $driver)) {
       throw new \RuntimeException('Please navigate to "http://php.net/manual/pdo.installation.php" '
         . ' to find out how to install "PDO" with "pdo_' . $driver . '" on your system!');
     }

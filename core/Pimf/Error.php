@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf;
@@ -29,7 +29,7 @@ class Error
   {
     static::log($exception);
 
-    ob_get_length() > 0 and ob_get_level() and ob_end_clean();
+    ob_get_length() > 0 && ob_get_level() && ob_end_clean();
 
     $conf = Registry::get('conf');
 

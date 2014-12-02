@@ -53,3 +53,7 @@ Read the PIMF Starter book almost anywhere. Available as a PDF, EPUB and MOBI. Y
 Framework Sponsor
 -------------------
 JetBRAINS supports the development of the PIMF with PHPStorm licenses and we feel confidential that PHPStorm strongly influences the PIMF's quality. Use PHPStorm! http://www.jetbrains.com/phpstorm/
+
+### License
+
+The PIMF framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)

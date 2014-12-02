@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf;
@@ -162,7 +162,7 @@ class Event
 
           // If the event is set to halt,
           // return the first response that is not null.
-          if ($halt and !is_null($response)) {
+          if ($halt && !is_null($response)) {
             return $response;
           }
 

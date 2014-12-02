@@ -3,12 +3,12 @@
  * Controller
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf\Controller;
 
-use Pimf\Registry, Pimf\Util\String, Pimf\Cli\Std, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
+use Pimf\Registry, Pimf\Cli\Std, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
 
 /**
  * @package Controller
@@ -126,7 +126,7 @@ class Core extends Base
 
       $file = str_replace('/', DS, BASE_PATH . 'pimf-framework/core/Pimf/_database/' . $file);
 
-      return $pdo->exec(file_get_contents(new File($file))) or print_r($pdo->errorInfo(), true);
+      return $pdo->exec(file_get_contents(new File($file))) || print_r($pdo->errorInfo(), true);
 
     } catch (\PDOException $pdoe) {
       throw new Bomb($pdoe->getMessage());

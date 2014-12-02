@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 
 namespace Pimf;
@@ -135,28 +135,14 @@ class Route
 
   /**
    * @return string
-   * @throws \RuntimeException If request uri does not match site base-url
    */
   private function computeUri()
   {
-    $uri       = Registry::get('env')->REQUEST_URI;
-    $pos       = strpos($uri, '?');
-    $app       = Registry::get('conf');
-    $app_url   = empty($app['app']['url']) ? "" : $app['app']['url'];
-    $base_uri  = parse_url($app_url);
-    $base_path = isset($base_uri['path']) ? $base_uri['path'] : "";
-
-    if (strlen($base_path) > 0) {
-      // if base_path exists
-      if (strpos($uri, $base_path) == 0) {
-        $uri = substr($uri, strlen($base_path));
-      } else {
-        throw \RuntimeException('request uri does not match site base url');
-      }
-    }
+    $uri = Registry::get('env')->REQUEST_URI;
+    $pos = strpos($uri, '?');
 
     if ($pos !== false) {
-      return substr($uri, 0, $pos);
+      $uri = substr($uri, 0, $pos);
     }
 
     return $uri;

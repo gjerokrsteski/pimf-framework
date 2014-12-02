@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://krsteski.de/new-bsd-license New BSD License
+ * @license   http://opensource.org/licenses/MIT MIT License
  */
 namespace Pimf;
 
@@ -133,7 +133,7 @@ class Url
 
     // disable SSL on all framework generated links to make it more
     // convenient to work with the site while developing locally.
-    if ($https and $conf['ssl']) {
+    if ($https && $conf['ssl']) {
       return preg_replace('~http://~', 'https://', $root, 1);
     }
 
@@ -162,7 +162,7 @@ class Url
    */
   public static function to_asset($url, $https = null)
   {
-    if (static::valid($url) or static::valid('http:' . $url)) {
+    if (static::valid($url) || static::valid('http:' . $url)) {
       return $url;
     }
 
