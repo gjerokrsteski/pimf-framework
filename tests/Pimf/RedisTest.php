@@ -140,7 +140,7 @@ class RedisTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \RuntimeException
+   * @expectedException \PHPUnit_Framework_Error_Warning
    */
   public function testIfErrorMakingRedisConnection()
   {
