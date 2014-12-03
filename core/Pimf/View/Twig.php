@@ -11,8 +11,6 @@ namespace Pimf\View;
 use Pimf\Contracts\Reunitable;
 use Pimf\View;
 use Pimf\Registry;
-use Pimf\Util\Value;
-
 
 /**
  * A view for TWIG a flexible, fast, and secure template engine for PHP.
@@ -59,8 +57,9 @@ class Twig extends View implements Reunitable
 
     \Twig_Autoloader::register();
 
-    $options = array('debug'       => Value::ensureBoolean($conf['view']['twig']['debug']),
-                     'auto_reload' => Value::ensureBoolean($conf['view']['twig']['auto_reload']),);
+    $options = array('debug'       => $conf['view']['twig']['debug'],
+                     'auto_reload' => $conf['view']['twig']['auto_reload']
+    );
 
     if ($conf['view']['twig']['cache'] === true) {
       $options['cache'] = $this->path . '/twig_cache';
