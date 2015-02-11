@@ -84,7 +84,7 @@ class File extends Storage implements Cleanable
 
     foreach ($files as $file) {
       if (filetype($file) == 'file' && filemtime($file) < $expiration) {
-        @unlink($file);
+        unlink($file);
       }
     }
   }
