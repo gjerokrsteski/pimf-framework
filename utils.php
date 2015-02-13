@@ -37,3 +37,4 @@ function url($route = '', array $params = array(), $https = null, $asset = false
 {
   return \Pimf\Url::compute($route, $params, $https, $asset);
 }
+
