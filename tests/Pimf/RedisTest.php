@@ -8,7 +8,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
    */
   protected function getRedis()
   {
-    return new \Pimf\Redis(new Pimf\Adapter\Socket('127.0.0.1', 80), 0);
+    return new \Pimf\Redis(new Pimf\Adapter\Socket('krsteski.de', 80), 0);
   }
 
   /**
