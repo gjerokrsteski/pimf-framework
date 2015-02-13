@@ -134,21 +134,23 @@ final class Application
       error_reporting(E_ALL | E_STRICT);
     } else {
 
+      $logger = self::$logger;
+
       set_exception_handler(
-        function ($exception) {
-          Error::exception($exception, self::$logger);
+        function ($exception) use ($logger) {
+          Error::exception($exception, $logger);
         }
       );
 
       set_error_handler(
-        function ($code, $error, $file, $line) {
-          Error::native($code, $error, $file, $line, self::$logger, error_reporting());
+        function ($code, $error, $file, $line) use ($logger) {
+          Error::native($code, $error, $file, $line, $logger, error_reporting());
         }
       );
 
       register_shutdown_function(
-        function () {
-          Error::shutdown(self::$logger, error_get_last());
+        function () use ($logger) {
+          Error::shutdown($logger, error_get_last());
         }
       );
 
