@@ -1,4 +1,0 @@
-1.-Welcome-to-PIMF.md
-2.-Feature-overview.md
-3.-Installation-&-Configuration.md
-3a.-Autoloading.md

@@ -8,14 +8,14 @@ class CliTest extends PHPUnit_Framework_TestCase
 
   public function testParsingCommand()
   {
-    $command = array('php pimf', 'core:init');
+    $command = array('php pimf', 'core:load');
 
     $this->assertEquals(
       array
       (
-          'core:init' => '',
+          'core:load' => '',
           'controller' => 'core',
-          'action' => 'init',
+          'action' => 'load',
       ),
 
      \Pimf\Cli::parse($command)

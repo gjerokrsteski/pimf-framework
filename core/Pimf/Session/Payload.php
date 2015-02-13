@@ -8,7 +8,7 @@
 
 namespace Pimf\Session;
 
-use Pimf\Registry;
+use Pimf\Config;
 use Pimf\Session;
 use Pimf\Util\String;
 use Pimf\Cookie;
@@ -105,10 +105,8 @@ class Payload
    */
   protected static function expired($session)
   {
-    $conf = Registry::get('conf');
-
     if (array_key_exists('last_activity', $session)) {
-      return (time() - $session['last_activity']) > ($conf['session']['lifetime'] * 60);
+      return (time() - $session['last_activity']) > (Config::get('session.lifetime') * 60);
     }
 
     return false;
@@ -279,8 +277,7 @@ class Payload
     // age it that should expire at the end of the user's next request.
     $this->age();
 
-    $conf        = Registry::get('conf');
-    $sessionConf = $conf['session'];
+    $sessionConf = Config::get('session');
 
     // save data into the specialized storage.
     $this->storage->save($this->session, $sessionConf, $this->exists);
@@ -305,8 +302,7 @@ class Payload
   public function clean()
   {
     if ($this->storage instanceof \Pimf\Contracts\Cleanable) {
-      $conf = Registry::get('conf');
-      $this->storage->clean(time() - ($conf['session']['lifetime'] * 60));
+      $this->storage->clean(time() - (Config::get('session.lifetime') * 60));
     }
   }
 

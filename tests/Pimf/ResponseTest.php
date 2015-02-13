@@ -1,19 +1,35 @@
 <?php
 class ResponseTest extends PHPUnit_Framework_TestCase
 {
+
+  private static $env;
+
+  protected static function fakeEnv($fake)
+  {
+    self::$env = new \Pimf\Environment((array)$fake);
+
+    $envData = self::$env->data();
+
+    \Pimf\Util\Header\ResponseStatus::setup($envData->get('SERVER_PROTOCOL', 'HTTP/1.0'));
+
+    \Pimf\Util\Header::setup(
+      self::$env->getUserAgent(),
+      self::$env->HTTP_IF_MODIFIED_SINCE,
+      self::$env->HTTP_IF_NONE_MATCH
+    );
+
+    \Pimf\Url::setup(self::$env->getUrl(), self::$env->isHttps());
+    \Pimf\Uri::setup(self::$env->PATH_INFO, self::$env->REQUEST_URI);
+    \Pimf\Util\Uuid::setup(self::$env->getIp(), self::$env->getHost());
+
+    return self::$env;
+  }
+
   public function testCreatingNewInstance()
   {
     $response = new \Pimf\Response('POST');
 
     $this->assertEquals('POST', $response->getMethod());
-  }
-
-  /**
-   * @expectedException RuntimeException
-   */
-  public function testCreatingNewInstanceExpectingExceptionIfNoRequestMethodGiven()
-  {
-    new \Pimf\Response('PUT');
   }
 
   public function testCreatingNewInstanceExpectingNoExceptionIfComesFromCli()
@@ -24,17 +40,6 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
   /**
    * @runInSeparateProcess
-   * @expectedException RuntimeException
-   */
-  public function testBombingExceptionIfMultipleTypesUsed()
-  {
-    $response = new \Pimf\Response('POST');
-    $response->asHTML()->asMSWord();
-  }
-
-  /**
-   * @runInSeparateProcess
-   * @outputBuffering enabled
    */
   public function testSendingJsonData()
   {
@@ -70,6 +75,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
   /**
    * @runInSeparateProcess
+   * @outputBuffering enabled
    * @expectedException RuntimeException
    */
   public function testBombingExceptionIfMultipleCachesSent()
@@ -80,6 +86,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
   /**
    * @runInSeparateProcess
+   * @outputBuffering enabled
    * @expectedException RuntimeException
    */
   public function testBombingExceptionIfNo_GET_RequestSent()
@@ -102,12 +109,13 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
   /**
    * @runInSeparateProcess
+   * @outputBuffering enabled
    */
   public function testSendPdfFile()
   {
     $server['USER_AGENT'] = 'Chrome/24.0.1312.57';
-    $env = new \Pimf\Environment($server);
-    \Pimf\Registry::set('env', $env);
+    self::fakeEnv($server);
+
 
     # start testing
 
@@ -117,12 +125,12 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
   /**
    * @runInSeparateProcess
+   * @outputBuffering enabled
    */
   public function testSendCsvFile()
   {
     $server['USER_AGENT'] = 'Chrome/24.0.1312.57';
-    $env = new \Pimf\Environment($server);
-    \Pimf\Registry::set('env', $env);
+    self::fakeEnv($server);
 
     # start testing
 
@@ -132,12 +140,12 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
   /**
    * @runInSeparateProcess
+   * @outputBuffering enabled
    */
   public function testSendZipFile()
   {
     $server['USER_AGENT'] = 'MSIE 5.5 blahh blahhh';
-    $env = new \Pimf\Environment($server);
-    \Pimf\Registry::set('env', $env);
+    self::fakeEnv($server);
 
     # start testing
 
@@ -147,12 +155,12 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
   /**
    * @runInSeparateProcess
+   * @outputBuffering enabled
    */
   public function testSendXZipFile()
   {
     $server['USER_AGENT'] = 'Chrome/24.0.1312.57';
-    $env = new \Pimf\Environment($server);
-    \Pimf\Registry::set('env', $env);
+    self::fakeEnv($server);
 
     # start testing
 
@@ -162,12 +170,12 @@ class ResponseTest extends PHPUnit_Framework_TestCase
 
   /**
    * @runInSeparateProcess
+   * @outputBuffering enabled
    */
   public function testSendMswordFile()
   {
     $server['USER_AGENT'] = 'Chrome/24.0.1312.57';
-    $env = new \Pimf\Environment($server);
-    \Pimf\Registry::set('env', $env);
+    self::fakeEnv($server);
 
     # start testing
 
@@ -227,8 +235,7 @@ class ResponseTest extends PHPUnit_Framework_TestCase
   public function testSendingWithCachingAndIfNotModifiedSinceOneSecond()
   {
     $server['HTTP_IF_MODIFIED_SINCE'] = gmdate('D, d M Y H:i:s', time()) . ' GMT';
-    $env = new \Pimf\Environment($server);
-    \Pimf\Registry::set('env', $env);
+    self::fakeEnv($server);
 
     # start testing
 

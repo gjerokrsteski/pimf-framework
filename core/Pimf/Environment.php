@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 namespace Pimf;
 
@@ -41,22 +41,22 @@ class Environment
   /**
    * @var Param
    */
-  private $envData;
+  private $data;
 
   /**
-   * @param array $envData Like $_SERVER
+   * @param array $server
    */
-  public function __construct(array $envData)
+  public function __construct(array $server)
   {
-    $this->envData = new Param($envData);
+    $this->data = new Param($server);
   }
 
   /**
    * @return Param
    */
-  public function getData()
+  public function data()
   {
-    return $this->envData;
+    return $this->data;
   }
 
   /**
@@ -66,7 +66,7 @@ class Environment
    */
   public function __get($key)
   {
-    return $this->envData->get($key);
+    return $this->data->get($key, null, false);
   }
 
   /**
@@ -221,7 +221,7 @@ class Environment
   {
     $headers = array();
 
-    foreach ($this->envData->getAll() as $key => $value) {
+    foreach ($this->data->getAll() as $key => $value) {
       if ('HTTP_' === substr($key, 0, 5)) {
         $headers[substr($key, 5)] = $value;
       }
@@ -229,4 +229,5 @@ class Environment
 
     return $headers;
   }
+
 }

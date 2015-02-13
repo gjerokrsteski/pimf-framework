@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 namespace Pimf;
@@ -104,10 +104,8 @@ class Cookie
 
     $value = static::hash($value) . '+' . $value;
 
-    // If we are attempting to send a secure cookie over the insecure HTTP.
-    $conf = Registry::get('conf');
-
-    if ($secure === true && $conf['ssl'] === false) {
+    // are we attempting to send a secure cookie over the insecure HTTP.
+    if ($secure === true && Config::get('ssl') === false) {
       throw new \RuntimeException("Attempting to set secure cookie over HTTP!");
     }
 
@@ -156,9 +154,7 @@ class Cookie
    */
   public static function hash($value)
   {
-    $conf = Registry::get('conf');
-
-    return hash_hmac('sha1', $value, $conf['app']['key']);
+    return hash_hmac('sha1', $value, Config::get('app.key'));
   }
 
   /**

@@ -3,13 +3,8 @@ class RouteTest extends PHPUnit_Framework_TestCase
 {
   protected static function mockUri($fake)
   {
-    \Pimf\Registry::set('env', new \Pimf\Environment(array('REQUEST_URI'=>$fake)));
-
-    $url = 'http://localhost/pimf';
-
-    \Pimf\Registry::set('conf', array(	'app' => array(	'routeable' => true,	'url' => $url,	'index' => 'index.php' ) ));
+    \Pimf\Uri::setup($fake, $fake);
   }
-
 
   #start testing
 
@@ -19,17 +14,7 @@ class RouteTest extends PHPUnit_Framework_TestCase
     self::mockUri('/pimf/rocks/');
 
     $route = new \Pimf\Route('/foo');
-    $this->assertEquals('/foo', $route->getRule());
-  }
-
-  /**
-   * @throws \RuntimeException
-   */
-  public function testRequestUriDoesNotMatchSiteBaseUrl()
-  {
-    self::mockUri('/not-pimf-sub-dir/rocks/');
-
-    new \Pimf\Route('/foo');
+    $this->assertEquals('/foo', $route->init()->getRule());
   }
 
   /**
@@ -37,11 +22,11 @@ class RouteTest extends PHPUnit_Framework_TestCase
    */
   public function testMainPageWillCallController()
   {
-    self::mockUri('/pimf/');
+    self::mockUri('/');
 
     $route = new \Pimf\Route('/', array('controller' => 'home'));
 
-    $this->assertTrue($route->matches(), 'bad route');
+    $this->assertTrue($route->init()->matches(), 'bad route');
 
     $this->assertEquals(
       array('controller' => 'home'),
@@ -54,11 +39,11 @@ class RouteTest extends PHPUnit_Framework_TestCase
    */
   public function testWillCallControllerProfileWithDynamicMethod()
   {
-    self::mockUri('/pimf/profile/show');
+    self::mockUri('/profile/show');
 
     $route = new \Pimf\Route('/profile/:action', array('controller' => 'profile'));
 
-    $this->assertTrue($route->matches(), 'bad route');
+    $this->assertTrue($route->init()->matches(), 'bad route');
 
     $this->assertEquals(
       array('controller' => 'profile', 'action' => 'show'),
@@ -71,11 +56,11 @@ class RouteTest extends PHPUnit_Framework_TestCase
    */
   public function testDefineFiltersForUrlParameters()
   {
-    self::mockUri('/pimf/users/174');
+    self::mockUri('/users/174');
 
     $route = new \Pimf\Route('/users/:id', array('controller' => 'users'), array('id' => '[\d]{1,8}'));
 
-    $this->assertTrue($route->matches(), 'bad route');
+    $this->assertTrue($route->init()->matches(), 'bad route');
 
     $this->assertEquals(
       array('controller' => 'users', 'id' => '174'),
@@ -85,20 +70,20 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
   public function testDefineFiltersForUrlParametersWithNoMatchingIdValue()
   {
-    self::mockUri('/pimf/users/berry');
+    self::mockUri('/users/berry');
 
     $route = new \Pimf\Route('/users/:first-name', array(), array('first-name' => '[a-zA-Z]{3,}'));
 
-    $this->assertFalse($route->matches(), 'route has not to match');
+    $this->assertFalse($route->init()->matches(), 'route has not to match');
   }
 
   public function testGetParamsIfRouteMatches()
   {
-    self::mockUri('/pimf/pimf/rocks/123');
+    self::mockUri('/pimf/rocks/123');
 
     $route = new \Pimf\Route('/:controller/:action/:id');
 
-    $this->assertTrue($route->matches(), 'bad route');
+    $this->assertTrue($route->init()->matches(), 'bad route');
 
     $this->assertEquals(
       array('controller' => 'pimf', 'action' => 'rocks', 'id' => '123'),
@@ -108,11 +93,11 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
   public function testGetParamsIfRouteAndTargetMatches()
   {
-    self::mockUri('/pimf/users/123');
+    self::mockUri('/users/123');
 
     $route = new \Pimf\Route('/users/:id', array('controller' => 'users'));
 
-    $this->assertTrue($route->matches(), 'bad route');
+    $this->assertTrue($route->init()->matches(), 'bad route');
 
     $this->assertEquals(
       array('controller' => 'users', 'id' => '123'),
@@ -122,11 +107,11 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
   public function testDirectRuleMapping()
   {
-    self::mockUri('/pimf/login');
+    self::mockUri('/login');
 
     $route = new \Pimf\Route('/login', array('controller' => 'auth', 'action' => 'login'));
 
-    $this->assertTrue($route->matches(), 'bad route');
+    $this->assertTrue($route->init()->matches(), 'bad route');
 
     $this->assertEquals(
       array('controller' => 'auth', 'action' => 'login'),
@@ -136,11 +121,11 @@ class RouteTest extends PHPUnit_Framework_TestCase
 
   public function testByCondition()
   {
-    self::mockUri('/pimf/users/show/Boby');
+    self::mockUri('/users/show/Boby');
 
     $route = new \Pimf\Route('/users/show/:firstname', array(), array('firstname' => '\w+'));
 
-    $this->assertTrue($route->matches(), 'bad route');
+    $this->assertTrue($route->init()->matches(), 'bad route');
 
     $this->assertEquals(
       array('firstname' => 'Boby'),

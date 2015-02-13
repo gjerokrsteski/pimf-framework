@@ -37,3 +37,33 @@ function url($route = '', array $params = array(), $https = null, $asset = false
 {
   return \Pimf\Url::compute($route, $params, $https, $asset);
 }
+
+/**
+ * Escape HTML entities in a string.
+ *
+ * @param string $value
+ *
+ * @return string
+ */
+function ent($value)
+{
+  return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
+}
+
+/**
+ * Relax the system and free up some memory
+ *
+ * @param int $seconds
+ */
+function relax($seconds = 1)
+{
+  sleep($seconds);
+  clearstatcache();
+
+  // free up the memory that could be lost
+  // through possible roots that are already
+  // recorded in the root buffer.
+  if (function_exists('gc_collect_cycles')) {
+    gc_collect_cycles();
+  }
+}

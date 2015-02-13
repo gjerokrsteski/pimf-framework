@@ -67,5 +67,13 @@ class PdoFactoryTest extends PHPUnit_Framework_TestCase
   {
     \Pimf\Pdo\Factory::get($driver);
   }
+
+  /**
+   * @expectedException RuntimeException
+   */
+  public function testIfDriverIsSupportedButNotLoaded()
+  {
+    \Pimf\Pdo\Factory::get(array('driver'=>'sqlserver'));
+  }
 }
  

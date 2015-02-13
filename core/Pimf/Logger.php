@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 namespace Pimf;
@@ -40,6 +40,26 @@ class Logger
    * @var bool
    */
   private $separator;
+
+  /**
+   * @var string
+   */
+  private static $remoteIp;
+
+  /**
+   * @var string
+   */
+  private static $script;
+
+  /**
+   * @param string $remoteIp
+   * @param string $script
+   */
+  public static function setup($remoteIp, $script)
+  {
+    self::$remoteIp = $remoteIp;
+    self::$script   = $script;
+  }
 
   /**
    * @param string $localeStorageDir Use better the local TMP dir or dir with mod 777.
@@ -142,11 +162,9 @@ class Logger
   {
     $msg = $this->format($msg, $severity);
 
-    // if severity is WARNING then write to warning file
     if ($severity == 'WARNING') {
       fwrite($this->warnHandle, $msg);
-    } // if severity is ERROR then write to error file
-    else if ($severity == 'ERROR') {
+    } else if ($severity == 'ERROR') {
       fwrite($this->errorHandle, $msg);
     } else {
       fwrite($this->handle, $msg);
@@ -161,7 +179,6 @@ class Logger
     ) {
 
       if (fclose($this->handle) === false) {
-        // Failure to close the log file
         $this->error('Logger failed to close the handle to the log file');
       }
 
@@ -180,13 +197,9 @@ class Logger
    */
   private function format($message, $severity)
   {
-    $registry = new Registry();
-    $remoteIP = $registry->env->getIp();
-    $script   = $registry->env->PHP_SELF;
+    $msg = date("m-d-Y") . " " . date("G:i:s") . " " . self::$remoteIp;
 
-    $msg = date("m-d-Y") . " " . date("G:i:s") . " " . $remoteIP;
-
-    $IPLength       = strlen($remoteIP);
+    $IPLength       = strlen(self::$remoteIp);
     $numWhitespaces = 15 - $IPLength;
 
     for ($i = 0; $i < $numWhitespaces; $i++) {
@@ -195,16 +208,14 @@ class Logger
 
     $msg .= " " . $severity . ": ";
 
-    // get the file name
-    $lastSlashIndex = strrpos($script, "/");
-    $fileName       = $script;
+    $lastSlashIndex = strrpos(self::$script, "/");
+    $fileName       = self::$script;
 
     if ($lastSlashIndex !== false) {
-      $fileName = substr($script, $lastSlashIndex + 1);
+      $fileName = substr(self::$script, $lastSlashIndex + 1);
     }
 
     $msg .= $fileName . "\t";
-    $msg .= $severity;
     $msg .= ": " . $message . "\r\n";
 
     return $msg;

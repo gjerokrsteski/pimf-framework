@@ -8,7 +8,7 @@
 
 namespace Pimf\Controller;
 
-use Pimf\Registry, Pimf\Cli\Std, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
+use Pimf\Config, Pimf\Cli\Std, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
 
 /**
  * @package Controller
@@ -32,8 +32,7 @@ class Core extends Base
   {
     clearstatcache();
 
-    $conf = Registry::get('conf');
-    $app  = 'app/' . $conf['app']['name'] . '/';
+    $app  = 'app/' . Config::get('app.name') . '/';
 
     $assets = array(
       BASE_PATH . $app . '_session/',
@@ -68,13 +67,16 @@ class Core extends Base
     chmod(BASE_PATH . 'pimf-framework/autoload.core.php', 0644);
 
     echo 'Create logging files' . PHP_EOL;
-    $handle = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-logs.txt', "at+");
+
+    $directory = Config::get('bootstrap.local_temp_directory');
+
+    $handle = fopen($file = $directory . 'pimf-logs.txt', "at+");
     fclose($handle);
     chmod($file, 0777);
-    $handle = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-warnings.txt', "at+");
+    $handle = fopen($file = $directory . 'pimf-warnings.txt', "at+");
     fclose($handle);
     chmod($file, 0777);
-    $handle = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-errors.txt', "at+");
+    $handle = fopen($file = $directory . 'pimf-errors.txt', "at+");
     fclose($handle);
     chmod($file, 0777);
 
@@ -86,7 +88,9 @@ class Core extends Base
     $std  = new Std();
     $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
 
-    echo 'success='.(int)$this->createTable($type, 'session')."\n";
+    var_dump(
+      $this->createTable($type, 'session')
+    );
   }
 
   public function createCacheTableCliAction()
@@ -94,7 +98,9 @@ class Core extends Base
     $std  = new Std();
     $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
 
-    echo 'success='.(int)$this->createTable($type, 'cache')."\n";
+    var_dump(
+      $this->createTable($type, 'cache')
+    );
   }
 
   /**
@@ -111,15 +117,13 @@ class Core extends Base
     try {
       $pdo = $file = null;
 
-      $conf = Registry::get('conf');
-
       switch ($for) {
         case 'cache':
-          $pdo  = Factory::get($conf['cache']['database']);
+          $pdo  = Factory::get(Config::get('cache.database'));
           $file = 'create-cache-table-' . $type . '.sql';
           break;
         case 'session':
-          $pdo  = Factory::get($conf['session']['database']);
+          $pdo  = Factory::get(Config::get('session.database'));
           $file = 'create-session-table-' . $type . '.sql';
           break;
       }

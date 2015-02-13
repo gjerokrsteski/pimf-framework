@@ -1,14 +1,15 @@
 <?php
 class RouterTest extends PHPUnit_Framework_TestCase
 {
+
   public static function setUpBeforeClass()
   {
-    \Pimf\Registry::set('conf', array('app'=> array('default_controller' => 'blog')));
+    \Pimf\Config::load( array('app'=> array('default_controller' => 'blog')), true);
   }
 
   protected static function mockUri($fake)
   {
-    \Pimf\Registry::set('env', new \Pimf\Environment(array('REQUEST_URI' => $fake)));
+    \Pimf\Uri::setup($fake, $fake);
   }
 
 

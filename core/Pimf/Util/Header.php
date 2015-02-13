@@ -8,7 +8,7 @@
 
 namespace Pimf\Util;
 
-use Pimf\Registry;
+use Pimf\Config;
 use Pimf\Sapi;
 
 /**
@@ -20,12 +20,41 @@ use Pimf\Sapi;
 class Header extends Header\ContentType
 {
   /**
+   * @var string
+   */
+  private static $userAgent;
+
+  /**
+   * @var string
+   */
+  private static $IfModifiedSince;
+
+  /**
+   * @var string
+   */
+  private static $IfNoneMatch;
+
+  /**
+   * @param string $userAgent
+   * @param string $IfModifiedSince
+   * @param string $IfNoneMatch
+   */
+  public static function edge($userAgent, $IfModifiedSince, $IfNoneMatch)
+  {
+    self::$userAgent       = $userAgent;
+    self::$IfModifiedSince = $IfModifiedSince;
+    self::$IfNoneMatch     = $IfNoneMatch;
+  }
+
+  /**
    * Removes previously set headers.
    */
   public static function clear()
   {
-    if (!headers_sent() && error_get_last() === null) {
-      header_remove();
+    if (headers_sent() && !error_get_last()) {
+      foreach ((array)headers_list() as $header) {
+        header_remove($header);
+      }
     }
   }
 
@@ -57,8 +86,7 @@ class Header extends Header\ContentType
 
     self::send($code, $status);
 
-    $conf    = Registry::get('conf');
-    $appTpl  = str_replace('/', DS, BASE_PATH . 'app/' . $conf['app']['name'] . '/_error/' . $code . '.php');
+    $appTpl  = str_replace('/', DS, BASE_PATH . 'app/' . Config::get('app.name') . '/_error/' . $code . '.php');
     $coreTpl = str_replace('/', DS, BASE_PATH . 'pimf-framework/core/Pimf/_error/' . $code . '.php');
     $coreTpl = str_replace(DS.'pimf-framework'.DS.'pimf-framework'.DS, DS.'pimf-framework'.DS, $coreTpl);
 
@@ -120,11 +148,9 @@ class Header extends Header\ContentType
    */
   public static function isModified($mtime, $etag = '')
   {
-    $env = Registry::get('env');
+    $modifiedSince = strtotime(preg_replace('/;.*$/', '', self::$IfModifiedSince));
 
-    $modified_since = strtotime(preg_replace('/;.*$/', '', $env->HTTP_IF_MODIFIED_SINCE));
-
-    return !($modified_since >= $mtime || $env->HTTP_IF_NONE_MATCH == $etag);
+    return !($modifiedSince >= $mtime || self::$IfNoneMatch == $etag);
   }
 
   /**
@@ -188,7 +214,7 @@ class Header extends Header\ContentType
    */
   public static function sendDownloadDialog($fileOrString, $fileName, $exit = true)
   {
-    $disposition = (false !== strpos(Registry::get('env')->getUserAgent(), 'MSIE 5.5')) ? '' : 'attachment; ';
+    $disposition = (false !== strpos(self::$userAgent, 'MSIE 5.5')) ? '' : 'attachment; ';
 
     header("Pragma: public");
     header("Expires: 0");

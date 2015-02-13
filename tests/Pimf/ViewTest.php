@@ -3,13 +3,14 @@ class ViewTest extends PHPUnit_Framework_TestCase
 {
   public static function setUpBeforeClass()
   {
-    \Pimf\Registry::set('conf',
+    \Pimf\Config::load(
       array(
         'app' => array(
           'name' => 'test-app',
         ),
         'environment' => 'testing'
-      )
+      ),
+      true
     );
   }
 
@@ -54,7 +55,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \OutOfRangeException
+   * @expectedException \PHPUnit_Framework_Error_Notice
    */
   public function testIfTemplateNotFound()
   {
@@ -63,7 +64,7 @@ class ViewTest extends PHPUnit_Framework_TestCase
   }
 
   /**
-   * @expectedException \OutOfBoundsException
+   * @expectedException \PHPUnit_Framework_Error_Notice
    */
   public function testIfRenderingUndefinedProperty()
   {

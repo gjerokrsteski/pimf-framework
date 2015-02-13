@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 namespace Pimf;
 
@@ -41,14 +41,9 @@ class Request
   public static $filesData;
 
   /**
-   * @var string
+   * @var Environment
    */
-  protected $content;
-
-  /**
-   * @var Param
-   */
-  public static $restData;
+  public $env;
 
   /**
    * @param array $getData
@@ -56,13 +51,15 @@ class Request
    * @param array $cookieData
    * @param array $cliData
    * @param array $filesData
+   * @param \Pimf\Environment $env
    */
   public function __construct(
     array $getData,
     array $postData = array (),
     array $cookieData = array (),
     array $cliData = array (),
-    array $filesData = array ()
+    array $filesData = array (),
+    \Pimf\Environment $env
   ) {
 
     static::$getData    = new Param((array)self::stripSlashesIfMagicQuotes($getData));
@@ -70,20 +67,33 @@ class Request
     static::$cookieData = new Param($cookieData);
     static::$cliData    = new Param((array)self::stripSlashesIfMagicQuotes($cliData));
     static::$filesData  = Util\Uploaded\Factory::get($filesData);
+    $this->env          = $env;
   }
 
   /**
-   * @param Environment $env
+   * For fetching body sent via PUT|DELETE|PATCH Http method.
+   *
+   * @param bool $asResource
+   *
+   * @return Param|resource|boolean
    */
-  public function fetchRestData(Environment $env)
+  public function streamInput($asResource = false)
   {
-    if (0 === strpos($env->getRequestHeader('CONTENT_TYPE'), 'application/x-www-form-urlencoded')
-      && in_array(strtoupper($env->getData()->get('REQUEST_METHOD', 'GET')), array('PUT', 'DELETE', 'PATCH'))
+    if (0 === strpos($this->env->getRequestHeader('CONTENT_TYPE'), 'application/x-www-form-urlencoded')
+      && in_array($this->env->data()->get('REQUEST_METHOD', 'GET'), array('PUT', 'DELETE', 'PATCH'))
     ) {
-      $data = array();
-      parse_str($this->getContent(), $data);
-      static::$restData = new Param($data);
+
+      if($asResource === true) {
+        return $this->getContent($asResource);
+      }
+
+      $body = array();
+      parse_str($this->getContent(), $body);
+
+      return new Param($body);
     }
+
+    return false;
   }
 
   /**
@@ -169,23 +179,25 @@ class Request
    * @param bool $asResource
    *
    * @return resource|string
-   * @throws \LogicException
+   * @throws \LogicException When using the resource twice times.
    */
   public function getContent($asResource = false)
   {
-    if (false === $this->content || (true === $asResource && null !== $this->content)) {
-      throw new \LogicException('can only be called once when using the resource return type');
+    static $content;
+
+    if (false === $content || (true === $asResource && null !== $content)) {
+      throw new \LogicException('resource can only be returned once');
     }
 
     if (true === $asResource) {
-      $this->content = false;
+      $content = false;
       return fopen('php://input', 'rb');
     }
 
-    if (null === $this->content) {
-      $this->content = file_get_contents('php://input');
+    if (null === $content) {
+      $content = file_get_contents('php://input');
     }
 
-    return $this->content;
+    return $content;
   }
 }
