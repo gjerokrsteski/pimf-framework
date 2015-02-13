@@ -84,6 +84,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
   public function testSetupErrorHandlingIfProductionEnvironment()
   {
     $app = new \Pimf\Application();
+    $app->bootstrap(self::$conf, $server = array());
 
     self::invokeMethod($app, 'setupErrorHandling', array(array('environment'=>'production')));
 
