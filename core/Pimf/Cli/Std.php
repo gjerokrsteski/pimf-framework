@@ -76,7 +76,7 @@ class Std
 
     while (true) {
 
-      echo "Please enter a " . $prompt . ":\n";
+      $this->view("Please enter a " . $prompt . ":");
 
       $value = $this->value();
 
@@ -84,7 +84,7 @@ class Std
         break;
       }
 
-      echo "[ Value format for " . $prompt . " is invalid! ]\n";
+      $this->view("[ Value format for " . $prompt . " is invalid! ]");
     }
 
     return $value;
@@ -99,5 +99,13 @@ class Std
   public function valid($validation, $value)
   {
     return strlen($value) > 0 && preg_match($validation, $value);
+  }
+
+  /**
+   * @param string $prompt
+   */
+  public function view($prompt)
+  {
+    echo $prompt . "\n";
   }
 }

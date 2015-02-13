@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 namespace Pimf;
@@ -61,11 +61,11 @@ class Session
    */
   public static function load()
   {
-    $conf = Registry::get('conf');
+    $session = Config::get('session');
 
-    static::start($conf['session']['storage']);
+    static::start($session['storage']);
 
-    static::$instance->load(Cookie::get($conf['session']['cookie']));
+    static::$instance->load(Cookie::get($session['cookie']));
   }
 
   /**
@@ -90,8 +90,6 @@ class Session
    */
   public static function factory($storage)
   {
-    $conf = Registry::get('conf');
-
     switch ($storage) {
       case 'apc':
         return new Storage\Apc(Cache::storage('apc'));
@@ -100,10 +98,10 @@ class Session
         return new Storage\Cookie();
 
       case 'file':
-        return new Storage\File($conf['session']['storage_path']);
+        return new Storage\File(Config::get('session.storage_path'));
 
       case 'pdo':
-        return new Storage\Pdo(Pdo\Factory::get($conf['session']['database']));
+        return new Storage\Pdo(Pdo\Factory::get(Config::get('session.database')));
 
       case 'memcached':
         return new Storage\Memcached(Cache::storage('memcached'));

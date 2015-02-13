@@ -1,5 +1,5 @@
 <?php
-class ParamTest extends PHPUnit_Framework_TestCase
+class ParamTest extends \PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {

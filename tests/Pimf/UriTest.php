@@ -1,5 +1,7 @@
 <?php
-class UriTest extends PHPUnit_Framework_TestCase {
+class UriTest extends \PHPUnit_Framework_TestCase {
+
+  private static $env;
 
 	public function tearDown()
 	{
@@ -10,7 +12,20 @@ class UriTest extends PHPUnit_Framework_TestCase {
 	protected function fakeUri($uri)
 	{
     $_SERVER = array('REQUEST_URI' => $uri, 'SCRIPT_NAME' => __FILE__, 'PATH_INFO' => $uri);
-    \Pimf\Registry::set('env', new \Pimf\Environment($_SERVER));
+    self::$env = new \Pimf\Environment($_SERVER);
+    $envData = self::$env->data();
+
+    \Pimf\Util\Header\ResponseStatus::setup($envData->get('SERVER_PROTOCOL', 'HTTP/1.0'));
+
+    \Pimf\Util\Header::setup(
+      self::$env->getUserAgent(),
+      self::$env->HTTP_IF_MODIFIED_SINCE,
+      self::$env->HTTP_IF_NONE_MATCH
+    );
+
+    \Pimf\Url::setup(self::$env->getUrl(), self::$env->isHttps());
+    \Pimf\Uri::setup(self::$env->PATH_INFO, self::$env->REQUEST_URI);
+    \Pimf\Util\Uuid::setup(self::$env->getIp(), self::$env->getHost());
   }
 
   public function requestUriProvider()

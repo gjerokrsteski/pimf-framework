@@ -1,5 +1,5 @@
 <?php
-class SessionTest extends PHPUnit_Framework_TestCase
+class SessionTest extends \PHPUnit_Framework_TestCase
 {
 
   #test configuration
@@ -8,8 +8,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
   {
     \Pimf\Session::$instance = null;
 
-    \Pimf\Registry::set(
-      'conf', array(
+    \Pimf\Config::load( array(
         'app'     => array( 'key' => 'rocker' ),
         'session' => array(
           'storage'            => 'cookie',
@@ -21,15 +20,35 @@ class SessionTest extends PHPUnit_Framework_TestCase
           'path'               => '/',
           'domain'             => null,
           'secure'             => false,
+          'database' => array(
+            'driver' => 'sqlite',
+            'database' => 'test-session.db',
+          ),
+
         ),
-      )
+
+        'cache' => array(
+
+          // Cache storage 'pdo', 'file', 'memcached', 'apc', 'redis', 'dba',
+          // 'wincache', 'memory' or '' for non
+          'storage' => 'memcached',
+
+          // If using Memcached and APC to prevent collisions with other applications on the server.
+          'key' => 'pimfmaster',
+
+          // Memcached servers - for more check out: http://memcached.org
+          'memcached' => array(
+            'servers' => array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
+          ),
+        ),
+      ),
+      true
     );
   }
 
   public function tearDown()
   {
-    \Pimf\Registry::set(
-        'conf', array(
+    \Pimf\Config::load( array(
           'app'     => array( 'key' => 'rocker' ),
           'session' => array(
             'storage'            => 'cookie',
@@ -42,7 +61,8 @@ class SessionTest extends PHPUnit_Framework_TestCase
             'domain'             => null,
             'secure'             => false,
           ),
-        )
+        ),
+      true
       );
   }
 
@@ -274,8 +294,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
     );
 
     $payload->session = $this->getSession();
-    $conf             = \Pimf\Registry::get('conf');
-    $expiration       = time() - ($conf['session']['lifetime'] * 60);
+    $expiration       = time() - (\Pimf\Config::get('session.lifetime') * 60);
 
     // Here we set the time to the expected expiration minus 5 seconds
     $payload->storage
@@ -300,8 +319,7 @@ class SessionTest extends PHPUnit_Framework_TestCase
     );
 
     $payload->session = $this->getSession();
-    $conf             = \Pimf\Registry::get('conf');
-    $expiration       = time() - ($conf['session']['lifetime'] * 60);
+    $expiration       = time() - (\Pimf\Config::get('session.lifetime') * 60);
 
     $payload->storage
       ->expects($this->once())
@@ -406,16 +424,16 @@ class SessionTest extends PHPUnit_Framework_TestCase
     $payload->session = $this->getSession();
     $payload->save();
 
-    $conf = \Pimf\Registry::get('conf');
+    $conf = \Pimf\Config::get('session');
 
-    $this->assertTrue(isset(\Pimf\Cookie::$jar[$conf['session']['cookie']]));
+    $this->assertTrue(isset(\Pimf\Cookie::$jar[$conf['cookie']]));
 
-    $cookie = \Pimf\Cookie::$jar[$conf['session']['cookie']];
+    $cookie = \Pimf\Cookie::$jar[$conf['cookie']];
 
     $this->assertEquals(\Pimf\Cookie::hash('rocker') . '+rocker', $cookie['value']);
-    $this->assertEquals($conf['session']['domain'], $cookie['domain']);
-    $this->assertEquals($conf['session']['path'], $cookie['path']);
-    $this->assertEquals($conf['session']['secure'], $cookie['secure']);
+    $this->assertEquals($conf['domain'], $cookie['domain']);
+    $this->assertEquals($conf['path'], $cookie['path']);
+    $this->assertEquals($conf['secure'], $cookie['secure']);
   }
 
   public function testActivityMethodReturnsLastActivity()
@@ -432,6 +450,15 @@ class SessionTest extends PHPUnit_Framework_TestCase
   public function testGivingSessionFactoryBadStorage()
   {
     \Pimf\Session::factory('bad-bad-storage');
+  }
+
+  public function testFactorizingStoragesMap()
+  {
+    $this->assertInstanceOf('\\Pimf\\Session\\Storages\\Apc', \Pimf\Session::factory('apc'));
+    $this->assertInstanceOf('\\Pimf\\Session\\Storages\\Cookie', \Pimf\Session::factory('cookie'));
+    $this->assertInstanceOf('\\Pimf\\Session\\Storages\\File', \Pimf\Session::factory('file'));
+    $this->assertInstanceOf('\\Pimf\\Session\\Storages\\Pdo', \Pimf\Session::factory('pdo'));
+    $this->assertInstanceOf('\\Pimf\\Session\\Storages\\Memory', \Pimf\Session::factory('memory'));
   }
 
   public function testStartingSession()

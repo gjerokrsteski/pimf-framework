@@ -1,6 +1,6 @@
 <?php
 
-class CacheMemcachedTest extends PHPUnit_Framework_TestCase
+class CacheMemcachedTest extends \PHPUnit_Framework_TestCase
 {
   public function testGetReturnsNullWhenNotFound()
   {

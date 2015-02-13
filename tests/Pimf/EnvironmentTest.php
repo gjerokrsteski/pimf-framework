@@ -1,5 +1,5 @@
 <?php
-class EnvironmentTest extends PHPUnit_Framework_TestCase
+class EnvironmentTest extends \PHPUnit_Framework_TestCase
 {
   protected static function serverData()
   {
@@ -56,7 +56,7 @@ class EnvironmentTest extends PHPUnit_Framework_TestCase
     $this->assertFalse($env->isHttps(), 'on isHttps');
     $this->assertEquals('GET', $env->REQUEST_METHOD, 'on getRequestMethod');
 
-    $this->assertEquals(self::serverData(), $env->getData()->getAll(), 'on comparing all data');
+    $this->assertEquals(self::serverData(), $env->data()->getAll(), 'on comparing all data');
 
     $this->assertEquals('http://localhost/', $env->getRequestHeader('REFERER'), 'on getRequestHeader');
     $this->assertNull($env->getRequestHeader('SOME-BAD-HEADER'), 'on getRequestHeader with some bad header');

@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 namespace Pimf;
@@ -48,6 +48,12 @@ class Route
   private $rule;
 
   /**
+   * Target to custom controller/action
+   * @var array
+   */
+  private $target;
+
+  /**
    * Array of URL parameter names
    *
    * @var array
@@ -77,22 +83,29 @@ class Route
   {
     $this->rule       = $rule;
     $this->conditions = $conditions;
+    $this->target     = $target;
+  }
 
-    //convert URL params into regex patterns, construct a regex for this route, init params
+  /**
+   * @return Route
+   */
+  public function init()
+  {
+    //convert URL params into regex patterns, construct a regex for this route, load params
     $regex = preg_replace_callback(
-      '#:([\w]+)\+?#', array($this, 'computeUrlRegex'), str_replace(')', ')?', (string)$rule)
+      '#:([\w]+)\+?#', array($this, 'computeUrlRegex'), str_replace(')', ')?', (string)$this->rule)
     );
 
-    if (substr($rule, -1) === '/') {
+    if (substr($this->rule, -1) === '/') {
       $regex .= '?';
     }
 
-    //cache URL params' names and values if this route matches the current HTTP request
+    //cache URL params names and values if this route matches the current HTTP request
     $params = array();
     if (!preg_match('#^' . $regex . '$#', self::computeUri(), $params)) {
       $this->matched = false;
 
-      return;
+      return $this;
     }
 
     foreach ($this->names as $name) {
@@ -105,9 +118,11 @@ class Route
       }
     }
 
-    foreach ($target as $key => $value) {
+    foreach ($this->target as $key => $value) {
       $this->params[$key] = $value;
     }
+
+    return $this;
   }
 
   /**
@@ -134,15 +149,14 @@ class Route
   }
 
   /**
+   * @throws \RuntimeException If request-uri does not match site base-url
    * @return string
-   * @throws \RuntimeException If does not match site base url
    */
   private function computeUri()
   {
-    $uri       = Registry::get('env')->REQUEST_URI;
+    $uri       = Uri::full();
     $pos       = strpos($uri, '?');
-    $app       = Registry::get('conf');
-    $app       = $app['app'];
+    $app       = Config::get('app');
     $app_url   = empty($app['url']) ? "" : $app['url'];
     $base_uri  = parse_url($app_url);
     $base_path = isset($base_uri['path']) ? $base_uri['path'] : "";

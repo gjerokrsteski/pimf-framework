@@ -1,5 +1,5 @@
 <?php
-class SessionFileTest extends PHPUnit_Framework_TestCase
+class SessionFileTest extends \PHPUnit_Framework_TestCase
 {
   protected function getCache()
   {

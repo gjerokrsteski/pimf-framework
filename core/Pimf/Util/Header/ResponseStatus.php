@@ -7,7 +7,7 @@
  */
 namespace Pimf\Util\Header;
 
-use Pimf\Registry;
+use Pimf\Config;
 
 /**
  * Manages a raw HTTP header ResponseStatus sending.
@@ -18,13 +18,27 @@ use Pimf\Registry;
 abstract class ResponseStatus
 {
   /**
+   * Name and revision of the information protocol
+   * @var string
+   */
+  public static $protocol;
+
+  /**
+   * @param string $protocol
+   */
+  public static function setup($protocol)
+  {
+    self::$protocol = $protocol;
+  }
+
+  /**
    * @param int    $code    HTTP response code
    * @param string $status  The header string which will be used to figure out the HTTP status code to send.
    * @param bool   $replace Whether the header should replace a previous similar header.
    */
   public static function send($code, $status, $replace = true)
   {
-    header('' . Registry::get('env')->SERVER_PROTOCOL . ' ' . $code . ' ' . $status, $replace, $code);
+    header('' . self::$protocol . ' ' . $code . ' ' . $status, $replace, $code);
   }
 
   public static function sendXFrameDeny()

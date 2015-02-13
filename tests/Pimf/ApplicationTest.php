@@ -1,5 +1,6 @@
 <?php
-class ApplicationTest extends PHPUnit_Framework_TestCase
+
+class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
   protected static $conf = array(
     'environment' => 'testing',
@@ -70,7 +71,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
   {
     $app = new \Pimf\Application();
 
-    self::invokeMethod($app, 'setupErrorHandling', array(array('environment'=>'testing')));
+    self::invokeMethod($app, 'setupErrorHandling', array('testing'));
 
     $current_error_reporting = error_reporting();
 
@@ -83,6 +84,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
   public function testSetupErrorHandlingIfProductionEnvironment()
   {
     $app = new \Pimf\Application();
+    $app->bootstrap(self::$conf, $server = array());
 
     self::invokeMethod($app, 'setupErrorHandling', array(array('environment'=>'production')));
 
@@ -98,7 +100,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
 
     $this->assertNull(
 
-      self::invokeMethod($app, 'loadPdoDriver', array(array('environment' => 'testing', 'testing'=>array('db'=>array()))))
+      self::invokeMethod($app, 'loadPdoDriver', array('testing', array('db'=>array()), 'MyFirstBlog'))
 
     );
   }
@@ -108,8 +110,6 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
    */
   public function testLoadingRoutes()
   {
-    \Pimf\Registry::set('env', new \Pimf\Environment(array('REQUEST_URI' => 'core/index')));
-
     $app = new \Pimf\Application();
 
     $routes = dirname(__FILE__) .'/_fixture/app/test-app/routes.php';

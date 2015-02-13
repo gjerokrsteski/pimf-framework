@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 namespace Pimf;

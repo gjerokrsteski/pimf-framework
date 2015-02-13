@@ -1,5 +1,5 @@
 <?php
-class PdoFactoryTest extends PHPUnit_Framework_TestCase
+class PdoFactoryTest extends \PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {
@@ -66,6 +66,14 @@ class PdoFactoryTest extends PHPUnit_Framework_TestCase
   public function testNotSupportedDrivers($driver)
   {
     \Pimf\Pdo\Factory::get($driver);
+  }
+
+  /**
+   * @expectedException RuntimeException
+   */
+  public function testIfDriverIsSupportedButNotLoaded()
+  {
+    \Pimf\Pdo\Factory::get(array('driver'=>'sqlserver'));
   }
 }
  

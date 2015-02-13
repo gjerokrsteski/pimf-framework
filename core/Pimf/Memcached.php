@@ -60,9 +60,8 @@ class Memcached
   public static function connection()
   {
     if (static::$connection === null) {
-      $conf               = Registry::get('conf');
       static::$connection = static::connect(
-        $conf['cache']['servers']
+        Config::get('cache.memcached.servers')
       );
     }
 

@@ -66,20 +66,20 @@ class Cache
    */
   protected static function factory($storage)
   {
-    $conf = Registry::get('conf');
+    $cache = Config::get('cache');
 
     switch ($storage) {
       case 'apc':
-        return new CS\Apc($conf['cache']['key']);
+        return new CS\Apc($cache['key']);
 
       case 'file':
-        return new CS\File($conf['cache']['storage_path']);
+        return new CS\File($cache['storage_path']);
 
       case 'pdo':
-        return new CS\Pdo(Pdo\Factory::get($conf['cache']['database']), $conf['cache']['key']);
+        return new CS\Pdo(Pdo\Factory::get($cache['database']), $cache['key']);
 
       case 'memcached':
-        return new CS\Memcached(Memcached::connection(), $conf['cache']['key']);
+        return new CS\Memcached(Memcached::connection(), $cache['key']);
 
       case 'memory':
         return new CS\Memory();
@@ -88,10 +88,10 @@ class Cache
         return new CS\Redis(Redis::database());
 
       case 'wincache':
-        return new CS\WinCache($conf['cache']['key']);
+        return new CS\WinCache($cache['key']);
 
       case 'dba':
-        return new CS\Dba(String::ensureTrailing('/', $conf['cache']['storage_path']) . $conf['cache']['key']);
+        return new CS\Dba(String::ensureTrailing('/', $cache['storage_path']) . $cache['key']);
 
       default:
         throw new \RuntimeException("Cache storage {$storage} is not supported.");
@@ -109,7 +109,7 @@ class Cache
   public static function __callStatic($method, $parameters)
   {
     return call_user_func_array(
-      array(static::storage(), $method), $parameters
+      array(static::storage(Config::get('cache.storage')), $method), $parameters
     );
   }
 }

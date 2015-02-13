@@ -1,6 +1,6 @@
 <?php
 
-class CacheRedisTest extends PHPUnit_Framework_TestCase
+class CacheRedisTest extends \PHPUnit_Framework_TestCase
 {
 
   /**

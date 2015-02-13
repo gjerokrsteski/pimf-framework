@@ -1,5 +1,5 @@
 <?php
-class MemcachedTest extends PHPUnit_Framework_TestCase
+class MemcachedTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * Call protected/private method of a class.

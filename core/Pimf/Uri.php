@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 namespace Pimf;
 
@@ -17,6 +17,16 @@ use Pimf\Util\String as Str;
  */
 class Uri
 {
+
+  /**
+   * @var string
+   */
+  private static $pathInfo;
+
+  /**
+   * @var string
+   */
+  private static $requestUri;
 
   /**
    * The URI for the current request.
@@ -33,13 +43,23 @@ class Uri
   public static $segments = array();
 
   /**
+   * @param string $pathInfo
+   * @param string $requestUri
+   */
+  public static function setup($pathInfo, $requestUri)
+  {
+    self::$pathInfo   = $pathInfo;
+    self::$requestUri = $requestUri;
+  }
+
+  /**
    * Get the full URI including the query string.
    *
    * @return string
    */
   public static function full()
   {
-    return Registry::get('env')->REQUEST_URI;
+    return self::$requestUri;
   }
 
   /**
@@ -54,7 +74,7 @@ class Uri
     }
 
     //Format a given URI.
-    $uri = trim(Registry::get('env')->PATH_INFO, '/') ? : '/';
+    $uri = trim(self::$pathInfo, '/') ? : '/';
 
     //Set the URI segments for the request.
     $segments         = explode('/', trim($uri, '/'));

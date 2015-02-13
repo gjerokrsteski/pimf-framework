@@ -11,7 +11,7 @@ class Gustbook extends \Pimf\Model\AsArray
 
 }
 
-class ToArrayTest extends PHPUnit_Framework_TestCase
+class ToArrayTest extends \PHPUnit_Framework_TestCase
 {
   public function testThatReturnsOnlyProtectedAndPublicPropertiesOfTheGivenModelObject()
   {

@@ -1,6 +1,6 @@
 <?php
 
-class CliStdTest extends PHPUnit_Framework_TestCase
+class CliStdTest extends \PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {

@@ -2,7 +2,7 @@
 
 require_once dirname(__FILE__) . '/_fixture/app/test-app/DataMapper/World.php';
 
-class EntityManagerTest extends PHPUnit_Framework_TestCase
+class EntityManagerTest extends \PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {

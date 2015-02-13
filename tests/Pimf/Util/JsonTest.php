@@ -1,5 +1,5 @@
 <?php
-class JsonTest extends PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit_Framework_TestCase
 {
   public function testEncodingAndDecodingValidData()
   {
@@ -34,7 +34,7 @@ class JsonTest extends PHPUnit_Framework_TestCase
    */
   public function testMalformedJSON()
   {
-    \Pimf\Util\Json::decode("{'title': 'my second title'");
+    \Pimf\Util\Json::decode("{'title': 'my second title'}");
   }
 
   public static function invokeMethod(&$object, $methodName, array $parameters = array())

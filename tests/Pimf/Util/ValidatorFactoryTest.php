@@ -1,5 +1,5 @@
 <?php
-class ValidatorFactoryTest extends PHPUnit_Framework_TestCase
+class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
 {
   public function testFactorizingValidatorBySetOfRules()
   {

@@ -1,5 +1,5 @@
 <?php
-class RedisTest extends PHPUnit_Framework_TestCase
+class RedisTest extends \PHPUnit_Framework_TestCase
 {
   const CRLF = "\r\n";
 
@@ -7,6 +7,14 @@ class RedisTest extends PHPUnit_Framework_TestCase
    * @return \Pimf\Redis
    */
   protected function getRedis()
+  {
+    return new \Pimf\Redis(new Pimf\Adapter\Socket('krsteski.de', 80), 0);
+  }
+
+  /**
+   * @return \Pimf\Redis
+   */
+  protected function getRedisMock()
   {
     return $this->getMockBuilder('\\Pimf\\Redis')
       ->disableOriginalConstructor()
@@ -38,15 +46,19 @@ class RedisTest extends PHPUnit_Framework_TestCase
 
   public function testCreatingNewInstance()
   {
-    new \Pimf\Redis('localhost', 52555, 0);
+    new \Pimf\Redis(new Pimf\Adapter\Socket('127.0.0.1', 80), 0);
   }
 
   public function testGetDatabaseConnectionInstance()
   {
-    \Pimf\Registry::set('conf',
-      array(
-        'cache' => array('storage' => 'redis', 'server' => array('host' => '127.0.0.1', 'port' => 11211, 'database' => 0))
-      )
+    \Pimf\Config::load(
+      array (
+        'cache' => array (
+          'storage' => 'redis',
+          'server'  => array ('host' => '127.0.0.1', 'port' => 11211, 'database' => 0)
+        )
+      ),
+      true
     );
 
    $this->assertInstanceOf(
@@ -63,15 +75,19 @@ class RedisTest extends PHPUnit_Framework_TestCase
    */
   public function testIfRedisDatabaseNotDefined()
   {
-    \Pimf\Registry::set('conf',
+    \Pimf\Config::load(
       array(
         'cache' => array('storage' => '', 'server' => array('host' => '127.0.0.1', 'port' => 11211, 'database' => 0))
-      )
+      ),
+      true
     );
 
     \Pimf\Redis::database('default2');
   }
 
+  /**
+   * @expectedException \RuntimeException
+   */
   public function testGetReturnsNullWhenNotFound()
   {
     $redis = $this->getRedis();
@@ -103,7 +119,7 @@ class RedisTest extends PHPUnit_Framework_TestCase
 
   public function testHappyParsing()
   {
-    $redis = $this->getRedis();
+    $redis = $this->getRedisMock();
 
     $redis->expects($this->any())->method('inline')->will($this->returnValue('ok'));
     $redis->expects($this->any())->method('bulk')->will($this->returnValue('ok'));
@@ -138,15 +154,5 @@ class RedisTest extends PHPUnit_Framework_TestCase
     );
 
   }
-
-  /**
-   * @expectedException \PHPUnit_Framework_Error_Warning
-   */
-  public function testIfErrorMakingRedisConnection()
-  {
-    $redis = $this->getRedis();
-    self::invokeMethod($redis, 'connect');
-  }
-
 }
  

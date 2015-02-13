@@ -8,8 +8,8 @@
 
 namespace Pimf\Controller;
 
-use \Pimf\Param, \Pimf\Registry, \Pimf\Sapi, \Pimf\Controller\Exception as Bomb, \Pimf\Request, \Pimf\Util\Header, \Pimf\Url,
-  \Pimf\Response;
+use \Pimf\Param, \Pimf\Config, \Pimf\Sapi, \Pimf\Controller\Exception as Bomb, \Pimf\Request, \Pimf\Util\Header, \Pimf\Url,
+  \Pimf\Response, \Pimf\EntityManager, \Pimf\Logger, \Pimf\Util\String, \Pimf\Util\Value;
 
 /**
  * Defines the general controller behaviour - you have to extend it.
@@ -20,23 +20,52 @@ use \Pimf\Param, \Pimf\Registry, \Pimf\Sapi, \Pimf\Controller\Exception as Bomb,
 abstract class Base
 {
   /**
-   * @var \Pimf\Request
+   * @var Request
    */
   protected $request;
 
   /**
-   * @var \Pimf\Response
+   * @var Response
    */
   protected $response;
 
   /**
-   * @param Request  $request
-   * @param Response $response
+   * @var Logger
    */
-  public function __construct(\Pimf\Request $request, \Pimf\Response $response = null)
+  protected $logger;
+
+  /**
+   * @var EntityManager
+   */
+  protected $em;
+
+  /**
+   * @var Router
+   */
+  protected $router;
+
+  /**
+   * @var Environment
+   */
+  protected $env;
+
+
+  /**
+   * @param Request $request
+   * @param Response $response
+   * @param Logger $logger
+   * @param EntityManager|null $em
+   * @param Router|null $router
+   * @param $env
+   */
+  public function __construct(Request $request, Response $response = null, \Pimf\Logger $logger, $em, $router, \Pimf\Environment $env)
   {
     $this->request  = $request;
     $this->response = $response;
+    $this->logger   = $logger;
+    $this->em       = $em;
+    $this->router   = $router;
+    $this->env      = $env;
   }
 
   abstract public function indexAction();
@@ -49,22 +78,30 @@ abstract class Base
    */
   public function render()
   {
-    $conf = Registry::get('conf');
-
-    if (Sapi::isCli() && $conf['environment'] == 'production') {
+    if (Sapi::isCli() && Config::get('environment') == 'production') {
 
       $suffix = 'CliAction';
       $action = $this->request->fromCli()->get('action', 'index');
 
     } else {
 
-      $suffix        = 'Action';
-      $bag           = 'from' . ucfirst(strtolower($this->response->getMethod()));
-      $action        = $this->request->{$bag}()->get('action', 'index');
+      $suffix = 'Action';
 
-      if ($conf['app']['routeable'] === true) {
+      if ($this->response->getMethod() != 'GET' && $this->response->getMethod() != 'POST') {
 
-        $target = Registry::get('router')->find();
+        $redirectUrl = new Value($this->env->REDIRECT_URL);
+        $redirectUrl = $redirectUrl->deleteLeading('/')->deleteTrailing('/')->explode('/');
+        $action      = $redirectUrl[1];
+
+      } else {
+
+        $bag    = 'from' . ucfirst(strtolower($this->response->getMethod()));
+        $action = $this->request->{$bag}()->get('action', 'index');
+      }
+
+      if (Config::get('app.routeable') === true && $this->router instanceof \Pimf\Router) {
+
+        $target = $this->router->find();
 
         if ($target instanceof \Pimf\Route\Target) {
 
@@ -100,8 +137,6 @@ abstract class Base
   public function redirect($route, $permanent = false, $exit = true)
   {
     $url = Url::compute($route);
-
-    Header::clear();
 
     ($permanent === true) ? Header::sendMovedPermanently() : Header::sendFound();
 

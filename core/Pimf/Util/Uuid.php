@@ -8,8 +8,6 @@
 
 namespace Pimf\Util;
 
-use Pimf\Registry;
-
 /**
  * A class that generates RFC 4122 UUIDs
  *
@@ -40,6 +38,14 @@ final class Uuid
    */
   private static $pid = null;
 
+  private static $hostIp, $hostName;
+
+  public static function setup($hostIp, $hostName)
+  {
+    self::$hostIp   = $hostIp;
+    self::$hostName = $hostName;
+  }
+
   /**
    * Returns a 32-bit integer that identifies this host.
    *
@@ -51,28 +57,25 @@ final class Uuid
    */
   private static function getNodeId()
   {
-    $host     = Registry::get('env')->getIp();
-    $hostname = Registry::get('env')->getHost();
-
-    if ($host === null && true === function_exists('gethostname')) {
-      $hostname = gethostname();
-      $host     = gethostbyname($hostname);
+    if (self::$hostIp === null && true === function_exists('gethostname')) {
+      self::$hostName = gethostname();
+      self::$hostIp   = gethostbyname(self::$hostName);
     }
 
-    if ($host === null && true === function_exists('php_uname')) {
-      $hostname = php_uname('n');
-      $host     = gethostbyname($hostname);
+    if (self::$hostIp === null && true === function_exists('php_uname')) {
+      self::$hostName = php_uname('n');
+      self::$hostIp   = gethostbyname(self::$hostName);
     }
 
-    if ($host === null && $hostname !== null) {
-      $host = crc32($hostname);
+    if (self::$hostIp === null && self::$hostName !== null) {
+      self::$hostIp = crc32(self::$hostName);
     }
 
-    if ($host === null) {
-      $host = '127.0.0.1';
+    if (self::$hostIp === null) {
+      self::$hostIp = '127.0.0.1';
     }
 
-    return ip2long($host);
+    return ip2long(self::$hostIp);
   }
 
   /**
@@ -120,12 +123,13 @@ final class Uuid
     $time_mid = (int)substr($time_mid, 2);
 
     $time_and_version = mt_rand(0, 0xfff);
-    /* version 4 UUID */
+
+    // version 4 UUID
     $time_and_version |= 0x4000;
 
     $clock_seq_low = mt_rand(0, 0xff);
 
-    /* type is pseudo-random */
+    // type is pseudo-random
     $clock_seq_high = mt_rand(0, 0x3f);
     $clock_seq_high |= 0x80;
 

@@ -1,5 +1,5 @@
 <?php
-class CacheFileTest extends PHPUnit_Framework_TestCase
+class CacheFileTest extends \PHPUnit_Framework_TestCase
 {
   public function testGetReturnsNullWhenNotFound()
   {

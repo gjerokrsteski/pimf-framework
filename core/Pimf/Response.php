@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 namespace Pimf;
 
@@ -47,13 +47,6 @@ class Response
   public function __construct($requestMethod)
   {
     $this->method = '' . strtoupper($requestMethod);
-
-    // it is PIMF framework restriction
-    if (!in_array($this->method, array('POST', 'GET', null))) {
-      throw new \RuntimeException('unsupported request-method given');
-    }
-
-    Header::clear();
   }
 
   /**
@@ -66,7 +59,6 @@ class Response
 
   public function asJSON()
   {
-    $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::asJSON();
 
@@ -75,7 +67,6 @@ class Response
 
   public function asHTML()
   {
-    $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::asTextHTML();
 
@@ -84,7 +75,6 @@ class Response
 
   public function asPDF()
   {
-    $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::asPDF();
 
@@ -93,7 +83,6 @@ class Response
 
   public function asCSV()
   {
-    $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::asCSV();
 
@@ -102,7 +91,6 @@ class Response
 
   public function asTEXT()
   {
-    $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::asTextPlain();
 
@@ -111,7 +99,6 @@ class Response
 
   public function asZIP()
   {
-    $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::asZIP();
 
@@ -120,7 +107,6 @@ class Response
 
   public function asXZIP()
   {
-    $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::asXZIP();
 
@@ -129,7 +115,6 @@ class Response
 
   public function asMSWord()
   {
-    $this->preventMultipleTypes();
     self::$typed = __FUNCTION__;
     Header::asMSWord();
 
@@ -145,7 +130,6 @@ class Response
    */
   public function sendStream($stream, $name, $exit = true)
   {
-    Header::clear();
     Header::sendDownloadDialog($stream, $name, $exit);
   }
 
@@ -237,26 +221,13 @@ class Response
   /**
    * @throws \RuntimeException
    */
-  private function preventMultipleTypes()
-  {
-    if (!is_empty(self::$typed)) {
-      Header::clear();
-      throw new \RuntimeException('only one HTTP content-type can be sent!');
-    }
-  }
-
-  /**
-   * @throws \RuntimeException
-   */
   private function preventMultipleCaching()
   {
     if ($this->method != 'GET') {
-      Header::clear();
       throw new \RuntimeException('HTTP cache headers can only take effect if request was sent via GET method!');
     }
 
     if (self::$cached === true) {
-      Header::clear();
       throw new \RuntimeException('only one HTTP cache-control can be sent!');
     }
   }

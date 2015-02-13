@@ -1,5 +1,5 @@
 <?php
-class XmlConverterTest extends PHPUnit_Framework_TestCase
+class XmlConverterTest extends \PHPUnit_Framework_TestCase
 {
   public function testConvertStringToSimpleXmlInstance()
   {

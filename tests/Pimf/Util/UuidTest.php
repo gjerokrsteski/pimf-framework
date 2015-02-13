@@ -1,11 +1,13 @@
 <?php
-class UuidTest extends PHPUnit_Framework_TestCase
+class UuidTest extends \PHPUnit_Framework_TestCase
 {
+  private static $env;
+
   public static function setUpBeforeClass()
   {
     parent::setUpBeforeClass();
 
-    \Pimf\Registry::set('env', new \Pimf\Environment(array('REMOTE_ADDR' => '127.0.0.1', 'SERVER_NAME' => 'test.de')));
+    self::$env = new \Pimf\Environment(array('REMOTE_ADDR' => '127.0.0.1', 'SERVER_NAME' => 'test.de'));
   }
 
   public function testRetreiveNewUuid()

@@ -10,7 +10,8 @@ namespace Pimf\View;
 
 use Pimf\Contracts\Reunitable;
 use Pimf\View;
-use Pimf\Registry;
+use Pimf\Config;
+use Pimf\Util\Value;
 
 /**
  * A view for HAANGA template engine that uses Django syntax - fast and secure template engine for PHP.
@@ -46,14 +47,15 @@ class Haanga extends View implements Reunitable
   {
     parent::__construct($template, $data);
 
-    $conf = Registry::get('conf');
+    $conf = Config::get('view.haanga');
 
-    $options = array('debug'    => $conf['view']['haanga']['debug'], 
+    $options = array('debug'    => $conf['view']['haanga']['debug'],
                      'template_dir' => $this->path,
                      'autoload' => $conf['view']['haanga']['auto_reload'],
+
     );
 
-    if ($conf['view']['haanga']['cache'] === true) {
+    if ($conf['cache'] === true) {
       $options['cache_dir'] = $this->path . '/haanga_cache';
     }
 

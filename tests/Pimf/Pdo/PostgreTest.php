@@ -1,6 +1,6 @@
 <?php
 
-class PdoPostgreTest extends PHPUnit_Framework_TestCase
+class PdoPostgreTest extends \PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {

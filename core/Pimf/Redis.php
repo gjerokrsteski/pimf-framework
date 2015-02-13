@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 namespace Pimf;
@@ -39,19 +39,11 @@ namespace Pimf;
  */
 class Redis
 {
-  /**
-   * The address for the Redis host.
-   *
-   * @var string
-   */
-  protected $host;
 
   /**
-   * The port on which Redis can be accessed on the host.
-   *
-   * @var int
+   * @var Adapter\Socket
    */
-  protected $port;
+  protected $socket;
 
   /**
    * The database number the connection selects on load.
@@ -77,14 +69,12 @@ class Redis
   /**
    * Create a new Redis connection instance.
    *
-   * @param string $host
-   * @param int    $port
-   * @param int    $database
+   * @param Adapter\Socket $socket
+   * @param int $database
    */
-  public function __construct($host, $port, $database = 0)
+  public function __construct(Adapter\Socket $socket, $database = 0)
   {
-    $this->host = $host;
-    $this->port = $port;
+    $this->socket   = $socket;
     $this->database = $database;
   }
 
@@ -101,14 +91,17 @@ class Redis
   public static function database($name = 'default')
   {
     if (!isset(static::$databases[$name])) {
-      $conf = Registry::get('conf');
 
-      if (!isset($conf['cache']['storage']) || $conf['cache']['storage'] != 'redis') {
+      $cache = Config::get('cache');
+
+      if (!isset($cache['storage']) || $cache['storage'] != 'redis') {
         throw new \RuntimeException("Redis database [$name] is not defined.");
       }
 
-      static::$databases[$name]
-        = new static($conf['cache']['server']['host'], $conf['cache']['server']['port'], $conf['cache']['server']['database']);
+      static::$databases[$name] = new static(
+        new Adapter\Socket($cache['server']['host'], $cache['server']['port']),
+        $cache['server']['database']
+      );
     }
 
     return static::$databases[$name];
@@ -164,7 +157,6 @@ class Redis
    * Establish the connection to the Redis database.
    *
    * @return resource
-   * @throws \RuntimeException
    */
   protected function connect()
   {
@@ -172,7 +164,7 @@ class Redis
       return $this->connection;
     }
 
-    $this->connection = fsockopen($this->host, $this->port, $error, $message);
+    $this->connection = $this->socket->open();
 
     $this->select($this->database);
 

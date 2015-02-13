@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 namespace Pimf;
 
@@ -31,6 +31,28 @@ class Url
    * @var string
    */
   public static $base;
+
+  /**
+   * Current page URL
+   * @var string
+   */
+  private static $url;
+
+  /**
+   * Is current application running under HTTPS protocol?
+   * @var boolean
+   */
+  private static $isHttps;
+
+  /**
+   * @param string $url
+   * @param boolean $isHttps
+   */
+  public static function setup($url, $isHttps)
+  {
+    self::$url     = $url;
+    self::$isHttps = $isHttps;
+  }
 
   /**
    * Get the full URI including the query string.
@@ -75,13 +97,12 @@ class Url
       return static::$base;
     }
 
-    $conf = Registry::get('conf');
-    $url  = $conf['app']['url'];
+    $url = Config::get('app.url');
 
     if ($url !== '') {
       $base = $url;
     } else {
-      $base = Registry::get('env')->getUrl();
+      $base = self::$url;
     }
 
     return static::$base = $base;
@@ -120,20 +141,19 @@ class Url
   private static function format($https = null, $asset = false)
   {
     $root = static::base();
-    $conf = Registry::get('conf');
 
     if (!$asset) {
-      $root .= '/' . $conf['app']['index'];
+      $root .= '/' . Config::get('app.index');
     }
 
     // Unless $https is specified we set https for all secure links.
     if (is_null($https)) {
-      $https = Registry::get('env')->isHttps();
+      $https = self::$isHttps;
     }
 
     // disable SSL on all framework generated links to make it more
     // convenient to work with the site while developing locally.
-    if ($https && $conf['ssl']) {
+    if ($https && Config::get('ssl')) {
       return preg_replace('~http://~', 'https://', $root, 1);
     }
 
@@ -147,7 +167,7 @@ class Url
    *
    * @return string
    */
-  public static function asHttps($url = '')
+  public static function as_https($url = '')
   {
     return static::to($url, true);
   }
@@ -160,14 +180,14 @@ class Url
    *
    * @return string
    */
-  public static function toAsset($url, $https = null)
+  public static function to_asset($url, $https = null)
   {
     if (static::valid($url) || static::valid('http:' . $url)) {
       return $url;
     }
 
-    $conf = Registry::get('conf');
-    $root = ($conf['app']['asset_url'] != '') ? $conf['app']['asset_url'] : false;
+    $app = Config::get('app');
+    $root = ($app['asset_url'] != '') ? $app['asset_url'] : false;
 
     // shoot us through a different server or third-party content delivery network.
     if ($root) {
@@ -177,8 +197,8 @@ class Url
     $url = static::to($url, $https, true);
 
     // we do not need to come through the front controller.
-    if ($conf['app']['index'] !== '') {
-      $url = str_replace($conf['app']['index'] . '/', '', $url);
+    if ($app['index'] !== '') {
+      $url = str_replace($app['index'] . '/', '', $url);
     }
 
     return $url;
@@ -213,9 +233,10 @@ class Url
   public static function compute($route = '', array $params = array(), $https = null, $asset = false)
   {
     // if your application should work with RFC 3986 URL-query strings
-    $conf = Registry::get('conf');
-    if ($conf['app']['routeable'] === false) {
+    if (Config::get('app.routeable') === false) {
+
       list($controller, $action) = explode('/', $route);
+
       $params = array_merge(compact('controller', 'action'), $params);
 
       return Str::ensureTrailing('/', self::format($https, $asset)) . '?' . http_build_query($params, null, '&');
@@ -223,6 +244,7 @@ class Url
 
     // otherwise PIMF will serve you cleaner URLs
     $slug = implode('/', $params);
+
     if ($slug != '') {
       $slug = '/' . $slug;
     }

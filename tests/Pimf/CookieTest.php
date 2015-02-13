@@ -1,5 +1,5 @@
 <?php
-class PimfCookieTest extends PHPUnit_Framework_TestCase
+class PimfCookieTest extends \PHPUnit_Framework_TestCase
 {
 
   # helpers
@@ -8,11 +8,10 @@ class PimfCookieTest extends PHPUnit_Framework_TestCase
   {
     \Pimf\Cookie::$jar = array();
     \Pimf\Request::$cookieData = new \Pimf\Param(array());
-    \Pimf\Registry::set(
-      'conf', array(
+    \Pimf\Config::load( array(
         'ssl' => true,
         'app' => array( 'key' => '123secure' )
-      )
+      ), true
     );
   }
 
@@ -49,11 +48,11 @@ class PimfCookieTest extends PHPUnit_Framework_TestCase
 
     $this->setServerVar('HTTPS', 'on');
 
-    \Pimf\Cookie::forever('bar', 'baz', 'path', 'domain', true);
+    \Pimf\Cookie::forever('bar', 'baz', 'path', 'domain', false);
 
     $this->assertEquals('path', \Pimf\Cookie::$jar['bar']['path']);
     $this->assertEquals('domain', \Pimf\Cookie::$jar['bar']['domain']);
-    $this->assertTrue(\Pimf\Cookie::$jar['bar']['secure']);
+    $this->assertFalse(\Pimf\Cookie::$jar['bar']['secure']);
 
     $this->setServerVar('HTTPS', 'off');
   }

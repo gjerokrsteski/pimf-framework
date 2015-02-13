@@ -5,7 +5,7 @@ class xObject
   public $fruits = array('public-banana');
 }
 
-class IdentityMapTest extends PHPUnit_Framework_TestCase
+class IdentityMapTest extends \PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {

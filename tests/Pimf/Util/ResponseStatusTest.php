@@ -1,13 +1,15 @@
 <?php
 
-class UtilResponseStatusTest extends PHPUnit_Framework_TestCase
+class UtilResponseStatusTest extends \PHPUnit_Framework_TestCase
 {
+  private static $env;
+
   public function setUp()
   {
     parent::setUp();
 
     $server['SERVER_PROTOCOL'] = 'HTTP/1.0';
-    \Pimf\Registry::set('env', new \Pimf\Environment($server));
+    self::$env = new \Pimf\Environment($server);
   }
 
 

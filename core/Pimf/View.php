@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 
 namespace Pimf;
@@ -46,9 +46,8 @@ class View implements Renderable
    */
   public function __construct($template = 'default.phtml', array $data = array(), $path = null)
   {
-    $conf           = Registry::get('conf');
     $this->data     = new \ArrayObject($data, \ArrayObject::ARRAY_AS_PROPS);
-    $this->path     = (!$path) ? BASE_PATH . 'app/' . $conf['app']['name'] . '/_templates' : $path;
+    $this->path     = (!$path) ? BASE_PATH . 'app/' . Config::get('app.name') . '/_templates' : $path;
     $this->template = (string)$template;
   }
 
@@ -117,9 +116,9 @@ class View implements Renderable
    *
    * @return View
    */
-  public function pump(array $model)
+  public function pump($model)
   {
-    $this->data->exchangeArray($model);
+    $this->data->exchangeArray((array)$model);
 
     return $this;
   }
@@ -144,7 +143,6 @@ class View implements Renderable
 
   /**
    * @return string
-   * @throws \Exception
    */
   public function render()
   {
@@ -161,7 +159,7 @@ class View implements Renderable
         ob_end_clean();
       }
 
-      throw $exception;
+      trigger_error($exception->getMessage(), E_USER_NOTICE);
     }
 
     return ob_get_clean();
