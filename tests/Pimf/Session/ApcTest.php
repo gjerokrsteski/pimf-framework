@@ -1,5 +1,5 @@
 <?php
-class SessionApcTest extends PHPUnit_Framework_TestCase
+class SessionApcTest extends \PHPUnit_Framework_TestCase
 {
   protected function getCache()
   {

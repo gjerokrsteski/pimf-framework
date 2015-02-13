@@ -3,7 +3,7 @@
 /**
  * @runTestsInSeparateProcesses
  */
-class ErrorTest extends PHPUnit_Framework_TestCase
+class ErrorTest extends \PHPUnit_Framework_TestCase
 {
   public function testErrorLogging()
   {

@@ -1,5 +1,5 @@
 <?php
-class ViewTest extends PHPUnit_Framework_TestCase
+class ViewTest extends \PHPUnit_Framework_TestCase
 {
   public static function setUpBeforeClass()
   {

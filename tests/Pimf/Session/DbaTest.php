@@ -1,5 +1,5 @@
 <?php
-class SessionDbaTest extends PHPUnit_Framework_TestCase
+class SessionDbaTest extends \PHPUnit_Framework_TestCase
 {
   protected function getCache()
   {

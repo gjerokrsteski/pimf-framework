@@ -1,5 +1,5 @@
 <?php
-class DomTest extends PHPUnit_Framework_TestCase
+class DomTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * A test-HTML content

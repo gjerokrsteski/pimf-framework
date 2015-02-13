@@ -1,5 +1,5 @@
 <?php
-class PimfCookieTest extends PHPUnit_Framework_TestCase
+class PimfCookieTest extends \PHPUnit_Framework_TestCase
 {
 
   # helpers

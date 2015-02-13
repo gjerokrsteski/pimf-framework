@@ -17,7 +17,7 @@ class TestAccumulatorClass
   }
 }
 
-class SerializerTest extends PHPUnit_Framework_TestCase
+class SerializerTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * Provides test data.

@@ -1,6 +1,6 @@
 <?php
 
-class ValueTest extends PHPUnit_Framework_TestCase
+class ValueTest extends \PHPUnit_Framework_TestCase
 {
 
   public function testCreatingNewInstance()

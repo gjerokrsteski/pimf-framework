@@ -10,7 +10,7 @@ class ReflectMe
   public function __get($prop) { return $this->$prop; }
 }
 
-class DataMapperTest extends PHPUnit_Framework_TestCase
+class DataMapperTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * @return \Pimf\DataMapper\Base

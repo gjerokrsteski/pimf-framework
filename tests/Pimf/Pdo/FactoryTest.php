@@ -1,5 +1,5 @@
 <?php
-class PdoFactoryTest extends PHPUnit_Framework_TestCase
+class PdoFactoryTest extends \PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {

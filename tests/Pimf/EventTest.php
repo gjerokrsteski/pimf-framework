@@ -18,7 +18,7 @@ class EventDummyClass
 }
 
 
-class EventTest extends PHPUnit_Framework_TestCase
+class EventTest extends \PHPUnit_Framework_TestCase
 {
   /**
  	 * Tear down the testing environment.

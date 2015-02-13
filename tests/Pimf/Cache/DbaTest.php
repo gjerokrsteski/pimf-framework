@@ -1,5 +1,5 @@
 <?php
-class CacheDbaTest extends PHPUnit_Framework_TestCase
+class CacheDbaTest extends \PHPUnit_Framework_TestCase
 {
   public function testGetReturnsNullWhenNotFound()
   {

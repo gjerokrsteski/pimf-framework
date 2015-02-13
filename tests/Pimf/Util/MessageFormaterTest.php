@@ -1,5 +1,5 @@
 <?php
-class MessageFormaterTest extends PHPUnit_Framework_TestCase
+class MessageFormaterTest extends \PHPUnit_Framework_TestCase
 {
   protected $expectedMsg = 'Hello Ben my name is Matt! I am 21, how old are you? I like food!';
 

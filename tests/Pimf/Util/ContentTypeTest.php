@@ -1,6 +1,6 @@
 <?php
 
-class UtilContentTypeTest extends PHPUnit_Framework_TestCase
+class UtilContentTypeTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * @runInSeparateProcess

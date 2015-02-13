@@ -1,6 +1,6 @@
 <?php
 
-class PdoSqlserverTest extends PHPUnit_Framework_TestCase
+class PdoSqlserverTest extends \PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {

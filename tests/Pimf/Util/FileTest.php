@@ -1,5 +1,5 @@
 <?php
-class UtilFileTest extends PHPUnit_Framework_TestCase
+class UtilFileTest extends \PHPUnit_Framework_TestCase
 {
   public function testCreatingNewInstance()
   {

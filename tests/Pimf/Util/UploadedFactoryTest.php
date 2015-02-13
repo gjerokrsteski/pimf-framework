@@ -1,5 +1,5 @@
 <?php
-class UtilUploadedFactoryTest extends PHPUnit_Framework_TestCase
+class UtilUploadedFactoryTest extends \PHPUnit_Framework_TestCase
 {
   public function testFactorizing()
   {

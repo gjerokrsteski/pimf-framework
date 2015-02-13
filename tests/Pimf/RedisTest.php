@@ -1,5 +1,5 @@
 <?php
-class RedisTest extends PHPUnit_Framework_TestCase
+class RedisTest extends \PHPUnit_Framework_TestCase
 {
   const CRLF = "\r\n";
 

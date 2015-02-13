@@ -1,5 +1,5 @@
 <?php
-class SessionMemcachedTest extends PHPUnit_Framework_TestCase
+class SessionMemcachedTest extends \PHPUnit_Framework_TestCase
 {
   protected function getCache()
    {

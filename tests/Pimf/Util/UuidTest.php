@@ -1,5 +1,5 @@
 <?php
-class UuidTest extends PHPUnit_Framework_TestCase
+class UuidTest extends \PHPUnit_Framework_TestCase
 {
   private static $env;
 

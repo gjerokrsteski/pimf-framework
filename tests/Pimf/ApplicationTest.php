@@ -1,6 +1,6 @@
 <?php
 
-class ApplicationTest extends PHPUnit_Framework_TestCase
+class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
   protected static $conf = array(
     'environment' => 'testing',

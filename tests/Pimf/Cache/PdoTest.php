@@ -1,6 +1,6 @@
 <?php
 
-class CachePdoTest extends PHPUnit_Framework_TestCase
+class CachePdoTest extends \PHPUnit_Framework_TestCase
 {
 
   /**

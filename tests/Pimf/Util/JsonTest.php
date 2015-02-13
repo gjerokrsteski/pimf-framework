@@ -1,5 +1,5 @@
 <?php
-class JsonTest extends PHPUnit_Framework_TestCase
+class JsonTest extends \PHPUnit_Framework_TestCase
 {
   public function testEncodingAndDecodingValidData()
   {

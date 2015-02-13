@@ -1,5 +1,5 @@
 <?php
-class SessionCookieTest extends PHPUnit_Framework_TestCase
+class SessionCookieTest extends \PHPUnit_Framework_TestCase
 {
   public static function setUpBeforeClass()
   {

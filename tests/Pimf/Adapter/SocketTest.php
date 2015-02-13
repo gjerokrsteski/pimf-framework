@@ -20,7 +20,7 @@ class SocketTest extends \PHPUnit_Framework_TestCase
 
   public function testIfCanConnect()
   {
-    $socket = new \Pimf\Adapter\Socket('is.gd', 80);
+    $socket = new \Pimf\Adapter\Socket('krsteski.de', 80);
 
     $this->assertInternalType('resource', $res = $socket->open());
 

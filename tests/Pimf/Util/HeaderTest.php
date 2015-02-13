@@ -1,6 +1,6 @@
 <?php
 
-class UtilHeaderTest extends PHPUnit_Framework_TestCase
+class UtilHeaderTest extends \PHPUnit_Framework_TestCase
 {
 
   private static $env;

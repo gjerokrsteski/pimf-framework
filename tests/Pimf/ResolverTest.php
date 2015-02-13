@@ -1,5 +1,5 @@
 <?php
-class ResolverTest extends PHPUnit_Framework_TestCase
+class ResolverTest extends \PHPUnit_Framework_TestCase
 {
   ## prepare the fake environment
 

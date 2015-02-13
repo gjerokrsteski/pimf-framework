@@ -1,5 +1,5 @@
 <?php
-class SessionPdoTest extends PHPUnit_Framework_TestCase
+class SessionPdoTest extends \PHPUnit_Framework_TestCase
 {
   /**
    * @return PHPUnit_Framework_MockObject_MockObject
