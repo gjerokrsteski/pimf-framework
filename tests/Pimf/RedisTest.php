@@ -46,7 +46,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
 
   public function testCreatingNewInstance()
   {
-    new \Pimf\Redis(new Pimf\Adapter\Socket('krsteski.de', 80), 0);
+    new \Pimf\Redis(new Pimf\Adapter\Socket('127.0.0.1', 80), 0);
   }
 
   public function testGetDatabaseConnectionInstance()
