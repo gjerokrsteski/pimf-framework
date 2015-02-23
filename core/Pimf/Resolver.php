@@ -45,16 +45,12 @@ class Resolver
   protected $router;
 
   /**
-   * @param \Pimf\Request $request
-   * @param string $repositoryPath
-   * @param string $prefix
+   * @param Request $request
+   * @param string  $repositoryPath
+   * @param string  $prefix
    * @param \Pimf\Router $router
    *
-   * @throws Bomb
-   *
-   * @todo refactoring of router injection
-   *
-   *
+   * @throws \Pimf\Resolver\Exception If no controller found at the repository path
    */
   public function __construct(\Pimf\Request $request, $repositoryPath = '/Controller', $prefix = 'Pimf\\', $router)
   {
@@ -102,7 +98,7 @@ class Resolver
    * @param EntityManager $em
    *
    * @return \Pimf\Controller\Base
-   * @throws \Exception If no controller specified or no controller found at the repository.
+   * @throws \Pimf\Resolver\Exception If no controller specified or no controller found at the repository.
    */
   public function process($env, Logger $logger, $em)
   {
