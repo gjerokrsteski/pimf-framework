@@ -24,7 +24,7 @@ abstract class Sapi
    */
   public static function isWeb()
   {
-    return self::isApache() || self::isIIS() || self::isCgi();
+    return self::isApache() || self::isIIS() || self::isCgi() || self::isBuiltInWebServer() || self::isHHVM();
   }
 
   /**
@@ -65,6 +65,24 @@ abstract class Sapi
   public static function isIIS()
   {
     return PHP_SAPI == 'isapi';
+  }
+
+  /**
+   * Are we served through PHP's built-in web server.
+   * @return bool
+   */
+  public static function isBuiltInWebServer()
+  {
+    return PHP_SAPI == 'cli-server';
+  }
+
+  /**
+   * Are we served through HHVM virtual machine
+   * @return bool
+   */
+  public static function isHHVM()
+  {
+    return PHP_SAPI == 'srv';
   }
 
   /**
