@@ -8,7 +8,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
    */
   protected function getRedis()
   {
-    return new \Pimf\Redis(new Pimf\Adapter\Socket('krsteski.de', 80), 0);
+    return new \Pimf\Redis('krsteski.de', 80);
   }
 
   /**
@@ -51,7 +51,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
 
   public function testGetDatabaseConnectionInstance()
   {
-    \Pimf\Config::load(
+    \Pimf\Registry::set('conf',
       array (
         'cache' => array (
           'storage' => 'redis',
@@ -75,7 +75,7 @@ class RedisTest extends \PHPUnit_Framework_TestCase
    */
   public function testIfRedisDatabaseNotDefined()
   {
-    \Pimf\Config::load(
+    \Pimf\Registry::set('conf',
       array(
         'cache' => array('storage' => '', 'server' => array('host' => '127.0.0.1', 'port' => 11211, 'database' => 0))
       ),
