@@ -1,6 +1,6 @@
 <?php
 
-class CharacterTest extends \PHPUnit_Framework_TestCase
+class StrTest extends \PHPUnit_Framework_TestCase
 {
     protected $testString = '';
 
@@ -13,12 +13,12 @@ class CharacterTest extends \PHPUnit_Framework_TestCase
 
     public function testCheckEncoding()
     {
-        $this->assertTrue(\Pimf\Util\Character::checkUtf8Encoding($this->testString));
+        $this->assertTrue(\Pimf\Util\Str::checkUtf8Encoding($this->testString));
     }
 
     public function testCleanAggressive()
     {
-        $res = \Pimf\Util\Character::cleanAggressive($this->testString);
+        $res = \Pimf\Util\Str::cleanAggressive($this->testString);
 
         $this->assertEquals(
             file_get_contents(dirname(__FILE__) . '/_fixture/expects-clean-aggressive.html'),
@@ -28,7 +28,7 @@ class CharacterTest extends \PHPUnit_Framework_TestCase
 
     public function testCleanXss()
     {
-        $res = \Pimf\Util\Character::cleanXss($this->testString);
+        $res = \Pimf\Util\Str::cleanXss($this->testString);
 
         $this->assertEquals(
             file_get_contents(dirname(__FILE__) . '/_fixture/expects-clean-xss.html'),
@@ -38,42 +38,42 @@ class CharacterTest extends \PHPUnit_Framework_TestCase
 
     public function testEnsureTrailing()
     {
-        $res = \Pimf\Util\Character::ensureTrailing('/', 'http://www.example.com');
+        $res = \Pimf\Util\Str::ensureTrailing('/', 'http://www.example.com');
         $this->assertStringEndsWith('/', $res);
 
-        $res = \Pimf\Util\Character::ensureTrailing('/', 'http://www.example.com/');
+        $res = \Pimf\Util\Str::ensureTrailing('/', 'http://www.example.com/');
         $this->assertStringEndsWith('/', $res);
         $this->assertStringEndsNotWith('//', $res);
 
-        $res = \Pimf\Util\Character::ensureTrailing('/', '//uc/receipt/');
+        $res = \Pimf\Util\Str::ensureTrailing('/', '//uc/receipt/');
         $this->assertStringEndsWith('/', $res);
         $this->assertStringEndsNotWith('//', $res);
     }
 
     public function testEnsureLeading()
     {
-        $res = \Pimf\Util\Character::ensureLeading('#', '1#2#3#4#5');
+        $res = \Pimf\Util\Str::ensureLeading('#', '1#2#3#4#5');
         $this->assertStringStartsWith('#1', $res);
 
-        $res = \Pimf\Util\Character::ensureLeading('#', '#1#2#3#4#5');
+        $res = \Pimf\Util\Str::ensureLeading('#', '#1#2#3#4#5');
         $this->assertStringStartsWith('#1', $res);
     }
 
     public function testDeleteLeading()
     {
-        $res = \Pimf\Util\Character::deleteLeading('#', '#1#2#3#4#5');
+        $res = \Pimf\Util\Str::deleteLeading('#', '#1#2#3#4#5');
         $this->assertStringStartsWith('1#', $res); // -> 1#2#3#4#5
 
-        $res = \Pimf\Util\Character::deleteLeading(array('#', '1'), '##111#2#3#4#5');
+        $res = \Pimf\Util\Str::deleteLeading(array('#', '1'), '##111#2#3#4#5');
         $this->assertStringStartsWith('2#', $res); // -> 2#3#4#5
     }
 
     public function testDeleteTrailing()
     {
-        $res = \Pimf\Util\Character::deleteTrailing('|', '|1|2|3|4|5|');
+        $res = \Pimf\Util\Str::deleteTrailing('|', '|1|2|3|4|5|');
         $this->assertStringEndsWith('|5', $res); // -> |1|2|3|4|5
 
-        $res = \Pimf\Util\Character::deleteTrailing(array('|', '5'), '|1|2|3|4|5|555');
+        $res = \Pimf\Util\Str::deleteTrailing(array('|', '5'), '|1|2|3|4|5|555');
         $this->assertStringEndsWith('|4', $res); // -> |1|2|3|4
     }
 
@@ -93,7 +93,7 @@ class CharacterTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertTrue(
 
-            \Pimf\Util\Character::isSerialized($data),
+            \Pimf\Util\Str::isSerialized($data),
 
             'problem on asserting that ' . print_r($data, true) . ' is serialized'
 
@@ -120,42 +120,42 @@ class CharacterTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsEvilPathContainsBadCombinations($path)
     {
-        $this->assertTrue(\Pimf\Util\Character::isEvilPath($path));
+        $this->assertTrue(\Pimf\Util\Str::isEvilPath($path));
     }
 
     public function testIsEvilPathContainsNoBadCombinations()
     {
-        $this->assertFalse(\Pimf\Util\Character::isEvilPath('/foo/bar/controller.php'));
+        $this->assertFalse(\Pimf\Util\Str::isEvilPath('/foo/bar/controller.php'));
     }
 
     public function testStartsWith()
     {
-        $this->assertTrue(\Pimf\Util\Character::startsWith('//www.krsteski.de', '//'));
+        $this->assertTrue(\Pimf\Util\Str::startsWith('//www.krsteski.de', '//'));
     }
 
     public function testEndsWith()
     {
-        $this->assertTrue(\Pimf\Util\Character::endsWith('//www.krsteski.de?index.php', '?index.php'));
+        $this->assertTrue(\Pimf\Util\Str::endsWith('//www.krsteski.de?index.php', '?index.php'));
     }
 
     public function testIsPattern()
     {
-        $this->assertTrue(\Pimf\Util\Character::is('user/profile', 'user/profile'));
+        $this->assertTrue(\Pimf\Util\Str::is('user/profile', 'user/profile'));
     }
 
     public function testIsWildcard()
     {
-        $this->assertTrue(\Pimf\Util\Character::is('user/*', 'user/profile/update'));
+        $this->assertTrue(\Pimf\Util\Str::is('user/*', 'user/profile/update'));
     }
 
     public function testIsNotEmptyString()
     {
-        $this->assertFalse(\Pimf\Util\Character::is('/', 'home'));
+        $this->assertFalse(\Pimf\Util\Str::is('/', 'home'));
     }
 
     public function testRandom()
     {
-        $res = \Pimf\Util\Character::random();
+        $res = \Pimf\Util\Str::random();
 
         $this->assertInternalType('string', $res);
         $this->assertEquals(32, strlen($res));
@@ -163,11 +163,11 @@ class CharacterTest extends \PHPUnit_Framework_TestCase
 
     public function testContains()
     {
-        $this->assertTrue(\Pimf\Util\Character::contains('user/save', array('user', 'save', 'user/')));
+        $this->assertTrue(\Pimf\Util\Str::contains('user/save', array('user', 'save', 'user/')));
     }
 
     public function testNotContains()
     {
-        $this->assertFalse(\Pimf\Util\Character::contains('user/save', 'hugo'));
+        $this->assertFalse(\Pimf\Util\Str::contains('user/save', 'hugo'));
     }
 }
