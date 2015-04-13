@@ -16,11 +16,11 @@ namespace Pimf\Contracts;
  */
 interface Reunitable
 {
-  /**
-   * Puts the template an the variables together.
-   *
-   * @throws \Exception
-   * @return string
-   */
-  public function reunite();
+    /**
+     * Puts the template an the variables together.
+     *
+     * @throws \Exception
+     * @return string
+     */
+    public function reunite();
 }

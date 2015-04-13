@@ -19,18 +19,18 @@ namespace Pimf\Controller;
  */
 class Rest extends Base
 {
-  public function init()
-  {
-    // allow cross-origin resource sharing
-    header("Access-Control-Allow-Origin: *");
-    header("Access-Control-Allow-Methods: *");
-  }
+    public function init()
+    {
+        // allow cross-origin resource sharing
+        header("Access-Control-Allow-Origin: *");
+        header("Access-Control-Allow-Methods: *");
+    }
 
-  /**
-   * Can be overridden.
-   */
-  public function indexAction()
-  {
-    //...
-  }
+    /**
+     * Can be overridden.
+     */
+    public function indexAction()
+    {
+        //...
+    }
 }

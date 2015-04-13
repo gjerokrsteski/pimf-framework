@@ -23,33 +23,33 @@ use Pimf\Contracts\Arrayable;
  */
 abstract class AsArray implements Arrayable
 {
-  /**
-   * Returns only protected and public properties of the given model-object.
-   * For another properties output format, please override this method.
-   *
-   * @return array A list of properties.
-   */
-  public function toArray()
-  {
-    return $this->map(get_class_vars(get_class($this)));
-  }
-
-  /**
-   * Maps the properties to array with actual values.
-   * For another properties-mapping, please override this method.
-   *
-   * @param array $properties
-   *
-   * @return array
-   */
-  protected function map(array $properties)
-  {
-    $map = array();
-
-    foreach ($properties as $name => $default) {
-      $map[$name] = (true === empty($this->$name)) ? $default : $this->$name;
+    /**
+     * Returns only protected and public properties of the given model-object.
+     * For another properties output format, please override this method.
+     *
+     * @return array A list of properties.
+     */
+    public function toArray()
+    {
+        return $this->map(get_class_vars(get_class($this)));
     }
 
-    return $map;
-  }
+    /**
+     * Maps the properties to array with actual values.
+     * For another properties-mapping, please override this method.
+     *
+     * @param array $properties
+     *
+     * @return array
+     */
+    protected function map(array $properties)
+    {
+        $map = array();
+
+        foreach ($properties as $name => $default) {
+            $map[$name] = (true === empty($this->$name)) ? $default : $this->$name;
+        }
+
+        return $map;
+    }
 }

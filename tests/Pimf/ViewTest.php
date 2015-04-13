@@ -1,75 +1,77 @@
 <?php
+
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
-  public static function setUpBeforeClass()
-  {
-    \Pimf\Config::load(
-      array(
-        'app' => array(
-          'name' => 'test-app',
-        ),
-        'environment' => 'testing'
-      ),
-      true
-    );
-  }
+    public static function setUpBeforeClass()
+    {
+        \Pimf\Config::load(
+            array(
+                'app'         => array(
+                    'name' => 'test-app',
+                ),
+                'environment' => 'testing'
+            ),
+            true
+        );
+    }
 
-  public function testCreatingNewInstance()
-  {
-    new \Pimf\View();
-  }
+    public function testCreatingNewInstance()
+    {
+        new \Pimf\View();
+    }
 
-  public function testWhenViewIsTreatedLikeAString()
-  {
-    $view = new \Pimf\View('default.phtml', array(), dirname(__FILE__) .'/_fixture/app/test-app/_templates/');
-    $view->assign('age', 123);
+    public function testWhenViewIsTreatedLikeAString()
+    {
+        $view = new \Pimf\View('default.phtml', array(), dirname(__FILE__) . '/_fixture/app/test-app/_templates/');
+        $view->assign('age', 123);
 
-    $this->assertStringStartsWith('123', ''.$view);
-  }
+        $this->assertStringStartsWith('123', '' . $view);
+    }
 
-  public function testProducing()
-  {
-    $view = new \Pimf\View();
+    public function testProducing()
+    {
+        $view = new \Pimf\View();
 
-    $view2 = $view->produce('default.phtml');
+        $view2 = $view->produce('default.phtml');
 
-    $this->assertInstanceOf('\Pimf\View', $view2);
-    $this->assertEquals($view, $view2);
-  }
+        $this->assertInstanceOf('\Pimf\View', $view2);
+        $this->assertEquals($view, $view2);
+    }
 
-  public function testPartialRendering()
-  {
-    $view = new \Pimf\View('default.phtml', array(), dirname(__FILE__) .'/_fixture/app/test-app/_templates/');
-    $res = $view->partial('default.phtml', array('age'=>123));
+    public function testPartialRendering()
+    {
+        $view = new \Pimf\View('default.phtml', array(), dirname(__FILE__) . '/_fixture/app/test-app/_templates/');
+        $res = $view->partial('default.phtml', array('age' => 123));
 
-    $this->assertStringStartsWith('123', $res);
-  }
+        $this->assertStringStartsWith('123', $res);
+    }
 
-  public function testLoopRendering()
-  {
-    $view = new \Pimf\View('default.phtml', array(), dirname(__FILE__) .'/_fixture/app/test-app/_templates/');
-    $res = $view->loop('default.phtml', array(array('age'=>123), array('age'=>456)));
+    public function testLoopRendering()
+    {
+        $view = new \Pimf\View('default.phtml', array(), dirname(__FILE__) . '/_fixture/app/test-app/_templates/');
+        $res = $view->loop('default.phtml', array(array('age' => 123), array('age' => 456)));
 
-    $this->assertStringStartsWith('123', $res);
-    $this->assertStringEndsWith('456', $res);
-  }
+        $this->assertStringStartsWith('123', $res);
+        $this->assertStringEndsWith('456', $res);
+    }
 
-  /**
-   * @expectedException \PHPUnit_Framework_Error_Notice
-   */
-  public function testIfTemplateNotFound()
-  {
-    $view = new \Pimf\View('bad-bad-template.phtml', array(), dirname(__FILE__) .'/_fixture/app/test-app/_templates/');
-    $view->render();
-  }
+    /**
+     * @expectedException \PHPUnit_Framework_Error_Notice
+     */
+    public function testIfTemplateNotFound()
+    {
+        $view = new \Pimf\View('bad-bad-template.phtml', array(),
+            dirname(__FILE__) . '/_fixture/app/test-app/_templates/');
+        $view->render();
+    }
 
-  /**
-   * @expectedException \PHPUnit_Framework_Error_Notice
-   */
-  public function testIfRenderingUndefinedProperty()
-  {
-    $view = new \Pimf\View('default.phtml', array(), dirname(__FILE__) .'/_fixture/app/test-app/_templates/');
-    $view->render();
-  }
+    /**
+     * @expectedException \PHPUnit_Framework_Error_Notice
+     */
+    public function testIfRenderingUndefinedProperty()
+    {
+        $view = new \Pimf\View('default.phtml', array(), dirname(__FILE__) . '/_fixture/app/test-app/_templates/');
+        $view->render();
+    }
 }
  

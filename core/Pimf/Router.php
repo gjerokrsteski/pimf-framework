@@ -21,67 +21,67 @@ use Pimf\Route\Target;
  */
 class Router
 {
-  /**
-   * @var Route[]
-   */
-  protected $routes = array();
+    /**
+     * @var Route[]
+     */
+    protected $routes = array();
 
-  public function __construct()
-  {
-    //it is a pimf-framework restriction.
-    $this->map(new Route('/:controller'))
-         ->map(new Route('/:controller/:action'))
-         ->map(new Route('/:controller/:action/:id'));
-  }
-
-  /**
-   * @param Route $route
-   *
-   * @return Router
-   */
-  public function map(Route $route)
-  {
-    $this->routes[$route->init()->getRule()] = $route;
-
-    return $this;
-  }
-
-  /**
-   * @param Route $route
-   *
-   * @return Target
-   */
-  private function target(Route $route)
-  {
-    $params = $route->getParams();
-
-    $target = new Target($params['controller']);
-
-    unset($params['controller']);
-
-    if (isset($params['action'])) {
-      $target->setAction($params['action']);
-      unset($params['action']);
+    public function __construct()
+    {
+        //it is a pimf-framework restriction.
+        $this->map(new Route('/:controller'))
+            ->map(new Route('/:controller/:action'))
+            ->map(new Route('/:controller/:action/:id'));
     }
 
-    $target->setParams($params);
+    /**
+     * @param Route $route
+     *
+     * @return Router
+     */
+    public function map(Route $route)
+    {
+        $this->routes[$route->init()->getRule()] = $route;
 
-    return $target;
-  }
-
-  /**
-   * @return bool|Target
-   */
-  public function find()
-  {
-    // check custom routes first
-    // than framework's restriction routes.
-    foreach (array_reverse($this->routes) as $route) {
-      if ($route->matches() === true) {
-        return $this->target($route);
-      }
+        return $this;
     }
 
-    return false;
-  }
+    /**
+     * @param Route $route
+     *
+     * @return Target
+     */
+    private function target(Route $route)
+    {
+        $params = $route->getParams();
+
+        $target = new Target($params['controller']);
+
+        unset($params['controller']);
+
+        if (isset($params['action'])) {
+            $target->setAction($params['action']);
+            unset($params['action']);
+        }
+
+        $target->setParams($params);
+
+        return $target;
+    }
+
+    /**
+     * @return bool|Target
+     */
+    public function find()
+    {
+        // check custom routes first
+        // than framework's restriction routes.
+        foreach (array_reverse($this->routes) as $route) {
+            if ($route->matches() === true) {
+                return $this->target($route);
+            }
+        }
+
+        return false;
+    }
 }

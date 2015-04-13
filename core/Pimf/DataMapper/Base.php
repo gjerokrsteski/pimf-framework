@@ -27,45 +27,45 @@ use Pimf\Util\IdentityMap;
  */
 abstract class Base
 {
-  /**
-   * @var \PDO The database resource.
-   */
-  protected $pdo;
+    /**
+     * @var \PDO The database resource.
+     */
+    protected $pdo;
 
-  /**
-   * @var \Pimf\Util\IdentityMap
-   */
-  protected $identityMap;
+    /**
+     * @var \Pimf\Util\IdentityMap
+     */
+    protected $identityMap;
 
-  /**
-   * @param \PDO $pdo
-   */
-  public function __construct(\PDO $pdo)
-  {
-    $this->pdo         = $pdo;
-    $this->identityMap = new IdentityMap();
-  }
+    /**
+     * @param \PDO $pdo
+     */
+    public function __construct(\PDO $pdo)
+    {
+        $this->pdo = $pdo;
+        $this->identityMap = new IdentityMap();
+    }
 
-  public function __destruct()
-  {
-    unset($this->identityMap, $this->pdo);
-  }
+    public function __destruct()
+    {
+        unset($this->identityMap, $this->pdo);
+    }
 
-  /**
-   * Makes a given model-property accessible.
-   *
-   * @param object $model
-   * @param int    $value
-   * @param string $property
-   *
-   * @return mixed
-   */
-  public function reflect($model, $value, $property = 'id')
-  {
-    $attribute = new \ReflectionProperty($model, $property);
-    $attribute->setAccessible(true);
-    $attribute->setValue($model, $value);
+    /**
+     * Makes a given model-property accessible.
+     *
+     * @param object $model
+     * @param int    $value
+     * @param string $property
+     *
+     * @return mixed
+     */
+    public function reflect($model, $value, $property = 'id')
+    {
+        $attribute = new \ReflectionProperty($model, $property);
+        $attribute->setAccessible(true);
+        $attribute->setValue($model, $value);
 
-    return $model;
-  }
+        return $model;
+    }
 }

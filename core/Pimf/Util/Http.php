@@ -21,7 +21,7 @@ class Http
      */
     public static function safeMethods()
     {
-        return array ('HEAD', 'GET', 'OPTIONS', 'TRACE');
+        return array('HEAD', 'GET', 'OPTIONS', 'TRACE');
     }
 
     /**
@@ -51,7 +51,7 @@ class Http
      */
     public static function idempotentMethods()
     {
-        return array ('HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'PATCH');
+        return array('HEAD', 'GET', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'PATCH');
     }
 
     /**
@@ -79,6 +79,6 @@ class Http
      */
     public static function canHaveBody()
     {
-        return array ('POST', 'PUT', 'PATCH', 'OPTIONS');
+        return array('POST', 'PUT', 'PATCH', 'OPTIONS');
     }
 }

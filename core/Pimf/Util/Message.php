@@ -36,105 +36,105 @@ namespace Pimf\Util;
  */
 class Message
 {
-  /**
-   * @var string The message.
-   */
-  protected $message = '';
+    /**
+     * @var string The message.
+     */
+    protected $message = '';
 
-  /**
-   * @var array A list of tokes which should be bind.
-   */
-  protected $bindings = array();
+    /**
+     * @var array A list of tokes which should be bind.
+     */
+    protected $bindings = array();
 
-  /**
-   * @var string The prefixed delimiter for the tokens.
-   */
-  protected $delimiter = '%';
+    /**
+     * @var string The prefixed delimiter for the tokens.
+     */
+    protected $delimiter = '%';
 
-  /**
-   * @param string $message  The message or the resource.
-   * @param array  $bindings (Optional) A List of tokes whitch should be bind.
-   */
-  public function __construct($message, array $bindings = array())
-  {
-    $this->setMessage($message);
-    $this->bindings = $bindings;
-  }
-
-  /**
-   * @return string
-   */
-  public function getMessage()
-  {
-    return $this->message;
-  }
-
-  /**
-   * @param string $message The message.
-   *
-   * @return Message
-   */
-  public function setMessage($message)
-  {
-    $this->message = $message;
-
-    return $this;
-  }
-
-  /**
-   * @param string $char The character for the prexied delimitation of the tokens.
-   *
-   * @return Message
-   */
-  public function setDelimiter($char)
-  {
-    $this->delimiter = $char;
-
-    return $this;
-  }
-
-  /**
-   * Sets/Updates the value for the given token.
-   *
-   * @param string $token The token.
-   * @param string $value The value for replacement.
-   *
-   * @return Message
-   */
-  public function bind($token, $value)
-  {
-    $this->bindings[$token] = $value;
-
-    return $this;
-  }
-
-  /**
-   * If the object is treated as string.
-   *
-   * @return string
-   */
-  public function __toString()
-  {
-    return (string) $this->format();
-  }
-
-  /**
-   * Retuns formated message.
-   *
-   * @return string
-   */
-  public function format()
-  {
-    if ($this->getMessage() == '' || !$this->getMessage()) {
-      return '';
+    /**
+     * @param string $message  The message or the resource.
+     * @param array  $bindings (Optional) A List of tokes whitch should be bind.
+     */
+    public function __construct($message, array $bindings = array())
+    {
+        $this->setMessage($message);
+        $this->bindings = $bindings;
     }
 
-    if (count($this->bindings) > 0) {
-      foreach ($this->bindings as $token => $value) {
-        $this->message = str_replace($this->delimiter . $token, $value, $this->message);
-      }
+    /**
+     * @return string
+     */
+    public function getMessage()
+    {
+        return $this->message;
     }
 
-    return $this->message;
-  }
+    /**
+     * @param string $message The message.
+     *
+     * @return Message
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
+    }
+
+    /**
+     * @param string $char The character for the prexied delimitation of the tokens.
+     *
+     * @return Message
+     */
+    public function setDelimiter($char)
+    {
+        $this->delimiter = $char;
+
+        return $this;
+    }
+
+    /**
+     * Sets/Updates the value for the given token.
+     *
+     * @param string $token The token.
+     * @param string $value The value for replacement.
+     *
+     * @return Message
+     */
+    public function bind($token, $value)
+    {
+        $this->bindings[$token] = $value;
+
+        return $this;
+    }
+
+    /**
+     * If the object is treated as string.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->format();
+    }
+
+    /**
+     * Retuns formated message.
+     *
+     * @return string
+     */
+    public function format()
+    {
+        if ($this->getMessage() == '' || !$this->getMessage()) {
+            return '';
+        }
+
+        if (count($this->bindings) > 0) {
+            foreach ($this->bindings as $token => $value) {
+                $this->message = str_replace($this->delimiter . $token, $value, $this->message);
+            }
+        }
+
+        return $this->message;
+    }
 }

@@ -14,66 +14,66 @@ namespace Pimf;
  */
 class Param
 {
-  /**
-   * @var \ArrayObject|null
-   */
-  protected $data = null;
+    /**
+     * @var \ArrayObject|null
+     */
+    protected $data = null;
 
-  /**
-   * @param array $data
-   */
-  public function __construct(array $data = array())
-  {
-    $this->data = new \ArrayObject($data, \ArrayObject::STD_PROP_LIST + \ArrayObject::ARRAY_AS_PROPS);
-  }
-
-  /**
-   * @return array
-   */
-  public function getAll()
-  {
-    return (array)$this->data->getArrayCopy();
-  }
-
-  /**
-   * @param string $index
-   * @param null|string $defaultValue
-   * @param bool   $filtered If you trust foreign input introduced to your PHP code - set to FALSE!
-   *
-   * @return mixed
-   */
-  public function get($index, $defaultValue = null, $filtered = true)
-  {
-    if ($this->data->offsetExists($index)) {
-
-      if ($filtered === true) {
-        // pretty high-level filtering here...
-        return self::filter($this->data->offsetGet($index));
-      }
-
-      return $this->data->offsetGet($index);
+    /**
+     * @param array $data
+     */
+    public function __construct(array $data = array())
+    {
+        $this->data = new \ArrayObject($data, \ArrayObject::STD_PROP_LIST + \ArrayObject::ARRAY_AS_PROPS);
     }
 
-    return $defaultValue;
-  }
+    /**
+     * @return array
+     */
+    public function getAll()
+    {
+        return (array)$this->data->getArrayCopy();
+    }
 
-  /**
-   * Never ever (ever) trust foreign input introduced to your PHP code!
-   *
-   * @param mixed $rawData
-   *
-   * @return mixed
-   */
-  public static function filter($rawData)
-  {
-    return is_array($rawData)
+    /**
+     * @param string      $index
+     * @param null|string $defaultValue
+     * @param bool        $filtered If you trust foreign input introduced to your PHP code - set to FALSE!
+     *
+     * @return mixed
+     */
+    public function get($index, $defaultValue = null, $filtered = true)
+    {
+        if ($this->data->offsetExists($index)) {
 
-      ? array_map(
-        function ($value) {
-          return \Pimf\Util\String\Clean::xss($value);
-        }, $rawData
-      )
+            if ($filtered === true) {
+                // pretty high-level filtering here...
+                return self::filter($this->data->offsetGet($index));
+            }
 
-      : \Pimf\Util\String\Clean::xss($rawData);
-  }
+            return $this->data->offsetGet($index);
+        }
+
+        return $defaultValue;
+    }
+
+    /**
+     * Never ever (ever) trust foreign input introduced to your PHP code!
+     *
+     * @param mixed $rawData
+     *
+     * @return mixed
+     */
+    public static function filter($rawData)
+    {
+        return is_array($rawData)
+
+            ? array_map(
+                function ($value) {
+                    return \Pimf\Util\Character\Clean::xss($value);
+                }, $rawData
+            )
+
+            : \Pimf\Util\Character\Clean::xss($rawData);
+    }
 }

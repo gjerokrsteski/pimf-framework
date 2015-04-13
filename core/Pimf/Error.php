@@ -19,55 +19,55 @@ use Pimf\Util\Header;
  */
 class Error
 {
-  /**
-   * Handle an exception and display the exception report.
-   *
-   * @param \Exception $exception
-   * @param Logger $logger
-   * @param boolean $exit
-   */
-  public static function exception(\Exception $exception, $logger, $exit = true)
-  {
-    static::log($exception, $logger);
+    /**
+     * Handle an exception and display the exception report.
+     *
+     * @param \Exception $exception
+     * @param Logger     $logger
+     * @param boolean    $exit
+     */
+    public static function exception(\Exception $exception, $logger, $exit = true)
+    {
+        static::log($exception, $logger);
 
-    ob_get_length() > 0 && ob_get_level() && ob_end_clean();
+        ob_get_length() > 0 && ob_get_level() && ob_end_clean();
 
-    if (Config::get('error.debug_info') === true) {
-      echo static::format($exception, Sapi::isCli());
-      if ($exit) {
-        exit;
-      }
+        if (Config::get('error.debug_info') === true) {
+            echo static::format($exception, Sapi::isCli());
+            if ($exit) {
+                exit;
+            }
+        }
+
+        if ($exception instanceof \Pimf\Controller\Exception
+            || $exception instanceof \Pimf\Resolver\Exception
+        ) {
+            Event::first('404', array($exception));
+            Header::sendNotFound(null, $exit);
+        } else {
+            Event::first('500', array($exception));
+            Header::sendInternalServerError(null, $exit);
+        }
     }
 
-    if ($exception instanceof \Pimf\Controller\Exception
-      || $exception instanceof \Pimf\Resolver\Exception
-    ) {
-      Event::first('404', array($exception));
-      Header::sendNotFound(null, $exit);
-    } else {
-      Event::first('500', array($exception));
-      Header::sendInternalServerError(null, $exit);
-    }
-  }
+    /**
+     * If detailed errors are enabled, just format the exception into
+     * a simple error message and display it.
+     *
+     * @param \Exception $exception
+     * @param boolean    $isCli
+     *
+     * @return string
+     */
+    public static function format(\Exception $exception, $isCli = false)
+    {
+        if ($isCli === true) {
+            return
+                "+++ Untreated Exception +++" . PHP_EOL . "Message: " . $exception->getMessage() . PHP_EOL . "Location: " . $exception->getFile()
+                . " on line " . $exception->getLine() . PHP_EOL . "Stack Trace: " . PHP_EOL . $exception->getTraceAsString() . PHP_EOL;
+        }
 
-  /**
-   * If detailed errors are enabled, just format the exception into
-   * a simple error message and display it.
-   *
-   * @param \Exception $exception
-   * @param boolean $isCli
-   *
-   * @return string
-   */
-  public static function format(\Exception $exception, $isCli = false)
-  {
-    if ($isCli === true) {
-      return
-        "+++ Untreated Exception +++" . PHP_EOL . "Message: " . $exception->getMessage() . PHP_EOL . "Location: " . $exception->getFile()
-        . " on line " . $exception->getLine() . PHP_EOL . "Stack Trace: " . PHP_EOL . $exception->getTraceAsString() . PHP_EOL;
-    }
-
-    return "<html>
+        return "<html>
     <head>
       <style>
         pre { display: block;
@@ -95,59 +95,60 @@ class Error
       <pre>" . $exception->getFile() . " on line " . $exception->getLine() . "</pre>
       <h3>Stack Trace:</h3>
       <pre>" . $exception->getTraceAsString() . "</pre></html>";
-  }
-
-  /**
-   * Handle a native PHP error as an ErrorException.
-   *
-   * @param int $code
-   * @param string $error
-   * @param string $file
-   * @param int $line
-   * @param Logger $logger
-   * @param array|int $reporting which PHP errors are reported
-   * @param boolean $exit
-   */
-  public static function native($code, $error, $file, $line, $logger, $reporting, $exit = true)
-  {
-    if ($reporting === 0) {
-      return;
     }
 
-    // create an ErrorException for the PHP error
-    $exception = new \ErrorException($error, $code, 0, $file, $line);
+    /**
+     * Handle a native PHP error as an ErrorException.
+     *
+     * @param int       $code
+     * @param string    $error
+     * @param string    $file
+     * @param int       $line
+     * @param Logger    $logger
+     * @param array|int $reporting which PHP errors are reported
+     * @param boolean   $exit
+     */
+    public static function native($code, $error, $file, $line, $logger, $reporting, $exit = true)
+    {
+        if ($reporting === 0) {
+            return;
+        }
 
-    if (in_array($code, (array)Config::get('error.ignore_levels'))) {
-      return static::log($exception, $logger);
+        // create an ErrorException for the PHP error
+        $exception = new \ErrorException($error, $code, 0, $file, $line);
+
+        if (in_array($code, (array)Config::get('error.ignore_levels'))) {
+            return static::log($exception, $logger);
+        }
+
+        // display the ErrorException
+        static::exception($exception, $logger, $exit);
     }
 
-    // display the ErrorException
-    static::exception($exception, $logger, $exit);
-  }
-
-  /**
-   * Handle the PHP shutdown event.
-   *
-   * @param Logger $logger
-   * @param array|null $error
-   * @param bool $exit
-   */
-  public static function shutdown($logger, $error, $exit = true)
-  {
-    // if a fatal error occurred
-    if (!is_null($error)) {
-      static::exception(new \ErrorException($error['message'], $error['type'], 0, $error['file'], $error['line']), $logger, $exit);
+    /**
+     * Handle the PHP shutdown event.
+     *
+     * @param Logger     $logger
+     * @param array|null $error
+     * @param bool       $exit
+     */
+    public static function shutdown($logger, $error, $exit = true)
+    {
+        // if a fatal error occurred
+        if (!is_null($error)) {
+            static::exception(new \ErrorException($error['message'], $error['type'], 0, $error['file'], $error['line']),
+                $logger, $exit);
+        }
     }
-  }
 
-  /**
-   * @param \Exception $exception
-   * @param Logger $logger
-   */
-  public static function log(\Exception $exception, Logger $logger)
-  {
-    if (Config::get('error.log') === true) {
-      $logger->error($exception->getMessage() . ' ' . $exception->getTraceAsString());
+    /**
+     * @param \Exception $exception
+     * @param Logger     $logger
+     */
+    public static function log(\Exception $exception, Logger $logger)
+    {
+        if (Config::get('error.log') === true) {
+            $logger->error($exception->getMessage() . ' ' . $exception->getTraceAsString());
+        }
     }
-  }
 }

@@ -19,103 +19,103 @@ namespace Pimf\Util;
  */
 class Serializer
 {
-  /**
-   * Serialize things.
-   *
-   * @param mixed $object Item you want - string, array, integer, object
-   *
-   * @return string Containing a byte-stream representation.
-   */
-  public static function serialize($object)
-  {
-    $masked = false;
+    /**
+     * Serialize things.
+     *
+     * @param mixed $object Item you want - string, array, integer, object
+     *
+     * @return string Containing a byte-stream representation.
+     */
+    public static function serialize($object)
+    {
+        $masked = false;
 
-    if (false === is_object($object)) {
-      $object = self::mask($object);
-      $masked = true;
+        if (false === is_object($object)) {
+            $object = self::mask($object);
+            $masked = true;
+        }
+
+        $capsule = new \stdClass();
+        $capsule->type = get_class($object);
+        $capsule->object = $object;
+        $capsule->fake = $masked;
+
+        if ($object instanceof \SimpleXMLElement) {
+            $capsule->object = $object->asXml();
+        }
+
+        return '' . self::serializeNative($capsule);
     }
 
-    $capsule         = new \stdClass();
-    $capsule->type   = get_class($object);
-    $capsule->object = $object;
-    $capsule->fake   = $masked;
+    /**
+     * Unserialize things.
+     *
+     * @param string $object Serialized object.
+     *
+     * @return mixed
+     */
+    public static function unserialize($object)
+    {
+        $capsule = self::unserializeNative($object);
 
-    if ($object instanceof \SimpleXMLElement) {
-      $capsule->object = $object->asXml();
+        if (true === $capsule->fake) {
+            $capsule->object = self::unmask($capsule->object);
+        }
+
+        if ($capsule->type == 'SimpleXMLElement') {
+            $capsule->object = simplexml_load_string($capsule->object);
+        }
+
+        return $capsule->object;
     }
 
-    return '' . self::serializeNative($capsule);
-  }
-
-  /**
-   * Unserialize things.
-   *
-   * @param string $object Serialized object.
-   *
-   * @return mixed
-   */
-  public static function unserialize($object)
-  {
-    $capsule = self::unserializeNative($object);
-
-    if (true === $capsule->fake) {
-      $capsule->object = self::unmask($capsule->object);
+    /**
+     * @param \stdClass $value Item value.
+     *
+     * @throws \RuntimeException If error during serialize.
+     * @return string
+     */
+    public static function serializeNative($value)
+    {
+        return (extension_loaded('igbinary') && function_exists('igbinary_serialize'))
+            ? igbinary_serialize($value)
+            : serialize($value);
     }
 
-    if ($capsule->type == 'SimpleXMLElement') {
-      $capsule->object = simplexml_load_string($capsule->object);
+    /**
+     * @param string $serialized The serialized item-string.
+     *
+     * @throws \RuntimeException If error during unserialize.
+     * @return mixed
+     */
+    public static function unserializeNative($serialized)
+    {
+        return (extension_loaded('igbinary') && function_exists('igbinary_unserialize'))
+            ? igbinary_unserialize($serialized)
+            : unserialize($serialized);
     }
 
-    return $capsule->object;
-  }
-
-  /**
-   * @param \stdClass $value Item value.
-   *
-   * @throws \RuntimeException If error during serialize.
-   * @return string
-   */
-  public static function serializeNative($value)
-  {
-    return (extension_loaded('igbinary') && function_exists('igbinary_serialize'))
-      ? igbinary_serialize($value)
-      : serialize($value);
-  }
-
-  /**
-   * @param string $serialized The serialized item-string.
-   *
-   * @throws \RuntimeException If error during unserialize.
-   * @return mixed
-   */
-  public static function unserializeNative($serialized)
-  {
-    return (extension_loaded('igbinary') && function_exists('igbinary_unserialize'))
-      ? igbinary_unserialize($serialized)
-      : unserialize($serialized);
-  }
-
-  /**
-   * @param mixed $item Item
-   *
-   * @return \stdClass
-   */
-  private static function mask($item)
-  {
-    return (object)$item;
-  }
-
-  /**
-   * @param mixed $item Item
-   *
-   * @return array
-   */
-  private static function unmask($item)
-  {
-    if (is_object($item) && property_exists($item, 'scalar')) {
-      return $item->scalar;
+    /**
+     * @param mixed $item Item
+     *
+     * @return \stdClass
+     */
+    private static function mask($item)
+    {
+        return (object)$item;
     }
 
-    return (array)$item;
-  }
+    /**
+     * @param mixed $item Item
+     *
+     * @return array
+     */
+    private static function unmask($item)
+    {
+        if (is_object($item) && property_exists($item, 'scalar')) {
+            return $item->scalar;
+        }
+
+        return (array)$item;
+    }
 }

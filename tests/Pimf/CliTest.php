@@ -1,86 +1,87 @@
 <?php
+
 class CliTest extends \PHPUnit_Framework_TestCase
 {
-  public function testCreatingNewInstance()
-  {
-    new \Pimf\Cli();
-  }
+    public function testCreatingNewInstance()
+    {
+        new \Pimf\Cli();
+    }
 
-  public function testParsingCommand()
-  {
-    $command = array('php pimf', 'core:load');
+    public function testParsingCommand()
+    {
+        $command = array('php pimf', 'core:load');
 
-    $this->assertEquals(
-      array
-      (
-          'core:load' => '',
-          'controller' => 'core',
-          'action' => 'load',
-      ),
+        $this->assertEquals(
+            array
+            (
+                'core:load'  => '',
+                'controller' => 'core',
+                'action'     => 'load',
+            ),
 
-     \Pimf\Cli::parse($command)
+            \Pimf\Cli::parse($command)
 
-    );
-  }
+        );
+    }
 
-  public function testParsingSomeAppCommand()
-  {
-    $command = array('php pimf', 'blog:insert');
+    public function testParsingSomeAppCommand()
+    {
+        $command = array('php pimf', 'blog:insert');
 
-    $this->assertEquals(
-      array
-      (
-          'blog:insert' => '',
-          'controller' => 'blog',
-          'action' => 'insert',
-      ),
+        $this->assertEquals(
+            array
+            (
+                'blog:insert' => '',
+                'controller'  => 'blog',
+                'action'      => 'insert',
+            ),
 
-     \Pimf\Cli::parse($command)
+            \Pimf\Cli::parse($command)
 
-    );
-  }
+        );
+    }
 
-  public function testParsingListCommand()
-  {
-    $command = array('php pimf', 'list');
+    public function testParsingListCommand()
+    {
+        $command = array('php pimf', 'list');
 
-    $this->assertEquals(
-      array
-      (
-          'list' => '',
-      ),
+        $this->assertEquals(
+            array
+            (
+                'list' => '',
+            ),
 
-     \Pimf\Cli::parse($command)
+            \Pimf\Cli::parse($command)
 
-    );
-  }
+        );
+    }
 
-  public function testCollectControllers()
-  {
-    $fixture_path = dirname(__FILE__) . '/_fixture';
-    $classes = \Pimf\Cli::collect($fixture_path, $fixture_path, '');
+    public function testCollectControllers()
+    {
+        $fixture_path = dirname(__FILE__) . '/_fixture';
+        $classes = \Pimf\Cli::collect($fixture_path, $fixture_path, '');
 
-    $this->assertInternalType('array', $classes);
-    $this->assertNotEmpty($classes);
-  }
+        $this->assertInternalType('array', $classes);
+        $this->assertNotEmpty($classes);
+    }
 
-  /**
-   * @runInSeparateProcess
-   * @outputBuffering enabled
-   */
-  public function testReflectingControllers()
-  {
-    require_once dirname(__FILE__) . '/_fixture/Index.php';
+    /**
+     * @runInSeparateProcess
+     * @outputBuffering enabled
+     */
+    public function testReflectingControllers()
+    {
+        require_once dirname(__FILE__) . '/_fixture/Index.php';
 
-    ob_start();
+        ob_start();
 
-     \Pimf\Cli::reflect(array('\\Fixture\\Controller\\Index'));
+        \Pimf\Cli::reflect(array('\\Fixture\\Controller\\Index'));
 
-    $res = ob_get_clean();
+        $res = ob_get_clean();
 
-    $this->assertContains('controller: \\fixture\\controller\\index', $res);
-    $this->assertContains('action: save', $res);
-    $this->assertContains('action: index', $res);
-  }
+        $this->assertContains('controller: \\fixture\\controller\\index', $res);
+        $this->assertContains('action: save', $res);
+        $this->assertContains('action: index', $res);
+    }
 }
  

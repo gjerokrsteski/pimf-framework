@@ -16,46 +16,47 @@ use Pimf\Cookie as Crumb;
  */
 class Cookie extends Storage
 {
-  /**
-   * The name of the cookie used to store the session payload.
-   *
-   * @var string
-   */
-  const PAYLOAD = 'session_payload';
+    /**
+     * The name of the cookie used to store the session payload.
+     *
+     * @var string
+     */
+    const PAYLOAD = 'session_payload';
 
-  /**
-   * Load a session from storage by a given ID.
-   *
-   * @param  string $key
-   *
-   * @return array|null
-   */
-  public function load($key)
-  {
-    if (Crumb::has(static::PAYLOAD)) {
-      return unserialize(base64_decode(Crumb::get(static::PAYLOAD)));
+    /**
+     * Load a session from storage by a given ID.
+     *
+     * @param  string $key
+     *
+     * @return array|null
+     */
+    public function load($key)
+    {
+        if (Crumb::has(static::PAYLOAD)) {
+            return unserialize(base64_decode(Crumb::get(static::PAYLOAD)));
+        }
+
+        return null;
     }
 
-    return null;
-  }
+    /**
+     * Save a given session to storage.
+     *
+     * @param array $session
+     * @param array $config
+     * @param bool  $exists
+     */
+    public function save($session, $config, $exists)
+    {
+        Crumb::put(static::PAYLOAD, base64_encode(serialize($session)), $config['lifetime'], $config['path'],
+            $config['domain']);
+    }
 
-  /**
-   * Save a given session to storage.
-   *
-   * @param array $session
-   * @param array $config
-   * @param bool  $exists
-   */
-  public function save($session, $config, $exists)
-  {
-    Crumb::put(static::PAYLOAD, base64_encode(serialize($session)), $config['lifetime'], $config['path'], $config['domain']);
-  }
-
-  /**
-   * @param string $key
-   */
-  public function delete($key)
-  {
-    Crumb::forget(static::PAYLOAD);
-  }
+    /**
+     * @param string $key
+     */
+    public function delete($key)
+    {
+        Crumb::forget(static::PAYLOAD);
+    }
 }

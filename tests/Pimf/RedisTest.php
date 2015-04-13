@@ -1,158 +1,162 @@
 <?php
+
 class RedisTest extends \PHPUnit_Framework_TestCase
 {
-  const CRLF = "\r\n";
+    const CRLF = "\r\n";
 
-  /**
-   * @return \Pimf\Redis
-   */
-  protected function getRedis()
-  {
-    return new \Pimf\Redis(new Pimf\Adapter\Socket('krsteski.de', 80), 0);
-  }
+    /**
+     * @return \Pimf\Redis
+     */
+    protected function getRedis()
+    {
+        return new \Pimf\Redis(new Pimf\Adapter\Socket('krsteski.de', 80), 0);
+    }
 
-  /**
-   * @return \Pimf\Redis
-   */
-  protected function getRedisMock()
-  {
-    return $this->getMockBuilder('\\Pimf\\Redis')
-      ->disableOriginalConstructor()
-      ->setMethods(array('get', 'expire', 'set', 'del', 'forget', 'select', 'put', 'inline', 'bulk', 'multibulk'))
-      ->getMock();
-  }
+    /**
+     * @return \Pimf\Redis
+     */
+    protected function getRedisMock()
+    {
+        return $this->getMockBuilder('\\Pimf\\Redis')
+            ->disableOriginalConstructor()
+            ->setMethods(array('get', 'expire', 'set', 'del', 'forget', 'select', 'put', 'inline', 'bulk', 'multibulk'))
+            ->getMock();
+    }
 
-  /**
-   * Call protected/private method of a class.
-   *
-   * @param object &$object    Instantiated object that we will run method on.
-   * @param string $methodName Method name to call
-   * @param array  $parameters Array of parameters to pass into method.
-   *
-   * @return mixed Method return.
-   */
-  public static function invokeMethod(&$object, $methodName, array $parameters = array())
-  {
-      $reflection = new \ReflectionClass(get_class($object));
-      $method = $reflection->getMethod($methodName);
-      $method->setAccessible(true);
+    /**
+     * Call protected/private method of a class.
+     *
+     * @param object &$object Instantiated object that we will run method on.
+     * @param string $methodName Method name to call
+     * @param array  $parameters Array of parameters to pass into method.
+     *
+     * @return mixed Method return.
+     */
+    public static function invokeMethod(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
 
-      return $method->invokeArgs($object, $parameters);
-  }
-
-
-  ## start testing
+        return $method->invokeArgs($object, $parameters);
+    }
 
 
-  public function testCreatingNewInstance()
-  {
-    new \Pimf\Redis(new Pimf\Adapter\Socket('127.0.0.1', 80), 0);
-  }
+    ## start testing
 
-  public function testGetDatabaseConnectionInstance()
-  {
-    \Pimf\Config::load(
-      array (
-        'cache' => array (
-          'storage' => 'redis',
-          'server'  => array ('host' => '127.0.0.1', 'port' => 11211, 'database' => 0)
-        )
-      ),
-      true
-    );
 
-   $this->assertInstanceOf(
+    public function testCreatingNewInstance()
+    {
+        new \Pimf\Redis(new Pimf\Adapter\Socket('127.0.0.1', 80), 0);
+    }
 
-     '\\Pimf\\Redis',
+    public function testGetDatabaseConnectionInstance()
+    {
+        \Pimf\Config::load(
+            array(
+                'cache' => array(
+                    'storage' => 'redis',
+                    'server'  => array('host' => '127.0.0.1', 'port' => 11211, 'database' => 0)
+                )
+            ),
+            true
+        );
 
-     \Pimf\Redis::database()
-   );
+        $this->assertInstanceOf(
 
-  }
+            '\\Pimf\\Redis',
 
-  /**
-   * @expectedException \RuntimeException
-   */
-  public function testIfRedisDatabaseNotDefined()
-  {
-    \Pimf\Config::load(
-      array(
-        'cache' => array('storage' => '', 'server' => array('host' => '127.0.0.1', 'port' => 11211, 'database' => 0))
-      ),
-      true
-    );
+            \Pimf\Redis::database()
+        );
 
-    \Pimf\Redis::database('default2');
-  }
+    }
 
-  /**
-   * @expectedException \RuntimeException
-   */
-  public function testGetReturnsNullWhenNotFound()
-  {
-    $redis = $this->getRedis();
-    $redis->expects($this->any())->method('connect')->will($this->returnValue($redis));
-    $redis->expects($this->once())->method('get')->will($this->returnValue(null));
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testIfRedisDatabaseNotDefined()
+    {
+        \Pimf\Config::load(
+            array(
+                'cache' => array(
+                    'storage' => '',
+                    'server'  => array('host' => '127.0.0.1', 'port' => 11211, 'database' => 0)
+                )
+            ),
+            true
+        );
 
-    $this->assertNull($redis->get('foo'));
-  }
+        \Pimf\Redis::database('default2');
+    }
 
-  /**
-   * @expectedException \RuntimeException
-   */
-  public function testIfUnknownRedisResponse()
-  {
-    $redis = $this->getRedis();
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetReturnsNullWhenNotFound()
+    {
+        $redis = $this->getRedis();
+        $redis->expects($this->any())->method('connect')->will($this->returnValue($redis));
+        $redis->expects($this->once())->method('get')->will($this->returnValue(null));
 
-    self::invokeMethod($redis, 'parse', array('bad-response-string'));
-  }
+        $this->assertNull($redis->get('foo'));
+    }
 
-  /**
-   * @expectedException \RuntimeException
-   */
-  public function testIfResponseIsRedisError()
-  {
-    $redis = $this->getRedis();
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testIfUnknownRedisResponse()
+    {
+        $redis = $this->getRedis();
 
-    self::invokeMethod($redis, 'parse', array('-erro'."\r\n"));
-  }
+        self::invokeMethod($redis, 'parse', array('bad-response-string'));
+    }
 
-  public function testHappyParsing()
-  {
-    $redis = $this->getRedisMock();
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testIfResponseIsRedisError()
+    {
+        $redis = $this->getRedis();
 
-    $redis->expects($this->any())->method('inline')->will($this->returnValue('ok'));
-    $redis->expects($this->any())->method('bulk')->will($this->returnValue('ok'));
-    $redis->expects($this->any())->method('multibulk')->will($this->returnValue('ok'));
+        self::invokeMethod($redis, 'parse', array('-erro' . "\r\n"));
+    }
 
-    $this->assertEquals('ok', self::invokeMethod($redis, 'parse', array('+ foo'."\r\n")));
-    $this->assertEquals('ok', self::invokeMethod($redis, 'parse', array(': foo'."\r\n")));
-    $this->assertEquals('ok', self::invokeMethod($redis, 'parse', array('* foo'."\r\n")));
-    $this->assertEquals('ok', self::invokeMethod($redis, 'parse', array('$ foo'."\r\n")));
-  }
+    public function testHappyParsing()
+    {
+        $redis = $this->getRedisMock();
 
-  public function testBuildingCommandBasedFromGivenMethodAndParameters()
-  {
-    $redis = $this->getRedis();
+        $redis->expects($this->any())->method('inline')->will($this->returnValue('ok'));
+        $redis->expects($this->any())->method('bulk')->will($this->returnValue('ok'));
+        $redis->expects($this->any())->method('multibulk')->will($this->returnValue('ok'));
 
-    $this->assertEquals(
+        $this->assertEquals('ok', self::invokeMethod($redis, 'parse', array('+ foo' . "\r\n")));
+        $this->assertEquals('ok', self::invokeMethod($redis, 'parse', array(': foo' . "\r\n")));
+        $this->assertEquals('ok', self::invokeMethod($redis, 'parse', array('* foo' . "\r\n")));
+        $this->assertEquals('ok', self::invokeMethod($redis, 'parse', array('$ foo' . "\r\n")));
+    }
 
-      '*3'.self::CRLF.'$6'.self::CRLF.'LRANGE'.self::CRLF.'$1'.self::CRLF.'0'.self::CRLF.'$1'.self::CRLF.'5'.self::CRLF.'',
+    public function testBuildingCommandBasedFromGivenMethodAndParameters()
+    {
+        $redis = $this->getRedis();
 
-      self::invokeMethod($redis, 'command', array('lrange', array(0, 5))),
+        $this->assertEquals(
 
-      'problem on LRANGE'
-    );
+            '*3' . self::CRLF . '$6' . self::CRLF . 'LRANGE' . self::CRLF . '$1' . self::CRLF . '0' . self::CRLF . '$1' . self::CRLF . '5' . self::CRLF . '',
 
-    $this->assertEquals(
+            self::invokeMethod($redis, 'command', array('lrange', array(0, 5))),
 
-      '*2'.self::CRLF.'$3'.self::CRLF.'GET'.self::CRLF.'$4'.self::CRLF.'name'.self::CRLF,
+            'problem on LRANGE'
+        );
 
-      self::invokeMethod($redis, 'command', array('get', array('name'))),
+        $this->assertEquals(
 
-      'problem on GET name var'
-    );
+            '*2' . self::CRLF . '$3' . self::CRLF . 'GET' . self::CRLF . '$4' . self::CRLF . 'name' . self::CRLF,
 
-  }
+            self::invokeMethod($redis, 'command', array('get', array('name'))),
+
+            'problem on GET name var'
+        );
+
+    }
 }
  

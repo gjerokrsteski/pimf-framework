@@ -9,7 +9,7 @@
 namespace Pimf;
 
 use Pimf\Resolver\Exception as Bomb;
-use Pimf\Util\String as Str;
+use Pimf\Util\Str as Str;
 
 /**
  * Resolves the user requests to controller and action.
@@ -19,97 +19,97 @@ use Pimf\Util\String as Str;
  */
 class Resolver
 {
-  /**
-   * @var string
-   */
-  protected $controllerPath;
+    /**
+     * @var string
+     */
+    protected $controllerPath;
 
-  /**
-   * @var string
-   */
-  protected $controllerClass;
+    /**
+     * @var string
+     */
+    protected $controllerClass;
 
-  /**
-   * @var string
-   */
-  protected $repositoryPath;
+    /**
+     * @var string
+     */
+    protected $repositoryPath;
 
-  /**
-   * @var Request
-   */
-  protected $request;
+    /**
+     * @var Request
+     */
+    protected $request;
 
-  /**
-   * @var Router
-   */
-  protected $router;
+    /**
+     * @var Router
+     */
+    protected $router;
 
-  /**
-   * @param Request $request
-   * @param string  $repositoryPath
-   * @param string  $prefix
-   * @param \Pimf\Router $router
-   *
-   * @throws \Pimf\Resolver\Exception If no controller found at the repository path
-   */
-  public function __construct(\Pimf\Request $request, $repositoryPath = '/Controller', $prefix = 'Pimf\\', $router)
-  {
-    $controllerName = $request->fromGet()->get('controller');
-    $this->router   = $router;
+    /**
+     * @param Request      $request
+     * @param string       $repositoryPath
+     * @param string       $prefix
+     * @param \Pimf\Router $router
+     *
+     * @throws \Pimf\Resolver\Exception If no controller found at the repository path
+     */
+    public function __construct(\Pimf\Request $request, $repositoryPath = '/Controller', $prefix = 'Pimf\\', $router)
+    {
+        $controllerName = $request->fromGet()->get('controller');
+        $this->router = $router;
 
-    if (Config::get('app.routeable') === true) {
+        if (Config::get('app.routeable') === true) {
 
-      $target = $this->router->find();
+            $target = $this->router->find();
 
-      if ($target instanceof \Pimf\Route\Target) {
-        $controllerName = $target->getController();
-      }
+            if ($target instanceof \Pimf\Route\Target) {
+                $controllerName = $target->getController();
+            }
+        }
+
+        if (Sapi::isCli() && Config::get('environment') == 'production') {
+            $controllerName = $request->fromCli()->get('controller');
+        }
+
+        if (!$controllerName) {
+            $controllerName = Config::get('app.default_controller');
+        }
+
+        $this->repositoryPath = $repositoryPath;
+        $this->request = $request;
+        $this->controllerClass = $prefix . 'Controller\\';
+
+        $basepath = $this->repositoryPath . '/';
+        $controller = ucfirst($controllerName);
+
+        if (Str::isEvilPath($basepath . $controller)) {
+            throw new Bomb('directory traversal attack is not funny!');
+        }
+
+        $this->controllerPath = $basepath . $controller . '.php';
+
+        if (!file_exists($this->controllerPath)) {
+            throw new Bomb('no "' . $controller . '" controller found at the repository path');
+        }
     }
 
-    if (Sapi::isCli() && Config::get('environment') == 'production') {
-      $controllerName = $request->fromCli()->get('controller');
+    /**
+     * @param Environment   $env
+     * @param Logger        $logger
+     * @param EntityManager $em
+     *
+     * @return \Pimf\Controller\Base
+     * @throws \Pimf\Resolver\Exception If no controller specified or no controller found at the repository.
+     */
+    public function process(Environment $env, EntityManager $em, Logger $logger)
+    {
+        $path = str_replace($this->repositoryPath, '', $this->controllerPath);
+        $name = str_replace('/', $this->controllerClass, $path);
+        $controller = str_replace('.php', '', $name);
+
+        if (!class_exists($controller)) {
+            throw new Bomb('can not load class "' . $controller . '" from the repository');
+        }
+
+        return new $controller($this->request, new Response($env->REQUEST_METHOD), $logger, $em, $this->router, $env);
     }
-
-    if (!$controllerName) {
-      $controllerName = Config::get('app.default_controller');
-    }
-
-    $this->repositoryPath  = $repositoryPath;
-    $this->request         = $request;
-    $this->controllerClass = $prefix . 'Controller\\';
-
-    $basepath   = $this->repositoryPath . '/';
-    $controller = ucfirst($controllerName);
-
-    if (Str::isEvilPath($basepath . $controller)) {
-      throw new Bomb('directory traversal attack is not funny!');
-    }
-
-    $this->controllerPath = $basepath . $controller . '.php';
-
-    if (!file_exists($this->controllerPath)) {
-      throw new Bomb('no "'.$controller.'" controller found at the repository path');
-    }
-  }
-
-  /**
-   * @param Environment $env
-   * @param Logger $logger
-   * @param EntityManager $em
-   *
-   * @return \Pimf\Controller\Base
-   * @throws \Pimf\Resolver\Exception If no controller specified or no controller found at the repository.
-   */
-  public function process($env, Logger $logger, $em)
-  {
-    $path       = str_replace($this->repositoryPath, '', $this->controllerPath);
-    $name       = str_replace('/', $this->controllerClass, $path);
-    $controller = str_replace('.php', '', $name);
-
-    if (!class_exists($controller)) {
-      throw new Bomb('can not load class "' . $controller . '" from the repository');
-    }
-
-    return new $controller($this->request, new Response($env->REQUEST_METHOD), $logger, $em, $this->router, $env);
-  }
 }

@@ -40,55 +40,56 @@ use Pimf\Util\Value;
  */
 class Twig extends View implements Reunitable
 {
-  /**
-   * @var \Twig_Environment
-   */
-  protected $twig;
+    /**
+     * @var \Twig_Environment
+     */
+    protected $twig;
 
-  /**
-   * @param string $template
-   * @param array  $data
-   */
-  public function __construct($template, array $data = array())
-  {
-    parent::__construct($template, $data);
+    /**
+     * @param string $template
+     * @param array  $data
+     */
+    public function __construct($template, array $data = array())
+    {
+        parent::__construct($template, $data);
 
-    $conf = Config::get('view.twig');
+        $conf = Config::get('view.twig');
 
-    require_once BASE_PATH . "Twig/lib/Twig/Autoloader.php";
+        require_once BASE_PATH . "Twig/lib/Twig/Autoloader.php";
 
-    \Twig_Autoloader::register();
+        \Twig_Autoloader::register();
 
-    $options = array('debug'       => $conf['view']['twig']['debug'],
-                     'auto_reload' => $conf['view']['twig']['auto_reload']
+        $options = array(
+            'debug'       => $conf['view']['twig']['debug'],
+            'auto_reload' => $conf['view']['twig']['auto_reload']
 
-    );
+        );
 
-    if ($conf['cache'] === true) {
-      $options['cache'] = $this->path . '/twig_cache';
+        if ($conf['cache'] === true) {
+            $options['cache'] = $this->path . '/twig_cache';
+        }
+
+        // define the Twig environment.
+        $this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem(array($this->path)), $options);
     }
 
-    // define the Twig environment.
-    $this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem(array($this->path)), $options);
-  }
+    /**
+     * @return \Twig_Environment
+     */
+    public function getTwig()
+    {
+        return $this->twig;
+    }
 
-  /**
-   * @return \Twig_Environment
-   */
-  public function getTwig()
-  {
-    return $this->twig;
-  }
-
-  /**
-   * Puts the template an the variables together.
-   *
-   * @return string|void
-   */
-  public function reunite()
-  {
-    return $this->twig->render(
-      $this->template, $this->data->getArrayCopy()
-    );
-  }
+    /**
+     * Puts the template an the variables together.
+     *
+     * @return string|void
+     */
+    public function reunite()
+    {
+        return $this->twig->render(
+            $this->template, $this->data->getArrayCopy()
+        );
+    }
 }

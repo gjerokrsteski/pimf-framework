@@ -16,49 +16,49 @@ namespace Pimf;
 class Config
 {
 
-  /**
-   * The temporary storage for the accumulator.
-   *
-   * @var \ArrayObject
-   */
-  protected static $battery;
+    /**
+     * The temporary storage for the accumulator.
+     *
+     * @var \ArrayObject
+     */
+    protected static $battery;
 
-  /**
-   * @param array $config
-   * @param bool $override Used for testing only!
-   */
-  public static function load(array $config, $override = false)
-  {
-    if (!self::$battery || $override === true) {
-      self::$battery = new \ArrayObject($config, \ArrayObject::STD_PROP_LIST + \ArrayObject::ARRAY_AS_PROPS);
-    }
-  }
-
-  /**
-   * Get an item from an array using "dot" notation.
-   *
-   * @param string|integer $index The index or identifier.
-   * @param mixed $default
-   *
-   * @return mixed|null
-   */
-  public static function get($index, $default = null)
-  {
-    if (self::$battery->offsetExists($index)) {
-      return self::$battery->offsetGet($index);
+    /**
+     * @param array $config
+     * @param bool  $override Used for testing only!
+     */
+    public static function load(array $config, $override = false)
+    {
+        if (!self::$battery || $override === true) {
+            self::$battery = new \ArrayObject($config, \ArrayObject::STD_PROP_LIST + \ArrayObject::ARRAY_AS_PROPS);
+        }
     }
 
-    $array = self::$battery->getArrayCopy();
+    /**
+     * Get an item from an array using "dot" notation.
+     *
+     * @param string|integer $index The index or identifier.
+     * @param mixed          $default
+     *
+     * @return mixed|null
+     */
+    public static function get($index, $default = null)
+    {
+        if (self::$battery->offsetExists($index)) {
+            return self::$battery->offsetGet($index);
+        }
 
-    foreach ((array)explode('.', $index) as $segment) {
+        $array = self::$battery->getArrayCopy();
 
-      if (!is_array($array) || !array_key_exists($segment, $array)) {
-        return $default;
-      }
+        foreach ((array)explode('.', $index) as $segment) {
 
-      $array = $array[$segment];
+            if (!is_array($array) || !array_key_exists($segment, $array)) {
+                return $default;
+            }
+
+            $array = $array[$segment];
+        }
+
+        return $array;
     }
-
-    return $array;
-  }
 }

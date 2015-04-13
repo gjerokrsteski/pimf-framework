@@ -3,89 +3,91 @@
 class CachePdoTest extends \PHPUnit_Framework_TestCase
 {
 
-  /**
-   * @return PHPUnit_Framework_MockObject_MockObject
-   */
-  protected function getStore()
-  {
-    $store = $this->getMockBuilder('\\Pimf\\Database')
-      ->setMethods(array('prepare'))->setConstructorArgs(
-        array('sqlite::memory:')
-      )->getMock();
+    /**
+     * @return PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getStore()
+    {
+        $store = $this->getMockBuilder('\\Pimf\\Database')
+            ->setMethods(array('prepare'))->setConstructorArgs(
+                array('sqlite::memory:')
+            )->getMock();
 
-    $statement = $this->getMockBuilder('\\stdClass')
-      ->setMethods(array('bindValue', 'execute', 'fetchObject'))->getMock(
-      );
+        $statement = $this->getMockBuilder('\\stdClass')
+            ->setMethods(array('bindValue', 'execute', 'fetchObject'))->getMock();
 
-    $store->expects($this->any())->method('prepare')->will($this->returnValue($statement));
+        $store->expects($this->any())->method('prepare')->will($this->returnValue($statement));
 
-    return $store;
-  }
-
-
-  # start testing
+        return $store;
+    }
 
 
-  public function testNullIsReturnedWhenItemNotFound()
-  {
-    $store = $this->getStore();
-
-    $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
-
-    $this->assertNull($cache->get('foo'));
-  }
+    # start testing
 
 
-  public function testValueIsReturned()
-  {
-    $store = $this->getStore();
+    public function testNullIsReturnedWhenItemNotFound()
+    {
+        $store = $this->getStore();
 
-    $cache = $this->getMockBuilder('\Pimf\Cache\Storages\Pdo')->setConstructorArgs(array($store, 'key.'))->getMock();
+        $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
 
-    $cache->expects($this->any())->method('retrieve')->with('foo')->will($this->returnValue(serialize('foo')));
+        $this->assertNull($cache->get('foo'));
+    }
 
-    $this->assertNull($cache->get('foo'));
 
-  }
+    public function testValueIsReturned()
+    {
+        $store = $this->getStore();
 
-  public function testSetMethodProperlyCallsPdo()
-  {
-    $store = $this->getStore();
+        $cache = $this->getMockBuilder('\Pimf\Cache\Storages\Pdo')->setConstructorArgs(array(
+            $store,
+            'key.'
+        ))->getMock();
 
-    $store->expects($this->any())->method('expiration')->with(60 * 60);
+        $cache->expects($this->any())->method('retrieve')->with('foo')->will($this->returnValue(serialize('foo')));
 
-    $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+        $this->assertNull($cache->get('foo'));
 
-    $cache->put('foo', 'foo', 60);
-  }
+    }
 
-  public function testSetMethodProperlyCallsPdoForNumerics()
-  {
-    $store = $this->getStore();
+    public function testSetMethodProperlyCallsPdo()
+    {
+        $store = $this->getStore();
 
-    $store->expects($this->any())->method('expiration')->with(60 * 60);
+        $store->expects($this->any())->method('expiration')->with(60 * 60);
 
-    $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+        $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
 
-    $cache->put('foo', 1, 60);
-  }
+        $cache->put('foo', 'foo', 60);
+    }
 
-  public function testStoreItemForeverProperlyCallsPdo()
-  {
-    $store = $this->getStore();
+    public function testSetMethodProperlyCallsPdoForNumerics()
+    {
+        $store = $this->getStore();
 
-    $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+        $store->expects($this->any())->method('expiration')->with(60 * 60);
 
-    $cache->forever('foo', 'foo', 60);
-  }
+        $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
 
-  public function testForgetMethodProperlyCallsRedis()
-  {
-    $store = $this->getStore();
+        $cache->put('foo', 1, 60);
+    }
 
-    $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+    public function testStoreItemForeverProperlyCallsPdo()
+    {
+        $store = $this->getStore();
 
-    $cache->forget('foo');
-  }
+        $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+
+        $cache->forever('foo', 'foo', 60);
+    }
+
+    public function testForgetMethodProperlyCallsRedis()
+    {
+        $store = $this->getStore();
+
+        $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+
+        $cache->forget('foo');
+    }
 }
  

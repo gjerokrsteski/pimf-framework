@@ -50,127 +50,127 @@ namespace Pimf;
  */
 class Event
 {
-  /**
-   * All registered events.
-   *
-   * @var array
-   */
-  protected static $events = array();
+    /**
+     * All registered events.
+     *
+     * @var array
+     */
+    protected static $events = array();
 
-  /**
-   * Determine if an event has any registered listeners.
-   *
-   * @param string $event
-   *
-   * @return bool
-   */
-  public static function listeners($event)
-  {
-    return isset(static::$events[$event]);
-  }
-
-  /**
-   * Register a callback for a given event.
-   *
-   * @param string $event
-   * @param mixed  $callback
-   *
-   * @return void
-   */
-  public static function listen($event, $callback)
-  {
-    static::$events[$event][] = $callback;
-  }
-
-  /**
-   * Override all callbacks for a given event with a new callback.
-   *
-   * @param string $event
-   * @param mixed  $callback
-   *
-   * @return void
-   */
-  public static function override($event, $callback)
-  {
-    static::clear($event);
-    static::listen($event, $callback);
-  }
-
-  /**
-   * Clear all event listeners for a given event.
-   *
-   * @param string $event
-   *
-   * @return void
-   */
-  public static function clear($event)
-  {
-    unset(static::$events[$event]);
-  }
-
-  /**
-   * Fire an event and return the first response.
-   *
-   * @param string       $event
-   * @param \Exception[] $parameters
-   *
-   * @return mixed
-   */
-  public static function first($event, $parameters = array())
-  {
-    $responses = static::fire($event, $parameters);
-
-    return reset($responses);
-  }
-
-  /**
-   * Fire an event and return the first response.
-   * Execution will be halted after the first valid response is found.
-   *
-   * @param string $event
-   * @param array  $parameters
-   *
-   * @return mixed
-   */
-  public static function until($event, $parameters = array())
-  {
-    return static::fire($event, $parameters, true);
-  }
-
-  /**
-   * Fire an event so that all listeners are called.
-   *
-   * @param string $events
-   * @param array  $parameters
-   * @param bool   $halt
-   *
-   * @return array|null
-   */
-  public static function fire($events, $parameters = array(), $halt = false)
-  {
-    $responses  = array();
-    $parameters = (array)$parameters;
-
-    // If the event has listeners, iterate through them and call each listener,
-    // passing in the parameters.
-    foreach ((array)$events as $event) {
-
-      if (static::listeners($event)) {
-
-        foreach (static::$events[$event] as $callback) {
-          $response = call_user_func_array($callback, $parameters);
-
-          // If the event is set to halt,
-          // return the first response that is not null.
-          if ($halt && !is_null($response)) {
-            return $response;
-          }
-
-          $responses[] = $response;
-        }
-      }
+    /**
+     * Determine if an event has any registered listeners.
+     *
+     * @param string $event
+     *
+     * @return bool
+     */
+    public static function listeners($event)
+    {
+        return isset(static::$events[$event]);
     }
 
-    return $halt ? null : $responses;
-  }
+    /**
+     * Register a callback for a given event.
+     *
+     * @param string $event
+     * @param mixed  $callback
+     *
+     * @return void
+     */
+    public static function listen($event, $callback)
+    {
+        static::$events[$event][] = $callback;
+    }
+
+    /**
+     * Override all callbacks for a given event with a new callback.
+     *
+     * @param string $event
+     * @param mixed  $callback
+     *
+     * @return void
+     */
+    public static function override($event, $callback)
+    {
+        static::clear($event);
+        static::listen($event, $callback);
+    }
+
+    /**
+     * Clear all event listeners for a given event.
+     *
+     * @param string $event
+     *
+     * @return void
+     */
+    public static function clear($event)
+    {
+        unset(static::$events[$event]);
+    }
+
+    /**
+     * Fire an event and return the first response.
+     *
+     * @param string       $event
+     * @param \Exception[] $parameters
+     *
+     * @return mixed
+     */
+    public static function first($event, $parameters = array())
+    {
+        $responses = static::fire($event, $parameters);
+
+        return reset($responses);
+    }
+
+    /**
+     * Fire an event and return the first response.
+     * Execution will be halted after the first valid response is found.
+     *
+     * @param string $event
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    public static function until($event, $parameters = array())
+    {
+        return static::fire($event, $parameters, true);
+    }
+
+    /**
+     * Fire an event so that all listeners are called.
+     *
+     * @param string $events
+     * @param array  $parameters
+     * @param bool   $halt
+     *
+     * @return array|null
+     */
+    public static function fire($events, $parameters = array(), $halt = false)
+    {
+        $responses = array();
+        $parameters = (array)$parameters;
+
+        // If the event has listeners, iterate through them and call each listener,
+        // passing in the parameters.
+        foreach ((array)$events as $event) {
+
+            if (static::listeners($event)) {
+
+                foreach (static::$events[$event] as $callback) {
+                    $response = call_user_func_array($callback, $parameters);
+
+                    // If the event is set to halt,
+                    // return the first response that is not null.
+                    if ($halt && !is_null($response)) {
+                        return $response;
+                    }
+
+                    $responses[] = $response;
+                }
+            }
+        }
+
+        return $halt ? null : $responses;
+    }
 }

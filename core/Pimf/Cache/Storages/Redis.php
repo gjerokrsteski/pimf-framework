@@ -21,78 +21,78 @@ namespace Pimf\Cache\Storages;
  */
 class Redis extends Storage
 {
-  /**
-   * The Redis database instance.
-   *
-   * @var \Pimf\Redis
-   */
-  protected $redis;
+    /**
+     * The Redis database instance.
+     *
+     * @var \Pimf\Redis
+     */
+    protected $redis;
 
-  /**
-   * @param \Pimf\Redis $redis
-   */
-  public function __construct(\Pimf\Redis $redis)
-  {
-    $this->redis = $redis;
-  }
-
-  /**
-   * Determine if an item exists in the cache.
-   *
-   * @param string $key
-   *
-   * @return bool
-   */
-  public function has($key)
-  {
-    return ($this->redis->get($key) !== null);
-  }
-
-  /**
-   * Retrieve an item from the cache storage.
-   *
-   * @param string $key
-   *
-   * @return mixed
-   */
-  protected function retrieve($key)
-  {
-    if (!is_null($cache = $this->redis->get($key))) {
-      return unserialize($cache);
+    /**
+     * @param \Pimf\Redis $redis
+     */
+    public function __construct(\Pimf\Redis $redis)
+    {
+        $this->redis = $redis;
     }
-  }
 
-  /**
-   * Write an item to the cache for a given number of minutes.
-   *
-   * @param string $key
-   * @param mixed  $value
-   * @param int    $minutes
-   */
-  public function put($key, $value, $minutes)
-  {
-    $this->forever($key, $value);
-    $this->redis->expire($key, $minutes * 60);
-  }
+    /**
+     * Determine if an item exists in the cache.
+     *
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function has($key)
+    {
+        return ($this->redis->get($key) !== null);
+    }
 
-  /**
-   * Write an item to the cache that lasts forever.
-   *
-   * @param string $key
-   * @param $value
-   */
-  public function forever($key, $value)
-  {
-    $this->redis->set($key, serialize($value));
-  }
+    /**
+     * Retrieve an item from the cache storage.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    protected function retrieve($key)
+    {
+        if (!is_null($cache = $this->redis->get($key))) {
+            return unserialize($cache);
+        }
+    }
 
-  /**
-   * Delete an item from the cache.
-   *
-   * @param string $key
-   */
-  public function forget($key)
-  {
-    $this->redis->del($key);
-  }
+    /**
+     * Write an item to the cache for a given number of minutes.
+     *
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $minutes
+     */
+    public function put($key, $value, $minutes)
+    {
+        $this->forever($key, $value);
+        $this->redis->expire($key, $minutes * 60);
+    }
+
+    /**
+     * Write an item to the cache that lasts forever.
+     *
+     * @param string $key
+     * @param        $value
+     */
+    public function forever($key, $value)
+    {
+        $this->redis->set($key, serialize($value));
+    }
+
+    /**
+     * Delete an item from the cache.
+     *
+     * @param string $key
+     */
+    public function forget($key)
+    {
+        $this->redis->del($key);
+    }
 }

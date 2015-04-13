@@ -40,123 +40,123 @@ use Pimf\Session\Storages as Storage;
  */
 class Session
 {
-  /**
-   * The session singleton instance for the request.
-   *
-   * @var Payload
-   */
-  public static $instance;
+    /**
+     * The session singleton instance for the request.
+     *
+     * @var Payload
+     */
+    public static $instance;
 
-  /**
-   * The string name of the CSRF token stored in the session.
-   *
-   * @var string
-   */
-  const CSRF = 'csrf_token';
+    /**
+     * The string name of the CSRF token stored in the session.
+     *
+     * @var string
+     */
+    const CSRF = 'csrf_token';
 
-  /**
-   * Create the session payload and load the session.
-   *
-   * @return void
-   */
-  public static function load()
-  {
-    $session = Config::get('session');
+    /**
+     * Create the session payload and load the session.
+     *
+     * @return void
+     */
+    public static function load()
+    {
+        $session = Config::get('session');
 
-    static::start($session['storage']);
+        static::start($session['storage']);
 
-    static::$instance->load(Cookie::get($session['cookie']));
-  }
-
-  /**
-   * Create the session payload instance for the request.
-   *
-   * @param string $storage
-   *
-   * @return void
-   */
-  public static function start($storage)
-  {
-    static::$instance = new Payload(static::factory($storage));
-  }
-
-  /**
-   * Create a new session storage instance.
-   *
-   * @param string $storage
-   *
-   * @return Storage\Storage
-   * @throws \RuntimeException
-   */
-  public static function factory($storage)
-  {
-    switch ($storage) {
-      case 'apc':
-        return new Storage\Apc(Cache::storage('apc'));
-
-      case 'cookie':
-        return new Storage\Cookie();
-
-      case 'file':
-        return new Storage\File(Config::get('session.storage_path'));
-
-      case 'pdo':
-        return new Storage\Pdo(Pdo\Factory::get(Config::get('session.database')));
-
-      case 'memcached':
-        return new Storage\Memcached(Cache::storage('memcached'));
-
-      case 'memory':
-        return new Storage\Memory();
-
-      case 'redis':
-        return new Storage\Redis(Cache::storage('redis'));
-
-      case 'dba':
-        return new Storage\Dba(Cache::storage('dba'));
-
-      default:
-        throw new \RuntimeException("Session storage [$storage] is not supported.");
-    }
-  }
-
-  /**
-   * Retrieve the active session payload instance for the request.
-   *
-   * @return Payload
-   * @throws \RuntimeException
-   */
-  public static function instance()
-  {
-    if (static::started()) {
-      return static::$instance;
+        static::$instance->load(Cookie::get($session['cookie']));
     }
 
-    throw new \RuntimeException("A storage must be set before using the session.");
-  }
+    /**
+     * Create the session payload instance for the request.
+     *
+     * @param string $storage
+     *
+     * @return void
+     */
+    public static function start($storage)
+    {
+        static::$instance = new Payload(static::factory($storage));
+    }
 
-  /**
-   * Determine if session handling has been started for the request.
-   *
-   * @return bool
-   */
-  public static function started()
-  {
-    return (static::$instance !== null);
-  }
+    /**
+     * Create a new session storage instance.
+     *
+     * @param string $storage
+     *
+     * @return Storage\Storage
+     * @throws \RuntimeException
+     */
+    public static function factory($storage)
+    {
+        switch ($storage) {
+            case 'apc':
+                return new Storage\Apc(Cache::storage('apc'));
 
-  /**
-   * Magic Method for calling the methods on the session singleton instance.
-   *
-   * @param $method
-   * @param $parameters
-   *
-   * @return mixed
-   */
-  public static function __callStatic($method, $parameters)
-  {
-    return call_user_func_array(
-      array(static::instance(), $method), $parameters
-    );
-  }
+            case 'cookie':
+                return new Storage\Cookie();
+
+            case 'file':
+                return new Storage\File(Config::get('session.storage_path'));
+
+            case 'pdo':
+                return new Storage\Pdo(Pdo\Factory::get(Config::get('session.database')));
+
+            case 'memcached':
+                return new Storage\Memcached(Cache::storage('memcached'));
+
+            case 'memory':
+                return new Storage\Memory();
+
+            case 'redis':
+                return new Storage\Redis(Cache::storage('redis'));
+
+            case 'dba':
+                return new Storage\Dba(Cache::storage('dba'));
+
+            default:
+                throw new \RuntimeException("Session storage [$storage] is not supported.");
+        }
+    }
+
+    /**
+     * Retrieve the active session payload instance for the request.
+     *
+     * @return Payload
+     * @throws \RuntimeException
+     */
+    public static function instance()
+    {
+        if (static::started()) {
+            return static::$instance;
+        }
+
+        throw new \RuntimeException("A storage must be set before using the session.");
+    }
+
+    /**
+     * Determine if session handling has been started for the request.
+     *
+     * @return bool
+     */
+    public static function started()
+    {
+        return (static::$instance !== null);
+    }
+
+    /**
+     * Magic Method for calling the methods on the session singleton instance.
+     *
+     * @param $method
+     * @param $parameters
+     *
+     * @return mixed
+     */
+    public static function __callStatic($method, $parameters)
+    {
+        return call_user_func_array(
+            array(static::instance(), $method), $parameters
+        );
+    }
 }

@@ -33,7 +33,7 @@ class Crypt
 
     public function __construct()
     {
-        $this->key    = pack('H*', 'bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3');
+        $this->key = pack('H*', 'bcb04b7e103a0cd8b54763051cef08bc55abe029fdebae5e1d417e2ffb2a00a3');
         $this->ivsize = mcrypt_get_iv_size(MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC);
     }
 
@@ -44,7 +44,7 @@ class Crypt
      */
     public function encrypt($plaintext)
     {
-        $vector     = mcrypt_create_iv($this->ivsize, MCRYPT_RAND);
+        $vector = mcrypt_create_iv($this->ivsize, MCRYPT_RAND);
         $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $this->key, $plaintext, MCRYPT_MODE_CBC, $vector);
 
         return base64_encode($vector . $ciphertext);
@@ -58,9 +58,9 @@ class Crypt
     public function decrypt($ciphertext)
     {
         $ciphertext = base64_decode($ciphertext);
-        $ivdec      = substr($ciphertext, 0, $this->ivsize);
+        $ivdec = substr($ciphertext, 0, $this->ivsize);
         $ciphertext = substr($ciphertext, $this->ivsize);
-        $plaintext  = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $this->key, $ciphertext, MCRYPT_MODE_CBC, $ivdec);
+        $plaintext = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $this->key, $ciphertext, MCRYPT_MODE_CBC, $ivdec);
 
         return rtrim($plaintext, "\0\4");
     }

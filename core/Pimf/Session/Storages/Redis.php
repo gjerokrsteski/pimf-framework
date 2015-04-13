@@ -14,50 +14,50 @@ namespace Pimf\Session\Storages;
  */
 class Redis extends Storage
 {
-  /**
-   * The Redis cache storage instance.
-   *
-   * @var \Pimf\Cache\Storages\Redis
-   */
-  protected $redis;
+    /**
+     * The Redis cache storage instance.
+     *
+     * @var \Pimf\Cache\Storages\Redis
+     */
+    protected $redis;
 
-  /**
-   * @param \Pimf\Cache\Storages\Redis $redis
-   */
-  public function __construct(\Pimf\Cache\Storages\Redis $redis)
-  {
-    $this->redis = $redis;
-  }
+    /**
+     * @param \Pimf\Cache\Storages\Redis $redis
+     */
+    public function __construct(\Pimf\Cache\Storages\Redis $redis)
+    {
+        $this->redis = $redis;
+    }
 
-  /**
-   * Load a session from storage by a given ID.
-   *
-   * @param string $key
-   *
-   * @return array|mixed|null
-   */
-  public function load($key)
-  {
-    return $this->redis->get($key);
-  }
+    /**
+     * Load a session from storage by a given ID.
+     *
+     * @param string $key
+     *
+     * @return array|mixed|null
+     */
+    public function load($key)
+    {
+        return $this->redis->get($key);
+    }
 
-  /**
-   * Save a given session to storage.
-   *
-   * @param array $session
-   * @param array $config
-   * @param bool  $exists
-   */
-  public function save($session, $config, $exists)
-  {
-    $this->redis->put($session['id'], $session, $config['lifetime']);
-  }
+    /**
+     * Save a given session to storage.
+     *
+     * @param array $session
+     * @param array $config
+     * @param bool  $exists
+     */
+    public function save($session, $config, $exists)
+    {
+        $this->redis->put($session['id'], $session, $config['lifetime']);
+    }
 
-  /**
-   * @param string $key
-   */
-  public function delete($key)
-  {
-    $this->redis->forget($key);
-  }
+    /**
+     * @param string $key
+     */
+    public function delete($key)
+    {
+        $this->redis->forget($key);
+    }
 }

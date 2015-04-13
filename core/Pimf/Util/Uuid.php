@@ -24,121 +24,122 @@ namespace Pimf\Util;
  */
 final class Uuid
 {
-  /**
-   * 32-bit integer that identifies this host.
-   *
-   * @var integer
-   */
-  private static $node = null;
+    /**
+     * 32-bit integer that identifies this host.
+     *
+     * @var integer
+     */
+    private static $node = null;
 
-  /**
-   * Process identifier.
-   *
-   * @var integer
-   */
-  private static $pid = null;
+    /**
+     * Process identifier.
+     *
+     * @var integer
+     */
+    private static $pid = null;
 
-  private static $hostIp, $hostName;
+    private static $hostIp, $hostName;
 
-  public static function setup($hostIp, $hostName)
-  {
-    self::$hostIp   = $hostIp;
-    self::$hostName = $hostName;
-  }
-
-  /**
-   * Returns a 32-bit integer that identifies this host.
-   *
-   * The node identifier needs to be unique among nodes
-   * in a cluster for a given application in order to
-   * avoid collisions between generated identifiers.
-   *
-   * @return integer
-   */
-  private static function getNodeId()
-  {
-    if (self::$hostIp === null && true === function_exists('gethostname')) {
-      self::$hostName = gethostname();
-      self::$hostIp   = gethostbyname(self::$hostName);
+    public static function setup($hostIp, $hostName)
+    {
+        self::$hostIp = $hostIp;
+        self::$hostName = $hostName;
     }
 
-    if (self::$hostIp === null && true === function_exists('php_uname')) {
-      self::$hostName = php_uname('n');
-      self::$hostIp   = gethostbyname(self::$hostName);
+    /**
+     * Returns a 32-bit integer that identifies this host.
+     *
+     * The node identifier needs to be unique among nodes
+     * in a cluster for a given application in order to
+     * avoid collisions between generated identifiers.
+     *
+     * @return integer
+     */
+    private static function getNodeId()
+    {
+        if (self::$hostIp === null && true === function_exists('gethostname')) {
+            self::$hostName = gethostname();
+            self::$hostIp = gethostbyname(self::$hostName);
+        }
+
+        if (self::$hostIp === null && true === function_exists('php_uname')) {
+            self::$hostName = php_uname('n');
+            self::$hostIp = gethostbyname(self::$hostName);
+        }
+
+        if (self::$hostIp === null && self::$hostName !== null) {
+            self::$hostIp = crc32(self::$hostName);
+        }
+
+        if (self::$hostIp === null) {
+            self::$hostIp = '127.0.0.1';
+        }
+
+        return ip2long(self::$hostIp);
     }
 
-    if (self::$hostIp === null && self::$hostName !== null) {
-      self::$hostIp = crc32(self::$hostName);
+    /**
+     * Returns a process identifier.
+     *
+     * In multi-process servers, this should be the system process ID.
+     * In multi-threaded servers, this should be some unique ID to
+     * prevent two threads from generating precisely the same UUID
+     * at the same time.
+     *
+     * @return integer
+     */
+    private static function getLockId()
+    {
+        return getmypid();
     }
 
-    if (self::$hostIp === null) {
-      self::$hostIp = '127.0.0.1';
+    /**
+     * Generate an RFC 4122 UUID.
+     *
+     * This is pseudo-random UUID influenced by the system clock, IP
+     * address and process ID.
+     *
+     * The intended use is to generate an identifier that can uniquely
+     * identify user generated posts, comments etc. made to a website.
+     * This generation process should be sufficient to avoid collisions
+     * between nodes in a cluster, and between apache children on the
+     * same host.
+     *
+     * @return string
+     */
+    public static function generate()
+    {
+        if (self::$node === null) {
+            self::$node = self::getNodeId();
+        }
+
+        if (self::$pid === null) {
+            self::$pid = self::getLockId();
+        }
+
+        list($time_mid, $time_lo) = explode(' ', microtime());
+
+        $time_low = (int)$time_lo;
+        $time_mid = (int)substr($time_mid, 2);
+
+        $time_and_version = mt_rand(0, 0xfff);
+
+        // version 4 UUID
+        $time_and_version |= 0x4000;
+
+        $clock_seq_low = mt_rand(0, 0xff);
+
+        // type is pseudo-random
+        $clock_seq_high = mt_rand(0, 0x3f);
+        $clock_seq_high |= 0x80;
+
+        $node_low = self::$pid;
+        $node = self::$node;
+
+        return sprintf(
+            '%08x-%04x-%04x-%02x%02x-%04x%08x', $time_low, $time_mid & 0xffff, $time_and_version, $clock_seq_high,
+            $clock_seq_low, $node_low,
+            $node
+        );
     }
-
-    return ip2long(self::$hostIp);
-  }
-
-  /**
-   * Returns a process identifier.
-   *
-   * In multi-process servers, this should be the system process ID.
-   * In multi-threaded servers, this should be some unique ID to
-   * prevent two threads from generating precisely the same UUID
-   * at the same time.
-   *
-   * @return integer
-   */
-  private static function getLockId()
-  {
-    return getmypid();
-  }
-
-  /**
-   * Generate an RFC 4122 UUID.
-   *
-   * This is pseudo-random UUID influenced by the system clock, IP
-   * address and process ID.
-   *
-   * The intended use is to generate an identifier that can uniquely
-   * identify user generated posts, comments etc. made to a website.
-   * This generation process should be sufficient to avoid collisions
-   * between nodes in a cluster, and between apache children on the
-   * same host.
-   *
-   * @return string
-   */
-  public static function generate()
-  {
-    if (self::$node === null) {
-      self::$node = self::getNodeId();
-    }
-
-    if (self::$pid === null) {
-      self::$pid = self::getLockId();
-    }
-
-    list($time_mid, $time_lo) = explode(' ', microtime());
-
-    $time_low = (int)$time_lo;
-    $time_mid = (int)substr($time_mid, 2);
-
-    $time_and_version = mt_rand(0, 0xfff);
-
-    // version 4 UUID
-    $time_and_version |= 0x4000;
-
-    $clock_seq_low = mt_rand(0, 0xff);
-
-    // type is pseudo-random
-    $clock_seq_high = mt_rand(0, 0x3f);
-    $clock_seq_high |= 0x80;
-
-    $node_low = self::$pid;
-    $node     = self::$node;
-
-    return sprintf(
-      '%08x-%04x-%04x-%02x%02x-%04x%08x', $time_low, $time_mid & 0xffff, $time_and_version, $clock_seq_high, $clock_seq_low, $node_low,
-      $node
-    );
-  }
 }

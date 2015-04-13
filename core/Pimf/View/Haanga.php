@@ -39,40 +39,41 @@ use Pimf\Util\Value;
  */
 class Haanga extends View implements Reunitable
 {
-  /**
-   * @param string $template
-   * @param array  $data
-   */
-  public function __construct($template, array $data = array())
-  {
-    parent::__construct($template, $data);
+    /**
+     * @param string $template
+     * @param array  $data
+     */
+    public function __construct($template, array $data = array())
+    {
+        parent::__construct($template, $data);
 
-    $conf = Config::get('view.haanga');
+        $conf = Config::get('view.haanga');
 
-    $options = array('debug'    => $conf['view']['haanga']['debug'],
-                     'template_dir' => $this->path,
-                     'autoload' => $conf['view']['haanga']['auto_reload'],
+        $options = array(
+            'debug'        => $conf['view']['haanga']['debug'],
+            'template_dir' => $this->path,
+            'autoload'     => $conf['view']['haanga']['auto_reload'],
 
-    );
+        );
 
-    if ($conf['cache'] === true) {
-      $options['cache_dir'] = $this->path . '/haanga_cache';
+        if ($conf['cache'] === true) {
+            $options['cache_dir'] = $this->path . '/haanga_cache';
+        }
+
+        require_once BASE_PATH . "Haanga/lib/Haanga.php";
+
+        \Haanga::configure($options);
     }
 
-    require_once BASE_PATH . "Haanga/lib/Haanga.php";
-
-    \Haanga::configure($options);
-  }
-
-  /**
-   * Puts the template an the variables together.
-   *
-   * @return NULL|string|void
-   */
-  public function reunite()
-  {
-    return \Haanga::Load(
-      $this->template, $this->data->getArrayCopy()
-    );
-  }
+    /**
+     * Puts the template an the variables together.
+     *
+     * @return NULL|string|void
+     */
+    public function reunite()
+    {
+        return \Haanga::Load(
+            $this->template, $this->data->getArrayCopy()
+        );
+    }
 }

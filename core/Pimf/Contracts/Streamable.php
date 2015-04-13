@@ -18,9 +18,9 @@ namespace Pimf\Contracts;
 interface Streamable
 {
 
-  /**
-   * @return resource
-   * @throws \RuntimeException If error on making connection
-   */
-  public function open();
+    /**
+     * @return resource
+     * @throws \RuntimeException If error on making connection
+     */
+    public function open();
 } 

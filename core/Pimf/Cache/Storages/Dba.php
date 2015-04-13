@@ -22,219 +22,219 @@ namespace Pimf\Cache\Storages;
  */
 class Dba extends Storage
 {
-  /**
-   * @var resource
-   */
-  protected $dba;
+    /**
+     * @var resource
+     */
+    protected $dba;
 
-  /**
-   * @var string
-   */
-  protected $handler;
+    /**
+     * @var string
+     */
+    protected $handler;
 
-  /**
-   * @var string
-   */
-  protected $file;
+    /**
+     * @var string
+     */
+    protected $file;
 
-  /**
-   * @param string  $file    the cache-file.
-   *
-   * @param string  $handler the dba handler.
-   *
-   * You have to install one of this handlers before use.
-   *
-   * cdb      = Tiny Constant Database - for reading.
-   * cdb_make = Tiny Constant Database - for writing.
-   * db4      = Oracle Berkeley DB 4   - for reading and writing.
-   * qdbm     = Quick Database Manager - for reading and writing.
-   * gdbm     = GNU Database Manager   - for reading and writing.
-   * flatfile = default dba extension  - for reading and writing.
-   *
-   * Use flatfile-handler only when you cannot install one,
-   * of the libraries required by the other handlers,
-   * and when you cannot use bundled cdb handler.
-   *
-   * @param string  $mode    For read/write access, database creation if it doesn't currently exist.
-   *
-   * @param boolean $persistently
-   *
-   * @throws \RuntimeException If no DBA extension or handler installed.
-   */
-  public function __construct($file, $handler = 'flatfile', $mode = 'c', $persistently = true)
-  {
-    if (false === extension_loaded('dba')) {
-      throw new \RuntimeException('The DBA extension is required for this wrapper, but the extension is not loaded');
+    /**
+     * @param string  $file    the cache-file.
+     *
+     * @param string  $handler the dba handler.
+     *
+     * You have to install one of this handlers before use.
+     *
+     * cdb      = Tiny Constant Database - for reading.
+     * cdb_make = Tiny Constant Database - for writing.
+     * db4      = Oracle Berkeley DB 4   - for reading and writing.
+     * qdbm     = Quick Database Manager - for reading and writing.
+     * gdbm     = GNU Database Manager   - for reading and writing.
+     * flatfile = default dba extension  - for reading and writing.
+     *
+     * Use flatfile-handler only when you cannot install one,
+     * of the libraries required by the other handlers,
+     * and when you cannot use bundled cdb handler.
+     *
+     * @param string  $mode    For read/write access, database creation if it doesn't currently exist.
+     *
+     * @param boolean $persistently
+     *
+     * @throws \RuntimeException If no DBA extension or handler installed.
+     */
+    public function __construct($file, $handler = 'flatfile', $mode = 'c', $persistently = true)
+    {
+        if (false === extension_loaded('dba')) {
+            throw new \RuntimeException('The DBA extension is required for this wrapper, but the extension is not loaded');
+        }
+
+        if (false === in_array($handler, dba_handlers(false))) {
+            throw new \RuntimeException('The ' . $handler . ' handler is required for the DBA extension, but the handler is not installed');
+        }
+
+        $this->dba = (true === $persistently) ? dba_popen($file, $mode, $handler) : dba_open($file, $mode, $handler);
+
+        $this->file = $file;
+        $this->handler = $handler;
     }
 
-    if (false === in_array($handler, dba_handlers(false))) {
-      throw new \RuntimeException('The ' . $handler . ' handler is required for the DBA extension, but the handler is not installed');
+    /**
+     * Closes an open dba resource
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        if ($this->dba) {
+            dba_close($this->dba);
+            $this->dba = null;
+        }
     }
 
-    $this->dba = (true === $persistently) ? dba_popen($file, $mode, $handler) : dba_open($file, $mode, $handler);
+    /**
+     * @param string $key
+     * @param mixed  $value
+     * @param int    $minutes
+     *
+     * @return bool
+     */
+    public function put($key, $value, $minutes)
+    {
+        if ($minutes <= 0) {
+            return;
+        }
 
-    $this->file    = $file;
-    $this->handler = $handler;
-  }
+        $value = $this->expiration($minutes) . serialize($value);
 
-  /**
-   * Closes an open dba resource
-   *
-   * @return void
-   */
-  public function __destruct()
-  {
-    if ($this->dba) {
-      dba_close($this->dba);
-      $this->dba = null;
-    }
-  }
+        if (true === $this->has($key)) {
+            return dba_replace($key, $value, $this->dba);
+        }
 
-  /**
-   * @param string $key
-   * @param mixed  $value
-   * @param int    $minutes
-   *
-   * @return bool
-   */
-  public function put($key, $value, $minutes)
-  {
-    if ($minutes <= 0) {
-      return;
+        return dba_insert($key, $value, $this->dba);
     }
 
-    $value = $this->expiration($minutes) . serialize($value);
+    /**
+     * @param string $key
+     * @param null   $default
+     *
+     * @return bool|mixed|null
+     */
+    public function get($key, $default = null)
+    {
+        $res = $this->retrieve($key);
 
-    if (true === $this->has($key)) {
-      return dba_replace($key, $value, $this->dba);
+        if (false === $res) {
+            $this->forget($key);
+
+            return false;
+        }
+
+        return $res;
     }
 
-    return dba_insert($key, $value, $this->dba);
-  }
+    /**
+     * @param string $key
+     *
+     * @return bool|mixed
+     */
+    protected function retrieve($key)
+    {
+        $value = dba_fetch($key, $this->dba);
 
-  /**
-   * @param string $key
-   * @param null $default
-   *
-   * @return bool|mixed|null
-   */
-  public function get($key, $default = null)
-  {
-    $res = $this->retrieve($key);
+        if (false === $value) {
+            return false;
+        }
 
-    if (false === $res) {
-      $this->forget($key);
+        // compare the timestamp to the current time when we read the value.
+        if (time() >= substr($value, 0, 10)) {
+            return $this->forget($key);
+        }
 
-      return false;
+        return unserialize(substr($value, 10));
     }
 
-    return $res;
-  }
+    /**
+     * @param string $key
+     *
+     * @return boolean
+     */
+    public function forget($key)
+    {
+        if (false === is_resource($this->dba)) {
+            return false;
+        }
 
-  /**
-   * @param string $key
-   *
-   * @return bool|mixed
-   */
-  protected function retrieve($key)
-  {
-    $value = dba_fetch($key, $this->dba);
-
-    if (false === $value) {
-      return false;
+        return dba_delete($key, $this->dba);
     }
 
-    // compare the timestamp to the current time when we read the value.
-    if (time() >= substr($value, 0, 10)) {
-      return $this->forget($key);
+    /**
+     * @param string $key
+     *
+     * @return boolean
+     */
+    public function has($key)
+    {
+        return dba_exists($key, $this->dba);
     }
 
-    return unserialize(substr($value, 10));
-  }
-
-  /**
-   * @param string $key
-   *
-   * @return boolean
-   */
-  public function forget($key)
-  {
-    if (false === is_resource($this->dba)) {
-      return false;
+    /**
+     * Write an item to the cache for five years.
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return boolean
+     */
+    public function forever($key, $value)
+    {
+        return $this->put($key, $value, 2628000);
     }
 
-    return dba_delete($key, $this->dba);
-  }
+    /**
+     * Cleans and optimizes the cache from all expired entries.
+     *
+     * @return bool
+     */
+    public function clean()
+    {
+        $dba = $this->dba;
+        $key = dba_firstkey($dba);
 
-  /**
-   * @param string $key
-   *
-   * @return boolean
-   */
-  public function has($key)
-  {
-    return dba_exists($key, $this->dba);
-  }
+        while ($key !== false && $key !== null) {
+            $this->retrieve($key);
+            $key = dba_nextkey($dba);
+        }
 
-  /**
-   * Write an item to the cache for five years.
-   *
-   * @param $key
-   * @param $value
-   *
-   * @return boolean
-   */
-  public function forever($key, $value)
-  {
-    return $this->put($key, $value, 2628000);
-  }
-
-  /**
-   * Cleans and optimizes the cache from all expired entries.
-   *
-   * @return bool
-   */
-  public function clean()
-  {
-    $dba = $this->dba;
-    $key = dba_firstkey($dba);
-
-    while ($key !== false && $key !== null) {
-      $this->retrieve($key);
-      $key = dba_nextkey($dba);
+        return dba_optimize($dba);
     }
 
-    return dba_optimize($dba);
-  }
+    /**
+     * Flush the whole storage.
+     *
+     * @return bool
+     */
+    public function flush()
+    {
+        if (file_exists($this->file)) {
 
-  /**
-   * Flush the whole storage.
-   *
-   * @return bool
-   */
-  public function flush()
-  {
-    if (file_exists($this->file)) {
+            // We close the dba file before deleting
+            // and reopen on next use.
+            $this->__destruct();
 
-      // We close the dba file before deleting
-      // and reopen on next use.
-      $this->__destruct();
+            unlink($this->file);
 
-      unlink($this->file);
+            clearstatcache();
 
-      clearstatcache();
+            return true;
+        }
 
-      return true;
+        return false;
     }
 
-    return false;
-  }
-
-  /**
-   * @return string
-   */
-  public function getFile()
-  {
-    return $this->file;
-  }
+    /**
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
 }

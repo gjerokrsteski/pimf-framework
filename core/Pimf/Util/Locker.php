@@ -15,7 +15,7 @@ namespace Pimf\Util;
  * @link    https://bugs.php.net/bug.php?id=39736
  * @author  Gjero Krsteski <gjero@krsteski.de>
  */
-class Lock
+class Locker
 {
     /**
      * @var string
@@ -28,29 +28,25 @@ class Lock
     private $handle;
 
     /**
-     * @param  string $name The lock name
+     * @param  string $context The unique lock name
      */
-    public function __construct($name)
+    public function __construct($context)
     {
-        $lockPath = sys_get_temp_dir();
-
         $this->file = sprintf(
             '%s/pimf.%s.%s.lock',
-            $lockPath,
-            preg_replace('/[^a-z0-9\._-]+/i', '-', $name),
-            hash('sha256', $name)
+            sys_get_temp_dir(),
+            preg_replace('/[^a-z0-9\._-]+/i', '-', $context),
+            hash('sha256', $context)
         );
     }
 
     /**
      * Lock the resource
      *
-     * @param  bool $blocking wait until the lock is released
-     *
      * @return bool        Returns true if the lock was acquired, false otherwise
      * @throws \RuntimeException If the lock file could not be created or opened
      */
-    public function lock($blocking = false)
+    public function lock()
     {
         if ($this->handle) {
             return true;
@@ -77,7 +73,7 @@ class Lock
             throw new \RuntimeException($error['message'], 0, null, $this->file);
         }
 
-        if (!flock($this->handle, LOCK_EX | ($blocking ? 0 : LOCK_NB))) {
+        if (!flock($this->handle, LOCK_EX | LOCK_NB)) {
             fclose($this->handle);
             $this->handle = null;
 

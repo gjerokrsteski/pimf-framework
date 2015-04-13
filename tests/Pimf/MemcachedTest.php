@@ -1,61 +1,62 @@
 <?php
+
 class MemcachedTest extends \PHPUnit_Framework_TestCase
 {
-  /**
-   * Call protected/private method of a class.
-   *
-   * @param object &$object    Instantiated object that we will run method on.
-   * @param string $methodName Method name to call
-   * @param array  $parameters Array of parameters to pass into method.
-   *
-   * @return mixed Method return.
-   */
-  public static function invokeMethod(&$object, $methodName, array $parameters = array())
-  {
-      $reflection = new \ReflectionClass(get_class($object));
-      $method = $reflection->getMethod($methodName);
-      $method->setAccessible(true);
+    /**
+     * Call protected/private method of a class.
+     *
+     * @param object &$object    Instantiated object that we will run method on.
+     * @param string $methodName Method name to call
+     * @param array  $parameters Array of parameters to pass into method.
+     *
+     * @return mixed Method return.
+     */
+    public static function invokeMethod(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
 
-      return $method->invokeArgs($object, $parameters);
-  }
-
-
-  # start testing
+        return $method->invokeArgs($object, $parameters);
+    }
 
 
-  public function testConnecting()
-  {
-    $mock = $this->getMockBuilder('\Memcached')
-                 ->disableOriginalConstructor()
-                 ->setMethods(array('addServer', 'getVersion'))
-                 ->getMock();
+    # start testing
 
-    $mock->expects($this->any())->method('addServer')->will($this->returnValue(true));
-    $mock->expects($this->any())->method('getVersion')->will($this->returnValue(true));
 
-    $memcache = new \Pimf\Memcached();
-    $servers[] = array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100);
+    public function testConnecting()
+    {
+        $mock = $this->getMockBuilder('\Memcached')
+            ->disableOriginalConstructor()
+            ->setMethods(array('addServer', 'getVersion'))
+            ->getMock();
 
-    self::invokeMethod($memcache, 'connect', array($servers, $mock));
-  }
+        $mock->expects($this->any())->method('addServer')->will($this->returnValue(true));
+        $mock->expects($this->any())->method('getVersion')->will($this->returnValue(true));
 
-  /**
-   * @expectedException \RuntimeException
-   */
-  public function testIfCouldNotEstablishMemcachedConnection()
-  {
-    $mock = $this->getMockBuilder('\Memcached')
-                 ->disableOriginalConstructor()
-                 ->setMethods(array('addServer', 'getVersion'))
-                 ->getMock();
+        $memcache = new \Pimf\Memcached();
+        $servers[] = array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100);
 
-    $mock->expects($this->any())->method('addServer')->will($this->returnValue(true));
-    $mock->expects($this->any())->method('getVersion')->will($this->returnValue(false));
+        self::invokeMethod($memcache, 'connect', array($servers, $mock));
+    }
 
-    $memcache = new \Pimf\Memcached();
-    $servers[] = array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100);
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testIfCouldNotEstablishMemcachedConnection()
+    {
+        $mock = $this->getMockBuilder('\Memcached')
+            ->disableOriginalConstructor()
+            ->setMethods(array('addServer', 'getVersion'))
+            ->getMock();
 
-    self::invokeMethod($memcache, 'connect', array($servers, $mock));
-  }
+        $mock->expects($this->any())->method('addServer')->will($this->returnValue(true));
+        $mock->expects($this->any())->method('getVersion')->will($this->returnValue(false));
+
+        $memcache = new \Pimf\Memcached();
+        $servers[] = array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100);
+
+        self::invokeMethod($memcache, 'connect', array($servers, $mock));
+    }
 }
  
