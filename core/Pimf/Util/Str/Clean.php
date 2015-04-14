@@ -5,7 +5,7 @@
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
  * @license   http://opensource.org/licenses/MIT MIT License
  */
-namespace Pimf\Util\Character;
+namespace Pimf\Util\Str;
 
 /**
  * String

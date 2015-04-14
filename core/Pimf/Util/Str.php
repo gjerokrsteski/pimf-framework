@@ -171,7 +171,7 @@ class Str
      */
     public static function cleanAggressive($string)
     {
-        return \Pimf\Util\Character\Clean::aggressive($string);
+        return \Pimf\Util\Str\Clean::aggressive($string);
     }
 
     /**
@@ -185,7 +185,7 @@ class Str
      */
     public static function cleanXss($string, $charset = 'ISO-8859-1')
     {
-        return \Pimf\Util\Character\Clean::xss($string, $charset);
+        return \Pimf\Util\Str\Clean::xss($string, $charset);
     }
 
     /**
