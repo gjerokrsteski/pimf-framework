@@ -8,7 +8,7 @@
 
 namespace Pimf;
 
-use Pimf\Util\Str;
+use Pimf\Util\Character as Str;
 
 /**
  * A full featured package for managing command-line options and arguments,

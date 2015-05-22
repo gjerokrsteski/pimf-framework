@@ -8,7 +8,7 @@
 
 namespace Pimf\Session\Storages;
 
-use Pimf\Util\Str;
+use Pimf\Util\Character;
 
 /**
  * @package Session_Storages
@@ -65,12 +65,12 @@ abstract class Storage
     {
         // just return any string since the Cookie storage has no idea.
         if ($this instanceof \Pimf\Session\Storages\Cookie) {
-            return Str::random(40);
+            return Character::random(40);
         }
 
         // we'll find an random ID here.
         do {
-            $session = $this->load($key = Str::random(40));
+            $session = $this->load($key = Character::random(40));
         } while ($session !== null);
 
         return $key;

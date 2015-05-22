@@ -8,7 +8,7 @@
 
 namespace Pimf;
 
-use Pimf\Util\Str as Str, Pimf\Util\Header, Pimf\Util\Header\ResponseStatus, Pimf\Util\Uuid;
+use Pimf\Util\Character as Str, Pimf\Util\Header, Pimf\Util\Header\ResponseStatus, Pimf\Util\Uuid;
 
 /**
  * Provides a facility for applications which provides reusable resources,
@@ -20,7 +20,7 @@ use Pimf\Util\Str as Str, Pimf\Util\Header, Pimf\Util\Header\ResponseStatus, Pim
  */
 final class Application
 {
-    const VERSION = '1.8.6';
+    const VERSION = '1.9.0';
 
     /**
      * @var Environment
@@ -66,8 +66,10 @@ final class Application
             self::loadListeners(BASE_PATH . 'app/' . Config::get('app.name') . '/events.php');
             self::setupErrorHandling($environment);
             self::loadPdoDriver($environment, Config::get($environment . '.db'), Config::get('app.name'));
-            self::loadRoutes(Config::get('app.routeable'),
-                BASE_PATH . 'app/' . Config::get('app.name') . '/routes.php');
+            self::loadRoutes(
+                Config::get('app.routeable'),
+                BASE_PATH . 'app/' . Config::get('app.name') . '/routes.php'
+            );
 
         } catch (\Exception $exception) {
             $problems[] = $exception->getMessage();

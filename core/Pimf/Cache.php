@@ -8,7 +8,7 @@
 
 namespace Pimf;
 
-use Pimf\Util\Str;
+use Pimf\Util\Character;
 use Pimf\Cache\Storages as CS;
 
 /**

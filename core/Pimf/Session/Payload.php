@@ -10,7 +10,7 @@ namespace Pimf\Session;
 
 use Pimf\Config;
 use Pimf\Session;
-use Pimf\Util\Str;
+use Pimf\Util\Character;
 use Pimf\Cookie;
 
 /**
@@ -92,7 +92,7 @@ class Payload
         // A CSRF token is stored in every session to protect
         // the application from cross-site request
         if (!$this->has(Session::CSRF)) {
-            $this->put(Session::CSRF, Str::random(40));
+            $this->put(Session::CSRF, Character::random(40));
         }
     }
 

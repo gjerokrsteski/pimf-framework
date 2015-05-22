@@ -7,7 +7,7 @@
  */
 namespace Pimf;
 
-use Pimf\Util\Str as Str;
+use Pimf\Util\Character as Str;
 
 /**
  * URL

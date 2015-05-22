@@ -70,10 +70,10 @@ class Param
 
             ? array_map(
                 function ($value) {
-                    return \Pimf\Util\Str\Clean::xss($value);
+                    return \Pimf\Util\Character\Clean::xss($value);
                 }, $rawData
             )
 
-            : \Pimf\Util\Str\Clean::xss($rawData);
+            : \Pimf\Util\Character\Clean::xss($rawData);
     }
 }

@@ -88,7 +88,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $mock->expects($this->any())->method('id')->will($this->returnValue(\Pimf\Util\Str::random(40)));
+        $mock->expects($this->any())->method('id')->will($this->returnValue(\Pimf\Util\Character::random(40)));
 
         return $mock;
     }

@@ -41,7 +41,7 @@ class Value
      */
     public function prepend($string)
     {
-        $this->value = Str::ensureLeading($string, $this->value);
+        $this->value = Character::ensureLeading($string, $this->value);
 
         return $this;
     }
@@ -53,7 +53,7 @@ class Value
      */
     public function append($string)
     {
-        $this->value = Str::ensureTrailing($string, $this->value);
+        $this->value = Character::ensureTrailing($string, $this->value);
 
         return $this;
     }
@@ -65,7 +65,7 @@ class Value
      */
     public function deleteTrailing($string)
     {
-        $this->value = Str::deleteTrailing($string, $this->value);
+        $this->value = Character::deleteTrailing($string, $this->value);
 
         return $this;
     }
@@ -77,7 +77,7 @@ class Value
      */
     public function deleteLeading($string)
     {
-        $this->value = Str::deleteLeading($string, $this->value);
+        $this->value = Character::deleteLeading($string, $this->value);
 
         return $this;
     }
@@ -89,7 +89,7 @@ class Value
      */
     public function contains($mixed)
     {
-        return Str::contains($this->value, $mixed);
+        return Character::contains($this->value, $mixed);
     }
 
     /**
@@ -99,7 +99,7 @@ class Value
      */
     public function starts($with)
     {
-        return Str::startsWith($this->value, $with);
+        return Character::startsWith($this->value, $with);
     }
 
     /**
@@ -109,7 +109,7 @@ class Value
      */
     public function ends($with)
     {
-        return Str::endsWith($this->value, $with);
+        return Character::endsWith($this->value, $with);
     }
 
     /**

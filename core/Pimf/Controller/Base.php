@@ -12,7 +12,7 @@ use \Pimf\Param, \Pimf\Config, \Pimf\Sapi,
     \Pimf\Controller\Exception as Bomb,
     \Pimf\Request, \Pimf\Util\Header, \Pimf\Url,
     \Pimf\Response, \Pimf\EntityManager, \Pimf\Logger,
-    \Pimf\Util\Str, \Pimf\Util\Value, \Pimf\Environment, \Pimf\Router;
+    \Pimf\Util\Character, \Pimf\Util\Value, \Pimf\Environment, \Pimf\Router;
 
 /**
  * Defines the general controller behaviour - you have to extend it.
