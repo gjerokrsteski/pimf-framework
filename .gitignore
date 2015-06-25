@@ -19,7 +19,7 @@ Thumbs.db
 *.sass-cache
 
 # Folders to ignore
-.idea
+
 .hg
 .svn
 .CVS
