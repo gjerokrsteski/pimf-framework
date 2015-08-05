@@ -280,7 +280,6 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
 
     }
 
-
     /**
      * @runInSeparateProcess
      * @outputBuffering enabled
@@ -344,3 +343,4 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
         $this->expectOutputString('');
     }
 }
+
