@@ -7,8 +7,6 @@
  */
 namespace Pimf\Util\Header;
 
-use Pimf\Config;
-
 /**
  * Manages a raw HTTP header ResponseStatus sending.
  *
@@ -127,6 +125,11 @@ abstract class ResponseStatus
         self::send(403, 'Forbidden');
     }
 
+    public static function sendNotFound()
+    {
+        self::send(404, 'Not Found');
+    }
+
     public static function sendMethodNotAllowed()
     {
         self::send(405, 'Method Not Allowed');
@@ -145,6 +148,11 @@ abstract class ResponseStatus
     public static function sendRequestTimeout()
     {
         self::send(408, 'Request Timeout');
+    }
+
+    public static function sendConflict()
+    {
+        self::send(409, 'Conflict');
     }
 
     public static function sendUnsupportedMediaType()
