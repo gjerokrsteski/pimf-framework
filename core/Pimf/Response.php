@@ -23,7 +23,7 @@ class Response
      *
      * @var string
      */
-    protected $method = null;
+    protected $requestMethod = null;
 
     /**
      * If the response attempts to send any cached headers.
@@ -46,15 +46,7 @@ class Response
      */
     public function __construct($requestMethod)
     {
-        $this->method = '' . strtoupper($requestMethod);
-    }
-
-    /**
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->method;
+        $this->requestMethod = '' . strtoupper($requestMethod);
     }
 
     public function asJSON()
@@ -153,7 +145,6 @@ class Response
         }
     }
 
-
     /**
      * If instead you have a page that has personalization on it
      * (say, for example, the splash page contains local news as well),
@@ -223,7 +214,7 @@ class Response
      */
     private function preventMultipleCaching()
     {
-        if ($this->method != 'GET') {
+        if ($this->requestMethod != 'GET') {
             throw new \RuntimeException('HTTP cache headers can only take effect if request was sent via GET method!');
         }
 

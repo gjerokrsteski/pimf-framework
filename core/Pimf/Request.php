@@ -46,6 +46,13 @@ class Request
     public $env;
 
     /**
+     * The request HTTP method send by the client-browser.
+     *
+     * @var null|string
+     */
+    protected $method = null;
+
+    /**
      * @param array             $getData
      * @param array             $postData
      * @param array             $cookieData
@@ -67,11 +74,13 @@ class Request
         static::$cookieData = new Param($cookieData);
         static::$cliData = new Param((array)self::stripSlashesIfMagicQuotes($cliData));
         static::$filesData = Util\Uploaded\Factory::get($filesData);
-        $this->env = $env;
+
+        $this->env    = $env;
+        $this->method = '' . strtoupper($env->REQUEST_METHOD);
     }
 
     /**
-     * For fetching body sent via PUT|DELETE|PATCH Http method.
+     * For fetching body/params sent via PUT|DELETE|PATCH Http method.
      *
      * @param bool $asResource
      *
@@ -200,5 +209,15 @@ class Request
         }
 
         return $content;
+    }
+
+    /**
+     * The request method send by the client-browser.
+     *
+     * @return null|string
+     */
+    public function getMethod()
+    {
+        return $this->method;
     }
 }

@@ -26,13 +26,6 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
         return self::$env;
     }
 
-    public function testCreatingNewInstance()
-    {
-        $response = new \Pimf\Response('POST');
-
-        $this->assertEquals('POST', $response->getMethod());
-    }
-
     public function testCreatingNewInstanceExpectingNoExceptionIfComesFromCli()
     {
         $this->assertInstanceOf('Pimf\\Response', new \Pimf\Response(null));

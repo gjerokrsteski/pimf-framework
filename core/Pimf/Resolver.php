@@ -110,6 +110,8 @@ class Resolver
             throw new Bomb('can not load class "' . $controller . '" from the repository');
         }
 
-        return new $controller($this->request, new Response($env->REQUEST_METHOD), $logger, $em, $this->router, $env);
+        return new $controller(
+            $this->request, new Response($this->request->getMethod()), $logger, $em, $this->router, $env
+        );
     }
 }
