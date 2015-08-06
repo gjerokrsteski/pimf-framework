@@ -8,7 +8,15 @@ php:
   - 7.0
   - hhvm
 
+
 matrix:
+    include:
+        - php: 5.5.9
+          env: setup=lowest
+        - php: 5.5.9
+          env: setup=stable
+        - php: 7.0
+          env: setup=stable
     allow_failures:
         - php: 7.0
         - php: hhvm
