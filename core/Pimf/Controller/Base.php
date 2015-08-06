@@ -52,7 +52,6 @@ abstract class Base
      */
     protected $env;
 
-
     /**
      * @param Request            $request
      * @param Response           $response
@@ -94,15 +93,15 @@ abstract class Base
 
             $suffix = 'Action';
 
-            if ($this->response->getMethod() != 'GET' && $this->response->getMethod() != 'POST') {
+            if ($this->request->getMethod() != 'GET' && $this->request->getMethod() != 'POST') {
 
                 $redirectUrl = new Value($this->env->REDIRECT_URL);
                 $redirectUrl = $redirectUrl->deleteLeading('/')->deleteTrailing('/')->explode('/');
-                $action = $redirectUrl[1];
+                $action      = isset($redirectUrl[1]) ? $redirectUrl[1] : 'index';
 
             } else {
 
-                $bag = 'from' . ucfirst(strtolower($this->response->getMethod()));
+                $bag = 'from' . ucfirst(strtolower($this->request->getMethod()));
                 $action = $this->request->{$bag}()->get('action', 'index');
             }
 
