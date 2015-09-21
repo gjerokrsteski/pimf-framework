@@ -20,7 +20,7 @@ A good and robust business-logic is better that a fat and complex framework. Mos
 
 The aim was to create robust and secure projects and deliver them fast. We wanted just one easy framework, that can be used once for all our projects. And then - PIMF was born!
 
-PIMF’s implementation is based on well proved design patterns as well as fast objects relation mapping mechanisms - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without having to override your projects. And for all of you out there, who like to create rich application interfaces with ExtJs or Dojo - we have created mechanisms to couple your GUI to the controllers in an easy and fast way.
+PIMF’s implementation is based on well proved design patterns as well as fast objects relation mapping mechanisms - like famous PHP frameworks had. The architecture is designed upgrade friendly - so you can upgrade to newer versions without having to override your projects. And for all of you out there, who like to create rich application interfaces - we have created mechanisms to couple your GUI to the controllers in an easy and fast way.
 
 Quickstart with PIMF-Blog bundle using SQLite
 ---------------------------------------------
