@@ -155,8 +155,8 @@ class Logger
     }
 
     /**
-     * @param        string $msg
-     * @param string        $severity
+     * @param string $msg
+     * @param string $severity
      */
     protected function write($msg, $severity = 'DEBUG')
     {
@@ -164,12 +164,11 @@ class Logger
 
         if ($severity == 'WARNING') {
             fwrite($this->warnHandle, $msg);
+        } elseif ($severity == 'ERROR') {
+            fwrite($this->errorHandle, $msg);
         } else {
-            if ($severity == 'ERROR') {
-                fwrite($this->errorHandle, $msg);
-            } else {
-                fwrite($this->handle, $msg);
-            }
+            fwrite($this->handle, $msg);
+
         }
     }
 

@@ -23,7 +23,11 @@ class Json
      */
     public static function encode($data)
     {
-        $json = json_encode($data);
+        if (version_compare(PHP_VERSION, '5.4.0', '>=')) {
+            $json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        } else {
+            $json = json_encode($data);
+        }
 
         self::handleError(json_last_error());
 
