@@ -50,9 +50,9 @@ class Haanga extends View implements Reunitable
         $conf = Config::get('view.haanga');
 
         $options = array(
-            'debug'        => $conf['view']['haanga']['debug'],
+            'debug'        => $conf['debug'],
             'template_dir' => $this->path,
-            'autoload'     => $conf['view']['haanga']['auto_reload'],
+            'autoload'     => $conf['auto_reload'],
 
         );
 
