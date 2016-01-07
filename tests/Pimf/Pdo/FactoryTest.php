@@ -22,9 +22,8 @@ class PdoFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return array(
 
-            array(null),
-            array(''),
-
+            array(array(null)),
+            array(array('')),
         );
     }
 
