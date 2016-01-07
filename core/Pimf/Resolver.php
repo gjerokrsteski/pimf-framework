@@ -100,7 +100,7 @@ class Resolver
      * @return \Pimf\Controller\Base
      * @throws \Pimf\Resolver\Exception If no controller specified or no controller found at the repository.
      */
-    public function process(Environment $env, EntityManager $em, Logger $logger)
+    public function process(Environment $env, $em, Logger $logger)
     {
         $path = str_replace($this->repositoryPath, '', $this->controllerPath);
         $name = str_replace('/', $this->controllerClass, $path);

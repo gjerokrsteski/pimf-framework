@@ -26,7 +26,7 @@ class Error
      * @param Logger     $logger
      * @param boolean    $exit
      */
-    public static function exception(\Exception $exception, $logger, $exit = true)
+    public static function exception($exception, $logger, $exit = true)
     {
         static::log($exception, $logger);
 
@@ -59,7 +59,7 @@ class Error
      *
      * @return string
      */
-    public static function format(\Exception $exception, $isCli = false)
+    public static function format($exception, $isCli = false)
     {
         if ($isCli === true) {
             return
@@ -145,7 +145,7 @@ class Error
      * @param \Exception $exception
      * @param Logger     $logger
      */
-    public static function log(\Exception $exception, Logger $logger)
+    public static function log($exception, Logger $logger)
     {
         if (Config::get('error.log') === true) {
             $logger->error($exception->getMessage() . ' ' . $exception->getTraceAsString());

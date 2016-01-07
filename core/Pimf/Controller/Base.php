@@ -64,7 +64,7 @@ abstract class Base
         Request $request,
         Response $response = null,
         Logger $logger,
-        EntityManager $em,
+        $em,
         Router $router,
         Environment $env
     ) {

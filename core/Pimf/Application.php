@@ -195,7 +195,7 @@ final class Application
      * @param array  $dbConf
      * @param string $appName
      */
-    private static function loadPdoDriver($environment, array $dbConf, $appName)
+    private static function loadPdoDriver($environment, $dbConf, $appName)
     {
         if (is_array($dbConf) && $environment != 'testing') {
             self::$em = new EntityManager(Pdo\Factory::get($dbConf), $appName);
