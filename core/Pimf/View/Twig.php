@@ -11,7 +11,6 @@ namespace Pimf\View;
 use Pimf\Contracts\Reunitable;
 use Pimf\View;
 use Pimf\Config;
-use Pimf\Util\Value;
 
 
 /**
@@ -55,14 +54,11 @@ class Twig extends View implements Reunitable
 
         $conf = Config::get('view.twig');
 
-        require_once BASE_PATH . "Twig/lib/Twig/Autoloader.php";
-
-        \Twig_Autoloader::register();
+        require_once BASE_PATH . "Twig/vendor/autoload.php";
 
         $options = array(
-            'debug'       => $conf['view']['twig']['debug'],
-            'auto_reload' => $conf['view']['twig']['auto_reload']
-
+            'debug'       => $conf['debug'],
+            'auto_reload' => $conf['auto_reload']
         );
 
         if ($conf['cache'] === true) {
