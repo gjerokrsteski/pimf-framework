@@ -48,7 +48,7 @@ class PdoFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * @expectedException \RuntimeException
      * @dataProvider PdoFactoryTest::varyBadDriverConfig
      */
     public function testIfVaryBadDriverSpecified($driver)

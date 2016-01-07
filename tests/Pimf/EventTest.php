@@ -2,22 +2,11 @@
 
 class EventDummyClass
 {
-    private function doSomethingPrivate()
-    {
-        return __FUNCTION__;
-    }
-
-    protected function doSomethingProtected()
-    {
-        return __FUNCTION__;
-    }
-
     public function doSomethingPublic()
     {
         return __FUNCTION__;
     }
 }
-
 
 class EventTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,26 +31,6 @@ class EventTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $responses);
         $this->assertNotEmpty($responses);
-    }
-
-    /**
-     * @expectedException TypeError
-     */
-    public function testCreateAndFireStartProtectedEvent()
-    {
-        $dummy = new \EventDummyClass();
-        \Pimf\Event::listen('start', array($dummy, 'doSomethingProtected'));
-        \Pimf\Event::fire('start');
-    }
-
-    /**
-     * @expectedException PHPUnit_Framework_Error
-     */
-    public function testCreateAndFireStartPrivateEvent()
-    {
-        $dummy = new EventDummyClass();
-        \Pimf\Event::listen('start', array($dummy, 'doSomethingPrivate'));
-        \Pimf\Event::fire('start');
     }
 
     public function testListenersAreFiredForEvents()
