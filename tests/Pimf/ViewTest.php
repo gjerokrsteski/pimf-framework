@@ -56,7 +56,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException TypeError
+     * @expectedException \PHPUnit_Framework_Error_Notice
      */
     public function testIfTemplateNotFound()
     {
