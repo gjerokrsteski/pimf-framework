@@ -16,13 +16,13 @@ namespace Pimf\Contracts;
  */
 interface Cleanable
 {
-  /**
-   * Delete all expired instance-data from persistent storage.
-   *
-   * @param int $expiration
-   *
-   * @return mixed
-   */
-  public function clean($expiration);
+    /**
+     * Delete all expired instance-data from persistent storage.
+     *
+     * @param int $expiration
+     *
+     * @return mixed
+     */
+    public function clean($expiration);
 
 }

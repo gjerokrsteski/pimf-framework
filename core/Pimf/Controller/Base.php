@@ -8,8 +8,11 @@
 
 namespace Pimf\Controller;
 
-use \Pimf\Param, \Pimf\Registry, \Pimf\Sapi, \Pimf\Controller\Exception as Bomb, \Pimf\Request, \Pimf\Util\Header, \Pimf\Url,
-  \Pimf\Response;
+use \Pimf\Param, \Pimf\Config, \Pimf\Sapi,
+    \Pimf\Controller\Exception as Bomb,
+    \Pimf\Request, \Pimf\Util\Header, \Pimf\Url,
+    \Pimf\Response, \Pimf\EntityManager, \Pimf\Logger,
+    \Pimf\Util\Character, \Pimf\Util\Value, \Pimf\Environment, \Pimf\Router;
 
 /**
  * Defines the general controller behaviour - you have to extend it.
@@ -19,92 +22,130 @@ use \Pimf\Param, \Pimf\Registry, \Pimf\Sapi, \Pimf\Controller\Exception as Bomb,
  */
 abstract class Base
 {
-  /**
-   * @var \Pimf\Request
-   */
-  protected $request;
+    /**
+     * @var Request
+     */
+    protected $request;
 
-  /**
-   * @var \Pimf\Response
-   */
-  protected $response;
+    /**
+     * @var Response
+     */
+    protected $response;
 
-  /**
-   * @param Request  $request
-   * @param Response $response
-   */
-  public function __construct(\Pimf\Request $request, \Pimf\Response $response = null)
-  {
-    $this->request  = $request;
-    $this->response = $response;
-  }
+    /**
+     * @var Logger
+     */
+    protected $logger;
 
-  abstract public function indexAction();
+    /**
+     * @var EntityManager
+     */
+    protected $em;
 
-  /**
-   * Method to show the content.
-   *
-   * @return mixed
-   * @throws \Exception If not supported request method or bad controller
-   */
-  public function render()
-  {
-    $conf = Registry::get('conf');
+    /**
+     * @var Router
+     */
+    protected $router;
 
-    if (Sapi::isCli() && $conf['environment'] == 'production') {
+    /**
+     * @var Environment
+     */
+    protected $env;
 
-      $suffix = 'CliAction';
-      $action = $this->request->fromCli()->get('action', 'index');
+    /**
+     * @param Request            $request
+     * @param Response           $response
+     * @param Logger             $logger
+     * @param EntityManager      $em
+     * @param Router             $router
+     * @param Environment  $env
+     */
+    public function __construct(
+        Request $request,
+        Response $response = null,
+        Logger $logger,
+        EntityManager $em,
+        Router $router,
+        Environment $env
+    ) {
+        $this->request = $request;
+        $this->response = $response;
+        $this->logger = $logger;
+        $this->em = $em;
+        $this->router = $router;
+        $this->env = $env;
+    }
 
-    } else {
+    abstract public function indexAction();
 
-      $suffix        = 'Action';
-      $bag           = 'from' . ucfirst(strtolower($this->response->getMethod()));
-      $action        = $this->request->{$bag}()->get('action', 'index');
+    /**
+     * Method to show the content.
+     *
+     * @return mixed
+     * @throws \Exception If not supported request method or bad controller
+     */
+    public function render()
+    {
+        if (Sapi::isCli() && Config::get('environment') == 'production') {
+            $suffix = 'CliAction';
+            $action = $this->request->fromCli()->get('action', 'index');
+        } else {
 
-      if ($conf['app']['routeable'] === true) {
+            $suffix = 'Action';
 
-        $target = Registry::get('router')->find();
+            if ($this->request->getMethod() != 'GET' && $this->request->getMethod() != 'POST') {
 
-        if ($target instanceof \Pimf\Route\Target) {
+                $redirectUrl = new Value($this->env->REDIRECT_URL);
+                $redirectUrl = $redirectUrl->deleteLeading('/')->deleteTrailing('/')->explode('/');
+                $action      = isset($redirectUrl[1]) ? $redirectUrl[1] : 'index';
 
-          $action = $target->getAction();
+            } else {
 
-          Request::$getData = new Param((array)Request::stripSlashesIfMagicQuotes(
-            array_merge($target->getParams(), Request::$getData->getAll())
-          ));
+                $bag = 'from' . ucfirst(strtolower($this->request->getMethod()));
+                $action = $this->request->{$bag}()->get('action', 'index');
+            }
+
+            if (Config::get('app.routeable') === true && $this->router instanceof \Pimf\Router) {
+
+                $target = $this->router->find();
+
+                if ($target instanceof \Pimf\Route\Target) {
+
+                    $action = $target->getAction();
+
+                    Request::$getData = new Param((array)Request::stripSlashesIfMagicQuotes(
+                        array_merge($target->getParams(), Request::$getData->getAll())
+                    ));
+                }
+            }
         }
-      }
+
+        $action = strtolower($action) . $suffix;
+
+        if (method_exists($this, 'init')) {
+            call_user_func(array($this, 'init'));
+        }
+
+        if (!method_exists($this, $action)) {
+            throw new Bomb("no action '{$action}' defined at controller " . get_class($this));
+        }
+
+        return call_user_func(array($this, $action));
     }
 
-    $action = strtolower($action) . $suffix;
+    /**
+     * Prepares the response object to return an HTTP Redirect response to the client.
+     *
+     * @param string  $route     The redirect destination like controller/action
+     * @param boolean $permanent If permanent redirection or not.
+     * @param boolean $exit
+     */
+    public function redirect($route, $permanent = false, $exit = true)
+    {
+        $url = Url::compute($route);
 
-    if (method_exists($this, 'init')) {
-      call_user_func(array($this, 'init'));
+        ($permanent === true) ? Header::sendMovedPermanently() : Header::sendFound();
+
+        Header::toLocation($url, $exit);
     }
-
-    if (!method_exists($this, $action)) {
-      throw new Bomb("no action '{$action}' defined at controller " . get_class($this));
-    }
-
-    return call_user_func(array($this, $action));
-  }
-
-  /**
-   * Prepares the response object to return an HTTP Redirect response to the client.
-   *
-   * @param string  $route     The redirect destination like controller/action
-   * @param boolean $permanent If permanent redirection or not.
-   * @param boolean $exit
-   */
-  public function redirect($route, $permanent = false, $exit = true)
-  {
-    $url = Url::compute($route);
-
-    Header::clear();
-
-    ($permanent === true) ? Header::sendMovedPermanently() : Header::sendFound();
-
-    Header::toLocation($url, $exit);
-  }
 }

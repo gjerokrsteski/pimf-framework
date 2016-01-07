@@ -8,7 +8,7 @@
 
 namespace Pimf\Controller;
 
-use Pimf\Registry, Pimf\Cli\Std, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
+use Pimf\Config, Pimf\Cli\Std, Pimf\Pdo\Factory, \Pimf\Controller\Exception as Bomb, Pimf\Util\File;
 
 /**
  * @package Controller
@@ -17,119 +17,127 @@ use Pimf\Registry, Pimf\Cli\Std, Pimf\Pdo\Factory, \Pimf\Controller\Exception as
  */
 class Core extends Base
 {
-  /**
-   * Because it is a PIMF restriction!
-   */
-  public function indexAction()
-  {
+    /**
+     * Because it is a PIMF restriction!
+     */
+    public function indexAction()
+    {
 
-  }
-
-  /**
-   * Checks the applications architecture and creates some security and safety measures.
-   */
-  public function initCliAction()
-  {
-    clearstatcache();
-
-    $conf = Registry::get('conf');
-    $app  = 'app/' . $conf['app']['name'] . '/';
-
-    $assets = array(
-      BASE_PATH . $app . '_session/',
-      BASE_PATH . $app . '_cache/',
-      BASE_PATH . $app . '_database/',
-      BASE_PATH . $app . '_templates/',
-    );
-
-    echo 'Check app assets' . PHP_EOL;
-
-    foreach ($assets as $asset) {
-
-      if (!is_dir($asset)) {
-        echo "[ Please create '$asset' directory! ]" . PHP_EOL;
-      }
-
-      if (!is_writable($asset)) {
-        echo "[ Please make '$asset' writable! ]" . PHP_EOL;
-      }
     }
 
-    echo 'Secure root directory' . PHP_EOL;
-    chmod(BASE_PATH, 0755);
+    /**
+     * Checks the applications architecture and creates some security and safety measures.
+     */
+    public function initCliAction()
+    {
+        clearstatcache();
 
-    echo 'Secure .htaccess' . PHP_EOL;
-    chmod(BASE_PATH . '.htaccess', 0644);
+        $app = 'app/' . Config::get('app.name') . '/';
 
-    echo 'Secure index.php' . PHP_EOL;
-    chmod(BASE_PATH . 'index.php', 0644);
+        $assets = array(
+            BASE_PATH . $app . '_session/',
+            BASE_PATH . $app . '_cache/',
+            BASE_PATH . $app . '_database/',
+            BASE_PATH . $app . '_templates/',
+        );
 
-    echo 'Secure autoload.core.php' . PHP_EOL;
-    chmod(BASE_PATH . 'pimf-framework/autoload.core.php', 0644);
+        echo 'Check app assets' . PHP_EOL;
 
-    echo 'Create logging files' . PHP_EOL;
-    $handle = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-logs.txt', "at+");
-    fclose($handle);
-    chmod($file, 0777);
-    $handle = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-warnings.txt', "at+");
-    fclose($handle);
-    chmod($file, 0777);
-    $handle = fopen($file = $conf['bootstrap']['local_temp_directory'] . 'pimf-errors.txt', "at+");
-    fclose($handle);
-    chmod($file, 0777);
+        foreach ($assets as $asset) {
 
-    clearstatcache();
-  }
+            if (!is_dir($asset)) {
+                echo "[ Please create '$asset' directory! ]" . PHP_EOL;
+            }
 
-  public function createSessionTableCliAction()
-  {
-    $std  = new Std();
-    $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
+            if (!is_writable($asset)) {
+                echo "[ Please make '$asset' writable! ]" . PHP_EOL;
+            }
+        }
 
-    echo 'success='.(int)$this->createTable($type, 'session')."\n";
-  }
+        echo 'Secure root directory' . PHP_EOL;
+        chmod(BASE_PATH, 0755);
 
-  public function createCacheTableCliAction()
-  {
-    $std  = new Std();
-    $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
+        echo 'Secure .htaccess' . PHP_EOL;
+        chmod(BASE_PATH . '.htaccess', 0644);
 
-    echo 'success='.(int)$this->createTable($type, 'cache')."\n";
-  }
+        echo 'Secure index.php' . PHP_EOL;
+        chmod(BASE_PATH . 'index.php', 0644);
 
-  /**
-   * @param string $type
-   * @param string $for
-   *
-   * @return bool
-   * @throws \DomainException
-   */
-  protected function createTable($type, $for)
-  {
-    $type = trim($type);
+        echo 'Secure autoload.core.php' . PHP_EOL;
+        chmod(BASE_PATH . 'pimf-framework/autoload.core.php', 0644);
 
-    try {
-      $pdo = $file = null;
+        echo 'Create logging files' . PHP_EOL;
 
-      $conf = Registry::get('conf');
+        $directory = Config::get('bootstrap.local_temp_directory');
 
-      switch ($for) {
-        case 'cache':
-          $pdo  = Factory::get($conf['cache']['database']);
-          $file = 'create-cache-table-' . $type . '.sql';
-          break;
-        case 'session':
-          $pdo  = Factory::get($conf['session']['database']);
-          $file = 'create-session-table-' . $type . '.sql';
-          break;
-      }
+        $handle = fopen($file = $directory . 'pimf-logs.txt', "at+");
+        fclose($handle);
+        chmod($file, 0777);
+        $handle = fopen($file = $directory . 'pimf-warnings.txt', "at+");
+        fclose($handle);
+        chmod($file, 0777);
+        $handle = fopen($file = $directory . 'pimf-errors.txt', "at+");
+        fclose($handle);
+        chmod($file, 0777);
 
-      $file = str_replace('/', DS, BASE_PATH . 'pimf-framework/core/Pimf/_database/' . $file);
-
-      return $pdo->exec(file_get_contents(new File($file))) || print_r($pdo->errorInfo(), true);
-
-    } catch (\PDOException $pdoe) {
-      throw new Bomb($pdoe->getMessage());
+        clearstatcache();
     }
-  }
+
+    public function createSessionTableCliAction()
+    {
+        $std = new Std();
+        $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
+
+        if ($this->createTable($type, 'session')) {
+            echo 'Session table successfully created.' . PHP_EOL;
+        } else {
+            echo 'Problems creating session table!' . PHP_EOL;
+        }
+    }
+
+    public function createCacheTableCliAction()
+    {
+        $std = new Std();
+        $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
+
+        if ($this->createTable($type, 'session')) {
+            echo 'Cache table successfully created.' . PHP_EOL;
+        } else {
+            echo 'Problems creating cache table!' . PHP_EOL;
+        }
+    }
+
+    /**
+     * @param string $type
+     * @param string $for
+     *
+     * @return bool
+     * @throws \DomainException
+     */
+    protected function createTable($type, $for)
+    {
+        $type = trim($type);
+
+        try {
+            $pdo = $file = null;
+
+            switch ($for) {
+                case 'cache':
+                    $pdo = Factory::get(Config::get('cache.database'));
+                    $file = 'create-cache-table-' . $type . '.sql';
+                    break;
+                case 'session':
+                    $pdo = Factory::get(Config::get('session.database'));
+                    $file = 'create-session-table-' . $type . '.sql';
+                    break;
+            }
+
+            $file = str_replace('/', DS, BASE_PATH . 'pimf-framework/core/Pimf/_database/' . $file);
+
+            return $pdo->exec(file_get_contents(new File($file))) || print_r($pdo->errorInfo(), true);
+
+        } catch (\PDOException $pdoe) {
+            throw new Bomb($pdoe->getMessage());
+        }
+    }
 }

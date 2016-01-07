@@ -26,83 +26,83 @@ namespace Pimf\Util;
  */
 class Identifier
 {
-  /**
-   * @var string
-   */
-  protected static $delimiter = '_';
+    /**
+     * @var string
+     */
+    protected static $delimiter = '_';
 
-  /**
-   * @var array
-   */
-  protected $args = array();
+    /**
+     * @var array
+     */
+    protected $args = array();
 
-  /**
-   * Create a new Cache Identifier based on the given parameters.
-   * Integer and string but not array and objects.
-   *
-   * @throws \BadMethodCallException If no identifiers received.
-   */
-  public function __construct()
-  {
-    $args = func_get_args();
+    /**
+     * Create a new Cache Identifier based on the given parameters.
+     * Integer and string but not array and objects.
+     *
+     * @throws \BadMethodCallException If no identifiers received.
+     */
+    public function __construct()
+    {
+        $args = func_get_args();
 
-    if (!count($args) || !implode('', $args)) {
-      throw new \BadMethodCallException('No identifiers received');
+        if (!count($args) || !implode('', $args)) {
+            throw new \BadMethodCallException('No identifiers received');
+        }
+
+        $this->args = $args;
     }
 
-    $this->args = $args;
-  }
+    /**
+     * Return String representation of this Cache Identifier.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->generate();
+    }
 
-  /**
-   * Return String representation of this Cache Identifier.
-   *
-   * @return string
-   */
-  public function __toString()
-  {
-    return $this->generate();
-  }
+    /**
+     * @return string
+     */
+    public function generate()
+    {
+        return (string)$this->slag();
+    }
 
-  /**
-   * @return string
-   */
-  public function generate()
-  {
-    return (string)$this->slag();
-  }
+    /**
+     * Slags the identifier.
+     *
+     * @return string
+     */
+    protected function slag()
+    {
+        $ident = str_replace('-', '_', implode(self::getDelimiter(), $this->args));
+        $ident = str_replace('_', self::getDelimiter(), $ident);
+        $ident = trim($ident);
+        $ident = str_replace(' ', '', $ident);
 
-  /**
-   * Slags the identifier.
-   *
-   * @return string
-   */
-  protected function slag()
-  {
-    $ident = str_replace('-', '_', implode(self::getDelimiter(), $this->args));
-    $ident = str_replace('_', self::getDelimiter(), $ident);
-    $ident = trim($ident);
-    $ident = str_replace(' ', '', $ident);
+        return strip_tags(strtolower($ident));
+    }
 
-    return strip_tags(strtolower($ident));
-  }
+    /**
+     * Set the delimiter used to create a Cache Identifier.
+     *
+     * @param string $delimiter The delimiter character.
+     */
+    public function setDelimiter($delimiter)
+    {
+        self::$delimiter = $delimiter;
+    }
 
-  /**
-   * Set the delimiter used to create a Cache Identifier.
-   *
-   * @param string $delimiter The delimiter character.
-   */
-  public function setDelimiter($delimiter)
-  {
-    self::$delimiter = $delimiter;
-  }
-
-  /**
-   * Get the delimiter used to create a Cache Identifier.
-   *
-   * @return string
-   */
-  public function getDelimiter()
-  {
-    return self::$delimiter;
-  }
+    /**
+     * Get the delimiter used to create a Cache Identifier.
+     *
+     * @return string
+     */
+    public function getDelimiter()
+    {
+        return self::$delimiter;
+    }
 }

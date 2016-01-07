@@ -49,62 +49,61 @@ namespace Pimf;
  */
 class Memcached
 {
-  /**
-   * @var \Memcached
-   */
-  protected static $connection;
+    /**
+     * @var \Memcached
+     */
+    protected static $connection;
 
-  /**
-   * @return \Memcached
-   */
-  public static function connection()
-  {
-    if (static::$connection === null) {
-      $conf               = Registry::get('conf');
-      static::$connection = static::connect(
-        $conf['cache']['servers']
-      );
+    /**
+     * @return \Memcached
+     */
+    public static function connection()
+    {
+        if (static::$connection === null) {
+            static::$connection = static::connect(
+                Config::get('cache.memcached.servers')
+            );
+        }
+
+        return static::$connection;
     }
 
-    return static::$connection;
-  }
+    /**
+     * Create a new Memcached connection instance.
+     *
+     * @param array $servers
+     * @param null  $memcache
+     *
+     * @return \Memcached|null
+     * @throws \RuntimeException
+     */
+    protected static function connect(array $servers, $memcache = null)
+    {
+        if (!$memcache) {
+            $memcache = new \Memcached();
+        }
 
-  /**
-   * Create a new Memcached connection instance.
-   *
-   * @param array $servers
-   * @param null  $memcache
-   *
-   * @return \Memcached|null
-   * @throws \RuntimeException
-   */
-  protected static function connect(array $servers, $memcache = null)
-  {
-    if (!$memcache) {
-      $memcache = new \Memcached();
+        foreach ($servers as $server) {
+            $memcache->addServer($server['host'], $server['port'], $server['weight']);
+        }
+
+        if ($memcache->getVersion() === false) {
+            throw new \RuntimeException('could not establish memcached connection!');
+        }
+
+        return $memcache;
     }
 
-    foreach ($servers as $server) {
-      $memcache->addServer($server['host'], $server['port'], $server['weight']);
+    /**
+     * Dynamically pass all other method calls to the Memcache instance.
+     *
+     * @param $method
+     * @param $parameters
+     *
+     * @return mixed
+     */
+    public static function __callStatic($method, $parameters)
+    {
+        return call_user_func_array(array(static::connection(), $method), $parameters);
     }
-
-    if ($memcache->getVersion() === false) {
-      throw new \RuntimeException('could not establish memcached connection!');
-    }
-
-    return $memcache;
-  }
-
-  /**
-   * Dynamically pass all other method calls to the Memcache instance.
-   *
-   * @param $method
-   * @param $parameters
-   *
-   * @return mixed
-   */
-  public static function __callStatic($method, $parameters)
-  {
-    return call_user_func_array(array(static::connection(), $method), $parameters);
-  }
 }

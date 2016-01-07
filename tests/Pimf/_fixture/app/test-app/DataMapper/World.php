@@ -5,8 +5,8 @@ use Pimf\DataMapper\Base;
 
 class World extends Base
 {
-  public function find($id)
-  {
-    return array($id);
-  }
+    public function find($id)
+    {
+        return array($id);
+    }
 }

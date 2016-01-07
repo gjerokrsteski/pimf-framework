@@ -1,262 +1,346 @@
 <?php
-class ResolverTest extends PHPUnit_Framework_TestCase
+
+class ResolverTest extends \PHPUnit_Framework_TestCase
 {
-  ## prepare the environment
+    ## prepare the fake environment
 
-  public function setUp()
-  {
-    parent::setUp();
+    private static $env, $logger, $em;
 
-    require_once dirname(__FILE__) . '/_fixture/Index.php';
+    public function setUp()
+    {
+        parent::setUp();
 
-    $_GET    = array(
-      'controller'=> 'index',
-      'action'    => 'save'
-    );
+        require_once dirname(__FILE__) . '/_fixture/Index.php';
+        require_once dirname(__FILE__) . '/_fixture/Rest.php';
 
-    \Pimf\Registry::set('conf',
-      array(
-        'app' => array(
-          'name' => 'test-app-name',
-          'key' => 'secret-key-here',
-          'default_controller' => 'index',
-          'routeable' => false,
-        ),
-        'environment' => 'testing'
-      )
-    );
+        $_GET = array(
+            'controller' => 'index',
+            'action'     => 'save'
+        );
 
-    $_SERVER['REQUEST_METHOD'] = 'POST';
-    \Pimf\Registry::set('env', new \Pimf\Environment($_SERVER));
-  }
+        \Pimf\Config::load(
+            array(
+                'app'         => array(
+                    'name'               => 'test-app-name',
+                    'key'                => 'secret-key-here',
+                    'default_controller' => 'index',
+                    'routeable'          => false,
+                ),
+                'environment' => 'testing'
+            ),
+            true
+        );
 
+        $_SERVER['REQUEST_METHOD'] = 'POST';
+        self::$env = new \Pimf\Environment($_SERVER);
 
-  # start testing
+        self::$logger = $this->getMockBuilder('\\Pimf\\Logger')
+            ->disableOriginalConstructor()
+            ->setMethods(array('error'))
+            ->getMock();
 
-
-  public function testCreatingNewInstance()
-  {
-    new \Pimf\Resolver(new \Pimf\Request($_GET), dirname(__FILE__).'/_fixture/');
-  }
-
-  public function testLoadingControllerInstance()
-  {
-    $resolver = new \Pimf\Resolver(
-      new \Pimf\Request($_GET),
-      dirname(__FILE__).'/_fixture/',
-      'Fixture\\'
-    );
-
-    $this->assertInstanceOf('\Pimf\Controller\Base', $resolver->process());
-  }
-
-  public function testIfNoActionGiven()
-  {
-    \Pimf\Registry::set('conf',
-       array(
-         'app' => array(
-           'name' => 'test-app-name',
-           'key' => 'secret-key-here',
-           'default_controller' => 'index',
-           'routeable' => false,
-         ),
-         'environment' => 'production'
-       )
-     );
-
-    $resolver = new \Pimf\Resolver(
-      new \Pimf\Request(array()),
-      dirname(__FILE__).'/_fixture/',
-      'Fixture\\'
-    );
-
-    $this->assertInstanceOf('\Pimf\Controller\Base', $resolver->process());
-  }
-
-  public function testCallingControllerAction()
-  {
-    $resolver = new \Pimf\Resolver(
-      new \Pimf\Request($_GET),
-      dirname(__FILE__).'/_fixture/',
-      'Fixture\\'
-    );
-
-    $this->assertEquals(
-
-      'indexAction',
-
-      $resolver->process()->render()
-
-    );
-  }
-
-  /**
-   * @expectedException \Pimf\Resolver\Exception
-   */
-  public function testIfNoControllerFoundAtTheRepositoryPath()
-  {
-    new \Pimf\Resolver(
-      new \Pimf\Request($_GET),
-      '/Undefined_Controller_Repository/',
-      'Fixture\\'
-    );
-  }
-
-  public function testIfNoActionFoundAtControllerTheRouterFindsTheIndexAction()
-  {
-    $resolver = new \Pimf\Resolver(
-      new \Pimf\Request(array(),array(),array(),array('action'=>'un de fi ned')),
-      dirname(__FILE__).'/_fixture/',
-      'Fixture\\'
-    );
-
-    $this->assertEquals(
-
-      'indexAction',
-
-      $resolver->process()->render()
-
-    );
-  }
-
-  public function testIfAppIsRouteable()
-  {
-    \Pimf\Registry::set('conf',
-      array(
-        'app' => array(
-          'name' => 'test-app-name',
-          'key' => 'secret-key-here',
-          'default_controller' => 'index',
-          'routeable' => true,
-        ),
-        'environment' => 'testing'
-      )
-    );
-
-    $router = new \Pimf\Router();
-    \Pimf\Registry::set('router',
-      $router->map(new \Pimf\Route('index/save'))
-    );
-
-    $resolver = new \Pimf\Resolver(
-      new \Pimf\Request(array(),array('action'=>'save')),
-      dirname(__FILE__).'/_fixture/',
-      'Fixture\\'
-    );
-
-    $this->assertEquals(
-
-      'saveAction',
-
-      $resolver->process()->render()
-
-    );
-  }
-
-  /**
-   * @expectedException \Pimf\Resolver\Exception
-   */
-  public function testThatDirectoryTraversalAttackIsNotFunny()
-  {
-    new \Pimf\Resolver(
-      new \Pimf\Request(array('controller'=>'.../bad-path'), array(),array(),array()),
-       dirname(__FILE__).'/_fixture/',
-       'Fixture\\'
-     );
-  }
-
-  /**
-   * @expectedException \Pimf\Resolver\Exception
-   */
-  public function testThatDirectoryTraversalAttackIsNotFunnyOnProduction()
-  {
-    \Pimf\Registry::set('conf',
-      array(
-        'app' => array(
-          'name' => 'test-app-name',
-          'key' => 'secret-key-here',
-          'default_controller' => 'index',
-          'routeable' => true,
-        ),
-        'environment' => 'production'
-      )
-    );
-
-    new \Pimf\Resolver(
-      new \Pimf\Request(array(), array(),array(),array('controller'=>'.../bad-path')),
-       dirname(__FILE__).'/_fixture/',
-       'Fixture\\'
-     );
-  }
-
-  /**
-   * @expectedException \Pimf\Resolver\Exception
-   */
-  public function testIfCanNotLoadClassControllerFromRepository()
-  {
-    \Pimf\Registry::set('conf',
-      array(
-        'app' => array(
-          'name' => 'test-app-name',
-          'key' => 'secret-key-here',
-          'default_controller' => 'index',
-          'routeable' => true,
-        ),
-        'environment' => 'testing'
-      )
-    );
-
-    $resolver = new \Pimf\Resolver(
-      new \Pimf\Request(array('controller'=>'bad')),
-       dirname(__FILE__).'/_fixture/',
-       'Fixture\\'
-     );
-
-    $resolver->process();
-  }
+        self::$em = $this->getMockBuilder('\\Pimf\\EntityManager')
+            ->disableOriginalConstructor()
+            ->setMethods(array('load'))
+            ->getMock();
+    }
 
 
-  /**
-   * @runInSeparateProcess
-   * @outputBuffering enabled
-   */
-  public function testIfAppCanRedirect()
-  {
-    \Pimf\Registry::set('env',
-      new \Pimf\Environment(
-        array('HTTPS' => 'off', 'SCRIPT_NAME' => __FILE__, 'HOST' => 'http://localhost', 'SERVER_PROTOCOL' => 'HTTP/1.0')));
+    # start testing
 
-    \Pimf\Registry::set('conf',
-      array(
-        'app' => array(
-          'name' => 'test-app-name',
-          'key' => 'secret-key-here',
-          'default_controller' => 'index',
-          'routeable' => true,
-          'url' => 'http://localhost',
-          'index' => 'index.php',
-          'asset_url' => '',
-        ),
-        'environment' => 'testing',
-        'ssl' => false,
-      )
-    );
 
-    $router = new \Pimf\Router();
-    \Pimf\Registry::set('router',
-      $router->map(new \Pimf\Route('index/save'))
-    );
+    public function testCreatingNewInstance()
+    {
+        new \Pimf\Resolver(new \Pimf\Request($_GET, $postData = array(),
+            $cookieData = array(),
+            $cliData = array(),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Pimf\\', new \Pimf\Router()
+        );
+    }
 
-    # the test assertion
+    public function testLoadingControllerInstance()
+    {
+        $resolver = new \Pimf\Resolver(new \Pimf\Request($_GET, $postData = array(),
+            $cookieData = array(),
+            $cliData = array(),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Fixture\\', new \Pimf\Router()
+        );
 
-    $resolver = new \Pimf\Resolver(
-      new \Pimf\Request(array(),array('action'=>'save')),
-      dirname(__FILE__).'/_fixture/',
-      'Fixture\\'
-    );
+        $this->assertInstanceOf('\Pimf\Controller\Base', $resolver->process(self::$env, self::$em, self::$logger));
+    }
 
-    $resolver->process()->redirect('index/index', false, false);
+    public function testIfNoActionGiven()
+    {
+        \Pimf\Config::load(
+            array(
+                'app'         => array(
+                    'name'               => 'test-app-name',
+                    'key'                => 'secret-key-here',
+                    'default_controller' => 'index',
+                    'routeable'          => false,
+                ),
+                'environment' => 'production'
+            ),
+            true
+        );
 
-    $this->expectOutputString('');
-  }
+        $resolver = new \Pimf\Resolver(new \Pimf\Request(array(), $postData = array(),
+            $cookieData = array(),
+            $cliData = array(),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Fixture\\', new \Pimf\Router()
+        );
+
+        $this->assertInstanceOf('\Pimf\Controller\Base', $resolver->process(self::$env, self::$em, self::$logger));
+    }
+
+    public function testCallingControllerAction()
+    {
+        $resolver = new \Pimf\Resolver(new \Pimf\Request($_GET, $postData = array(),
+            $cookieData = array(),
+            $cliData = array(),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Fixture\\', new \Pimf\Router()
+        );
+
+        $this->assertEquals(
+
+            'indexAction',
+
+            $resolver->process(self::$env, self::$em, self::$logger)->render()
+
+        );
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function testCallingControllerActionByHttpMethodPut()
+    {
+        $_MY_SERVER['REQUEST_METHOD'] = 'PUT';
+        $_MY_SERVER['REDIRECT_URL'] = '/rest/put/';
+
+        $resolver = new \Pimf\Resolver(
+            new \Pimf\Request(array('controller' => 'rest'), $postData = array(),
+                $cookieData = array(),
+                $cliData = array(),
+                $filesData = array(),
+                new \Pimf\Environment($_MY_SERVER)),
+            dirname(__FILE__) . '/_fixture/',
+            'Fixture\\',
+            new \Pimf\Router()
+        );
+
+        $this->assertEquals(
+
+            false,
+
+            $resolver->process(new \Pimf\Environment($_MY_SERVER), self::$em, self::$logger)->render()
+
+        );
+    }
+
+
+    /**
+     * @expectedException \Pimf\Resolver\Exception
+     */
+    public function testIfNoControllerFoundAtTheRepositoryPath()
+    {
+
+        new \Pimf\Resolver(new \Pimf\Request($_GET, $postData = array(),
+            $cookieData = array(),
+            $cliData = array(),
+            $filesData = array(),
+            self::$env), '/Undefined_Controller_Repository/', 'Fixture\\', new \Pimf\Router()
+        );
+
+    }
+
+    public function testIfNoActionFoundAtControllerTheRouterFindsTheIndexAction()
+    {
+        $resolver = new \Pimf\Resolver(new \Pimf\Request(array(), $postData = array(),
+            $cookieData = array(),
+            $cliData = array('action' => 'un de fi ned'),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Fixture\\', new \Pimf\Router()
+        );
+
+        $this->assertEquals(
+
+            'indexAction',
+
+            $resolver->process(self::$env, self::$em, self::$logger)->render()
+
+        );
+    }
+
+    public function testIfAppIsRouteable()
+    {
+        \Pimf\Config::load(
+            array(
+                'app'         => array(
+                    'name'               => 'test-app-name',
+                    'key'                => 'secret-key-here',
+                    'default_controller' => 'index',
+                    'routeable'          => true,
+                ),
+                'environment' => 'testing'
+            ),
+            true
+        );
+
+        $router = new \Pimf\Router();
+        $router->map(new \Pimf\Route('index/save'));
+
+        $resolver = new \Pimf\Resolver(new \Pimf\Request(array(), $postData = array('action' => 'save'),
+            $cookieData = array(),
+            $cliData = array(),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Fixture\\', $router
+        );
+
+        $this->assertEquals(
+
+            'saveAction',
+
+            $resolver->process(self::$env, self::$em, self::$logger)->render()
+
+        );
+    }
+
+    /**
+     * @expectedException \Pimf\Resolver\Exception
+     */
+    public function testThatDirectoryTraversalAttackIsNotFunny()
+    {
+        new \Pimf\Resolver(new \Pimf\Request(array('controller' => '.../bad-path'), $postData = array(),
+            $cookieData = array(),
+            $cliData = array(),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Fixture\\', new \Pimf\Router()
+        );
+    }
+
+    /**
+     * @expectedException \Pimf\Resolver\Exception
+     */
+    public function testThatDirectoryTraversalAttackIsNotFunnyOnProduction()
+    {
+        \Pimf\Config::load(
+            array(
+                'app'         => array(
+                    'name'               => 'test-app-name',
+                    'key'                => 'secret-key-here',
+                    'default_controller' => 'index',
+                    'routeable'          => true,
+                ),
+                'environment' => 'production'
+            ),
+            true
+        );
+
+        new \Pimf\Resolver(new \Pimf\Request(array(), $postData = array(),
+            $cookieData = array(),
+            $cliData = array('controller' => '.../bad-path'),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Fixture\\', new \Pimf\Router()
+        );
+
+    }
+
+    /**
+     * @expectedException \Pimf\Resolver\Exception
+     */
+    public function testIfCanNotLoadClassControllerFromRepository()
+    {
+        \Pimf\Config::load(
+            array(
+                'app'         => array(
+                    'name'               => 'test-app-name',
+                    'key'                => 'secret-key-here',
+                    'default_controller' => 'index',
+                    'routeable'          => true,
+                ),
+                'environment' => 'testing'
+            ),
+            true
+        );
+
+        $resolver = new \Pimf\Resolver(new \Pimf\Request(array('controller' => 'bad'), $postData = array(),
+            $cookieData = array(),
+            $cliData = array(),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Fixture\\', new \Pimf\Router()
+        );
+
+
+        $resolver->process(self::$env, self::$em, self::$logger);
+
+    }
+
+    /**
+     * @runInSeparateProcess
+     * @outputBuffering enabled
+     */
+    public function testIfAppCanRedirect()
+    {
+        self::$env =
+            new \Pimf\Environment(
+                array(
+                    'HTTPS'           => 'off',
+                    'SCRIPT_NAME'     => __FILE__,
+                    'HOST'            => 'http://localhost',
+                    'SERVER_PROTOCOL' => 'HTTP/1.0'
+                ));
+
+        \Pimf\Config::load(
+            array(
+                'app'         => array(
+                    'name'               => 'test-app-name',
+                    'key'                => 'secret-key-here',
+                    'default_controller' => 'index',
+                    'routeable'          => true,
+                    'url'                => 'http://localhost',
+                    'index'              => 'index.php',
+                    'asset_url'          => '',
+                ),
+                'environment' => 'testing',
+                'ssl'         => false,
+            ),
+            true
+        );
+
+        $envData = self::$env->data();
+
+        \Pimf\Util\Header\ResponseStatus::setup($envData->get('SERVER_PROTOCOL', 'HTTP/1.0'));
+
+        \Pimf\Util\Header::setup(
+            self::$env->getUserAgent(),
+            self::$env->HTTP_IF_MODIFIED_SINCE,
+            self::$env->HTTP_IF_NONE_MATCH
+        );
+
+        \Pimf\Url::setup(self::$env->getUrl(), self::$env->isHttps());
+        \Pimf\Uri::setup(self::$env->PATH_INFO, self::$env->REQUEST_URI);
+        \Pimf\Util\Uuid::setup(self::$env->getIp(), self::$env->getHost());
+
+        $router = new \Pimf\Router();
+        $router->map(new \Pimf\Route('index/save'));
+
+        # the test assertion
+
+        $resolver = new \Pimf\Resolver(new \Pimf\Request(array(), $postData = array('action' => 'save'),
+            $cookieData = array(),
+            $cliData = array(),
+            $filesData = array(),
+            self::$env), dirname(__FILE__) . '/_fixture/', 'Fixture\\', new \Pimf\Router()
+        );
+
+        $resolver->process(self::$env, self::$em, self::$logger)->redirect('index/index', false, false);
+
+        $this->expectOutputString('');
+    }
 }
+

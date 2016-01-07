@@ -16,30 +16,30 @@ namespace Pimf\Pdo;
  */
 class Mysql extends Connector
 {
-  /**
-   * @param array $config
-   *
-   * @return \Pimf\Database
-   */
-  public function connect(array $config)
-  {
-    $dsn = "mysql:host={$config['host']};dbname={$config['database']}";
+    /**
+     * @param array $config
+     *
+     * @return \Pimf\Database
+     */
+    public function connect(array $config)
+    {
+        $dsn = "mysql:host={$config['host']};dbname={$config['database']}";
 
-    if (isset($config['port'])) {
-      $dsn .= ";port={$config['port']}";
+        if (isset($config['port'])) {
+            $dsn .= ";port={$config['port']}";
+        }
+
+        if (isset($config['unix_socket'])) {
+            $dsn .= ";unix_socket={$config['unix_socket']}";
+        }
+
+        $connection = new \Pimf\Database($dsn, $config['username'], $config['password'], $this->options($config));
+
+        // set to UTF-8 which should be fine for most scenarios.
+        if (isset($config['charset'])) {
+            $connection->prepare("SET NAMES '{$config['charset']}'")->execute();
+        }
+
+        return $connection;
     }
-
-    if (isset($config['unix_socket'])) {
-      $dsn .= ";unix_socket={$config['unix_socket']}";
-    }
-
-    $connection = new \Pimf\Database($dsn, $config['username'], $config['password'], $this->options($config));
-
-    // set to UTF-8 which should be fine for most scenarios.
-    if (isset($config['charset'])) {
-      $connection->prepare("SET NAMES '{$config['charset']}'")->execute();
-    }
-
-    return $connection;
-  }
 }

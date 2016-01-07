@@ -5,39 +5,41 @@
  */
 class Gustbook extends \Pimf\Model\AsArray
 {
-  protected $id = 1;
-  private $used = true;
-  public $title = 'test-title', $message = 'cool-guestbook';
+    protected $id = 1;
+    private $used = true;
+    public $title = 'test-title', $message = 'cool-guestbook';
 
 }
 
-class ToArrayTest extends PHPUnit_Framework_TestCase
+class ToArrayTest extends \PHPUnit_Framework_TestCase
 {
-  public function testThatReturnsOnlyProtectedAndPublicPropertiesOfTheGivenModelObject()
-  {
-    $guestbook = new Gustbook();
+    public function testThatReturnsOnlyProtectedAndPublicPropertiesOfTheGivenModelObject()
+    {
+        $guestbook = new Gustbook();
 
-    $this->assertEquals(
+        $this->assertEquals(
 
-      array('id' => 1, 'title' => 'test-title', 'message' => 'cool-guestbook'),
+            array('id' => 1, 'title' => 'test-title', 'message' => 'cool-guestbook'),
 
-      $guestbook->toArray()
+            $guestbook->toArray()
 
-    );
-  }
+        );
+    }
 
-  public function testThatReturnsChangedOnlyProtectedAndPublicPropertiesOfTheGivenModelObject()
-  {
-    $guestbook = new Gustbook(); $guestbook->message = 'ho ho ho'; $guestbook->title = 'new title';
+    public function testThatReturnsChangedOnlyProtectedAndPublicPropertiesOfTheGivenModelObject()
+    {
+        $guestbook = new Gustbook();
+        $guestbook->message = 'ho ho ho';
+        $guestbook->title = 'new title';
 
-    $this->assertEquals(
+        $this->assertEquals(
 
-      array('id' => 1, 'title' => 'new title', 'message' => 'ho ho ho'),
+            array('id' => 1, 'title' => 'new title', 'message' => 'ho ho ho'),
 
-      $guestbook->toArray()
+            $guestbook->toArray()
 
-    );
-  }
+        );
+    }
 
 }
  

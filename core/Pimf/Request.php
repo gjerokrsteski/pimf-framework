@@ -3,7 +3,7 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 namespace Pimf;
 
@@ -15,177 +15,209 @@ namespace Pimf;
  */
 class Request
 {
-  /**
-   * @var Param
-   */
-  public static $postData;
+    /**
+     * @var Param
+     */
+    public static $postData;
 
-  /**
-   * @var Param
-   */
-  public static $getData;
+    /**
+     * @var Param
+     */
+    public static $getData;
 
-  /**
-   * @var Param
-   */
-  public static $cookieData;
+    /**
+     * @var Param
+     */
+    public static $cookieData;
 
-  /**
-   * @var Param
-   */
-  public static $cliData;
+    /**
+     * @var Param
+     */
+    public static $cliData;
 
-  /**
-   * @var Util\Uploaded
-   */
-  public static $filesData;
+    /**
+     * @var Util\Uploaded
+     */
+    public static $filesData;
 
-  /**
-   * @var string
-   */
-  protected $content;
+    /**
+     * @var Environment
+     */
+    public $env;
 
-  /**
-   * @var Param
-   */
-  public static $restData;
+    /**
+     * The request HTTP method send by the client-browser.
+     *
+     * @var null|string
+     */
+    protected $method = null;
 
-  /**
-   * @param array $getData
-   * @param array $postData
-   * @param array $cookieData
-   * @param array $cliData
-   * @param array $filesData
-   */
-  public function __construct(
-    array $getData,
-    array $postData = array (),
-    array $cookieData = array (),
-    array $cliData = array (),
-    array $filesData = array ()
-  ) {
-
-    static::$getData    = new Param((array)self::stripSlashesIfMagicQuotes($getData));
-    static::$postData   = new Param((array)self::stripSlashesIfMagicQuotes($postData));
-    static::$cookieData = new Param($cookieData);
-    static::$cliData    = new Param((array)self::stripSlashesIfMagicQuotes($cliData));
-    static::$filesData  = Util\Uploaded\Factory::get($filesData);
-  }
-
-  /**
-   * @param Environment $env
-   */
-  public function fetchRestData(Environment $env)
-  {
-    if (0 === strpos($env->getRequestHeader('CONTENT_TYPE'), 'application/x-www-form-urlencoded')
-      && in_array(strtoupper($env->getData()->get('REQUEST_METHOD', 'GET')), array('PUT', 'DELETE', 'PATCH'))
+    /**
+     * @param array             $getData
+     * @param array             $postData
+     * @param array             $cookieData
+     * @param array             $cliData
+     * @param array             $filesData
+     * @param \Pimf\Environment $env
+     */
+    public function __construct(
+        array $getData,
+        array $postData = array(),
+        array $cookieData = array(),
+        array $cliData = array(),
+        array $filesData = array(),
+        \Pimf\Environment $env
     ) {
-      $data = array();
-      parse_str($this->getContent(), $data);
-      static::$restData = new Param($data);
-    }
-  }
 
-  /**
-   * HTTP GET variables.
-   *
-   * @return Param
-   */
-  public function fromGet()
-  {
-    return static::$getData;
-  }
+        static::$getData = new Param((array)self::stripSlashesIfMagicQuotes($getData));
+        static::$postData = new Param((array)self::stripSlashesIfMagicQuotes($postData));
+        static::$cookieData = new Param($cookieData);
+        static::$cliData = new Param((array)self::stripSlashesIfMagicQuotes($cliData));
+        static::$filesData = Util\Uploaded\Factory::get($filesData);
 
-  /**
-   * CLI arguments passed to script.
-   *
-   * @return Param
-   */
-  public function fromCli()
-  {
-    return static::$cliData;
-  }
-
-  /**
-   * HTTP POST variables.
-   *
-   * @return Param
-   */
-  public function fromPost()
-  {
-    return static::$postData;
-  }
-
-  /**
-   * HTTP Cookies.
-   *
-   * @return Param
-   */
-  public function fromCookie()
-  {
-    return static::$cookieData;
-  }
-
-  /**
-   * Strip slashes from string or array
-   *
-   * @param      $rawData
-   * @param null $overrideStripSlashes
-   *
-   * @return array|string
-   */
-  public static function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
-  {
-    $hasMagicQuotes = function_exists('get_magic_quotes_gpc') ? get_magic_quotes_gpc() : false;
-    $strip          = !$overrideStripSlashes ? $hasMagicQuotes : $overrideStripSlashes;
-
-    if ($strip) {
-      return self::stripSlashes($rawData);
+        $this->env    = $env;
+        $this->method = '' . strtoupper($env->REQUEST_METHOD);
     }
 
-    return $rawData;
-  }
+    /**
+     * For fetching body/params sent via PUT|DELETE|PATCH Http method.
+     *
+     * @param bool $asResource
+     *
+     * @return Param|resource|boolean
+     */
+    public function streamInput($asResource = false)
+    {
+        if (0 === strpos($this->env->getRequestHeader('CONTENT_TYPE'), 'application/x-www-form-urlencoded')
+            && in_array($this->env->data()->get('REQUEST_METHOD', 'GET'), array('PUT', 'DELETE', 'PATCH'))
+        ) {
 
-  /**
-   * Strip slashes from string or array
-   *
-   * @param $rawData
-   *
-   * @return array|string
-   */
-  public static function stripSlashes($rawData)
-  {
-    return is_array($rawData)
-      ? array_map(
-        function ($value) {
-          return \Pimf\Request::stripSlashes($value);
-        },
-        $rawData
-      )
-      : stripslashes($rawData);
-  }
+            if ($asResource === true) {
+                return $this->getContent($asResource);
+            }
 
-  /**
-   * @param bool $asResource
-   *
-   * @return resource|string
-   * @throws \LogicException
-   */
-  public function getContent($asResource = false)
-  {
-    if (false === $this->content || (true === $asResource && null !== $this->content)) {
-      throw new \LogicException('can only be called once when using the resource return type');
+            $body = array();
+            parse_str($this->getContent(), $body);
+
+            return new Param($body);
+        }
+
+        return false;
     }
 
-    if (true === $asResource) {
-      $this->content = false;
-      return fopen('php://input', 'rb');
+    /**
+     * HTTP GET variables.
+     *
+     * @return Param
+     */
+    public function fromGet()
+    {
+        return static::$getData;
     }
 
-    if (null === $this->content) {
-      $this->content = file_get_contents('php://input');
+    /**
+     * CLI arguments passed to script.
+     *
+     * @return Param
+     */
+    public function fromCli()
+    {
+        return static::$cliData;
     }
 
-    return $this->content;
-  }
+    /**
+     * HTTP POST variables.
+     *
+     * @return Param
+     */
+    public function fromPost()
+    {
+        return static::$postData;
+    }
+
+    /**
+     * HTTP Cookies.
+     *
+     * @return Param
+     */
+    public function fromCookie()
+    {
+        return static::$cookieData;
+    }
+
+    /**
+     * Strip slashes from string or array
+     *
+     * @param      $rawData
+     * @param null $overrideStripSlashes
+     *
+     * @return array|string
+     */
+    public static function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
+    {
+        $hasMagicQuotes = function_exists('get_magic_quotes_gpc') ? get_magic_quotes_gpc() : false;
+        $strip = !$overrideStripSlashes ? $hasMagicQuotes : $overrideStripSlashes;
+
+        if ($strip) {
+            return self::stripSlashes($rawData);
+        }
+
+        return $rawData;
+    }
+
+    /**
+     * Strip slashes from string or array
+     *
+     * @param $rawData
+     *
+     * @return array|string
+     */
+    public static function stripSlashes($rawData)
+    {
+        return is_array($rawData)
+            ? array_map(
+                function ($value) {
+                    return \Pimf\Request::stripSlashes($value);
+                },
+                $rawData
+            )
+            : stripslashes($rawData);
+    }
+
+    /**
+     * @param bool $asResource
+     *
+     * @return resource|string
+     * @throws \LogicException When using the resource twice times.
+     */
+    public function getContent($asResource = false)
+    {
+        static $content;
+
+        if (false === $content || (true === $asResource && null !== $content)) {
+            throw new \LogicException('resource can only be returned once');
+        }
+
+        if (true === $asResource) {
+            $content = false;
+
+            return fopen('php://input', 'rb');
+        }
+
+        if (null === $content) {
+            $content = file_get_contents('php://input');
+        }
+
+        return $content;
+    }
+
+    /**
+     * The request method send by the client-browser.
+     *
+     * @return null|string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
 }

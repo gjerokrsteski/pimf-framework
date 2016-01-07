@@ -16,21 +16,21 @@ namespace Pimf\Pdo;
  */
 class Sqlite extends Connector
 {
-  /**
-   * @param array $config
-   *
-   * @return \Pimf\Database
-   */
-  public function connect(array $config)
-  {
-    $options = $this->options($config);
+    /**
+     * @param array $config
+     *
+     * @return \Pimf\Database
+     */
+    public function connect(array $config)
+    {
+        $options = $this->options($config);
 
-    // SQLite provides supported for "in-memory" databases, which exist only for
-    // lifetime of the request. These are mainly for tests.
-    if ($config['database'] == ':memory:') {
-      return new \Pimf\Database('sqlite::memory:', null, null, $options);
+        // SQLite provides supported for "in-memory" databases, which exist only for
+        // lifetime of the request. These are mainly for tests.
+        if ($config['database'] == ':memory:') {
+            return new \Pimf\Database('sqlite::memory:', null, null, $options);
+        }
+
+        return new \Pimf\Database('sqlite:' . $config['database'], null, null, $options);
     }
-
-    return new \Pimf\Database('sqlite:' . $config['database'], null, null, $options);
-  }
 }

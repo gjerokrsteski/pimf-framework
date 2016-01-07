@@ -8,7 +8,7 @@
 
 namespace Pimf;
 
-use Pimf\Util\String;
+use Pimf\Util\Character as Str;
 
 /**
  * A full featured package for managing command-line options and arguments,
@@ -19,117 +19,115 @@ use Pimf\Util\String;
  */
 final class Cli
 {
-  /**
-   * Prints out a list of CLI commands from the system,
-   * which is defined at the controllers with the "CliAction()" suffix at the method-name.
-   *
-   * @param string $appClr  Path to application controller repository
-   * @param string $coreClr Path to core controller repository
-   * @param string $root    Path to home directory
-   */
-  public static function absorb($appClr = null, $coreClr = null, $root = null)
-  {
-    echo PHP_EOL . 'PIMF v' . \Pimf\Application::VERSION . ' PHP Command Line Interface by Gjero Krsteski' . PHP_EOL;
+    /**
+     * Prints out a list of CLI commands from the system,
+     * which is defined at the controllers with the "CliAction()" suffix at the method-name.
+     *
+     * @param string $appClr  Path to application controller repository
+     * @param string $coreClr Path to core controller repository
+     * @param string $root    Path to home directory
+     */
+    public static function absorb($appClr = null, $coreClr = null, $root = null)
+    {
+        echo PHP_EOL . 'PIMF v' . \Pimf\Application::VERSION . ' PHP Command Line Interface by Gjero Krsteski' . PHP_EOL;
 
-    echo '+------------------------------------------------------+' . PHP_EOL;
+        echo '+------------------------------------------------------+' . PHP_EOL;
 
-    self::reflect(self::collect($appClr, $coreClr, $root));
-  }
+        self::reflect(self::collect($appClr, $coreClr, $root));
+    }
 
-  /**
-   * @param array $classes
-   */
-  public static function reflect(array $classes)
-  {
-    array_map(
-      function ($class) {
+    /**
+     * @param array $classes
+     */
+    public static function reflect(array $classes)
+    {
+        array_map(
+            function ($class) {
 
-        $reflection = new \ReflectionClass($class);
+                $reflection = new \ReflectionClass($class);
 
-        if ($reflection->isSubclassOf('\Pimf\Controller\Base')) {
+                if ($reflection->isSubclassOf('\Pimf\Controller\Base')) {
 
-          $methods    = $reflection->getMethods();
-          $controller = explode('_', $class);
+                    $methods = $reflection->getMethods();
+                    $controller = explode('_', $class);
 
-          echo 'controller: ' . strtolower(end($controller)) . '' . PHP_EOL;
+                    echo 'controller: ' . strtolower(end($controller)) . '' . PHP_EOL;
 
-          array_map(
-            function (\ReflectionMethod $method) {
-              if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
-                echo PHP_EOL . ' action: ' . $command . ' ' . PHP_EOL;
-              }
-            }, $methods
-          );
+                    array_map(
+                        function (\ReflectionMethod $method) {
+                            if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
+                                echo PHP_EOL . ' action: ' . $command . ' ' . PHP_EOL;
+                            }
+                        }, $methods
+                    );
 
-          echo PHP_EOL . '+------------------------------------------------------+' . PHP_EOL;
+                    echo PHP_EOL . '+------------------------------------------------------+' . PHP_EOL;
+                }
+
+            }, $classes
+        );
+    }
+
+    /**
+     * @param string $appClr
+     * @param string $coreClr
+     * @param string $root
+     *
+     * @return array
+     */
+    public static function collect($appClr = null, $coreClr = null, $root = null)
+    {
+        $classes = array();
+
+        if (!$root && !$coreClr && !$appClr) {
+            $coreClr = str_replace('/', DS, BASE_PATH . '/pimf-framework/core/Pimf/Controller/');
+            $appClr = str_replace('/', DS, BASE_PATH . '/app/' . Config::get('app.name') . '/Controller/');
         }
 
-      }, $classes
-    );
-  }
+        foreach (array($appClr, $coreClr) as $dir) {
 
-  /**
-   * @param string $appClr
-   * @param string $coreClr
-   * @param string $root
-   *
-   * @return array
-   */
-  public static function collect($appClr = null, $coreClr = null, $root = null)
-  {
-    $classes = array();
-    $conf    = Registry::get('conf');
-    $dis     = DIRECTORY_SEPARATOR;
+            $iterator
+                = new \RegexIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir)),
+                '/^.+\.php$/i',
+                \RecursiveRegexIterator::GET_MATCH);
 
-    if (!$root && !$coreClr && !$appClr) {
-      // compute the PIMF framework path restriction.
-      $root    = dirname(dirname(dirname(dirname(__FILE__))));
-      $coreClr = str_replace('/', $dis, $root . '/pimf-framework/core/Pimf/Controller/');
-      $appClr  = str_replace('/', $dis, $root . '/app/' . $conf['app']['name'] . '/Controller/');
+            foreach (iterator_to_array($iterator, false) as $file) {
+                $file = str_replace("\\", '/', current($file));
+                $file = str_replace('/', DS, $file);
+                $name = str_replace(
+                    array(BASE_PATH . DS . 'pimf-framework' . DS . 'core' . DS, BASE_PATH . DS . 'app' . DS), '', $file
+                );
+
+                $name = str_replace(DS, '\\', $name);
+                $name = str_replace('.php', '', $name);
+                $classes[] = '\\' . $name;
+            }
+        }
+
+        return $classes;
     }
 
-    foreach (array($appClr, $coreClr) as $dir) {
+    /**
+     * @param array $commands
+     *
+     * @return array
+     */
+    public static function parse(array $commands)
+    {
+        $cli = array();
 
-      $iterator
-        = new \RegexIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir)), '/^.+\.php$/i', \RecursiveRegexIterator::GET_MATCH);
+        parse_str(implode('&', array_slice($commands, 1)), $cli);
 
-      foreach (iterator_to_array($iterator, false) as $file) {
-        $file = str_replace("\\", '/', current($file));
-        $file = str_replace('/', $dis, $file);
-        $name = str_replace(
-          array($root . $dis . 'pimf-framework' . $dis . 'core' . $dis, $root . $dis . 'app' . $dis), '', $file
-        );
+        $command = current(array_keys((array)$cli, ''));
 
-        $name      = str_replace($dis, '\\', $name);
-        $name      = str_replace('.php', '', $name);
-        $classes[] = '\\' . $name;
-      }
+        if (Str::contains($command, ':')) {
+
+            list($controller, $action) = explode(':', $command);
+
+            $cli['controller'] = $controller;
+            $cli['action'] = $action;
+        }
+
+        return $cli;
     }
-
-    return $classes;
-  }
-
-  /**
-   * @param array $commands
-   *
-   * @return array
-   */
-  public static function parse(array $commands)
-  {
-    $cli = array();
-
-    parse_str(implode('&', array_slice($commands, 1)), $cli);
-
-    $command = current(array_keys((array)$cli, ''));
-
-    if (String::contains($command, ':')) {
-
-      list($controller, $action) = explode(':', $command);
-
-      $cli['controller'] = $controller;
-      $cli['action']     = $action;
-    }
-
-    return $cli;
-  }
 }

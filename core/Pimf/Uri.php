@@ -3,11 +3,11 @@
  * Pimf
  *
  * @copyright Copyright (c)  Gjero Krsteski (http://krsteski.de)
- * @license   http://opensource.org/licenses/MIT MIT License
+ * @license   http://opensource.org/licenses/MIT MIT
  */
 namespace Pimf;
 
-use Pimf\Util\String as Str;
+use Pimf\Util\Character as Str;
 
 /**
  * URI
@@ -18,60 +18,80 @@ use Pimf\Util\String as Str;
 class Uri
 {
 
-  /**
-   * The URI for the current request.
-   *
-   * @var string
-   */
-  public static $uri;
+    /**
+     * @var string
+     */
+    private static $pathInfo;
 
-  /**
-   * The URI segments for the current request.
-   *
-   * @var array
-   */
-  public static $segments = array();
+    /**
+     * @var string
+     */
+    private static $requestUri;
 
-  /**
-   * Get the full URI including the query string.
-   *
-   * @return string
-   */
-  public static function full()
-  {
-    return Registry::get('env')->REQUEST_URI;
-  }
+    /**
+     * The URI for the current request.
+     *
+     * @var string
+     */
+    public static $uri;
 
-  /**
-   * Get the URI for the current request.
-   *
-   * @return string
-   */
-  public static function current()
-  {
-    if (!is_null(static::$uri)) {
-      return static::$uri;
+    /**
+     * The URI segments for the current request.
+     *
+     * @var array
+     */
+    public static $segments = array();
+
+    /**
+     * @param string $pathInfo
+     * @param string $requestUri
+     */
+    public static function setup($pathInfo, $requestUri)
+    {
+        self::$pathInfo = $pathInfo;
+        self::$requestUri = $requestUri;
     }
 
-    //Format a given URI.
-    $uri = trim(Registry::get('env')->PATH_INFO, '/') ? : '/';
+    /**
+     * Get the full URI including the query string.
+     *
+     * @return string
+     */
+    public static function full()
+    {
+        return self::$requestUri;
+    }
 
-    //Set the URI segments for the request.
-    $segments         = explode('/', trim($uri, '/'));
-    static::$segments = array_diff($segments, array(''));
+    /**
+     * Get the URI for the current request.
+     *
+     * @return string
+     */
+    public static function current()
+    {
+        if (!is_null(static::$uri)) {
+            return static::$uri;
+        }
 
-    return static::$uri = $uri;
-  }
+        //Format a given URI.
+        $uri = trim(self::$pathInfo, '/') ?: '/';
 
-  /**
-   * Determine if the current URI matches a given pattern.
-   *
-   * @param  string $pattern
-   *
-   * @return bool
-   */
-  public static function is($pattern)
-  {
-    return Str::is($pattern, static::current());
-  }
+        //Set the URI segments for the request.
+        $segments = explode('/', trim($uri, '/'));
+        static::$segments = array_diff($segments, array(''));
+
+        return static::$uri = $uri;
+    }
+
+    /**
+     * Determine if the current URI matches a given pattern.
+     *
+     * @param  string $pattern
+     *
+     * @return bool
+     */
+    public static function is($pattern)
+    {
+        return Str::is($pattern, static::current());
+    }
 }

@@ -7,8 +7,6 @@
  */
 namespace Pimf\Util\Header;
 
-use Pimf\Registry;
-
 /**
  * Manages a raw HTTP header ResponseStatus sending.
  *
@@ -17,133 +15,158 @@ use Pimf\Registry;
  */
 abstract class ResponseStatus
 {
-  /**
-   * @param int    $code    HTTP response code
-   * @param string $status  The header string which will be used to figure out the HTTP status code to send.
-   * @param bool   $replace Whether the header should replace a previous similar header.
-   */
-  public static function send($code, $status, $replace = true)
-  {
-    header('' . Registry::get('env')->SERVER_PROTOCOL . ' ' . $code . ' ' . $status, $replace, $code);
-  }
+    /**
+     * Name and revision of the information protocol
+     *
+     * @var string
+     */
+    public static $protocol;
 
-  public static function sendXFrameDeny()
-  {
-    header('X-Frame-Options: DENY');
-  }
+    /**
+     * @param string $protocol
+     */
+    public static function setup($protocol)
+    {
+        self::$protocol = $protocol;
+    }
 
-  public static function sendXFrameSameOrigin()
-  {
-    header('X-Frame-Options: SAMEORIGIN');
-  }
+    /**
+     * @param int    $code    HTTP response code
+     * @param string $status  The header string which will be used to figure out the HTTP status code to send.
+     * @param bool   $replace Whether the header should replace a previous similar header.
+     */
+    public static function send($code, $status, $replace = true)
+    {
+        header('' . self::$protocol . ' ' . $code . ' ' . $status, $replace, $code);
+    }
 
-  public static function sendContinue()
-  {
-    self::send(100, 'Continue');
-  }
+    public static function sendXFrameDeny()
+    {
+        header('X-Frame-Options: DENY');
+    }
 
-  public static function sendProcessing()
-  {
-    self::send(102, 'Processing');
-  }
+    public static function sendXFrameSameOrigin()
+    {
+        header('X-Frame-Options: SAMEORIGIN');
+    }
 
-  public static function sendOK()
-  {
-    self::send(200, 'OK');
-  }
+    public static function sendContinue()
+    {
+        self::send(100, 'Continue');
+    }
 
-  public static function sendCreated()
-  {
-    self::send(201, 'Created');
-  }
+    public static function sendProcessing()
+    {
+        self::send(102, 'Processing');
+    }
 
-  public static function sendAccepted()
-  {
-    self::send(202, 'Accepted');
-  }
+    public static function sendOK()
+    {
+        self::send(200, 'OK');
+    }
 
-  public static function sendNoAuthInfo()
-  {
-    self::send(203, 'Non-Authoritative Information');
-  }
+    public static function sendCreated()
+    {
+        self::send(201, 'Created');
+    }
 
-  public static function sendNoContent()
-  {
-    self::send(204, 'No Content');
-  }
+    public static function sendAccepted()
+    {
+        self::send(202, 'Accepted');
+    }
 
-  public static function sendMovedPermanently()
-  {
-    self::send(301, 'Moved Permanently');
-  }
+    public static function sendNoAuthInfo()
+    {
+        self::send(203, 'Non-Authoritative Information');
+    }
 
-  public static function sendFound()
-  {
-    self::send(302, 'Found');
-  }
+    public static function sendNoContent()
+    {
+        self::send(204, 'No Content');
+    }
 
-  public static function sendNotModified()
-  {
-    self::send(304, 'Not Modified');
-  }
+    public static function sendMovedPermanently()
+    {
+        self::send(301, 'Moved Permanently');
+    }
 
-  public static function sendTemporaryRedirect()
-  {
-    self::send(307, 'Temporary Redirect');
-  }
+    public static function sendFound()
+    {
+        self::send(302, 'Found');
+    }
 
-  public static function sendBadRequest()
-  {
-    self::send(400, 'Bad Request');
-  }
+    public static function sendNotModified()
+    {
+        self::send(304, 'Not Modified');
+    }
 
-  public static function sendUnauthorized()
-  {
-    self::send(401, 'Unauthorized');
-  }
+    public static function sendTemporaryRedirect()
+    {
+        self::send(307, 'Temporary Redirect');
+    }
 
-  public static function sendPaymentRequired()
-  {
-    self::send(402, 'Payment Required');
-  }
+    public static function sendBadRequest()
+    {
+        self::send(400, 'Bad Request');
+    }
 
-  public static function sendForbidden()
-  {
-    self::send(403, 'Forbidden');
-  }
+    public static function sendUnauthorized()
+    {
+        self::send(401, 'Unauthorized');
+    }
 
-  public static function sendMethodNotAllowed()
-  {
-    self::send(405, 'Method Not Allowed');
-  }
+    public static function sendPaymentRequired()
+    {
+        self::send(402, 'Payment Required');
+    }
 
-  public static function sendNotAcceptable()
-  {
-    self::send(406, 'Not Acceptable');
-  }
+    public static function sendForbidden()
+    {
+        self::send(403, 'Forbidden');
+    }
 
-  public static function sendProxyAuthRequired()
-  {
-    self::send(407, 'Proxy Authentication Required');
-  }
+    public static function sendNotFound()
+    {
+        self::send(404, 'Not Found');
+    }
 
-  public static function sendRequestTimeout()
-  {
-    self::send(408, 'Request Timeout');
-  }
+    public static function sendMethodNotAllowed()
+    {
+        self::send(405, 'Method Not Allowed');
+    }
 
-  public static function sendUnsupportedMediaType()
-  {
-    self::send(415, 'Unsupported Media Type');
-  }
+    public static function sendNotAcceptable()
+    {
+        self::send(406, 'Not Acceptable');
+    }
 
-  public static function sendLocked()
-  {
-    self::send(423, 'Locked');
-  }
+    public static function sendProxyAuthRequired()
+    {
+        self::send(407, 'Proxy Authentication Required');
+    }
 
-  public static function sendServiceUnavailable()
-  {
-    self::send(503, 'Service Unavailable');
-  }
+    public static function sendRequestTimeout()
+    {
+        self::send(408, 'Request Timeout');
+    }
+
+    public static function sendConflict()
+    {
+        self::send(409, 'Conflict');
+    }
+
+    public static function sendUnsupportedMediaType()
+    {
+        self::send(415, 'Unsupported Media Type');
+    }
+
+    public static function sendLocked()
+    {
+        self::send(423, 'Locked');
+    }
+
+    public static function sendServiceUnavailable()
+    {
+        self::send(503, 'Service Unavailable');
+    }
 }

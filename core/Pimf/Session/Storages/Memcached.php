@@ -14,50 +14,50 @@ namespace Pimf\Session\Storages;
  */
 class Memcached extends Storage
 {
-  /**
-   * The Memcache cache storage instance.
-   *
-   * @var \Pimf\Cache\Storages\Memcached
-   */
-  private $memcached;
+    /**
+     * The Memcache cache storage instance.
+     *
+     * @var \Pimf\Cache\Storages\Memcached
+     */
+    private $memcached;
 
-  /**
-   * @param \Pimf\Cache\Storages\Memcached $memcached
-   */
-  public function __construct(\Pimf\Cache\Storages\Memcached $memcached)
-  {
-    $this->memcached = $memcached;
-  }
+    /**
+     * @param \Pimf\Cache\Storages\Memcached $memcached
+     */
+    public function __construct(\Pimf\Cache\Storages\Memcached $memcached)
+    {
+        $this->memcached = $memcached;
+    }
 
-  /**
-   * Load a session from storage by a given ID.
-   *
-   * @param string $key
-   *
-   * @return array|mixed|null
-   */
-  public function load($key)
-  {
-    return $this->memcached->get($key);
-  }
+    /**
+     * Load a session from storage by a given ID.
+     *
+     * @param string $key
+     *
+     * @return array|mixed|null
+     */
+    public function load($key)
+    {
+        return $this->memcached->get($key);
+    }
 
-  /**
-   * Save a given session to storage.
-   *
-   * @param array $session
-   * @param array $config
-   * @param bool  $exists
-   */
-  public function save($session, $config, $exists)
-  {
-    $this->memcached->put($session['id'], $session, $config['lifetime']);
-  }
+    /**
+     * Save a given session to storage.
+     *
+     * @param array $session
+     * @param array $config
+     * @param bool  $exists
+     */
+    public function save($session, $config, $exists)
+    {
+        $this->memcached->put($session['id'], $session, $config['lifetime']);
+    }
 
-  /**
-   * @param string $key
-   */
-  public function delete($key)
-  {
-    $this->memcached->forget($key);
-  }
+    /**
+     * @param string $key
+     */
+    public function delete($key)
+    {
+        $this->memcached->forget($key);
+    }
 }

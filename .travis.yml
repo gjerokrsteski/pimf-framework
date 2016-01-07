@@ -5,14 +5,27 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
+  - hhvm
+
+
+matrix:
+    include:
+        - php: 5.5.9
+          env: setup=lowest
+        - php: 5.5.9
+          env: setup=stable
+        - php: 7.0
+          env: setup=stable
+    allow_failures:
+        - php: 7.0
+        - php: hhvm
+    fast_finish: true
 
 script:
   - phpunit --configuration phpunit.xml --coverage-clover=coverage.clover
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
-
-matrix:
-  fast_finish: true
 
 notifications:
   email:

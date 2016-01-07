@@ -1,167 +1,167 @@
 <?php
-class ApplicationTest extends PHPUnit_Framework_TestCase
+
+class ApplicationTest extends \PHPUnit_Framework_TestCase
 {
-  protected static $conf = array(
-    'environment' => 'testing',
-    'encoding' => 'UTF-8',
-    'timezone' => 'UTC',
-    'testing' => array(
-      'db' => array(
-        'driver' => 'sqlite',
-        'database' => ':memory:'
-      ),
-    ),
-    'bootstrap' => array(
-      'expected' => array(
-        'php_version' => 5.3,
-      ),
-      'local_temp_directory' => '/tmp/'
-    ),
-    'app' => array(
-      'name'               => 'MyFirstBlog',
-      'key'                => 'some5secret5key5here',
-      'default_controller' => 'blog',
-      'routeable'          => true,
-      'url'                => 'http://localhost',
-      'index'              => '',
-      'asset_url'          => '',
-    ),
-    'error' => array(
-      'ignore_levels' => array(E_USER_DEPRECATED),
-      'debug_info' => false,
-      'log' => true,
-    ),
-    'session' => array(
-        'storage' => '',
-    ),
-    'cache' => array(
-        'storage' => '',
-    ),
-  );
-
-  public static function invokeMethod(&$object, $methodName, array $parameters = array())
-  {
-    $reflection = new \ReflectionClass(get_class($object));
-    $method     = $reflection->getMethod($methodName);
-    $method->setAccessible(true);
-
-    return $method->invokeArgs($object, $parameters);
-  }
-
-
-  # start testing
-
-
-  public function testCreatingNewInstance()
-  {
-    new \Pimf\Application();
-  }
-
-  public function testHappyBootstrapping()
-  {
-    $this->assertNull(
-
-      \Pimf\Application::bootstrap(self::$conf, $server = array())
-
+    protected static $conf = array(
+        'environment' => 'testing',
+        'encoding'    => 'UTF-8',
+        'timezone'    => 'UTC',
+        'testing'     => array(
+            'db' => array(
+                'driver'   => 'sqlite',
+                'database' => ':memory:'
+            ),
+        ),
+        'bootstrap'   => array(
+            'expected'             => array(
+                'php_version' => 5.3,
+            ),
+            'local_temp_directory' => '/tmp/'
+        ),
+        'app'         => array(
+            'name'               => 'MyFirstBlog',
+            'key'                => 'some5secret5key5here',
+            'default_controller' => 'blog',
+            'routeable'          => true,
+            'url'                => 'http://localhost',
+            'index'              => '',
+            'asset_url'          => '',
+        ),
+        'error'       => array(
+            'ignore_levels' => array(E_USER_DEPRECATED),
+            'debug_info'    => false,
+            'log'           => true,
+        ),
+        'session'     => array(
+            'storage' => '',
+        ),
+        'cache'       => array(
+            'storage' => '',
+        ),
     );
-  }
 
-  public function testSetupErrorHandlingIfTestingEnvironment()
-  {
-    $app = new \Pimf\Application();
+    public static function invokeMethod(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
 
-    self::invokeMethod($app, 'setupErrorHandling', array(array('environment'=>'testing')));
-
-    $current_error_reporting = error_reporting();
-
-    $this->assertEquals(E_ALL | E_STRICT, $current_error_reporting);
-  }
-
-  /**
-   * @runInSeparateProcess
-   */
-  public function testSetupErrorHandlingIfProductionEnvironment()
-  {
-    $app = new \Pimf\Application();
-
-    self::invokeMethod($app, 'setupErrorHandling', array(array('environment'=>'production')));
-
-    $current_error_reporting = error_reporting();
-
-    $this->assertEquals(-1, $current_error_reporting);
-  }
+        return $method->invokeArgs($object, $parameters);
+    }
 
 
-  public function testLoadPdoDriver()
-  {
-    $app = new \Pimf\Application();
+    # start testing
 
-    $this->assertNull(
 
-      self::invokeMethod($app, 'loadPdoDriver', array(array('environment' => 'testing', 'testing'=>array('db'=>array()))))
+    public function testCreatingNewInstance()
+    {
+        new \Pimf\Application();
+    }
 
-    );
-  }
+    public function testHappyBootstrapping()
+    {
+        $this->assertNull(
 
-  /**
-   * @runInSeparateProcess
-   */
-  public function testLoadingRoutes()
-  {
-    \Pimf\Registry::set('env', new \Pimf\Environment(array('REQUEST_URI' => 'core/index')));
+            \Pimf\Application::bootstrap(self::$conf, $server = array())
 
-    $app = new \Pimf\Application();
+        );
+    }
 
-    $routes = dirname(__FILE__) .'/_fixture/app/test-app/routes.php';
+    public function testSetupErrorHandlingIfTestingEnvironment()
+    {
+        $app = new \Pimf\Application();
 
-    $this->assertNull(
+        self::invokeMethod($app, 'setupErrorHandling', array('testing'));
 
-      self::invokeMethod($app, 'loadRoutes', array(true, $routes))
+        $current_error_reporting = error_reporting();
 
-    );
-  }
+        $this->assertEquals(E_ALL | E_STRICT, $current_error_reporting);
+    }
 
-  public function testLoadingListeners()
-  {
-    $app = new \Pimf\Application();
+    /**
+     * @runInSeparateProcess
+     */
+    public function testSetupErrorHandlingIfProductionEnvironment()
+    {
+        $app = new \Pimf\Application();
+        $app->bootstrap(self::$conf, $server = array());
 
-    $events = dirname(__FILE__) .'/_fixture/app/test-app/events.php';
+        self::invokeMethod($app, 'setupErrorHandling', array(array('environment' => 'production')));
 
-    self::invokeMethod($app, 'loadListeners', array($events));
+        $current_error_reporting = error_reporting();
 
-    $this->assertTrue(\Pimf\Event::listeners('test.loading.listeners'));
-  }
+        $this->assertEquals(-1, $current_error_reporting);
+    }
 
-  public function testReportProblemIfNotExpectedPhpVersion()
-  {
-    $app = new \Pimf\Application();
 
-    $fake_php_version = 5.2;
-    $problems = array();
+    public function testLoadPdoDriver()
+    {
+        $app = new \Pimf\Application();
 
-    $res = self::invokeMethod($app, 'reportIf', array($problems, $fake_php_version, false));
+        $this->assertNull(
 
-    $this->assertNotEmpty($res);
-    $this->assertEquals(
+            self::invokeMethod($app, 'loadPdoDriver', array('testing', array('db' => array()), 'MyFirstBlog'))
 
-      'You have PHP '.$fake_php_version.' and you need 5.3 or higher!',
+        );
+    }
 
-      current($res)
+    /**
+     * @runInSeparateProcess
+     */
+    public function testLoadingRoutes()
+    {
+        $app = new \Pimf\Application();
 
-    );
-  }
+        $routes = dirname(__FILE__) . '/_fixture/app/test-app/routes.php';
 
-  public function testReportProblemIfPreviousProblemsGiven()
-  {
-    $app = new \Pimf\Application();
+        $this->assertNull(
 
-    $fake_php_version = 5.3;
-    $problems = array('problem 1', 'problem 2');
+            self::invokeMethod($app, 'loadRoutes', array(true, $routes))
 
-    $res = self::invokeMethod($app, 'reportIf', array($problems, $fake_php_version, false));
+        );
+    }
 
-    $this->assertNotEmpty($res);
-    $this->assertEquals($problems, $res);
-  }
+    public function testLoadingListeners()
+    {
+        $app = new \Pimf\Application();
+
+        $events = dirname(__FILE__) . '/_fixture/app/test-app/events.php';
+
+        self::invokeMethod($app, 'loadListeners', array($events));
+
+        $this->assertTrue(\Pimf\Event::listeners('test.loading.listeners'));
+    }
+
+    public function testReportProblemIfNotExpectedPhpVersion()
+    {
+        $app = new \Pimf\Application();
+
+        $fake_php_version = 5.2;
+        $problems = array();
+
+        $res = self::invokeMethod($app, 'reportIf', array($problems, $fake_php_version, false));
+
+        $this->assertNotEmpty($res);
+        $this->assertEquals(
+
+            'You have PHP ' . $fake_php_version . ' and you need 5.3 or higher!',
+
+            current($res)
+
+        );
+    }
+
+    public function testReportProblemIfPreviousProblemsGiven()
+    {
+        $app = new \Pimf\Application();
+
+        $fake_php_version = 5.3;
+        $problems = array('problem 1', 'problem 2');
+
+        $res = self::invokeMethod($app, 'reportIf', array($problems, $fake_php_version, false));
+
+        $this->assertNotEmpty($res);
+        $this->assertEquals($problems, $res);
+    }
 }
  

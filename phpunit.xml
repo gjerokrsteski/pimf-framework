@@ -6,7 +6,7 @@
         colors="false"
         processIsolation="false"
         stopOnError="false"
-        stopOnFailure="true"
+        stopOnFailure="false"
         stopOnIncomplete="false"
         stopOnSkipped="false"
         syntaxCheck="true"
@@ -26,8 +26,8 @@
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./core</directory>
             <exclude>
-               <file>bootstrap.core.php</file>
-               <directory suffix=".php">./core/_error</directory>
+                <file>bootstrap.core.php</file>
+                <directory suffix=".php">./core/_error</directory>
             </exclude>
         </whitelist>
     </filter>
@@ -41,7 +41,7 @@
              highlight="true"
              lowUpperBound="35"
              highLowerBound="70"
-                />
+        />
     </logging>
 
 </phpunit>

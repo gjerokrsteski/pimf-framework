@@ -1,8 +1,7 @@
-<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Error 404 - Not Found</title>
+    <meta charset="utf-8">
+    <title>Error 404 - Not Found</title>
 </head>
 <body>
 
@@ -15,13 +14,13 @@
 <h3>What does this mean?</h3>
 
 <p>
-  We couldn't find the page you requested on our servers. We're really sorry
-  about that. It's our fault, not yours. We'll work hard to get this page
-  back online as soon as possible.
+    We couldn't find the page you requested on our servers. We're really sorry
+    about that. It's our fault, not yours. We'll work hard to get this page
+    back online as soon as possible.
 </p>
 
 <p>
-  Perhaps you would like to go to our <a href="<?php echo $home = Pimf\url('/') ?>"><?php echo $home ?></a>
+    Perhaps you would like to go to our <a href="<?php echo $home = Pimf\url('/') ?>"><?php echo $home ?></a>
 </p>
 
 </body>

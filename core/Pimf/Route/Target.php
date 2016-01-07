@@ -19,74 +19,74 @@ namespace Pimf\Route;
  */
 class Target
 {
-  /**
-   * Controller name as it appears in url
-   *
-   * @var string
-   */
-  protected $controller;
+    /**
+     * Controller name as it appears in url
+     *
+     * @var string
+     */
+    protected $controller;
 
-  /**
-   * Controller action name as it appears in url
-   *
-   * @var string
-   */
-  protected $action = 'index';
+    /**
+     * Controller action name as it appears in url
+     *
+     * @var string
+     */
+    protected $action = 'index';
 
-  /**
-   * List of additional params at teh URL.
-   *
-   * @var array
-   */
-  protected $params = array();
+    /**
+     * List of additional params at teh URL.
+     *
+     * @var array
+     */
+    protected $params = array();
 
-  /**
-   * @param string $controller
-   */
-  public function __construct($controller)
-  {
-    $this->controller = $controller;
-  }
+    /**
+     * @param string $controller
+     */
+    public function __construct($controller)
+    {
+        $this->controller = $controller;
+    }
 
-  /**
-   * @param string $action
-   */
-  public function setAction($action)
-  {
-    $this->action = $action;
-  }
+    /**
+     * @param string $action
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
 
-  /**
-   * @param array $params
-   */
-  public function setParams(array $params)
-  {
-    $this->params = $params;
-  }
+    /**
+     * @param array $params
+     */
+    public function setParams(array $params)
+    {
+        $this->params = $params;
+    }
 
-  /**
-   * @return string
-   */
-  public function getAction()
-  {
-    return $this->action;
-  }
+    /**
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
+    }
 
-  /**
-   * Controller-name as it appears in url.
-   *
-   * @return string
-   */
-  public function getController()
-  {
-    return $this->controller;
-  }
+    /**
+     * Controller-name as it appears in url.
+     *
+     * @return string
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
 
-  /**
-   * @return array
-   */
-  public function getParams()
-  {
-    return $this->params;
-  }
+    /**
+     * @return array
+     */
+    public function getParams()
+    {
+        return $this->params;
+    }
 }
