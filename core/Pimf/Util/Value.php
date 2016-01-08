@@ -59,7 +59,7 @@ class Value
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return $this
      */
@@ -71,7 +71,7 @@ class Value
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return $this
      */
