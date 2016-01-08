@@ -12,7 +12,7 @@ use \Pimf\Param, \Pimf\Config, \Pimf\Sapi,
     \Pimf\Controller\Exception as Bomb,
     \Pimf\Request, \Pimf\Util\Header, \Pimf\Url,
     \Pimf\Response, \Pimf\EntityManager, \Pimf\Logger,
-    \Pimf\Util\Character, \Pimf\Util\Value, \Pimf\Environment, \Pimf\Router;
+    \Pimf\Util\Value, \Pimf\Environment, \Pimf\Router;
 
 /**
  * Defines the general controller behaviour - you have to extend it.
@@ -53,12 +53,12 @@ abstract class Base
     protected $env;
 
     /**
-     * @param Request            $request
-     * @param Response           $response
-     * @param Logger             $logger
-     * @param EntityManager      $em
-     * @param Router             $router
-     * @param Environment  $env
+     * @param Request       $request
+     * @param Response      $response
+     * @param Logger        $logger
+     * @param EntityManager $em
+     * @param Router        $router
+     * @param Environment   $env
      */
     public function __construct(
         Request $request,
@@ -97,7 +97,7 @@ abstract class Base
 
                 $redirectUrl = new Value($this->env->REDIRECT_URL);
                 $redirectUrl = $redirectUrl->deleteLeading('/')->deleteTrailing('/')->explode('/');
-                $action      = isset($redirectUrl[1]) ? $redirectUrl[1] : 'index';
+                $action = isset($redirectUrl[1]) ? $redirectUrl[1] : 'index';
 
             } else {
 
@@ -123,14 +123,14 @@ abstract class Base
         $action = strtolower($action) . $suffix;
 
         if (method_exists($this, 'init')) {
-            call_user_func(array($this, 'init'));
+            call_user_func([$this, 'init']);
         }
 
         if (!method_exists($this, $action)) {
             throw new Bomb("no action '{$action}' defined at controller " . get_class($this));
         }
 
-        return call_user_func(array($this, $action));
+        return call_user_func([$this, $action]);
     }
 
     /**

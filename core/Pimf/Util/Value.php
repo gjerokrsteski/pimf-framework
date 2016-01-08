@@ -113,7 +113,7 @@ class Value
     }
 
     /**
-     * @param $byString The delimiter string
+     * @param string $byString The delimiter string
      *
      * @return array
      */

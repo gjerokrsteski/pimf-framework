@@ -35,7 +35,7 @@ function is_empty($value)
  *
  * @return string
  */
-function url($route = '', array $params = array(), $https = null, $asset = false)
+function url($route = '', array $params = [], $https = null, $asset = false)
 {
     return \Pimf\Url::compute($route, $params, $https, $asset);
 }
@@ -54,12 +54,9 @@ function ent($value)
 
 /**
  * Relax the system and free up some memory
- *
- * @param int $seconds
  */
-function relax($seconds = 1)
+function relax()
 {
-    sleep($seconds);
     clearstatcache();
 
     // free up the memory that could be lost
@@ -69,4 +66,3 @@ function relax($seconds = 1)
         gc_collect_cycles();
     }
 }
-

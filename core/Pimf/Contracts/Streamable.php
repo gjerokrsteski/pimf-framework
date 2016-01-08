@@ -23,4 +23,4 @@ interface Streamable
      * @throws \RuntimeException If error on making connection
      */
     public function open();
-} 
+}
