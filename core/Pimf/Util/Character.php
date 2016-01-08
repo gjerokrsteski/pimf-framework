@@ -16,7 +16,6 @@ namespace Pimf\Util;
  */
 class Character
 {
-
     /**
      * Check value to find if it was serialized.
      *

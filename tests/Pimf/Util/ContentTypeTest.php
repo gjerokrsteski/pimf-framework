@@ -2,6 +2,12 @@
 
 class UtilContentTypeTest extends \PHPUnit_Framework_TestCase
 {
+
+   protected function setUp()
+   {
+       \Pimf\Sapi::isHHVM() ? $this->markTestSkipped('xdebug_get_headers not supportet by HHVM') : true;
+   }
+
     /**
      * @runInSeparateProcess
      */
