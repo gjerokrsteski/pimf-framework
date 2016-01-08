@@ -4,12 +4,9 @@ Have you ever wished a PHP framework that perfectly adapts to your projects`s ne
 
 [![Build Status](https://travis-ci.org/gjerokrsteski/pimf-framework.png?branch=master)](https://travis-ci.org/gjerokrsteski/pimf-framework) 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/badges/quality-score.png?s=6455d019460628327434d85520bd13c4d03a2673)](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/)
-[![Code Coverage](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/badges/coverage.png?s=ded7f154ac78cbdbabc166e32fd2f54c009d2c67)](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/)
 [![Dependency Status](https://www.versioneye.com/php/gjerokrsteski:pimf/dev-master/badge.svg)](https://www.versioneye.com/php/gjerokrsteski:pimf/dev-master)
 [![Code Climate](https://codeclimate.com/github/gjerokrsteski/pimf-framework.png)](https://codeclimate.com/github/gjerokrsteski/pimf-framework)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/f73307c6-0864-454f-967d-cebfd1e4b304/mini.png)](https://insight.sensiolabs.com/projects/f73307c6-0864-454f-967d-cebfd1e4b304)
 [![Packagist](https://img.shields.io/packagist/dt/gjerokrsteski/pimf.svg)](https://packagist.org/packages/gjerokrsteski/pimf-framework)
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/gjerokrsteski/pimf-framework/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
 
 **Note:** This repository contains the core code of the PIMF framework. If you want to build an application using PIMF, please use one of the quick starting bundles below.
