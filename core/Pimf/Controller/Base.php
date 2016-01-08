@@ -123,14 +123,14 @@ abstract class Base
         $action = strtolower($action) . $suffix;
 
         if (method_exists($this, 'init')) {
-            call_user_func([$this, 'init']);
+            call_user_func(array($this, 'init'));
         }
 
         if (!method_exists($this, $action)) {
             throw new Bomb("no action '{$action}' defined at controller " . get_class($this));
         }
 
-        return call_user_func([$this, $action]);
+        return call_user_func(array($this, $action));
     }
 
     /**
