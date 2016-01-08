@@ -1,4 +1,5 @@
 <?php
+
 namespace Pimf;
 
 /**
@@ -35,7 +36,7 @@ function is_empty($value)
  *
  * @return string
  */
-function url($route = '', array $params = [], $https = null, $asset = false)
+function url($route = '', array $params = array(), $https = null, $asset = false)
 {
     return \Pimf\Url::compute($route, $params, $https, $asset);
 }

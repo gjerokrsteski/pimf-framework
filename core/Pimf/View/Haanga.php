@@ -42,7 +42,7 @@ class Haanga extends View implements Reunitable
      * @param string $template
      * @param array  $data
      */
-    public function __construct($template, array $data = [])
+    public function __construct($template, array $data = array())
     {
         parent::__construct($template, $data);
 
