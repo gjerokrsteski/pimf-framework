@@ -4,7 +4,6 @@ Have you ever wished a PHP framework that perfectly adapts to your projects`s ne
 
 [![Build Status](https://travis-ci.org/gjerokrsteski/pimf-framework.png?branch=master)](https://travis-ci.org/gjerokrsteski/pimf-framework) 
 [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/badges/quality-score.png?s=6455d019460628327434d85520bd13c4d03a2673)](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/)
-[![Dependency Status](https://www.versioneye.com/php/gjerokrsteski:pimf/dev-master/badge.svg)](https://www.versioneye.com/php/gjerokrsteski:pimf/dev-master)
 [![Code Climate](https://codeclimate.com/github/gjerokrsteski/pimf-framework.png)](https://codeclimate.com/github/gjerokrsteski/pimf-framework)
 [![Packagist](https://img.shields.io/packagist/dt/gjerokrsteski/pimf.svg)](https://packagist.org/packages/gjerokrsteski/pimf-framework)
 
