@@ -22,7 +22,7 @@ class Value
     protected $value;
 
     /**
-     * @param $string
+     * @param string $string
      */
     public function __construct($string)
     {
@@ -35,7 +35,7 @@ class Value
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return $this
      */
@@ -47,7 +47,7 @@ class Value
     }
 
     /**
-     * @param $string
+     * @param string $string
      *
      * @return $this
      */
