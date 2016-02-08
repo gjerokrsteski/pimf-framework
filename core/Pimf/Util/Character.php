@@ -223,7 +223,7 @@ class Character
      * Determine if a given string begins with a given value.
      *
      * @param string $haystack
-     * @param string $needle
+     * @param string|array $needle
      *
      * @return bool
      */
@@ -236,7 +236,7 @@ class Character
      * Determine if a given string ends with a given value.
      *
      * @param string $haystack
-     * @param string $needle
+     * @param string|array $needle
      *
      * @return bool
      */
