@@ -19,7 +19,7 @@
     }
   ],
   "autoload": {
-    "psr-4": { "Pimf\\": "" }
+    "psr-4": { "Pimf\\": "core/" }
   },
   "require" : {
     "php" : ">=5.3"
