@@ -18,9 +18,11 @@
       "role" : "Developer"
     }
   ],
-  "autoload": {
-    "psr-4": { "Pimf\\": "core/" }
-  },
+    "autoload": {
+        "psr-4": {
+            "Pimf\\": "core/"
+        }
+    },
   "require" : {
     "php" : ">=5.3"
   }
