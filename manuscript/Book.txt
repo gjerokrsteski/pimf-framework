@@ -14,7 +14,6 @@ Pretty URLs.md
 6f.-Events.md
 6g.-Response-&-Headers.md
 6h.-Request.md
-6j.-Registry.md
 7.-Creating-new-data-mapper-&-working-with-Entity-Manager.md
 7a.-Views-&-Tempate-Engines.md
 8a. Session configuration.md
