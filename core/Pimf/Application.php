@@ -50,7 +50,7 @@ final class Application
      *
      * @return boolean|null
      */
-    public static function bootstrap(array $conf, array $server = [])
+    public static function bootstrap(array $conf, array $server = array())
     {
         $problems = array();
 
