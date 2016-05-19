@@ -251,7 +251,6 @@ class Validator
             $date = new \DateTime($fieldValue);
 
             return $fieldValue === $date->format($format);
-
         } catch (\Exception $exception) {
             return $this->error($field, __FUNCTION__);
         }

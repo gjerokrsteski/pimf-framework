@@ -50,7 +50,7 @@ final class Application
      *
      * @return boolean|null
      */
-    public static function bootstrap(array $conf, array $server = array())
+    public static function bootstrap(array $conf, array $server = [])
     {
         $problems = array();
 
@@ -71,6 +71,8 @@ final class Application
                 BASE_PATH . 'app/' . Config::get('app.name') . '/routes.php'
             );
 
+        } catch (\Throwable $throwable) {
+            $problems[] = $throwable->getMessage();
         } catch (\Exception $exception) {
             $problems[] = $exception->getMessage();
         }

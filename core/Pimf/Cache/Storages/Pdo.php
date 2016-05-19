@@ -90,6 +90,7 @@ class Pdo extends Storage
             $sth = $this->pdo->prepare(
                 "INSERT INTO pimf_cache (key, value, expiration) VALUES (:key, :value, :expiration)"
             );
+
         } catch (\Exception $exception) {
             $sth = $this->pdo->prepare(
                 "UPDATE pimf_cache SET value = :value, expiration = :expiration WHERE key = :key"
