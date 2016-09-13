@@ -23,6 +23,7 @@ matrix:
     fast_finish: true
 
 script:
+  - composer self-update --rollback
   - phpunit --configuration phpunit.xml --coverage-clover=coverage.clover
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --access-token="53c569dececa0578c84587178c5f08e25df8c6e42c37bd313bf0802d2cf74a71" --format=php-clover coverage.clover
