@@ -1,6 +1,6 @@
 {
-  "name": "garrettw/pimf-enhanced",
-  "description": "Micro framework for PHP that emphasises minimalism and simplicity",
+  "name": "gjerokrsteski/pimf-framework",
+  "description": "Micro-framework for PHP that emphasises minimalism and simplicity",
   "license": "MIT",
   "homepage": "http://pimf-framework.de",
   "minimum-stability": "stable",
@@ -15,7 +15,7 @@
       "name" : "Gjero Krsteski",
       "email" : "gjero@krsteski.de",
       "homepage" : "http://krsteski.de/",
-      "role" : "Developer"
+      "role" : "Lead Developer"
     },
     {
       "name" : "Garrett Whitehorn",
