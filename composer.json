@@ -1,28 +1,33 @@
 {
-    "name": "gjerokrsteski/pimf",
-    "description": "Micro framework for PHP that emphasises minimalism and simplicity",
-    "license": "MIT",
-    "homepage": "http://pimf-framework.de",
-    "minimum-stability": "stable",
-    "keywords": ["framework", "pimf"],
-    "support": {
-        "email": "gjero@krsteski.de",
-        "wiki": "https://github.com/gjerokrsteski/pimf/wiki",
-        "source": "https://github.com/gjerokrsteski/pimf-framework"
-    },
-    "authors" : [
+  "name": "garrettw/pimf-enhanced",
+  "description": "Micro framework for PHP that emphasises minimalism and simplicity",
+  "license": "MIT",
+  "homepage": "http://pimf-framework.de",
+  "minimum-stability": "stable",
+  "keywords": ["framework", "pimf"],
+  "support": {
+    "email": "gjero@krsteski.de",
+    "wiki": "https://github.com/gjerokrsteski/pimf-framework/wiki",
+    "source": "https://github.com/gjerokrsteski/pimf-framework"
+  },
+  "authors" : [
     {
       "name" : "Gjero Krsteski",
       "email" : "gjero@krsteski.de",
       "homepage" : "http://krsteski.de/",
       "role" : "Developer"
+    },
+    {
+      "name" : "Garrett Whitehorn",
+      "homepage" : "http://garrettw.net/",
+      "role" : "Developer"
     }
   ],
-    "autoload": {
-        "psr-4": {
-            "Pimf\\": "core/"
-        }
-    },
+  "autoload": {
+    "psr-4": {
+      "Pimf\\": "core/"
+    }
+  },
   "require" : {
     "php" : ">=5.3"
   }
