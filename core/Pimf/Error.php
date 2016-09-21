@@ -26,7 +26,7 @@ class Error
      * @param Logger     $logger
      * @param boolean    $exit
      */
-    public static function exception($exception, $logger, $exit = true)
+    public static function exception(\Exception $exception, Logger $logger, $exit = true)
     {
         static::log($exception, $logger);
 
@@ -59,7 +59,7 @@ class Error
      *
      * @return string
      */
-    public static function format($exception, $isCli = false)
+    public static function format(\Exception $exception, $isCli = false)
     {
         if ($isCli === true) {
             return
@@ -108,7 +108,7 @@ class Error
      * @param array|int $reporting which PHP errors are reported
      * @param boolean   $exit
      */
-    public static function native($code, $error, $file, $line, $logger, $reporting, $exit = true)
+    public static function native($code, $error, $file, $line, Logger $logger, $reporting, $exit = true)
     {
         if ($reporting === 0) {
             return;
@@ -132,7 +132,7 @@ class Error
      * @param array|null $error
      * @param bool       $exit
      */
-    public static function shutdown($logger, $error, $exit = true)
+    public static function shutdown(Logger $logger, $error, $exit = true)
     {
         // if a fatal error occurred
         if (!is_null($error)) {
@@ -145,7 +145,7 @@ class Error
      * @param \Exception $exception
      * @param Logger     $logger
      */
-    public static function log($exception, Logger $logger)
+    public static function log(\Exception $exception, Logger $logger)
     {
         if (Config::get('error.log') === true) {
             $logger->error($exception->getMessage() . ' ' . $exception->getTraceAsString());

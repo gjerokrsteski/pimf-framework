@@ -5,6 +5,7 @@ Thumbs.db
 .settings
 .tmproj
 *.esproj
+.c9
 
 # Numerous always-ignore extensions
 *.diff

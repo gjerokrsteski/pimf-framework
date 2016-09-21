@@ -57,22 +57,24 @@ final class Uuid
      */
     private static function getNodeId()
     {
-        if (self::$hostIp === null && true === function_exists('gethostname')) {
-            self::$hostName = gethostname();
-            self::$hostIp = gethostbyname(self::$hostName);
+        if (self::$hostIp !== null) {
+            return ip2long(self::$hostIp);
         }
 
-        if (self::$hostIp === null && true === function_exists('php_uname')) {
+        self::$hostIp = '127.0.0.1';
+
+        if (self::$hostName !== null) {
+            self::$hostIp = crc32(self::$hostName);
+        }
+
+        if (true === function_exists('php_uname')) {
             self::$hostName = php_uname('n');
             self::$hostIp = gethostbyname(self::$hostName);
         }
 
-        if (self::$hostIp === null && self::$hostName !== null) {
-            self::$hostIp = crc32(self::$hostName);
-        }
-
-        if (self::$hostIp === null) {
-            self::$hostIp = '127.0.0.1';
+        if (true === function_exists('gethostname')) {
+            self::$hostName = gethostname();
+            self::$hostIp = gethostbyname(self::$hostName);
         }
 
         return ip2long(self::$hostIp);
