@@ -14,14 +14,28 @@
     {
       "name" : "Gjero Krsteski",
       "email" : "gjero@krsteski.de",
-      "homepage" : "http://krsteski.de/",
+      "homepage" : "http://krsteski.de",
       "role" : "Lead Developer"
     },
     {
       "name" : "Garrett Whitehorn",
-      "homepage" : "http://garrettw.net/",
+      "homepage" : "http://garrettw.net",
       "role" : "Developer"
-    }
+    },
+    {
+      "name" : "Alexander Miertsch",
+      "homepage" : "http://prooph-software.de",
+      "role" : "Developer"
+    },
+    {
+      "name" : "Sascha Presnac",
+      "homepage" : "http://www.codemercenary.de",
+      "role" : "Developer"
+    },
+    {
+      "name" : "Markus Dethlefsen",
+      "role" : "Developer"
+    }    
   ],
   "autoload": {
     "psr-4": {
