@@ -4,7 +4,7 @@ class CacheMemcachedTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetReturnsNullWhenNotFound()
     {
-        $memcache = $this->getMock('Memcached', array('get'));
+        $memcache = $this->getMockBuilder('Memcached')->setMethods(array('get'))->getMock();
         $memcache->expects($this->once())->method('get')->with($this->equalTo('foobar'))->will($this->returnValue(null));
         $store = new \Pimf\Cache\Storages\Memcached($memcache, 'foo');
 
@@ -13,7 +13,7 @@ class CacheMemcachedTest extends \PHPUnit_Framework_TestCase
 
     public function testMemcacheValueIsReturned()
     {
-        $memcache = $this->getMock('Memcached', array('get'));
+        $memcache = $this->getMockBuilder('Memcached')->setMethods(array('get'))->getMock();
         $memcache->expects($this->once())->method('get')->will($this->returnValue('bar'));
         $store = new \Pimf\Cache\Storages\Memcached($memcache, 'foo');
 
@@ -22,7 +22,7 @@ class CacheMemcachedTest extends \PHPUnit_Framework_TestCase
 
     public function testSetMethodProperlyCallsMemcache()
     {
-        $memcache = $this->getMock('Memcached', array('set'));
+        $memcache = $this->getMockBuilder('Memcached')->setMethods(array('set'))->getMock();
         $memcache->expects($this->once())->method('set')->with($this->equalTo('key.foo3'), $this->equalTo('bar'));
         $store = new \Pimf\Cache\Storages\Memcached($memcache, 'key.');
 
@@ -31,7 +31,7 @@ class CacheMemcachedTest extends \PHPUnit_Framework_TestCase
 
     public function testStoreItemForeverProperlyCallsMemcached()
     {
-        $memcache = $this->getMock('Memcached', array('set'));
+        $memcache = $this->getMockBuilder('Memcached')->setMethods(array('set'))->getMock();
         $memcache->expects($this->once())->method('set')->with(
             $this->equalTo('key.foo'),
             $this->equalTo('bar'),
@@ -44,7 +44,7 @@ class CacheMemcachedTest extends \PHPUnit_Framework_TestCase
 
     public function testForgetMethodProperlyCallsMemcache()
     {
-        $memcache = $this->getMock('Memcached', array('delete'));
+        $memcache = $this->getMockBuilder('Memcached')->setMethods(array('delete'))->getMock();
         $memcache->expects($this->once())->method('delete')->with($this->equalTo('key.foo'));
         $store = new \Pimf\Cache\Storages\Memcached($memcache, 'key.');
         $store->forget('foo');

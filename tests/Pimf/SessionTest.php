@@ -79,14 +79,14 @@ class SessionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getMockStorage()
     {
-        $mock = $this->getMock(
-            '\\Pimf\\Session\\Storages\\Storage', array(
+        $mock = $this->getMockBuilder('\\Pimf\\Session\\Storages\\Storage')
+            ->setMethods(array(
                 'id',
                 'load',
                 'save',
                 'delete'
-            )
-        );
+            ))
+            ->getMock();
 
         $mock->expects($this->any())->method('id')->will($this->returnValue(\Pimf\Util\Character::random(40)));
 
@@ -490,7 +490,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadingSession()
     {
-        \Pimf\Request::$cookieData = $this->getMock('\\Pimf\\Param');
+        \Pimf\Request::$cookieData = $this->getMockBuilder('\\Pimf\\Param')->getMock();
 
         \Pimf\Session::load();
     }
