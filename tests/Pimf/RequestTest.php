@@ -79,20 +79,6 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('01-01-2017', $request->fromCli()->get('date'));
     }
 
-
-    public function testStripSlashesIfMagicQuotes()
-    {
-        $request = new \Pimf\Request(array(), array(), array(),
-            array(), array(),
-            new \Pimf\Environment(array())
-        );
-
-        $res = $request->stripSlashesIfMagicQuotes($_GET, true);
-
-        $this->assertNotNull($res['controller']);
-        $this->assertEquals('index', $res['controller']);
-    }
-
     /**
      * @expectedException LogicException
      */
