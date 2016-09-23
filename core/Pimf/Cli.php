@@ -55,7 +55,7 @@ final class Cli
 
                     array_map(
                         function (\ReflectionMethod $method) {
-                            if (false !== $command = strstr($method->getName(), 'CliAction', true)) {
+                            if (false !== $command = strstr($method->name, 'CliAction', true)) {
                                 echo PHP_EOL . ' action: ' . $command . ' ' . PHP_EOL;
                             }
                         }, $methods
