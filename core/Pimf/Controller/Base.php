@@ -100,8 +100,7 @@ abstract class Base
                 $action = isset($redirectUrl[1]) ? $redirectUrl[1] : 'index';
 
             } else {
-
-                $bag = 'from' . ucfirst(strtolower($this->request->getMethod()));
+                $bag = sprintf('from%s', ucfirst(strtolower($this->request->getMethod())));
                 $action = $this->request->{$bag}()->get('action', 'index');
             }
 
