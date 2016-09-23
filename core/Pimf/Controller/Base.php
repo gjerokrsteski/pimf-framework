@@ -113,9 +113,9 @@ abstract class Base
 
                     $action = $target->getAction();
 
-                    Request::$getData = new Param((array)Request::stripSlashesIfMagicQuotes(
+                    Request::$getData = new Param(
                         array_merge($target->getParams(), Request::$getData->getAll())
-                    ));
+                    );
                 }
             }
         }

@@ -1,5 +1,7 @@
-Welcome to PIMF [![Build Status](https://travis-ci.org/gjerokrsteski/pimf-framework.svg?branch=master)](https://travis-ci.org/gjerokrsteski/pimf-framework) [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/badges/quality-score.png?s=6455d019460628327434d85520bd13c4d03a2673)](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/) [![Code Climate](https://codeclimate.com/github/gjerokrsteski/pimf-framework.png)](https://codeclimate.com/github/gjerokrsteski/pimf-framework) [![Packagist](https://img.shields.io/packagist/dt/gjerokrsteski/pimf.svg)](https://packagist.org/packages/gjerokrsteski/pimf-framework)
+Welcome to PIMF
 ====================
+[![Build Status](https://travis-ci.org/gjerokrsteski/pimf-framework.svg?branch=master)](https://travis-ci.org/gjerokrsteski/pimf-framework) [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/badges/quality-score.png?s=6455d019460628327434d85520bd13c4d03a2673)](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/) [![Code Climate](https://codeclimate.com/github/gjerokrsteski/pimf-framework.png)](https://codeclimate.com/github/gjerokrsteski/pimf-framework) [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/f73307c6-0864-454f-967d-cebfd1e4b304.svg)](https://insight.sensiolabs.com/projects/f73307c6-0864-454f-967d-cebfd1e4b304) [![Packagist](https://img.shields.io/packagist/dt/gjerokrsteski/pimf.svg)](https://packagist.org/packages/gjerokrsteski/pimf-framework) [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pimf-framework/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Have you ever wished for a PHP framework that perfectly adapts to your project's needs, your programming experience, and your customer's budget? A thin PHP framework with fewer implementation rules that is easy to learn to use? PIMF is about to satisfy your demands!
 
 
@@ -43,7 +45,7 @@ Good, robust business logic is better than a fat, complex framework. Most of the
 
 The aim was to create robust and secure projects and deliver them fast. We wanted just one easy framework that can be used for all our projects. And then - PIMF was born!
 
-PIMF’s implementation is based on well-proved design patterns as well as fast object-relational mapping mechanisms - like famous PHP frameworks had. The architecture is designed to be upgrade friendly - so you can upgrade to newer versions without having to overwrite your projects. And for all of you out there who like to create rich application interfaces - we have created mechanisms to couple your GUI to the controllers in an easy and fast way.
+PIMF’s implementation is based on well-proven design patterns as well as fast object-relational mapping mechanisms - like famous PHP frameworks had. The architecture is designed to be upgrade friendly - so you can upgrade to newer versions without having to overwrite your projects. And for all of you out there who like to create rich application interfaces - we have created mechanisms to couple your GUI to the controllers in an easy and fast way.
 
 Framework Sponsor
 -------------------

@@ -69,10 +69,10 @@ class Request
         \Pimf\Environment $env
     ) {
 
-        static::$getData = new Param((array)self::stripSlashesIfMagicQuotes($getData));
-        static::$postData = new Param((array)self::stripSlashesIfMagicQuotes($postData));
+        static::$getData = new Param($getData);
+        static::$postData = new Param($postData);
         static::$cookieData = new Param($cookieData);
-        static::$cliData = new Param((array)self::stripSlashesIfMagicQuotes($cliData));
+        static::$cliData = new Param($cliData);
         static::$filesData = Util\Uploaded\Factory::get($filesData);
 
         $this->env    = $env;
@@ -143,26 +143,6 @@ class Request
     public function fromCookie()
     {
         return static::$cookieData;
-    }
-
-    /**
-     * Strip slashes from string or array
-     *
-     * @param      $rawData
-     * @param null $overrideStripSlashes
-     *
-     * @return array|string
-     */
-    public static function stripSlashesIfMagicQuotes($rawData, $overrideStripSlashes = null)
-    {
-        $hasMagicQuotes = function_exists('get_magic_quotes_gpc') ? get_magic_quotes_gpc() : false;
-        $strip = !$overrideStripSlashes ? $hasMagicQuotes : $overrideStripSlashes;
-
-        if ($strip) {
-            return self::stripSlashes($rawData);
-        }
-
-        return $rawData;
     }
 
     /**
