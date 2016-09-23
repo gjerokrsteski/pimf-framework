@@ -1,5 +1,4 @@
 # OS or Editor folders
-Thumbs.db
 .cache
 .project
 .settings
@@ -13,14 +12,11 @@ Thumbs.db
 *.orig
 *.log
 *.rej
-*.swo
-*.swp
 *.vi
 *~
 *.sass-cache
 
 # Folders to ignore
-.idea
 .hg
 .svn
 .CVS
