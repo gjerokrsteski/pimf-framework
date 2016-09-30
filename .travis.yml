@@ -1,11 +1,13 @@
 language: php
 
 php:
+  - 5.2
   - 5.3
   - 5.4
   - 5.5
   - 5.6
   - 7.0
+  - 7.1
   - hhvm
   
 sudo: false
@@ -19,8 +21,10 @@ matrix:
         - php: 7.0
           env: setup=stable
     allow_failures:
+        - php 5.2
         - php: 5.6
         - php: 7.0
+        - php: 7.1
         - php: hhvm
     fast_finish: true
 
