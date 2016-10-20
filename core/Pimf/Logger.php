@@ -78,9 +78,14 @@ class Logger
             return;
         }
 
-        $this->handle = (new File($this->storageDir, "pimf-logs.txt"))->open();
-        $this->warnHandle = (new File($this->storageDir, "pimf-warnings.txt"))->open();
-        $this->errorHandle = (new File($this->storageDir, "pimf-errors.txt"))->open();
+        $file = new File($this->storageDir, "pimf-logs.txt");
+        $this->handle = $file->open();
+
+        $file = new File($this->storageDir, "pimf-warnings.txt");
+        $this->warnHandle = $file->open();
+
+        $file = new File($this->storageDir, "pimf-errors.txt");
+        $this->errorHandle = $file->open();
 
         if (!$this->errorHandle || !$this->handle || !$this->warnHandle) {
             throw new \RuntimeException("failed to obtain a handle to logger file");
