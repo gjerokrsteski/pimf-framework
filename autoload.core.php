@@ -10,6 +10,7 @@ spl_autoload_register(
                 'Pimf\\Application'                  => '/Pimf/Application.php',
                 'Pimf\\Adapter\\Socket'              => '/Pimf/Adapter/Socket.php',
                 'Pimf\\Adapter\\File'                => '/Pimf/Adapter/File.php',
+                'Pimf\\Adapter\\Std'                 => '/Pimf/Adapter/Std.php',
                 'Pimf\\Cache'                        => '/Pimf/Cache.php',
                 'Pimf\\Cache\\Storages\\Apc'         => '/Pimf/Cache/Storages/Apc.php',
                 'Pimf\\Cache\\Storages\\Dba'         => '/Pimf/Cache/Storages/Dba.php',
