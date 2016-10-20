@@ -179,16 +179,18 @@ final class Application
         ResponseStatus::setup($envData->get('SERVER_PROTOCOL', 'HTTP/1.0'));
 
         Header::setup(
-            self::$env->getUserAgent(),
-            self::$env->HTTP_IF_MODIFIED_SINCE,
-            self::$env->HTTP_IF_NONE_MATCH
+            self::$env->getUserAgent()
         );
 
         Url::setup(self::$env->getUrl(), self::$env->isHttps());
         Uri::setup(self::$env->PATH_INFO, self::$env->REQUEST_URI);
         Uuid::setup(self::$env->getIp(), self::$env->getHost());
 
-        self::$logger = new Logger($tmpPath);
+        self::$logger = new Logger(
+            new Adapter\File($tmpPath, "pimf-logs.txt"),
+            new Adapter\File($tmpPath, "pimf-warnings.txt"),
+            new Adapter\File($tmpPath, "pimf-errors.txt")
+        );
         self::$logger->init();
     }
 

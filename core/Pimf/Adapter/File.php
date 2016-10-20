@@ -18,6 +18,7 @@ use Pimf\Contracts\Streamable;
 class File implements Streamable
 {
     /**
+     * Use better the local TMP dir or dir with mod 777
      * @var string
      */
     protected $storageDir;

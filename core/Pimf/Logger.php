@@ -8,8 +8,6 @@
 
 namespace Pimf;
 
-use Pimf\Adapter\File;
-
 /**
  * Logger with common logging options into a file.
  *
@@ -21,7 +19,7 @@ class Logger
     /**
      * @var resource
      */
-    private $handle;
+    private $infoHandle;
 
     /**
      * @var resource
@@ -32,11 +30,6 @@ class Logger
      * @var resource
      */
     private $errorHandle;
-
-    /**
-     * @var string
-     */
-    private $storageDir;
 
     /**
      * @var string
@@ -59,11 +52,19 @@ class Logger
     }
 
     /**
-     * @param string $localeStorageDir Use better the local TMP dir or dir with mod 777.
+     * Logger constructor.
+     * @param Contracts\Streamable $infoHandle
+     * @param Contracts\Streamable $warnHandle
+     * @param Contracts\Streamable $errorHandle
      */
-    public function __construct($localeStorageDir)
+    public function __construct(
+        Contracts\Streamable $infoHandle,
+        Contracts\Streamable $warnHandle,
+        Contracts\Streamable $errorHandle)
     {
-        $this->storageDir = (string)$localeStorageDir;
+        $this->infoHandle = $infoHandle->open();
+        $this->warnHandle = $warnHandle->open();
+        $this->errorHandle = $errorHandle->open();
     }
 
     /**
@@ -72,23 +73,14 @@ class Logger
     public function init()
     {
         if (is_resource($this->errorHandle)
-            && is_resource($this->handle)
+            && is_resource($this->infoHandle)
             && is_resource($this->warnHandle)
         ) {
             return;
         }
 
-        $file = new File($this->storageDir, "pimf-logs.txt");
-        $this->handle = $file->open();
-
-        $file = new File($this->storageDir, "pimf-warnings.txt");
-        $this->warnHandle = $file->open();
-
-        $file = new File($this->storageDir, "pimf-errors.txt");
-        $this->errorHandle = $file->open();
-
-        if (!$this->errorHandle || !$this->handle || !$this->warnHandle) {
-            throw new \RuntimeException("failed to obtain a handle to logger file");
+        if (!$this->errorHandle || !$this->infoHandle || !$this->warnHandle) {
+            throw new \RuntimeException("failed to obtain a Streamable handle for logging");
         }
     }
 
@@ -159,19 +151,19 @@ class Logger
         } elseif ($severity == 'ERROR') {
             fwrite($this->errorHandle, $msg);
         } else {
-            fwrite($this->handle, $msg);
+            fwrite($this->infoHandle, $msg);
 
         }
     }
 
     public function __destruct()
     {
-        if (is_resource($this->handle)
+        if (is_resource($this->infoHandle)
             && is_resource($this->warnHandle)
             && is_resource($this->errorHandle)
         ) {
 
-            if (fclose($this->handle) === false) {
+            if (fclose($this->infoHandle) === false) {
                 $this->error('Logger failed to close the handle to the log file');
             }
 
