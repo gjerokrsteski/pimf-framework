@@ -8,6 +8,8 @@
 
 namespace Pimf;
 
+use Pimf\Adapter\File;
+
 /**
  * Logger with common logging options into a file.
  *
@@ -37,11 +39,6 @@ class Logger
     private $storageDir;
 
     /**
-     * @var bool
-     */
-    private $separator;
-
-    /**
      * @var string
      */
     private static $remoteIp;
@@ -63,12 +60,10 @@ class Logger
 
     /**
      * @param string $localeStorageDir Use better the local TMP dir or dir with mod 777.
-     * @param bool   $trailingSeparator
      */
-    public function __construct($localeStorageDir, $trailingSeparator = true)
+    public function __construct($localeStorageDir)
     {
         $this->storageDir = (string)$localeStorageDir;
-        $this->separator = (bool)$trailingSeparator;
     }
 
     /**
@@ -83,17 +78,9 @@ class Logger
             return;
         }
 
-        if (!is_dir($this->storageDir)) {
-            mkdir($this->storageDir, 0777);
-        }
-
-        if (true === $this->separator) {
-            $this->storageDir = rtrim(realpath($this->storageDir), '\\/') . DS;
-        }
-
-        $this->handle = fopen($this->storageDir . "pimf-logs.txt", "at+");
-        $this->warnHandle = fopen($this->storageDir . "pimf-warnings.txt", "at+");
-        $this->errorHandle = fopen($this->storageDir . "pimf-errors.txt", "at+");
+        $this->handle = (new File($this->storageDir, "pimf-logs.txt"))->open();
+        $this->warnHandle = (new File($this->storageDir, "pimf-warnings.txt"))->open();
+        $this->errorHandle = (new File($this->storageDir, "pimf-errors.txt"))->open();
 
         if (!$this->errorHandle || !$this->handle || !$this->warnHandle) {
             throw new \RuntimeException("failed to obtain a handle to logger file");

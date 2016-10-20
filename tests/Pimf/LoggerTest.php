@@ -4,14 +4,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 {
     private static $localeStorageDir;
 
-    private static $env;
-
     public static function setUpBeforeClass()
     {
         self::$localeStorageDir = dirname(__FILE__) . '/_drafts/';
-
-        self::$env = new \Pimf\Environment(array('REMOTE_ADDR' => 'localhost.test', 'PHP_SELF' => 'self.test.php'));
-
     }
 
     public static function tearDownAfterClass()
@@ -25,24 +20,24 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreatingNewInstanceAndDestructingIt()
     {
-        new \Pimf\Logger(self::$localeStorageDir, self::$env);
+        new \Pimf\Logger(self::$localeStorageDir);
     }
 
     public function testCreatingNewInstanceWithTrailingSeparatorAndDestructingIt()
     {
-        new \Pimf\Logger(self::$localeStorageDir, self::$env, true);
+        new \Pimf\Logger(self::$localeStorageDir);
     }
 
     public function testInitialisingTheFileResources()
     {
-        $logger = new \Pimf\Logger(self::$localeStorageDir, self::$env);
+        $logger = new \Pimf\Logger(self::$localeStorageDir);
 
         $logger->init();
     }
 
     public function testLoggingMethods()
     {
-        $logger = new \Pimf\Logger(self::$localeStorageDir, self::$env);
+        $logger = new \Pimf\Logger(self::$localeStorageDir);
         $logger->init();
 
         $logger->debug('debug msg')->error('error msg')->info('info msg')->warn('warn msg');
