@@ -29,44 +29,44 @@ require_once 'utils.php';
         | Supported timezones list: http://www.php.net/manual/en/timezones.php
         |------------------------------------------------------------------------
         */
-        'timezone'    => 'UTC',
+        'timezone' => 'UTC',
         /*
         |--------------------------------------------------------------------------
         | Is it regular HTTP or secure HTTPS
         |--------------------------------------------------------------------------
         */
-        'ssl'         => false,
+        'ssl' => false,
         /*
         |------------------------------------------------------------------------
         | Application meta
         |------------------------------------------------------------------------
         */
-        'app'         => array(
+        'app' => array(
 
-            'name'               => 'MyFirstBlog',
+            'name' => 'MyFirstBlog',
             // secret application key or try out http://randomkeygen.com
-            'key'                => 'some5secret5key5here',
+            'key' => 'some5secret5key5here',
             // the name of the fallback controller
             'default_controller' => 'blog',
             // get cleaner URLs or not
-            'routeable'          => true,
+            'routeable' => true,
             // do you have a representational state transfer app?
-            'restfull'           => false,
+            'restfull' => false,
             // URL used to access your application without a trailing slash.
-            'url'                => 'http://localhost',
+            'url' => 'http://localhost',
             // if using mod_rewrite to get cleaner URLs let it empty otherwise set index.php
-            'index'              => '',
+            'index' => '',
             // the base URL used for your application's asset files
-            'asset_url'          => '',
+            'asset_url' => '',
         ),
         /*
         |------------------------------------------------------------------------
         | Production environment settings
         |------------------------------------------------------------------------
         */
-        'production'  => array(
+        'production' => array(
             'db' => array(
-                'driver'   => 'sqlite',
+                'driver' => 'sqlite',
                 'database' => 'app/MyFirstBlog/_database/blog-production.db'
             ),
         ),
@@ -75,9 +75,9 @@ require_once 'utils.php';
         | Production environment settings
         |------------------------------------------------------------------------
         */
-        'testing'     => array(
+        'testing' => array(
             'db' => array(
-                'driver'   => 'sqlite',
+                'driver' => 'sqlite',
                 'database' => 'app/MyFirstBlog/_database/blog-production.db'
             ),
         ),
@@ -86,7 +86,7 @@ require_once 'utils.php';
         | Bootstrapping meta
         |------------------------------------------------------------------------
         */
-        'bootstrap'   => array(
+        'bootstrap' => array(
             'local_temp_directory' => '/tmp/'
         ),
         /*
@@ -94,66 +94,66 @@ require_once 'utils.php';
         | Settings for the error handling behavior
         |------------------------------------------------------------------------
         */
-        'error'       => array(
+        'error' => array(
 
             'ignore_levels' => array(0),
-            'debug_info'    => true,
-            'log'           => true,
+            'debug_info' => true,
+            'log' => true,
         ),
         /*
         |--------------------------------------------------------------------------
         | Session settings
         |--------------------------------------------------------------------------
         */
-        'session'     => array(
+        'session' => array(
 
             // Session storage 'cookie', 'file', 'pdo', 'memcached', 'apc', 'redis',
             // 'dba', 'wincache', 'memory'  or '' for non
-            'storage'            => 'memory',
+            'storage' => 'memory',
             // If using file storage - default is null
-            'storage_path'       => 'app/MyFirstBlog/_session/',
+            'storage_path' => 'app/MyFirstBlog/_session/',
             // If using the PDO (database) session storage
-            'database'           => array(
-                'driver'   => 'sqlite',
+            'database' => array(
+                'driver' => 'sqlite',
                 'database' => 'app/MyFirstBlog/_session/blog-session.db',
             ),
             // Garbage collection has a 2% chance of occurring for any given request to
             // the application. Feel free to tune this to your requirements.
             'garbage_collection' => array(2, 100),
             // Session lifetime number of minutes
-            'lifetime'           => 60,
+            'lifetime' => 60,
             // Session expiration on web browser close
-            'expire_on_close'    => false,
+            'expire_on_close' => false,
             // Session cookie name
-            'cookie'             => 'pimf_session',
+            'cookie' => 'pimf_session',
             // Session cookie path
-            'path'               => '/',
+            'path' => '/',
             // Domain for which the session cookie is available.
-            'domain'             => null,
+            'domain' => null,
             // If the cookie should only be sent over HTTPS.
-            'secure'             => false,
+            'secure' => false,
         ),
         /*
         |--------------------------------------------------------------------------
         | Cache settings
         |--------------------------------------------------------------------------
         */
-        'cache'       => array(
+        'cache' => array(
 
             // Cache storage 'pdo', 'file', 'memcached', 'apc', 'redis', 'dba',
             // 'wincache', 'memory' or '' for non
-            'storage'      => 'memory',
+            'storage' => 'memory',
             // If using file storage - default is null
             'storage_path' => 'app/MyFirstBlog/_cache/',
             // If using the PDO (database) cache storage
-            'database'     => array(
-                'driver'   => 'sqlite',
+            'database' => array(
+                'driver' => 'sqlite',
                 'database' => 'app/MyFirstBlog/_cache/blog-cache.db',
             ),
             // If using Memcached and APC to prevent collisions with other applications on the server.
-            'key'          => 'pimfmaster',
+            'key' => 'pimfmaster',
             // Memcached servers - for more check out: http://memcached.org
-            'memcached'    => array(
+            'memcached' => array(
                 'servers' => array('host' => '127.0.0.1', 'port' => 11211, 'weight' => 100),
             ),
         ),
@@ -175,9 +175,7 @@ $envData = $env->data();
     $envData->get('SERVER_PROTOCOL', 'HTTP/1.0'));
 
 \Pimf\Util\Header::setup(
-    $env->getUserAgent(),
-    $env->HTTP_IF_MODIFIED_SINCE,
-    $env->HTTP_IF_NONE_MATCH
+    $env->getUserAgent()
 );
 
 \Pimf\Url::setup($env->getUrl(), $env->isHttps());

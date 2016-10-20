@@ -21,9 +21,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         \Pimf\Util\Header\ResponseStatus::setup($envData->get('SERVER_PROTOCOL', 'HTTP/1.0'));
 
         \Pimf\Util\Header::setup(
-            self::$env->getUserAgent(),
-            self::$env->HTTP_IF_MODIFIED_SINCE,
-            self::$env->HTTP_IF_NONE_MATCH
+            self::$env->getUserAgent()
         );
 
         \Pimf\Url::setup(self::$env->getUrl(), self::$env->isHttps());
