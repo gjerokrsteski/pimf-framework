@@ -62,7 +62,7 @@ final class Application
 
             date_default_timezone_set(Config::get('timezone'));
 
-            self::setupUtils($server, Config::get('bootstrap.local_temp_directory'), Config::get('logging.storage'));
+            self::setupUtils($server, Config::get('bootstrap.local_temp_directory'), Config::get('logging.storage', 'file'));
             self::loadListeners(BASE_PATH . 'app/' . Config::get('app.name') . '/events.php');
             self::setupErrorHandling($environment);
             self::loadPdoDriver($environment, Config::get($environment . '.db'), Config::get('app.name'));
