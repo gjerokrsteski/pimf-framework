@@ -45,7 +45,7 @@ final class Application
     /**
      * Mechanism used to do initial setup and edging before a application runs.
      *
-     * @param array $conf   The array of configuration options.
+     * @param array $conf The array of configuration options.
      * @param array $server Array of information such as headers, paths, and script locations.
      *
      * @return boolean|null
@@ -62,7 +62,7 @@ final class Application
 
             date_default_timezone_set(Config::get('timezone'));
 
-            self::setupUtils($server, Config::get('bootstrap.local_temp_directory'));
+            self::setupUtils($server, Config::get('bootstrap.local_temp_directory'), Config::get('logging.storage'));
             self::loadListeners(BASE_PATH . 'app/' . Config::get('app.name') . '/events.php');
             self::setupErrorHandling($environment);
             self::loadPdoDriver($environment, Config::get($environment . '.db'), Config::get('app.name'));
@@ -85,10 +85,10 @@ final class Application
      * Run a application, let application accept a request, route the request,
      * dispatch to controller/action, render response and return response to client finally.
      *
-     * @param array $get    Array of variables passed to the current script via the URL parameters.
-     * @param array $post   Array of variables passed to the current script via the HTTP POST method.
+     * @param array $get Array of variables passed to the current script via the URL parameters.
+     * @param array $post Array of variables passed to the current script via the HTTP POST method.
      * @param array $cookie Array of variables passed to the current script via HTTP Cookies.
-     * @param array $files  An associative array FILES of items uploaded to the current script via the HTTP POST method.
+     * @param array $files An associative array FILES of items uploaded to the current script via the HTTP POST method.
      *
      * @return void
      */
@@ -163,10 +163,11 @@ final class Application
     }
 
     /**
-     * @param array  $server
-     * @param string $tmpPath
+     * @param array $server
+     * @param $tmpPath
+     * @param string $logging
      */
-    private static function setupUtils(array $server, $tmpPath)
+    private static function setupUtils(array $server, $tmpPath, $logging = 'file')
     {
         self::$env = new Environment($server);
         $envData = self::$env->data();
@@ -186,17 +187,26 @@ final class Application
         Uri::setup(self::$env->PATH_INFO, self::$env->REQUEST_URI);
         Uuid::setup(self::$env->getIp(), self::$env->getHost());
 
-        self::$logger = new Logger(
-            new Adapter\File($tmpPath, "pimf-logs.txt"),
-            new Adapter\File($tmpPath, "pimf-warnings.txt"),
-            new Adapter\File($tmpPath, "pimf-errors.txt")
-        );
+        if ($logging === 'file') {
+            self::$logger = new Logger(
+                new Adapter\File($tmpPath, "pimf-logs.txt"),
+                new Adapter\File($tmpPath, "pimf-warnings.txt"),
+                new Adapter\File($tmpPath, "pimf-errors.txt")
+            );
+        } else {
+            self::$logger = new Logger(
+                new Adapter\Std(Adapter\Std::OUT),
+                new Adapter\Std(Adapter\Std::OUT),
+                new Adapter\Std(Adapter\Std::ERR)
+            );
+        }
+
         self::$logger->init();
     }
 
     /**
      * @param string $environment
-     * @param array  $dbConf
+     * @param array $dbConf
      * @param string $appName
      */
     private static function loadPdoDriver($environment, $dbConf, $appName)
@@ -208,7 +218,7 @@ final class Application
 
     /**
      * @param boolean $routeable
-     * @param string  $routes Path to routes definition file.
+     * @param string $routes Path to routes definition file.
      */
     private static function loadRoutes($routeable, $routes)
     {
@@ -237,7 +247,7 @@ final class Application
     /**
      * @param array $problems
      * @param float $version
-     * @param bool  $die
+     * @param bool $die
      *
      * @return array|void
      */
