@@ -171,6 +171,7 @@ final class Application
             pcntl_signal(SIGKILL, function ($signal) {
                 Event::fire('on.sigkill', array($signal));
             });
+            pcntl_signal_dispatch();
         }
     }
 
