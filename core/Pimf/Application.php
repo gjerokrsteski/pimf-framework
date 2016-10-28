@@ -160,20 +160,6 @@ final class Application
 
             error_reporting(-1);
         }
-
-        if (function_exists('pcntl_signal')) {
-            declare(ticks = 1);
-            pcntl_signal(SIGTERM, function ($signal) {
-                Event::fire('on.sigterm', array($signal));
-            });
-            pcntl_signal(SIGINT, function ($signal) {
-                Event::fire('on.sigint', array($signal));
-            });
-            pcntl_signal(SIGKILL, function ($signal) {
-                Event::fire('on.sigkill', array($signal));
-            });
-            pcntl_signal_dispatch();
-        }
     }
 
     /**
