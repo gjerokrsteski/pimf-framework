@@ -3,8 +3,7 @@ Welcome to PIMF
 [![Build Status](https://travis-ci.org/gjerokrsteski/pimf-framework.svg?branch=master)](https://travis-ci.org/gjerokrsteski/pimf-framework) [![Latest Stable Version](https://img.shields.io/packagist/v/gjerokrsteski/pimf-framework.svg?label=stable)](https://packagist.org/packages/gjerokrsteski/pimf-framework) [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/badges/quality-score.png?s=6455d019460628327434d85520bd13c4d03a2673)](https://scrutinizer-ci.com/g/gjerokrsteski/pimf-framework/) [![Code Climate](https://codeclimate.com/github/gjerokrsteski/pimf-framework.png)](https://codeclimate.com/github/gjerokrsteski/pimf-framework) [![SensioLabsInsight](https://img.shields.io/sensiolabs/i/f73307c6-0864-454f-967d-cebfd1e4b304.svg)](https://insight.sensiolabs.com/projects/f73307c6-0864-454f-967d-cebfd1e4b304) [![License](https://img.shields.io/packagist/l/gjerokrsteski/pimf-framework.svg)](https://packagist.org/packages/gjerokrsteski/pimf-framework)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pimf-framework/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Have you ever wished for a PHP framework that perfectly adapts to your project's needs, your programming experience, and your customer's budget? A thin PHP framework with fewer implementation rules that is easy to learn to use? PIMF is about to satisfy your demands!
-
+Have you ever wanted a PHP framework which perfectly adapts to the needs of your project? A thin PHP framework with minimal installation configuration as well as being easy to learn? PIMF is about to satisfy your demands!
 
 Getting Started
 ---------------
@@ -42,11 +41,11 @@ Read the PIMF Starter book almost anywhere. Available as a PDF, EPUB, and MOBI. 
 
 PIMF Philosophy
 ---------------
-Good, robust business logic is better than a fat, complex framework. Most of the PHP frameworks are bigger than your problem. At most, you need less than 20% of the framework’s functionality to solve your problem. Therefore, we believe that the “right” 20% of the effort is the 80% of the results - and that is PIMF.
+Most PHP frameworks are bigger than the problem you are trying to solve. A big and complex framework can't protect you from poor business logic, and will often become a large part of your problem. Often you need 20% or less from the functionality of a full-stack framework to solve your problem. Therefore finding the right 20% of the framework functionality solves the remaining 80% of your problem. PIMF is an opinionated framework which follows common best practises that strives to be those right 20%.
 
-The aim was to create robust and secure projects and deliver them fast. We wanted just one easy framework that can be used for all our projects. And then - PIMF was born!
+PIMF was first created for our own personal use. The aim was to deliver robust and secure projects fast. We just wanted one easy framework, which could be used for all of our projects. And then - PIMF was born!
 
-PIMF’s implementation is based on well-proven design patterns as well as fast object-relational mapping mechanisms - like famous PHP frameworks had. The architecture is designed to be upgrade friendly - so you can upgrade to newer versions without having to overwrite your projects. And for all of you out there who like to create rich application interfaces - we have created mechanisms to couple your GUI to the controllers in an easy and fast way.
+PIMF’s implementation is based on well proven design patterns as well as fast object relation mapping mechanisms. PIMF is designed to be upgrade friendly - so that you can upgrade to newer versions with minimal effort.
 
 Framework Sponsor
 -------------------
