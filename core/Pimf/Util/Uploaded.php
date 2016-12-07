@@ -148,7 +148,7 @@ class Uploaded extends File
      */
     public function getError()
     {
-        return $this->error;
+        return (int)$this->error;
     }
 
     /**
@@ -212,6 +212,6 @@ class Uploaded extends File
             $max *= 1024;
         }
 
-        return (integer)$max;
+        return (int)$max;
     }
 }
