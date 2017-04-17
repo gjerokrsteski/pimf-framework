@@ -54,3 +54,7 @@ JetBRAINS supports the development of PIMF with PHPStorm licenses and we feel co
 ### License
 
 The PIMF framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/gjerokrsteski/pimf-framework/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
