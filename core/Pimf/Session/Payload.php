@@ -46,7 +46,7 @@ class Payload
     /**
      * The session array that is stored by the storage.
      *
-     * @var array
+     * @var array|null
      */
     public $session;
 

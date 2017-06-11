@@ -37,6 +37,7 @@ namespace Pimf;
  *           '/index.html'.
  * @property string REQUEST_METHOD         Which request method was used to access the page; i.e. 'GET', 'HEAD',
  *           'POST', 'PUT'.
+ * @property string REDIRECT_URL           The URL to redirect the user agent to
  * @property string HTTP_IF_MODIFIED_SINCE Get request header from Apache even on PHP running as a CGI
  * @property string HTTP_IF_NONE_MATCH     Get request header from Apache even on PHP running as a CGI
  */

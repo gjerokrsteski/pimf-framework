@@ -100,7 +100,7 @@ class Core extends Base
         $std = new Std();
         $type = $std->read('database type [mysql|sqlite]', '(mysql|sqlite)');
 
-        if ($this->createTable($type, 'session')) {
+        if ($this->createTable($type, 'cache')) {
             echo 'Cache table successfully created.' . PHP_EOL;
         } else {
             echo 'Problems creating cache table!' . PHP_EOL;
