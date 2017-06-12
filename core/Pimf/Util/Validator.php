@@ -295,7 +295,7 @@ class Validator
     protected function middleware($fieldName, $comparing, $operator, $expecting)
     {
         if (in_array($operator, array("<", ">", "==", "<=", ">="), true)) {
-            $func = function($a,$b) use ($operator) {
+            $func = function($a, $b) use ($operator) {
                 switch ($operator){
                     case "<":
                         return ($a < $b);
