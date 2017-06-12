@@ -161,12 +161,7 @@ class Header extends Header\ContentType
      */
     public static function cacheNoValidate($seconds = 60)
     {
-        $now = time();
-        $lmtime = gmdate('D, d M Y H:i:s', $now) . ' GMT';
-        $extime = gmdate('D, d M Y H:i:s', $now + $seconds) . 'GMT';
-        // backwards compatibility for HTTP/1.0 clients
-        header("Last Modified: $lmtime");
-        header("Expires: $extime");
+        self::cachePage($seconds);
         // HTTP/1.1 support
         header("Cache-Control: public,max-age=$seconds");
     }
@@ -180,14 +175,19 @@ class Header extends Header\ContentType
      */
     public static function cacheBrowser($seconds = 60)
     {
+        self::cachePage($seconds);
+        // HTTP/1.1 support
+        header("Cache-Control: private,max-age=$seconds,s-maxage=0");
+    }
+
+    private static function cachePage($seconds)
+    {
         $now = time();
         $lmtime = gmdate('D, d M Y H:i:s', $now) . ' GMT';
         $extime = gmdate('D, d M Y H:i:s', $now + $seconds) . ' GMT';
         // backwards compatibility for HTTP/1.0 clients
         header("Last Modified: $lmtime");
         header("Expires: $extime");
-        // HTTP/1.1 support
-        header("Cache-Control: private,max-age=$seconds,s-maxage=0");
     }
 
 
