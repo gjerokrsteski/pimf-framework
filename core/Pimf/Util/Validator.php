@@ -298,7 +298,7 @@ class Validator
             $func = function($a,$b) use ($operator) {
                 switch ($operator){
                     case "<":
-                        return ($a > $b);
+                        return ($a < $b);
                     case ">":
                         return ($a > $b);
                     case "==":
