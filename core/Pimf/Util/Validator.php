@@ -296,7 +296,18 @@ class Validator
     {
         if (in_array($operator, array("<", ">", "==", "<=", ">="), true)) {
             $func = function($a,$b) use ($operator) {
-                return ($a.' '.$operator.' '.$b);
+                switch ($operator){
+                    case "<":
+                        return ($a > $b);
+                    case ">":
+                        return ($a > $b);
+                    case "==":
+                        return ($a == $b);
+                    case ">=":
+                        return ($a >= $b);
+                    case "<=":
+                        return ($a <= $b);
+                }
             };
 
             return ($func($comparing, $expecting) === true) ?: $this->error($fieldName, $operator);
