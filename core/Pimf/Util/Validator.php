@@ -295,7 +295,9 @@ class Validator
     protected function middleware($fieldName, $comparing, $operator, $expecting)
     {
         if (in_array($operator, array("<", ">", "==", "<=", ">="), true)) {
-            $func = create_function('$a,$b', 'return ($a ' . '' . $operator . ' $b);');
+            $func = function($a,$b) use ($operator) {
+                return ($a.' '.$operator.' '.$b);
+            };
 
             return ($func($comparing, $expecting) === true) ?: $this->error($fieldName, $operator);
         }
