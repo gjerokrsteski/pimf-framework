@@ -46,11 +46,10 @@ class Cache
      *
      * @return CS\Apc|CS\Dba|CS\File|CS\Memcached|CS\Memory|CS\Pdo|CS\Redis|CS\WinCache
      */
-    public static function storage($storage = 'memory')
+    public static function storage($storage = null)
     {
-        $conf = Config::get('cache.storage');
-        if ($conf !== null) {
-            $storage = $conf;
+        if ($storage === null) {
+            $storage = Config::get('cache.storage') ?: 'memory';
         }
 
         if (!isset(static::$storages[$storage])) {
