@@ -30,19 +30,34 @@ class File extends Storage
     }
 
     /**
+     * Determine if an item exists in the cache.
+     *
+     * @param $key
+     *
+     * @return bool
+     */
+    public function has($key)
+    {
+        return file_exists($this->path . $key);
+    }
+
+    /**
      * @param string $key
      *
      * @return bool|mixed|null
      */
     protected function retrieve($key)
     {
-        if (!file_exists($this->path . $key)) {
+        if (!$this->has($key)) {
             return null;
         }
 
+        $cache = file_get_contents($this->path . $key);
+
         // compare the timestamp to the current time when we read the file.
-        if (time() >= substr($cache = file_get_contents($this->path . $key), 0, 10)) {
-            return $this->forget($key);
+        if (time() >= substr($cache, 0, 10)) {
+            $this->forget($key);
+            return null;
         }
 
         return unserialize(substr($cache, 10));
@@ -68,7 +83,7 @@ class File extends Storage
             return null;
         }
 
-        $value = $this->expiration($minutes) . serialize($value);
+        $value = self::expiration($minutes) . serialize($value);
 
         return file_put_contents($this->path . $key, $value, LOCK_EX);
     }
@@ -95,7 +110,7 @@ class File extends Storage
      */
     public function forget($key)
     {
-        if (file_exists($this->path . $key)) {
+        if ($this->has($key)) {
 
             unlink($this->path . $key);
 

@@ -12,7 +12,7 @@ namespace Pimf\Cache\Storages;
  * @package Cache_Storages
  * @author  Gjero Krsteski <gjero@krsteski.de>
  */
-abstract class Storage
+abstract class Storage implements \ArrayAccess
 {
     /**
      * Determine if an item exists in the cache.
@@ -24,6 +24,20 @@ abstract class Storage
     public function has($key)
     {
         return ($this->get($key) !== null);
+    }
+
+    /**
+     * Determine if an item exists in the cache.
+     *
+     * Enables you to use: isset($storage[$key])
+     *
+     * @param $offset
+     *
+     * @return bool
+     */
+    public function offsetExists($offset)
+    {
+        return $this->has($offset);
     }
 
     /**
@@ -45,6 +59,25 @@ abstract class Storage
     public function get($key, $default = null)
     {
         return (!is_null($item = $this->retrieve($key))) ? $item : $default;
+    }
+
+    /**
+     * Get an item from the cache.
+     *
+     * Enables you to use: $storage[$key]
+     *
+     * <code>
+     *    // Get an item from the cache storage
+     *    $name = Cache::storage()['name'];
+     * </code>
+     *
+     * @param      $offset
+     *
+     * @return mixed|null
+     */
+    public function offsetGet($offset)
+    {
+        return $this->get($offset);
     }
 
     /**
@@ -71,6 +104,19 @@ abstract class Storage
      * @return void
      */
     abstract public function put($key, $value, $minutes);
+
+    /**
+     * Write an item to the cache for indefinite-term storage.
+     *
+     * Enables you to use: $storage[$key] = $value;
+     *
+     * @param $key
+     * @param $value
+     */
+    public function offsetSet($key, $value)
+    {
+        $this->forever($key, value);
+    }
 
     /**
      * Get an item from the cache, or cache and return the default value.
@@ -102,6 +148,16 @@ abstract class Storage
     }
 
     /**
+     * Write an item to the cache for indefinite-term storage.
+     *
+     * @param $key
+     * @param $value
+     *
+     * @return mixed Depends on implementation
+     */
+    abstract public function forever($key, $value);
+
+    /**
      * Get an item from the cache, or cache the default value forever.
      *
      * @param string $key
@@ -124,13 +180,25 @@ abstract class Storage
     abstract public function forget($key);
 
     /**
+     * Delete an item from the cache.
+     *
+     * Enables you to use: unset($storage[$key]);
+     *
+     * @param string $key
+     */
+    public function offsetUnset($key)
+    {
+        $this->forget($key);
+    }
+
+    /**
      * Get the expiration time as a UNIX timestamp.
      *
      * @param int $minutes
      *
      * @return int
      */
-    protected function expiration($minutes)
+    protected static function expiration($minutes)
     {
         return time() + ($minutes * 60);
     }

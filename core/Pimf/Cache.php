@@ -48,6 +48,11 @@ class Cache
      */
     public static function storage($storage = 'memory')
     {
+        $conf = Config::get('cache.storage');
+        if ($conf !== null) {
+            $storage = $conf;
+        }
+
         if (!isset(static::$storages[$storage])) {
             static::$storages[$storage] = static::factory($storage);
         }
