@@ -103,7 +103,7 @@ class Dba extends Storage
             return;
         }
 
-        $value = $this->expiration($minutes) . serialize($value);
+        $value = self::expiration($minutes) . serialize($value);
 
         if (true === $this->has($key)) {
             return dba_replace($key, $value, $this->dba);
