@@ -141,12 +141,13 @@ class Dba extends Storage
         $value = dba_fetch($key, $this->dba);
 
         if (false === $value) {
-            return false;
+            return null;
         }
 
         // compare the timestamp to the current time when we read the value.
         if (time() >= substr($value, 0, 10)) {
-            return $this->forget($key);
+            $this->forget($key);
+            return null;
         }
 
         return unserialize(substr($value, 10));

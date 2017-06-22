@@ -64,6 +64,8 @@ class Pdo extends Storage
 
             return unserialize($cache->value);
         }
+
+        return null;
     }
 
     /**

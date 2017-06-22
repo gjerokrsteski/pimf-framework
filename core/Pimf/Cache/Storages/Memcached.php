@@ -48,6 +48,8 @@ class Memcached extends Storage
         if (($cache = $this->memcache->get($this->key . $key)) !== false) {
             return $cache;
         }
+
+        return null;
     }
 
     /**
