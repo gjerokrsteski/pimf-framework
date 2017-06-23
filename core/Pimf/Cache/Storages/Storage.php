@@ -115,7 +115,7 @@ abstract class Storage implements \ArrayAccess
      */
     public function offsetSet($key, $value)
     {
-        $this->forever($key, value);
+        $this->forever($key, $value);
     }
 
     /**

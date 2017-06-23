@@ -1,4 +1,5 @@
 # OS or Editor folders
+.idea
 .cache
 .project
 .settings
