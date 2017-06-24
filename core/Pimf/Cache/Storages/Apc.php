@@ -48,7 +48,11 @@ class Apc extends Storage
      */
     protected function retrieve($key)
     {
-        return $this->apcu ? apcu_fetch($this->key . $key) : apc_fetch($this->key . $key);
+        $result = $this->apcu
+            ? apcu_fetch($this->key . $key, $success)
+            : apc_fetch($this->key . $key, $success)
+        ;
+        return ($success === true) ? $result : null;
     }
 
     /**

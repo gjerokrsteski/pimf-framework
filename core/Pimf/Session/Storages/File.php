@@ -36,13 +36,15 @@ class File extends Storage implements Cleanable
      *
      * @param string $key
      *
-     * @return array|mixed
+     * @return array|mixed|null
      */
     public function load($key)
     {
         if (file_exists($path = $this->path . $key)) {
             return unserialize(file_get_contents($path));
         }
+
+        return null;
     }
 
     /**
