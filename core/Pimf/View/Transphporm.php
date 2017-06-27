@@ -67,9 +67,16 @@ class Transphporm extends View implements Reunitable
      */
     public function reunite()
     {
+        $tss = $this->data['tss'];
+        $tsspath = $this->path . '/' . $tss;
+
+        if (is_file($tsspath)) {
+            $tss = $tsspath;
+        }
+
         $template = new \Transphporm\Builder(
             $this->path . '/' . $this->template,
-            $this->path . '/' . $this->data['tss']
+            $tss
         );
 
         if (isset($this->cache)) {
