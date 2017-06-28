@@ -99,7 +99,7 @@ spl_autoload_register(
                 'Pimf\\Util\\Xml'                    => '/Pimf/Util/Xml.php',
                 'Pimf\\View'                         => '/Pimf/View.php',
                 'Pimf\\View\\Haanga'                 => '/Pimf/View/Haanga.php',
-                'Pimf\\View\\Json'                   => '/Pimf/View/Json.php',
+                'Pimf\\View\\Transphporm'            => '/Pimf/View/Transphporm.php',
                 'Pimf\\View\\Twig'                   => '/Pimf/View/Twig.php'
             );
         }
