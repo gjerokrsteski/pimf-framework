@@ -33,6 +33,15 @@ This is a run-ready "Hello world" application using PIMF micro-framework and Twi
 engine for PHP (http://twig.sensiolabs.org) brought to us by the Symfony framework developers. Here you can learn how to work
 with \Pimf\View\Twig template engine and \Pimf\Router. https://github.com/gjerokrsteski/pimf-twig
 
+Quickstart with PIMF-Command bundle
+-----------------------------
+This is a run ready "Hello world" bundle using PIMF micro framework. Here you can learn how to work with \Pimf\Cli and write actions for the command line interface. https://github.com/gjerokrsteski/pimf-command
+
+Quickstart with PIMF-Transphporm bundle
+-----------------------------
+This is a run-ready "Hello world" application using PIMF micro framework and Transphporm (https://github.com/Level-2/Transphporm), a template engine that separates logic from markup and that uses a syntax already familiar to web developers. Here you can learn how to work with \Pimf\View\Transphporm template engine and \Pimf\Router. https://github.com/garrettw/pimf-transphporm
+
+
 Learning PIMF
 -------------
 One of the best ways to learn PIMF is to read through the entirety of its documentation. This guide details all aspects of the framework and how to apply them to your application. http://docs.pimf-framework.de
