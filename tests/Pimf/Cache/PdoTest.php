@@ -44,7 +44,7 @@ class CachePdoTest extends \PHPUnit_Framework_TestCase
             'key.'
         ))->getMock();
 
-        $cache->expects($this->any())->method('retrieve')->with('foo')->will($this->returnValue(serialize('foo')));
+        $cache->expects($this->any())->method('get')->with('foo')->will($this->returnValue(serialize('foo')));
 
         $this->assertNull($cache->get('foo'));
 
@@ -90,4 +90,3 @@ class CachePdoTest extends \PHPUnit_Framework_TestCase
         $cache->forget('foo');
     }
 }
- 

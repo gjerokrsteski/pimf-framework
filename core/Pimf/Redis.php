@@ -158,7 +158,7 @@ class Redis
      *
      * @return resource
      */
-    protected function connect()
+    public function connect()
     {
         if (!is_null($this->connection)) {
             return $this->connection;
