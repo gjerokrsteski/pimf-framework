@@ -46,7 +46,7 @@ class CachePdoTest extends \PHPUnit_Framework_TestCase
 
         $cache->expects($this->any())->method('get')->with('foo')->will($this->returnValue(serialize('foo')));
 
-        $this->assertNull($cache->get('foo'));
+        $this->assertNotNull($cache->get('foo'));
 
     }
 

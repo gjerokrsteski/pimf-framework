@@ -10,7 +10,7 @@ class CacheRedisTest extends \PHPUnit_Framework_TestCase
     {
         return $this->getMockBuilder('\\Pimf\\Redis')->disableOriginalConstructor()
             ->setMethods(
-                array('get', 'expire', 'set', 'del', 'forget', 'select', 'put', 'inline', 'bulk', 'multibulk')
+                array('connect', 'get', 'expire', 'set', 'del', 'forget', 'select', 'put', 'inline', 'bulk', 'multibulk')
             )->getMock();
     }
 
@@ -116,4 +116,3 @@ class CacheRedisTest extends \PHPUnit_Framework_TestCase
     }
 
 }
- 
