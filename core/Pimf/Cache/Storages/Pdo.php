@@ -86,7 +86,7 @@ class Pdo extends Storage
     {
         $key = $this->key . $key;
         $value = serialize($value);
-        $expiration = self::expiration($minutes);
+        $expiration = $this->expiration($minutes);
 
         try {
             $sth = $this->pdo->prepare(

@@ -198,7 +198,7 @@ abstract class Storage implements \ArrayAccess
      *
      * @return int
      */
-    protected static function expiration($minutes)
+    public function expiration($minutes)
     {
         return time() + ($minutes * 60);
     }

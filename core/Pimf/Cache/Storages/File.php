@@ -83,7 +83,7 @@ class File extends Storage
             return null;
         }
 
-        $value = self::expiration($minutes) . serialize($value);
+        $value = $this->expiration($minutes) . serialize($value);
 
         return file_put_contents($this->path . $key, $value, LOCK_EX);
     }

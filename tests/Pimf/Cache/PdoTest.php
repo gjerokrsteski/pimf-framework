@@ -54,9 +54,12 @@ class CachePdoTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getStore();
 
-        $store->expects($this->any())->method('expiration')->with(60 * 60);
+        $cache = $this->getMockBuilder('\Pimf\Cache\Storages\Pdo')->setConstructorArgs(array(
+            $store,
+            'key.'
+        ))->getMock();
 
-        $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+        $cache->expects($this->any())->method('expiration')->with(60 * 60);
 
         $cache->put('foo', 'foo', 60);
     }
@@ -65,9 +68,12 @@ class CachePdoTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getStore();
 
-        $store->expects($this->any())->method('expiration')->with(60 * 60);
+        $cache = $this->getMockBuilder('\Pimf\Cache\Storages\Pdo')->setConstructorArgs(array(
+            $store,
+            'key.'
+        ))->getMock();
 
-        $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+        $cache->expects($this->any())->method('expiration')->with(60 * 60);
 
         $cache->put('foo', 1, 60);
     }
