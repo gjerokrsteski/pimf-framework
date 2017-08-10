@@ -13,8 +13,8 @@ class UriTest extends \PHPUnit_Framework_TestCase
 
     protected function fakeUri($uri)
     {
-        $_SERVER = array('REQUEST_URI' => $uri, 'SCRIPT_NAME' => __FILE__, 'PATH_INFO' => $uri);
-        self::$env = new \Pimf\Environment($_SERVER);
+        $server = array('REQUEST_URI' => $uri, 'SCRIPT_NAME' => __FILE__, 'PATH_INFO' => $uri);
+        self::$env = new \Pimf\Environment($server);
         $envData = self::$env->data();
 
         \Pimf\Util\Header\ResponseStatus::setup($envData->get('SERVER_PROTOCOL', 'HTTP/1.0'));
