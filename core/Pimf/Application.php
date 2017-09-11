@@ -20,7 +20,7 @@ use Pimf\Util\Character as Str, Pimf\Util\Header, Pimf\Util\Header\ResponseStatu
  */
 final class Application
 {
-    const VERSION = '1.10.1';
+    const VERSION = '1.11.0';
 
     /**
      * @var Environment
