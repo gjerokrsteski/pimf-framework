@@ -283,12 +283,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testSaveMethodSweepsIfCleanerAndOddsHitWithTimeGreaterThanThreshold()
     {
         $payload = $this->getPayload();
-        $payload->storage = $this->getMock(
-            '\\Pimf\\Session\\Storages\\File', array(
-            'save',
-            'clean'
-        ), array(null)
-        );
+        $payload->storage = $this->getMockBuilder('\\Pimf\\Session\\Storages\\File')
+            ->setConstructorArgs(array(null))
+            ->setMethods(array('save','clean'))
+            ->getMock();
 
         $payload->session = $this->getSession();
         $expiration = time() - (\Pimf\Config::get('session.lifetime') * 60);
@@ -308,12 +306,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testSaveMethodSweepsIfCleanerAndOddsHitWithTimeLessThanThreshold()
     {
         $payload = $this->getPayload();
-        $payload->storage = $this->getMock(
-            '\\Pimf\\Session\\Storages\\File', array(
-            'save',
-            'clean'
-        ), array(null)
-        );
+        $payload->storage = $this->getMockBuilder('\\Pimf\\Session\\Storages\\File')
+            ->setConstructorArgs(array(null))
+            ->setMethods(array('save','clean'))
+            ->getMock();
 
         $payload->session = $this->getSession();
         $expiration = time() - (\Pimf\Config::get('session.lifetime') * 60);
@@ -331,12 +327,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testCleanerShouldntBeCalledIfStorageIsntCleaner()
     {
         $payload = $this->getPayload();
-        $payload->storage = $this->getMock(
-            '\\Pimf\\Session\\Storages\\Apc', array(
-            'save',
-            'clean'
-        ), array(), '', false
-        );
+        $payload->storage = $this->getMockBuilder('\\Pimf\\Session\\Storages\\Apc')
+            ->disableOriginalConstructor()
+            ->setMethods(array('save','clean'))
+            ->getMock();
 
         $payload->session = $this->getSession();
         $payload->storage->expects($this->never())->method('clean');
@@ -349,12 +343,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testCleanerShouldntBeCalledIfMemoryStorageIsntCleaner()
     {
         $payload = $this->getPayload();
-        $payload->storage = $this->getMock(
-            '\\Pimf\\Session\\Storages\\Memory', array(
-            'save',
-            'clean'
-        ), array(), '', false
-        );
+        $payload->storage = $this->getMockBuilder('\\Pimf\\Session\\Storages\\Memory')
+            ->disableOriginalConstructor()
+            ->setMethods(array('save','clean'))
+            ->getMock();
 
         $payload->session = $this->getSession();
         $payload->storage->expects($this->never())->method('clean');
@@ -367,12 +359,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testCleanerShouldntBeCalledIfCookieStorageIsntCleaner()
     {
         $payload = $this->getPayload();
-        $payload->storage = $this->getMock(
-            '\\Pimf\\Session\\Storages\\Cookie', array(
-            'save',
-            'clean'
-        ), array(), '', false
-        );
+        $payload->storage = $this->getMockBuilder('\\Pimf\\Session\\Storages\\Cookie')
+            ->disableOriginalConstructor()
+            ->setMethods(array('save','clean'))
+            ->getMock();
 
         $payload->session = $this->getSession();
         $payload->storage->expects($this->never())->method('clean');
@@ -385,12 +375,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testCleanerShouldntBeCalledIfMemcachedStorageIsntCleaner()
     {
         $payload = $this->getPayload();
-        $payload->storage = $this->getMock(
-            '\\Pimf\\Session\\Storages\\Memcached', array(
-            'save',
-            'clean'
-        ), array(), '', false
-        );
+        $payload->storage = $this->getMockBuilder('\\Pimf\\Session\\Storages\\Memcached')
+            ->disableOriginalConstructor()
+            ->setMethods(array('save','clean'))
+            ->getMock();
 
         $payload->session = $this->getSession();
         $payload->storage->expects($this->never())->method('clean');
@@ -403,12 +391,10 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testCleanerShouldntBeCalledIfRedisStorageIsntCleaner()
     {
         $payload = $this->getPayload();
-        $payload->storage = $this->getMock(
-            '\\Pimf\\Session\\Storages\\Redis', array(
-            'save',
-            'clean'
-        ), array(), '', false
-        );
+        $payload->storage = $this->getMockBuilder('\\Pimf\\Session\\Storages\\Redis')
+            ->disableOriginalConstructor()
+            ->setMethods(array('save','clean'))
+            ->getMock();
 
         $payload->session = $this->getSession();
         $payload->storage->expects($this->never())->method('clean');

@@ -207,11 +207,12 @@ class Uploaded extends File
         }
 
         $unit = strtolower(substr($max, -1));
+        $max = (int)substr($max, 0, -1);
 
         if (in_array($unit, array('g', 'm', 'k'), true)) {
             $max *= 1024;
         }
 
-        return (int)$max;
+        return $max;
     }
 }

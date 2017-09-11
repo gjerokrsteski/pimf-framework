@@ -1,31 +1,25 @@
 language: php
 
 php:
-  - 5.3
-  - 5.4
-  - 5.5
   - 5.6
   - 7.0
   - 7.1
-  
+
 sudo: false
 
 matrix:
     include:
-        - php: 5.5.9
-          env: setup=lowest
-        - php: 5.5.9
-          env: setup=stable
         - php: 7.0
           env: setup=stable
-    allow_failures:
-        - php: 5.6
-        - php: 7.0
-        - php: 7.1
     fast_finish: true
 
+install:
+  - composer install
+
 script:
-  - phpunit --configuration phpunit.xml --coverage-clover=coverage.clover
+  - vendor/bin/phpunit --coverage-clover=coverage.clover
+
+after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --access-token="53c569dececa0578c84587178c5f08e25df8c6e42c37bd313bf0802d2cf74a71" --format=php-clover coverage.clover
 

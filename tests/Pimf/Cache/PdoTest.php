@@ -44,9 +44,9 @@ class CachePdoTest extends \PHPUnit_Framework_TestCase
             'key.'
         ))->getMock();
 
-        $cache->expects($this->any())->method('retrieve')->with('foo')->will($this->returnValue(serialize('foo')));
+        $cache->expects($this->any())->method('get')->with('foo')->will($this->returnValue(serialize('foo')));
 
-        $this->assertNull($cache->get('foo'));
+        $this->assertNotNull($cache->get('foo'));
 
     }
 
@@ -54,9 +54,12 @@ class CachePdoTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getStore();
 
-        $store->expects($this->any())->method('expiration')->with(60 * 60);
+        $cache = $this->getMockBuilder('\Pimf\Cache\Storages\Pdo')->setConstructorArgs(array(
+            $store,
+            'key.'
+        ))->getMock();
 
-        $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+        $cache->expects($this->any())->method('expiration')->with(60 * 60);
 
         $cache->put('foo', 'foo', 60);
     }
@@ -65,9 +68,12 @@ class CachePdoTest extends \PHPUnit_Framework_TestCase
     {
         $store = $this->getStore();
 
-        $store->expects($this->any())->method('expiration')->with(60 * 60);
+        $cache = $this->getMockBuilder('\Pimf\Cache\Storages\Pdo')->setConstructorArgs(array(
+            $store,
+            'key.'
+        ))->getMock();
 
-        $cache = new \Pimf\Cache\Storages\Pdo($store, 'key.');
+        $cache->expects($this->any())->method('expiration')->with(60 * 60);
 
         $cache->put('foo', 1, 60);
     }
@@ -90,4 +96,3 @@ class CachePdoTest extends \PHPUnit_Framework_TestCase
         $cache->forget('foo');
     }
 }
- 
