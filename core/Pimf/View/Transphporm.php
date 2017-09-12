@@ -45,7 +45,7 @@ class Transphporm extends View implements Reunitable
 
     /**
      * @param string $template
-     * @param array  $data
+     * @param array $data
      */
     public function __construct($template, array $data = [])
     {
@@ -85,6 +85,7 @@ class Transphporm extends View implements Reunitable
         if (isset($this->data['data'])) {
             return $template->output($this->data['data'])->body;
         }
+
         return $template->output()->body;
     }
 }

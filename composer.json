@@ -4,7 +4,7 @@
   "license": "MIT",
   "homepage": "http://pimf-framework.de",
   "minimum-stability": "stable",
-  "keywords": ["framework", "pimf"],
+  "keywords": ["framework", "pimf", "php"],
   "support": {
     "email": "gjero@krsteski.de",
     "wiki": "https://github.com/gjerokrsteski/pimf-framework/wiki",
