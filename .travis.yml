@@ -4,6 +4,7 @@ php:
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
 
 sudo: false
 
@@ -32,4 +33,3 @@ notifications:
     on_start: never     # options: [always|never|change] default: always
   email:
     - gjero@krsteski.de
-
